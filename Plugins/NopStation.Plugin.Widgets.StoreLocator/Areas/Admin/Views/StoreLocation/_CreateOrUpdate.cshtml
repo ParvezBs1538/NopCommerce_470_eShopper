@@ -1,0 +1,31 @@
+﻿@model StoreLocationModel
+
+@{
+    const string hideInfoBlockAttributeName = "StoreLocationPage.HideInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideInfoBlockAttributeName);
+
+    const string hidePicturesBlockAttributeName = "StoreLocationPage.HidePicturesBlock";
+    var hidePicturesBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hidePicturesBlockAttributeName);
+
+    const string hideLocationBlockAttributeName = "StoreLocationPage.HideLocationBlock";
+    var hideLocationBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideLocationBlockAttributeName);
+
+    const string hideSeoBlockAttributeName = "StoreLocationPage.HideSeoBlock";
+    var hideSeoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSeoBlockAttributeName);
+}
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <nop-cards id="country-cards">
+                <nop-card asp-name="storelocation-details" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.StoreLocator.StoreLocations.BlockTitle.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</nop-card>
+                <nop-card asp-name="storelocation-pictures" asp-icon="far fa-images" asp-title="@T("Admin.NopStation.StoreLocator.StoreLocations.BlockTitle.Pictures")" asp-hide-block-attribute-name="@hidePicturesBlockAttributeName" asp-hide="@hidePicturesBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Pictures", Model)</nop-card>
+                <nop-card asp-name="storelocation-location" asp-icon="fas fa-map" asp-title="@T("Admin.NopStation.StoreLocator.StoreLocations.BlockTitle.Location")" asp-hide-block-attribute-name="@hideLocationBlockAttributeName" asp-hide="@hideLocationBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Location", Model)</nop-card>
+                <nop-card asp-name="storelocation-seo" asp-icon="fas fa-search-plus" asp-title="@T("Admin.Common.SEO")" asp-hide-block-attribute-name="@hideSeoBlockAttributeName" asp-hide="@hideSeoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Seo", Model)</nop-card>
+            </nop-cards>
+        </div>
+    </div>
+</section>

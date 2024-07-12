@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Sms.To",
+  "SystemName": "NopStation.Plugin.SMS.SmsTo",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.SMS.SmsTo.dll",
+  "Description": "This plugin allows to send SMS on multiple events using Sms.to gateway.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

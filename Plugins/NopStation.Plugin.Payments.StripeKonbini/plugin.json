@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Stripe Konbini",
+  "SystemName": "NopStation.Plugin.Payments.StripeKonbini",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.StripeKonbini.dll",
+  "Description": "This plugin enables Stripe Konbini payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

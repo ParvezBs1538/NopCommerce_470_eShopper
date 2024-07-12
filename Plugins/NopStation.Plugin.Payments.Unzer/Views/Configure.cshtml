@@ -1,0 +1,140 @@
+﻿@model NopStation.Plugin.Payments.Unzer.Models.ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.Unzer.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("Unzer.Configuration");
+}
+
+@using Nop.Services
+@using NopStation.Plugin.Payments.Unzer.Domain
+@inject Nop.Core.IWebHelper webHelper
+
+<form asp-controller="Unzer" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Unzer.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ApiPrivateKey_OverrideForStore" asp-input="ApiPrivateKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ApiPrivateKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="ApiPrivateKey" />
+                                    <span asp-validation-for="ApiPrivateKey"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ApiPublicKey_OverrideForStore" asp-input="ApiPublicKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ApiPublicKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="ApiPublicKey" />
+                                    <span asp-validation-for="ApiPublicKey"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ApiEndpoint_OverrideForStore" asp-input="ApiEndpoint" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ApiEndpoint" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ApiEndpoint" />
+                                    <span asp-validation-for="ApiEndpoint"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ApiVersion_OverrideForStore" asp-input="ApiVersion" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ApiVersion" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ApiVersion" />
+                                    <span asp-validation-for="ApiVersion"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="UseSandbox_OverrideForStore" asp-input="UseSandbox" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="UseSandbox" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="UseSandbox" />
+                                    <span asp-validation-for="UseSandbox"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="TransactionModeId_OverrideForStore" asp-input="TransactionModeId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="TransactionModeId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="TransactionModeId" asp-items="@(await TransactionMode.Authorize.ToSelectListAsync())" />
+                                    <span asp-validation-for="TransactionModeId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="IsCardActive_OverrideForStore" asp-input="IsCardActive" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="IsCardActive" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="IsCardActive" />
+                                    <span asp-validation-for="IsCardActive"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="IsPaypalActive_OverrideForStore" asp-input="IsPaypalActive" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="IsPaypalActive" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="IsPaypalActive" />
+                                    <span asp-validation-for="IsPaypalActive"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="IsSofortActive_OverrideForStore" asp-input="IsSofortActive" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="IsSofortActive" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="IsSofortActive" />
+                                    <span asp-validation-for="IsSofortActive"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="IsEpsActive_OverrideForStore" asp-input="IsEpsActive" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="IsEpsActive" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="IsEpsActive" />
+                                    <span asp-validation-for="IsEpsActive"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

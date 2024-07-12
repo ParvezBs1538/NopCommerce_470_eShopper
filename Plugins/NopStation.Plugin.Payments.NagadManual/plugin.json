@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nagad",
+  "SystemName": "NopStation.Plugin.Payments.NagadManual",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.NagadManual.dll",
+  "Description": "This plugin enables Nagad (BD) manual payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

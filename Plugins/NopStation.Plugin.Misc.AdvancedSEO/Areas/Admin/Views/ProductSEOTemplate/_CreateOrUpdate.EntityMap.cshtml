@@ -1,0 +1,68 @@
+﻿@model ProductSEOTemplateModel
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+
+<div class="card-body">
+    @await Html.PartialAsync("Table", new DataTablesModel
+    {
+        Name = "nopstation-product-seo-template-mapping-grid",
+        UrlRead = new DataUrl("ProductSEOTemplateMappingList", "ProductSEOTemplate", new RouteValueDictionary { [nameof(ProductProductSEOTemplateMappingSearchModel.ProductSEOTemplateId)] = Model.Id }),
+        UrlDelete = new DataUrl("ProductSEOTemplateMappingDelete", "ProductSEOTemplate", null),
+        //PrimaryKeyColumn = nameof(ProductProductSEOTemplateMappingModel.Id),
+        Length = Model.ProductProductSEOTemplateMappingSearchModel.PageSize,
+        LengthMenu = Model.ProductProductSEOTemplateMappingSearchModel.AvailablePageSizes,
+        ColumnCollection = new List<ColumnProperty>
+        {
+            //new ColumnProperty(nameof(ProductProductSEOTemplateMappingModel.Id))
+            //{
+            //    Width = "50"
+            //},
+            new ColumnProperty(nameof(ProductProductSEOTemplateMappingModel.ProductName))
+            {
+                Title = T("Admin.NopStation.Plugin.Misc.AdvancedSEO.ProductProductSEOTemplateMapping.Fields.Product").Text,
+            },
+            new ColumnProperty(nameof(ProductProductSEOTemplateMappingModel.ProductName))
+            {
+                Title = T("Admin.Common.View").Text,
+                Width = "100",
+                Render = new RenderCustom("renderProductViewBtn")
+            },
+            new ColumnProperty(nameof(ProductProductSEOTemplateMappingModel.Id))
+            {
+                Title = T("Admin.Common.Delete").Text,
+                Width = "100",
+                ClassName =  NopColumnClassDefaults.Button,
+                Render = new RenderButtonRemove(T("Admin.Common.Delete").Text)
+            }
+        }
+    })
+    <div class="card-footer mt-2">
+        <button type="button" id="add-new-categories-to-mapping" class="btn btn-primary">@T("Admin.Common.AddNew")</button>
+    </div>
+
+    <input type="submit" id="btnproductmappedrelode" style="display: none" />
+
+    <script>
+        function renderProductViewBtn(data, type, row, meta) {
+            return '<a href="/Admin/Product/Edit/' + row.ProductId + '">' + "@T("Admin.Common.View")" + '</a>'
+        }
+
+        $(document).ready(function() {
+            $('#add-new-categories-to-mapping').click(function () {
+                var productSEOTemplateId = $("#@Html.IdFor(model => model.Id)").val();
+                javascript: OpenWindow('/Admin/ProductSEOTemplate/ProductAddPopup?productSEOTemplateId=' + productSEOTemplateId + '&btnId=btnproductmappedrelode&formId=EditProductSEOTemplate', 800, 800, true);
+                return false;
+            })
+
+            $('#btnproductmappedrelode').click(function () {
+                //refresh grid
+                updateTable('#nopstation-product-seo-template-mapping-grid');
+
+                //return false to don't reload a page
+                return false;
+            });
+        });
+    </script>
+</div>

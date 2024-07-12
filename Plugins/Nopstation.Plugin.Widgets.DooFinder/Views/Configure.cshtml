@@ -1,0 +1,43 @@
+﻿@using Nopstation.Plugin.Widgets.DooFinder;
+@using Nopstation.Plugin.Widgets.DooFinder.Models;
+
+@model FeedDooFinderModel
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("DooFinder.Configuration");
+    <link rel="stylesheet" href="~/Plugins/NopStation.Plugin.Widgets.DooFinder/Content/styles.css" />
+}
+
+<form asp-controller="FeedDooFinder" asp-action="Configure" method="post" id="doofinder-shopping-form">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Nopstation.Plugin.Widgets.DooFinder.Heading")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <nop-cards id="doofinder-cards">
+                    <nop-card asp-name="doofinder-config" asp-icon="fa fa-info" asp-title="@T("Nopstation.Plugin.Widgets.DooFinder.Config")" asp-hide-block-attribute-name="@DooFinderDefaults.HideConfigBlock" asp-hide="@Model.HideConfigBlock" asp-advanced="false">
+                        @await Html.PartialAsync("~/Plugins/NopStation.Plugin.Widgets.DooFinder/Views/_Configure.Config.cshtml", Model)
+                    </nop-card>
+
+                    <nop-card asp-name="doofinder-scheduler" asp-icon="fa fa-info" asp-title="@T("Nopstation.Plugin.Widgets.DooFinder.Scheduler")" asp-hide-block-attribute-name="@DooFinderDefaults.HideSchedulerBlock" asp-hide="@Model.HideSchedulerBlock" asp-advanced="false">
+                        @await Html.PartialAsync("~/Plugins/NopStation.Plugin.Widgets.DooFinder/Views/_Configure.Scheduler.cshtml", Model)
+                    </nop-card>
+
+                    <nop-card asp-name="doofinder-settings" asp-icon="fa fa-info" asp-title="@T("Nopstation.Plugin.Widgets.DooFinder.Settings")" asp-hide-block-attribute-name="@DooFinderDefaults.HideSettingsBlock" asp-hide="@Model.HideSettingsBlock" asp-advanced="false">
+                        @await Html.PartialAsync("~/Plugins/NopStation.Plugin.Widgets.DooFinder/Views/_Configure.Settings.cshtml", Model)
+                    </nop-card>
+                </nop-cards>
+            </div>
+        </div>
+    </section>
+</form>

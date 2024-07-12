@@ -1,0 +1,160 @@
+﻿@model IWidgetZoneSupportedModel
+
+@{
+    var column1Str = (string)ViewData["Column1Grid"];
+    var column1 = 3;
+    if (!string.IsNullOrWhiteSpace(column1Str) && int.TryParse(column1Str, out int c1))
+    {
+        column1 = c1;
+    }
+    var column2 = 12 - column1;
+
+    var controller = (string)ViewData["Controller"] ?? Url.ActionContext.RouteData.Values["controller"].ToString();
+    var list = (string)ViewData["WidgetZoneListAction"] ?? "WidgetZoneList";
+    var delete = (string)ViewData["WidgetZoneDeleteAction"] ?? "WidgetZoneDelete";
+    var update = (string)ViewData["WidgetZoneEditAction"] ?? "WidgetZoneEdit";
+    var create = (string)ViewData["WidgetZoneCreateAction"] ?? "WidgetZoneCreate";
+}
+
+<input type="hidden" asp-for="AddWidgetZoneModel.EntityName" value="@Model.AddWidgetZoneModel.EntityName">
+<input type="hidden" asp-for="AddWidgetZoneModel.EntityId" value="@Model.AddWidgetZoneModel.EntityId">
+
+<div class="card-body">
+    @if (Model.AddWidgetZoneModel.EntityId > 0)
+    {
+        @await Html.PartialAsync("Table", new DataTablesModel
+        {
+            Name = "widgetzones-grid",
+            UrlRead = new DataUrl(list, controller, new RouteValueDictionary 
+                { 
+                    [nameof(Model.WidgetZoneSearchModel.EntityName)] = Model.WidgetZoneSearchModel.EntityName,
+                    [nameof(Model.WidgetZoneSearchModel.EntityId)] = Model.WidgetZoneSearchModel.EntityId
+                }),
+            UrlDelete = new DataUrl(delete, controller, new RouteValueDictionary 
+                { 
+                    [nameof(Model.WidgetZoneSearchModel.EntityName)] = Model.WidgetZoneSearchModel.EntityName,
+                    [nameof(Model.WidgetZoneSearchModel.EntityId)] = Model.WidgetZoneSearchModel.EntityId
+                }),
+            UrlUpdate = new DataUrl(update, controller, new RouteValueDictionary 
+                { 
+                    [nameof(Model.WidgetZoneSearchModel.EntityName)] = Model.WidgetZoneSearchModel.EntityName,
+                    [nameof(Model.WidgetZoneSearchModel.EntityId)] = Model.WidgetZoneSearchModel.EntityId
+                }),
+            Length = Model.WidgetZoneSearchModel.PageSize,
+            LengthMenu = Model.WidgetZoneSearchModel.AvailablePageSizes,
+            RefreshButton= true,
+            ColumnCollection = new List<ColumnProperty>
+            {
+                new ColumnProperty(nameof(WidgetZoneModel.WidgetZone))
+                {
+                    Title = T("Admin.NopStation.WidgetManager.WidgetZones.Fields.WidgetZone").Text,
+                    Width = "200"
+                },
+                new ColumnProperty(nameof(WidgetZoneModel.DisplayOrder))
+                {
+                    Title = T("Admin.NopStation.WidgetManager.WidgetZones.Fields.DisplayOrder").Text,
+                    Width = "200",
+                    Editable = true,
+                    EditType = EditType.Number
+                },
+                new ColumnProperty(nameof(WidgetZoneModel.Id))
+                {
+                    Title = T("Admin.Common.Edit").Text,
+                    Width = "200",
+                    ClassName =  NopColumnClassDefaults.Button,
+                    Render = new RenderButtonsInlineEdit()
+                },
+                new ColumnProperty(nameof(WidgetZoneModel.Id))
+                {
+                    Title = T("Admin.Common.Delete").Text,
+                    ClassName = NopColumnClassDefaults.Button,
+                    Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                    Width = "100"
+                }
+            }
+        })
+        
+        <div class="card card-default">
+            <div class="card-header">
+                @T("Admin.NopStation.WidgetManager.WidgetZones.AddNew")
+            </div>
+            <div class="card-body">
+                <script>
+                    $(document).ready(function() {
+                        $('#addEntityWidget').click(function() {
+                            var widgetZone = $("#@Html.IdFor(model => model.AddWidgetZoneModel.WidgetZone)").val();
+                            var displayOrder = $("#@Html.IdFor(model => model.AddWidgetZoneModel.DisplayOrder)").val();
+
+                            if (!widgetZone) {
+                                $("#addEntityWidgetAlert").click();
+                                return;
+                            }
+
+                            $('#addEntityWidget').attr('disabled', true);
+
+                            var postData = {
+                                WidgetZone: widgetZone,
+                                DisplayOrder: displayOrder,
+                                EntityName: '@Model.AddWidgetZoneModel.EntityName',
+                                EntityId : @Model.AddWidgetZoneModel.EntityId,
+                            };
+                            addAntiForgeryToken(postData);
+
+                            $.ajax({
+                                cache: false,
+                                type: "POST",
+                                url: "@(Url.Action(create, controller))",
+                                data: postData,
+                                success: function (data, textStatus, jqXHR) {
+                                    if (!data.Result) {
+                                        return;
+                                    }                                        
+                                    updateTable('#widgetzones-grid');
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    $("#entityWidgetAddAlert").click();
+                                },
+                                complete: function (jqXHR, textStatus) {
+                                    $('#addEntityWidget').attr('disabled', false);
+                                }
+                            });
+                        });
+                    });
+                </script>
+               <div class="form-group row">
+                    <div class="col-md-@column1">
+                        <nop-label asp-for="AddWidgetZoneModel.WidgetZone"/>
+                    </div>
+                    <div class="col-md-@column2">
+                       <nop-select  asp-for="AddWidgetZoneModel.WidgetZone" asp-items="@Model.AddWidgetZoneModel.AvaliableWidgetZones"> </nop-select>
+                        <span asp-validation-for="AddWidgetZoneModel.WidgetZone"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-@column1">
+                        <nop-label asp-for="@Model.AddWidgetZoneModel.DisplayOrder" />
+                    </div>
+                    <div class="col-md-@column2">
+                        <nop-editor asp-for="@Model.AddWidgetZoneModel.DisplayOrder" />
+                        <span asp-validation-for="@Model.AddWidgetZoneModel.DisplayOrder"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-@column2 offset-md-3">
+                        <button type="button" id="addEntityWidget" class="btn btn-primary">@T("Admin.NopStation.WidgetManager.WidgetZones.AddButton")</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card card-default">
+            <div class="card-body" id="product-pictures-area">
+                @T("Admin.NopStation.WidgetManager.WidgetZones.SaveBeforeEdit")
+            </div>
+        </div>
+    }
+</div>
+<nop-alert asp-alert-id="addEntityWidgetAlert" asp-alert-message="@T("Admin.NopStation.WidgetManager.WidgetZones.Alert.AddNew")" />
+<nop-alert asp-alert-id="entityWidgetAddAlert" asp-alert-message="@T("Admin.NopStation.WidgetManager.WidgetZones.Alert.WidgetZoneAdd")" />

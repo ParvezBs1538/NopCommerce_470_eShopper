@@ -1,0 +1,8 @@
+.cloud-zoom-lens{background-color:#fff;border:1px solid #ddd;cursor:move;margin:-1px}
+.cloud-zoom-title{background-color:#000;color:#fff;font-family:Arial, Helvetica, sans-serif;font-size:10px;font-weight:700;padding:3px;position:absolute !important;text-align:center;top:0;width:100%}
+.cloud-zoom-big{border:1px solid #ddd;margin-top:-28px;overflow:hidden}
+.cloud-zoom-loading{background:#222;border:1px solid #ddd;color:#FFF;padding:3px}
+.product-view .product-img-box .product-image-zoom{overflow:visible}
+.picture-gallery { width: 42%; float: left; }
+.picture-gallery .picture { width: 100%; }
+.picture-gallery .picture img { width: 100%; }

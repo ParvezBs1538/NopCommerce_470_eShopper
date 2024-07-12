@@ -1,0 +1,199 @@
+﻿@model ConfigurationModel
+@{
+    Layout = "_AdminLayout";
+
+    string CustomerName = ViewBag.CustomerName;
+    const string hideOpenOnDaysBlockAttributeName = "NopChatSettingsPage.HideOpenOnDaysBlock";
+    var hideOpenOnDaysBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideOpenOnDaysBlockAttributeName);
+
+    NopHtml.SetActiveMenuItemSystemName("NopChat.Configure");
+}
+
+<script src="~/Plugins/NopStation.Plugin.Widgets.NopChat/Scripts/signalr.js"></script>
+
+<style>
+    #status-light {
+        background: #808080;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-right: 4px;
+    }
+
+    .connection-status {
+        align-items: center;
+        justify-content: center;
+        float: left;
+        padding-left: 6px;
+    }
+
+    .connection-test-btn {
+        padding-left: 32px;
+    }
+</style>
+
+<form asp-controller="NopChatAdmin" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Plugin.Widgets.NopChat.Configuration.Title")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-header">
+                            @T("Admin.NopStation.Plugin.Widgets.NopChat.Configuration.OpenOnDays")
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="OpenOnMonday_OverrideForStore" asp-input="OpenOnMonday" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="OpenOnMonday" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="OpenOnMonday" />
+                                    <span asp-validation-for="OpenOnMonday"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="OpenOnTuesday_OverrideForStore" asp-input="OpenOnTuesday" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="OpenOnTuesday" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="OpenOnTuesday" />
+                                    <span asp-validation-for="OpenOnTuesday"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="OpenOnWednesday_OverrideForStore" asp-input="OpenOnWednesday" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="OpenOnWednesday" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="OpenOnWednesday" />
+                                    <span asp-validation-for="OpenOnWednesday"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="OpenOnThursday_OverrideForStore" asp-input="OpenOnThursday" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="OpenOnThursday" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="OpenOnThursday" />
+                                    <span asp-validation-for="OpenOnThursday"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="OpenOnFriday_OverrideForStore" asp-input="OpenOnFriday" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="OpenOnFriday" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="OpenOnFriday" />
+                                    <span asp-validation-for="OpenOnFriday"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="OpenOnSaturday_OverrideForStore" asp-input="OpenOnSaturday" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="OpenOnSaturday" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="OpenOnSaturday" />
+                                    <span asp-validation-for="OpenOnSaturday"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="OpenOnSunday_OverrideForStore" asp-input="OpenOnSunday" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="OpenOnSunday" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="OpenOnSunday" />
+                                    <span asp-validation-for="OpenOnSunday"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-default">
+                        <div class="card-header">
+                            @T("Admin.NopStation.Plugin.Widgets.NopChat.Configuration.Settings")
+                        </div>
+                        <div class="card-body">
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <div class="label-wrapper">
+                                            <label class="col-form-label" for="Logo">@T("Admin.NopStation.Plugin.Widgets.NopChat.Configuration.CheckSignalR.ConnectionStatus")</label>
+                                            <div title="" data-toggle="tooltip" class="ico-help" data-original-title="@T("Admin.NopStation.Plugin.Widgets.NopChat.ConnectionStatus.Hint")"><i class="fas fa-question-circle"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="row connection-status">
+                                            <div id="status-light"></div>
+                                            <span id="status-text">@T("Admin.NopStation.Plugin.Widgets.NopChat.Configuration.CheckSignalR.Connecting")</span>
+                                            <div class="input-group-btn connection-test-btn">
+                                                <button type="button" onclick="testConnection()" name="sendtestsms" class="btn btn-info">
+                                                    @T("Admin.NopStation.Plugin.Widgets.NopChat.Configuration.CheckSignalR.Button")
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="Logo_OverrideForStore" asp-input="Logo" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="Logo" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="Logo" />
+                                        <span asp-validation-for="Logo"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+
+<script asp-location="Footer">
+
+    async function testConnection() {
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/nopChatTestHub")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+        $("#status-text").text("Connecting..");
+        $("#status-light").css("background", "#808080");
+        try {
+            await connection.start();
+            $("#status-text").text("Connected");
+            $("#status-light").css("background", "#48b461");
+        } catch (err) {
+            console.log(err)
+            $("#status-text").text("Connection Error");
+            $("#status-light").css("background", "#FF0000");
+        }
+    };
+
+    $(document).ready(function () {
+        testConnection();
+    });
+</script>

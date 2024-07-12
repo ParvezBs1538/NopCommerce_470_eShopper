@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station BulkSms.com",
+  "SystemName": "NopStation.Plugin.SMS.BulkSms",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.SMS.BulkSms.dll",
+  "Description": "This plugin allows to send SMS on multiple events using BulkSms.com gateway.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

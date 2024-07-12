@@ -1,0 +1,72 @@
+﻿@model PickupInStoreSettingsModel
+
+@await Component.InvokeAsync("StoreScopeConfiguration")
+<form asp-controller="PickupInStoreAdvance" asp-action="Configure" method="post">
+    <div class="cards-group">
+        <div class="card card-default">
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="ShowOrderStatusInOrderDetails_OverrideForStore" asp-input="ShowOrderStatusInOrderDetails" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="ShowOrderStatusInOrderDetails" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="ShowOrderStatusInOrderDetails" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="AddOrderNote_OverrideForStore" asp-input="AddOrderNote" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="AddOrderNote" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="AddOrderNote" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="OrderNotesShowToCustomer_OverrideForStore" asp-input="OrderNotesShowToCustomer" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="OrderNotesShowToCustomer" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="OrderNotesShowToCustomer" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="NotifyCustomerIfReady_OverrideForStore" asp-input="NotifyCustomerIfReady" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="NotifyCustomerIfReady" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="NotifyCustomerIfReady" />
+                    </div>
+                </div>
+                @if (Model.TemplateId != 0)
+                {
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            @*<nop-override-store-checkbox asp-for="NotifyCustomerIfReady_OverrideForStore" asp-input="NotifyCustomerIfReady" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />*@
+                            <nop-label asp-for="TemplateId" />
+                        </div>
+                        <div class="col-md-9">
+                            <a asp-controller="MessageTemplate" asp-action="Edit" asp-route-id="@Model.TemplateId">@T("Admin.NopStation.PickupInStoreAdvance.Template.Edit")</a>
+                        </div>
+                    </div>
+                }
+
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        &nbsp;
+                    </div>
+                    <div class="col-md-9">
+                        <input type="submit" name="save" class="btn btn-primary" value="@T("Admin.Common.Save")" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

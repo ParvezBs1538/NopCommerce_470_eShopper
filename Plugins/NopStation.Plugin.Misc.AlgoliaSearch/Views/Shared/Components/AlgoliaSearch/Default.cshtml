@@ -1,0 +1,133 @@
+﻿@model AlgoliaSearchModel
+@inject Nop.Core.Domain.Catalog.CatalogSettings catalogSettings
+@inject Nop.Core.IStoreContext storeContext
+@inject Nop.Core.IWebHelper webHelper
+
+<script asp-location="Footer" src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+<script asp-location="Footer" src="//cdn.jsdelivr.net/autocomplete.js/0/autocomplete.min.js"></script>
+
+@{
+    NopHtml.AddCssFileParts("/Plugins/NopStation.Plugin.Misc.AlgoliaSearch/Contents/css/styles.css",string.Empty);
+}
+
+<form asp-route="ProductSearch" method="get" id="small-search-box-form">
+    <span><input type="text" class="search-box-text" id="small-searchterms" autocomplete="off" name="q" placeholder="@T("Search.SearchBox.Tooltip")" aria-label="@T("Search.SearchBox.Text.Label")" /></span>
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.SearchBoxBeforeSearchButton })
+    <span><input type="submit" class="button-1 search-box-button" value="@T("Search.Button")" /></span>
+
+    @if (Model.SearchTermMinimumLength > 0)
+    {
+        <script asp-location="Footer">
+            $("#small-search-box-form").on("submit", function(event) {
+                var searchText = $("#small-searchterms").val();
+                if (searchText == "") {
+                    alert('@Html.Raw(JavaScriptEncoder.Default.Encode(T("Search.EnterSearchTerms").Text))');
+                    $("#small-searchterms").focus();
+                    event.preventDefault();
+                }
+                else if (searchText.length < @Model.SearchTermMinimumLength) {
+                    alert('@Html.Raw(JavaScriptEncoder.Default.Encode(string.Format(T("NopStation.AlgoliaSearch.EnterSearchMinimumLength").Text, Model.SearchTermMinimumLength)))');
+                    $("#small-searchterms").focus();
+                    event.preventDefault();
+                }
+            });
+        </script>
+    }
+    @if (Model.AutoCompleteEnabled)
+    {
+        <script asp-location="Footer">
+            function getFilters() {
+                var f = [];
+                @if(!catalogSettings.IgnoreStoreLimitations)
+                {
+                    <text>
+                f.push('(LimitedToStores = 0 OR Stores = @((await storeContext.GetCurrentStoreAsync()).Id))');
+                    </text>
+                }
+
+                var cid = $('#small-search-box-form select[name="cid"]').val() || 0;
+                var mid = $('#small-search-box-form select[name="mid"]').val() || 0;
+                var vid = $('#small-search-box-form select[name="vid"]').val() || 0;
+                if (cid > 0)
+                    f.push('FilterableCategories.Id=' + cid);
+                if (mid > 0)
+                    f.push('FilterableManufacturers.Id=' + mid);
+                if (vid > 0)
+                    f.push('FilterableVendor.Id=' + vid);
+                var filter = f.join(' AND ');
+
+                return filter;
+            }
+
+            $(document).ready(function() {
+                var client = algoliasearch('@Model.ApplicationId', '@Model.SearchOnlyKey')
+                var index = client.initIndex('@AlgoliaDefaults.DefaultIndexName');
+
+                autocomplete('#small-searchterms', { hint: false, minLength: @Model.SearchTermMinimumLength }, [
+                {
+                    source: function (query, callback) {
+                        index.search(query, {
+							hitsPerPage: @Model.AutoCompleteListSize,
+                            filters: getFilters()
+                        }).then(({ hits }) => {
+                            callback(hits);
+                        });
+                    },
+                    displayKey: 'title',
+                    templates: {
+                        suggestion: function (suggestion) {
+                            var img = '';
+                            @if (Model.ShowProductImagesInSearchAutoComplete)
+                            {
+                                <text>img = "<img src='" + suggestion.AutoCompleteImageUrl + "'>";</text>
+                            }
+                             var highlightResult = suggestion._highlightResult;
+                            for (var key in highlightResult) {
+                                if (highlightResult.hasOwnProperty(key)) {
+                                    var value = highlightResult[key].value;
+                                    if(highlightResult[key].hasOwnProperty('matchLevel')){
+                                        if(highlightResult[key].matchLevel=='none')
+                                            continue;
+                                        if(highlightResult[key].matchLevel=="full")
+                                        return "<span>" + img + value +"</span>";
+                                    }
+                                }
+                            } 
+                            for (var key in highlightResult) {
+                                if (highlightResult.hasOwnProperty(key)) {
+                                    var value = highlightResult[key].value;
+                                    if(highlightResult[key].hasOwnProperty('matchLevel')){
+                                        if(highlightResult[key].matchLevel=='none')
+                                            continue;
+                                        return "<span>" + img + value +"</span>";
+                                    }
+                                }
+                            }
+                            return "<span>" + img + suggestion._highlightResult.Name.value +"</span>"
+
+                        },
+                        empty: function (options) {
+                            return '<div class="no-result">@T("NopStation.AlgoliaSearch.NoSearchResultFor") "<em>' + options.query + '</em>".</div>';
+                        }
+                        @if (!Model.HidePoweredByAlgolia)
+                        {
+                            <text>,footer: '<span class="branding">Powered by <img src="https://www.algolia.com/assets/algolia128x40.png" /></span>'</text>
+                        }
+                    },
+                    response: function (event, ui) {
+                        console.log(ui)
+                    }
+                }])
+                .on('autocomplete:selected', function (event, suggestion, dataset) {
+                    setLocation('@webHelper.GetStoreLocation()' + suggestion.SeName);
+                })
+                //.off('blur').on('blur', function () {
+                //    if(document.hasFocus()) {
+                //        $('ul.ui-autocomplete').hide();
+                //    }
+                //});
+            });
+        </script>
+    }
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.SearchBox })
+</form>

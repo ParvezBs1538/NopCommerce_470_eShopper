@@ -1,0 +1,199 @@
+﻿@model ShipperSearchModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.DMS.Shippers.List").Text;
+
+    NopHtml.SetActiveMenuItemSystemName("DMS.Shipper");
+}
+
+@{
+    const string hideSearchBlockAttributeName = "Shippers.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<form asp-controller="Shipper" asp-action="List" method="post" id="dmsshipper-form">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.DMS.Shippers.List")
+        </h1>
+        <div class="float-right">
+            <button type="submit" id="btnAddNewProduct" onclick="javascript:OpenWindow('@(Url.Action("ShipperAddPopup", "Shipper", new { btnId = "btnRefreshShippers", formId = "dmsshipper-form" }))', 800, 800, true); return false;" class="btn btn-primary">
+                <i class="fas fa-plus-square"></i>
+                @T("Admin.Common.AddNew")
+            </button>
+            <button type="button" id="delete-selected" class="btn btn-danger">
+                <i class="far fa-trash-alt"></i>
+                @T("Admin.Common.Delete.Selected")
+            </button>
+            <nop-action-confirmation asp-button-id="delete-selected" />
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default card-search">
+                        <div class="card-body">
+                            <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                                <div class="search-text">@T("Admin.Common.Search")</div>
+                                <div class="icon-search"><i class="fa fa-search" aria-hidden="true"></i></div>
+                                <div class="icon-collapse"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
+                            </div>
+
+                            <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="SearchEmail" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="SearchEmail" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group row">
+                                            <div class="col-md-8 offset-md-4">
+                                                <button type="button" id="search-dmsshipper" class="btn btn-primary btn-search">
+                                                    <i class="fa fa-search"></i>
+                                                    @T("Admin.Common.Search")
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-default">
+                        <div class="card-body">
+                            @await Html.PartialAsync("Table", new DataTablesModel
+                       {
+                           Name = "dmsshipper-grid",
+                           UrlRead = new DataUrl("List", "Shipper", null),
+                           SearchButtonId = "search-dmsshipper",
+                           Length = Model.PageSize,
+                           LengthMenu = Model.AvailablePageSizes,
+                           Filters = new List<FilterParameter>
+                            {
+                            new FilterParameter(nameof(Model.SearchEmail)),
+                            },
+                           ColumnCollection = new List<ColumnProperty>
+                            {
+                            new ColumnProperty(nameof(ShipperModel.Id))
+                            {
+                            IsMasterCheckBox = true,
+                            Render = new RenderCheckBox("checkbox_products"),
+                            ClassName =  NopColumnClassDefaults.CenterAll,
+                            Width = "50"
+                            },
+                            new ColumnProperty(nameof(ShipperModel.CustomerName))
+                            {
+                            Title = T("Admin.NopStation.DMS.Shippers.Fields.Customer").Text,
+                            Width = "250",
+                            Render = new RenderLink(new DataUrl("~/Admin/Customer/Edit", nameof(ShipperModel.CustomerId)))
+                            },
+                            new ColumnProperty(nameof(ShipperModel.Active))
+                            {
+                            Title = T("Admin.NopStation.DMS.Shippers.Fields.Active").Text,
+                            Width = "50",
+                            Render = new RenderBoolean(),
+                            },
+                            new ColumnProperty(nameof(ShipperModel.Online))
+                            {
+                            Title = T("Admin.NopStation.DMS.Shippers.Fields.Online").Text,
+                            Width = "50",
+                            Render = new RenderCustom("IsOnline"),
+                            ClassName = NopColumnClassDefaults.CenterAll
+                            },
+                            new ColumnProperty(nameof(ShipperModel.CreatedOn))
+                            {
+                            Title = T("Admin.NopStation.DMS.Shippers.Fields.CreatedOn").Text,
+                            Width = "100",
+                            Render = new RenderDate()
+                            },
+                            new ColumnProperty(nameof(ShipperModel.Id))
+                            {
+                            Title = T("Admin.Common.View").Text,
+                            Width = "100",
+                            ClassName =  NopColumnClassDefaults.Button,
+                            Render = new RenderButtonView(new DataUrl("Edit"))
+                            },
+                            // ,new ColumnProperty(nameof(ShipperModel.Id))
+                            // {
+                            //     Title = T("Admin.Common.Edit").Text,
+                            //     Width = "150",
+                            //     ClassName =  NopColumnClassDefaults.Button,
+                            //     Render = new RenderButtonsInlineEdit()
+                            // },
+                            // new ColumnProperty(nameof(ShipperModel.Id))
+                            // {
+                            //     Title = T("Admin.Common.Delete").Text,
+                            //     Width = "100",
+                            //     Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                            //     ClassName = NopColumnClassDefaults.Button
+                            // }
+                            }
+                       })
+                        </div>
+
+                        <button type="button" id="btnRefreshShippers" style="display: none"></button>
+                        <script>
+                            $(document).ready(function () {
+                                $('#btnRefreshShippers').click(function () {
+                                    //refresh grid
+                                    updateTable('#dmsshipper-grid');
+                                    //return false to don't reload a page
+                                    return false;
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+<script>
+    function IsOnline(data, type, row, meta) {
+        return (row.Online) ? '🟢' : '🔴';
+    }
+</script>
+<script>
+
+    $(document).ready(function () {
+        $('#delete-selected-action-confirmation-submit-button').bind('click', function () {
+            var postData = {
+                selectedIds: selectedIds
+            };
+            addAntiForgeryToken(postData);
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@(Url.Action("DeleteSelected", "Shipper"))",
+                data: postData,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    showAlert('deleteSelectedFailed', errorThrown);
+                },
+                complete: function (jqXHR, textStatus) {
+                    if (jqXHR.status === 204) {
+                        showAlert('nothingSelectedAlert', '@T("Admin.Common.Alert.NothingSelected")');
+                        return;
+                    }
+                    updateTable('#dmsshipper-grid');
+                }
+            });
+            $('#delete-selected-action-confirmation').modal('toggle');
+            return false;
+        });
+    });
+
+</script>
+<nop-alert asp-alert-id="deleteSelectedFailed" />
+<nop-alert asp-alert-id="nothingSelectedAlert" />

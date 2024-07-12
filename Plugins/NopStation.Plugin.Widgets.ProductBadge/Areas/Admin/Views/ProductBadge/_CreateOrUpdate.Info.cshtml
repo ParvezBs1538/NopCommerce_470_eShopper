@@ -1,0 +1,410 @@
+﻿@model BadgeModel
+
+<link rel="stylesheet" href="~/lib_npm/farbstastic/farbtastic.css" />
+<script src="~/lib_npm/farbstastic/farbtastic.min.js" asp-location="Head"></script>
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.ContentTypeId)").change(toggleContentType);
+        $("#@Html.IdFor(model => model.BadgeTypeId)").change(toggleBadgeType);
+        $("#@Html.IdFor(model => model.CatalogTypeId)").change(toggleCatalogType);
+
+        toggleContentType();
+        toggleBadgeType();
+    });
+
+    function toggleContentType() {
+        var selectedContentTypeId = $("#@Html.IdFor(model => model.ContentTypeId)").val();
+        if (selectedContentTypeId == @(((int)ContentType.Picture).ToString())) {
+            $('#pnlShapeTypeId').hide();
+            $('#badge-info-localized').hide();
+            $('#pnlBackgroundColor').hide();
+            $('#pnlFontColor').hide();
+            $('#pnlPictureId').show();
+        } else if (selectedContentTypeId == @(((int)ContentType.Text).ToString())) {
+            $('#pnlShapeTypeId').show();
+            $('#badge-info-localized').show();
+            $('#pnlBackgroundColor').show();
+            $('#pnlFontColor').show();
+            $('#pnlPictureId').hide();
+        }
+    }
+    
+    function toggleBadgeType() {
+        var selectedBadgeTypeId = $("#@Html.IdFor(model => model.BadgeTypeId)").val();
+        if (selectedBadgeTypeId == @(((int)BadgeType.CustomProducts).ToString())) {
+            toggleCatalogType();
+            $('#pnlCatalogTypeId').show();
+            $('#pnlDiscountBadgeTextFormatId').hide();
+            $('#pnlBestSeller').hide();
+        } else {
+            if (selectedBadgeTypeId == @(((int)BadgeType.DiscountedProducts).ToString())) {
+                $('#pnlDiscountBadgeTextFormatId').show();
+                $('#pnlBestSeller').hide();
+            }
+            else if (selectedBadgeTypeId == @(((int)BadgeType.BestSellingProducts).ToString())) {
+                $('#pnlDiscountBadgeTextFormatId').hide();
+                $('#pnlBestSeller').show();
+            }
+            else { 
+                $('#pnlDiscountBadgeTextFormatId').hide();
+                $('#pnlBestSeller').hide();
+            }
+
+            $('[data-card-name=badge-appliedtoproducts]').hideElement();
+            $('[data-card-name=badge-appliedtocategories]').hideElement();
+            $('[data-card-name=badge-appliedtomanufacturers]').hideElement();
+            $('[data-card-name=badge-appliedtovendors]').hideElement();
+            $('#pnlCatalogTypeId').hide();
+        }
+    }
+
+    function toggleCatalogType() {
+        var selectedCatalogTypeId = $("#@Html.IdFor(model => model.CatalogTypeId)").val();
+        if (selectedCatalogTypeId == @(((int)CatalogType.Products).ToString())) {
+            $('[data-card-name=badge-appliedtoproducts]').showElement();
+            $('[data-card-name=badge-appliedtocategories]').hideElement();
+            $('[data-card-name=badge-appliedtomanufacturers]').hideElement();
+            $('[data-card-name=badge-appliedtovendors]').hideElement();
+        } else if (selectedCatalogTypeId == @(((int)CatalogType.Categories).ToString())) {
+            $('[data-card-name=badge-appliedtoproducts]').hideElement();
+            $('[data-card-name=badge-appliedtocategories]').showElement();
+            $('[data-card-name=badge-appliedtomanufacturers]').hideElement();
+            $('[data-card-name=badge-appliedtovendors]').hideElement();
+        } else if (selectedCatalogTypeId == @(((int)CatalogType.Manufacturers).ToString())) {
+            $('[data-card-name=badge-appliedtoproducts]').hideElement();
+            $('[data-card-name=badge-appliedtocategories]').hideElement();
+            $('[data-card-name=badge-appliedtomanufacturers]').showElement();
+            $('[data-card-name=badge-appliedtovendors]').hideElement();
+        } else if (selectedCatalogTypeId == @(((int)CatalogType.Vendors).ToString())) {
+            $('[data-card-name=badge-appliedtoproducts]').hideElement();
+            $('[data-card-name=badge-appliedtocategories]').hideElement();
+            $('[data-card-name=badge-appliedtomanufacturers]').hideElement();
+            $('[data-card-name=badge-appliedtovendors]').showElement();
+        }
+    }
+</script>
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Name" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Name" asp-required="true" />
+            <span asp-validation-for="Name"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ContentTypeId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="ContentTypeId" asp-items="@Model.AvailableContentTypes" />
+            <span asp-validation-for="ContentTypeId"></span>
+        </div>
+    </div>
+    <div class="form-group row" id="pnlShapeTypeId">
+        <div class="col-md-3">
+            <nop-label asp-for="ShapeTypeId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="ShapeTypeId" asp-items="@Model.AvailableShapeTypes" />
+            <span asp-validation-for="ShapeTypeId"></span>
+        </div>
+    </div>
+    @(await Html.LocalizedEditorAsync<BadgeModel, BadgeLocalizedModel>("badge-info-localized",
+                @<div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="@Model.Locales[item].Text" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="@Model.Locales[item].Text" />
+                            <span asp-validation-for="@Model.Locales[item].Text"></span>
+                        </div>
+                    </div>
+
+                    <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+                </div>
+        ,@<div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="Text" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="Text" asp-required="true" />
+                            <span asp-validation-for="Text"></span>
+                        </div>
+                    </div>
+                </div>)
+    )
+    
+    @if (string.IsNullOrEmpty(Model.BackgroundColor))
+    {
+        Model.BackgroundColor = "#aaa";
+    }
+        
+    <div id="pnlBackgroundColor" class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="BackgroundColor" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="BackgroundColor" />
+            <div id="bg-color-picker"></div>
+            <script>
+            $(document).ready(function(){
+                $('#bg-color-picker').farbtastic('#@Html.IdFor(model => model.BackgroundColor)');
+            });
+            </script>
+            <span asp-validation-for="BackgroundColor"></span>
+        </div>
+    </div>
+    <div class="form-group row" id="pnlPictureId">
+        <div class="col-md-3">
+            <nop-label asp-for="PictureId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="PictureId"/>
+            <span asp-validation-for="PictureId"></span>
+        </div>
+    </div>
+    @if (string.IsNullOrEmpty(Model.FontColor))
+    {
+        Model.FontColor = "#fff";
+    }
+        
+    <div id="pnlFontColor" class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="FontColor" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="FontColor" />
+            <div id="font-color-picker"></div>
+            <script>
+            $(document).ready(function(){
+                $('#font-color-picker').farbtastic('#@Html.IdFor(model => model.FontColor)');
+            });
+            </script>
+            <span asp-validation-for="FontColor"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SizeId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="SizeId" asp-items="@Model.AvailableSizes" />
+            <span asp-validation-for="SizeId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="BadgeTypeId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="BadgeTypeId" asp-items="@Model.AvailableBadgeTypes" />
+            <span asp-validation-for="BadgeTypeId"></span>
+        </div>
+    </div> 
+
+    <div class="form-group row" id="pnlDiscountBadgeTextFormatId">
+        <div class="col-md-3">
+            <nop-label asp-for="DiscountBadgeTextFormatId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="DiscountBadgeTextFormatId" asp-items="@Model.AvailableDiscountBadgeTextFormats" />
+            <span asp-validation-for="DiscountBadgeTextFormatId"></span>
+        </div>
+    </div>
+
+    <div class="card card-default" id="pnlBestSeller">
+        <div class="card-header">
+            @T("Admin.NopStation.ProductBadge.Badges.BestSell.Parameters")
+        </div>
+        <div class="card-body">
+   
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="BestSellSoldInDays" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="BestSellSoldInDays" />
+                    <span asp-validation-for="BestSellSoldInDays"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="BestSellStoreWise" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="BestSellStoreWise" />
+                    <span asp-validation-for="BestSellStoreWise"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="BestSellMinimumAmountSold" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="BestSellMinimumAmountSold" asp-postfix="@Model.CurrencyCode" />
+                    <span asp-validation-for="BestSellMinimumAmountSold"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="BestSellMinimumQuantitySold" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="BestSellMinimumQuantitySold" />
+                    <span asp-validation-for="BestSellMinimumQuantitySold"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="BestSellPaymentStatusIds" />
+                </div>
+                <div class="col-md-9">
+                    <nop-select asp-for="BestSellPaymentStatusIds" asp-items="Model.AvailablePaymentStatuses" asp-multiple="true" />
+                    <span asp-validation-for="BestSellPaymentStatusIds"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="BestSellShippingStatusIds" />
+                </div>
+                <div class="col-md-9">
+                    <nop-select asp-for="BestSellShippingStatusIds" asp-items="Model.AvailableShippingStatuses" asp-multiple="true" />
+                    <span asp-validation-for="BestSellShippingStatusIds"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="BestSellOrderStatusIds" />
+                </div>
+                <div class="col-md-9">
+                    <nop-select asp-for="BestSellOrderStatusIds" asp-items="Model.AvailableOrderStatuses" asp-multiple="true" />
+                    <span asp-validation-for="BestSellOrderStatusIds"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row" id="pnlCatalogTypeId">
+        <div class="col-md-3">
+            <nop-label asp-for="CatalogTypeId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="CatalogTypeId" asp-items="@Model.AvailableCatalogTypes" />
+            <span asp-validation-for="CatalogTypeId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="PositionTypeId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="PositionTypeId" asp-items="@Model.AvailablePositionTypes" />
+            <em>@T("Admin.NopStation.ProductBadge.Badges.Fields.PositionType.RtlHint")</em>
+            <span asp-validation-for="PositionTypeId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="CssClass" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="CssClass" />
+            <span asp-validation-for="CssClass"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="FromDateTimeUtc" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="FromDateTimeUtc" />
+            <span asp-validation-for="FromDateTimeUtc"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ToDateTimeUtc" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ToDateTimeUtc" />
+            <span asp-validation-for="ToDateTimeUtc"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Active" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Active"/>
+            <span asp-validation-for="Active"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SelectedCustomerRoleIds" />
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-4">
+                    <nop-select asp-for="SelectedCustomerRoleIds" asp-items="Model.AvailableCustomerRoles" asp-multiple="true"/>
+                    <script>
+                        $(function () {
+                            var rolesIdsInput = $('#@Html.IdFor(model => model.SelectedCustomerRoleIds)').select2({
+                            closeOnSelect: false,
+                            @if (!Model.AvailableCustomerRoles.Any())
+                            {
+                                <text>
+                                        disabled: true,
+                                        placeholder: 'No customer roles available',
+                                </text>
+                            }
+                        });
+                    });
+                    </script>
+                </div>
+                <div class="col-md-8">
+                    @await Component.InvokeAsync(typeof(AclDisabledWarningViewComponent))
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SelectedStoreIds" />
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-4">
+                    <nop-select asp-for="SelectedStoreIds" asp-items="Model.AvailableStores" asp-multiple="true" />
+                    <script>
+                        $(function () {
+                            var storesIdsInput = $('#@Html.IdFor(model => model.SelectedStoreIds)').select2({
+                                closeOnSelect: false,
+                                @if (!Model.AvailableStores.Any())
+                                {
+                                    <text>
+                                            disabled: true,
+                                            placeholder: 'No stores available',
+                                    </text>
+                                }
+                            });
+                        });
+                    </script>
+                </div>
+                <div class="col-md-8">
+                    @await Component.InvokeAsync(typeof(MultistoreDisabledWarningViewComponent))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Bit.ly URL Shortener",
+  "SystemName": "NopStation.Plugin.Misc.UrlShortener",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Misc.UrlShortener.dll",
+  "Description": "This plugin offers url shortener by bit.ly",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

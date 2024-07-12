@@ -1,0 +1,51 @@
+﻿@model SitemapModel
+@using Nop.Web.Models.Common;
+@{
+    Layout = "_ColumnsOne";
+
+    //title
+    NopHtml.AddTitleParts(T("PageTitle.Sitemap").Text);
+}
+<div class="container">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h2 class="title text-center">@T("Sitemap")</h2>
+
+        </div>
+    </div>
+
+    @foreach (var itemGroup in Model.Items.GroupBy(itemGroup => itemGroup.GroupTitle))
+    {
+        <div class="custom-page-box-div">
+            <div class="row">
+                <div class="entity-title">
+                    <h2>@itemGroup.Key</h2>
+                </div>
+                <div class="entity-body">
+
+                    @foreach (var item in itemGroup.ToList())
+                    {
+                        <div class="col-md-3">
+                            <a href="@item.Url">@item.Name</a>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    }
+    @{
+        var pager = Html.Pager(Model.PageModel).QueryParam("pagenumber");
+        if (!(await pager.IsEmpty()))
+        {
+            <div class="pager">
+                @pager
+            </div>
+        }
+    }
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.SitemapAfter })
+</div>
+
+
+

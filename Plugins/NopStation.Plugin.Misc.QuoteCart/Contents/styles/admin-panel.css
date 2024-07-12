@@ -1,0 +1,69 @@
+﻿.messages {
+  padding: 0.5rem 2rem;
+  height: min(90vh, 400px);
+  overflow-y: auto;
+  position: relative;
+}
+.messages:empty {
+    display: none;
+}
+
+  .messages::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .messages::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+  }
+
+  .messages::-webkit-scrollbar-thumb {
+    background-color: #00c0ef;
+  }
+
+.quote-message {
+  display: block;
+  max-width: 80%;
+  border-radius: 4px;
+  padding: .5rem 1.5rem;
+  width: max-content;
+  position: relative;
+  margin: 0.5rem 0;
+}
+
+  .quote-message.quote-message-right {
+    text-align: right;
+    margin-left: auto;
+    background-color: #a9dfff;
+    color: #002e48;
+    border-top-right-radius: 0;
+  }
+
+    .quote-message.quote-message-right::before {
+      content: "";
+      position: absolute;
+      border: 10px solid #a9dfff;
+      right: -15px;
+      top: 0;
+      border-right-color: transparent;
+      border-bottom-color: transparent;
+    }
+
+  .quote-message.quote-message-left {
+    background-color: #eee;
+    color: #002e48;
+    border-top-left-radius: 0;
+  }
+
+    .quote-message.quote-message-left::before {
+      content: "";
+      position: absolute;
+      border: 10px solid #eee;
+      left: -15px;
+      top: 0;
+      border-left-color: transparent;
+      border-bottom-color: transparent;
+    }
+
+  .quote-message p {
+    margin: 0;
+  }

@@ -1,0 +1,83 @@
+﻿@model AcceptedCardModel
+
+@{ 
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.QuickStream.AcceptedCards.EditDetails").Text;
+    NopHtml.SetActiveMenuItemSystemName("QuickStream.AcceptedCards");
+}
+
+<form asp-controller="QuickStream" asp-action="Edit" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.QuickStream.AcceptedCards.EditDetails")
+            <small>
+                <i class="fas fa-arrow-circle-left"></i>
+                <a asp-action="AcceptCardList">@T("Admin.NopStation.QuickStream.AcceptedCards.BackToList")</a>
+            </small>
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="CardScheme" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Model.CardScheme</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="CardType" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Model.CardType</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="Surcharge" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Model.Surcharge</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="IsEnable" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="IsEnable" />
+                                    <span asp-validation-for="IsEnable"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="PictureId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="PictureId" />
+                                    <span asp-validation-for="PictureId"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

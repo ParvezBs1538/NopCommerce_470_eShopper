@@ -1,0 +1,37 @@
+﻿@model ShipmentComponentModel
+
+@if (Model.CanSendShipmentToRedx)
+{
+    <span id="redx-parcel-submit" class="btn btn-info" onclick="sendShipmentToRedx()">
+        <i class="fas fa-save"></i>
+        @T("Admin.NopStation.Redx.RedxShipments.ParcelSubmit")
+    </span>
+}
+
+<script asp-location="Footer">
+    $(document).ready(function() {
+        loadRedxShipment();
+    });
+
+    function loadRedxShipment() {
+        var postData = {
+            shipmentId: @Model.Id
+        };
+        addAntiForgeryToken(postData);
+        $.ajax({
+            type: "POST",
+            url: "@(Url.Action("Details", "RedxShipment"))",
+            data: postData,
+            success: function (data, textStatus, jqXHR) {
+                if (data.success) {
+                    $($(".form-horizontal .cards-group")[0]).after(data.html);
+                }
+                if (data.message) {
+                    alert(data.message);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+    }
+</script>

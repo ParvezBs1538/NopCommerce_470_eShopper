@@ -1,0 +1,92 @@
+﻿@model SurveyModel
+@using Nop.Core.Domain.Catalog;
+@using Nop.Services
+@using Nop.Services.Stores
+@using Nop.Core.Domain.Messages
+
+<div class="card-body">
+    @(await Html.LocalizedEditorAsync<SurveyModel, SurveyLocalizedModel>("survey-email-localized",
+    @<div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="@Model.Locales[item].EmailAccountId" />
+            </div>
+            <div class="col-md-9">
+                <nop-select asp-for="@Model.Locales[item].EmailAccountId" asp-items="@Model.Locales[item].AvailableEmailAccounts" />
+                <span asp-validation-for="@Model.Locales[item].EmailAccountId"></span>
+            </div>
+        </div>
+        <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+    </div>
+    ,
+    @<div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="EmailAccountId" />
+            </div>
+            <div class="col-md-9">
+                <nop-select asp-for="EmailAccountId" asp-items="Model.AvailableEmailAccounts" />
+                <span asp-validation-for="EmailAccountId"></span>
+            </div>
+        </div>
+    </div>))
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ToEmailAddresses" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ToEmailAddresses" />
+            <span asp-validation-for="ToEmailAddresses"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="BccEmailAddresses" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="BccEmailAddresses" />
+            <span asp-validation-for="BccEmailAddresses"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SendImmediately" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="SendImmediately" />
+            <span asp-validation-for="SendImmediately"></span>
+        </div>
+    </div>
+    <div class="form-group row" id="pnl-send-after">
+        <div class="col-md-3">
+            <nop-label asp-for="DelayBeforeSend" />
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-3">
+                    <nop-editor asp-for="DelayBeforeSend" />
+                    <span asp-validation-for="DelayBeforeSend"></span>
+                </div>
+                <div class="col-md-3">
+                    <nop-select asp-for="DelayPeriodId" asp-items="@await (((MessageDelayPeriod)Model.DelayPeriodId).ToSelectListAsync())" style="max-width: 200px;" />
+                    <span asp-validation-for="DelayPeriodId"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.SendImmediately)").click(sendImmediately);
+        sendImmediately();
+    });
+
+    function sendImmediately() {
+        if ($('#@Html.IdFor(model => model.SendImmediately)').is(':checked'))
+            $('#pnl-send-after').hideElement();
+        else
+            $('#pnl-send-after').showElement();
+    }
+</script>

@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Google Tag Manager",
+  "SystemName": "NopStation.Plugin.Widgets.GoogleTagManager",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.GoogleTagManager.dll",
+  "Description": "This plugin allows you to connect with google tag manager.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

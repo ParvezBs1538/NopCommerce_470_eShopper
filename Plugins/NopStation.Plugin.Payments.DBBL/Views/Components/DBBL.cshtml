@@ -1,0 +1,32 @@
+﻿@model CartdListModel
+
+<style>
+    .dbbl-card-selection li {
+        display: inline-block;
+        border: solid 1px #ddd;
+        padding: 20px 15px;
+        margin: 10px;
+        min-width: 200px;
+        background: #fff;
+    }
+</style>
+
+<ul class="dbbl-card-selection">
+    @for (var i = 0; i < Model.AvailableCards.Count; i++)
+    {
+        var card = Model.AvailableCards[i];
+        <li>
+            <div class="">
+                <div class="">
+                    <label for="card_@(card.Value)">
+                        <img src="@card.LogoUrl" alt="@card.DisplayName" />
+                    </label>
+                </div>
+                <div class="">
+                    <input id="card_@(card.Value)" type="radio" name="dbbl_card" value="@(card.Value)" />
+                    <label for="card_@(card.Value)">@card.DisplayName</label>
+                </div>
+            </div>
+        </li>
+    }
+</ul>

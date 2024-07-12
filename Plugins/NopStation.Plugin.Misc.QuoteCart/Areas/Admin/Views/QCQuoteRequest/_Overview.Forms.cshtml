@@ -1,0 +1,45 @@
+﻿@using Nop.Core.Domain.Media;
+@using Nop.Services.Media;
+@model QuoteRequestDetailsModel
+
+@inject IDownloadService downloadService
+
+<div class="card-body">
+    <div class="search-body">
+        <dl class="card card-default p-3">
+            @foreach (var formAttributeModel in Model.SubmittedFormAttributes)
+            {
+                @if (formAttributeModel != null)
+                {
+                    <dt>
+                        @(string.IsNullOrEmpty(formAttributeModel.TextPrompt) ? formAttributeModel.Name : formAttributeModel.TextPrompt)
+                    </dt>
+                    @switch (formAttributeModel.AttributeControlType)
+                    {
+                        case AttributeControlType.MultilineTextbox:
+                            <dd class="ml-3">@formAttributeModel.Values.FirstOrDefault()</dd>
+                            break;
+                        case AttributeControlType.FileUpload:
+                            @foreach (var file in formAttributeModel.Values)
+                            {
+                                var download = await downloadService.GetDownloadByGuidAsync(Guid.Parse(file));
+                                if (download != null)
+                                {
+                                    var url = Url.Action("GetFileUpload", "Download", new { downloadId = download.DownloadGuid, Area = "" });
+                                    <span class="ml-3">
+                                        <a href="@url">
+                                            @(download.Filename)@(download.Extension)
+                                        </a>
+                                    </span>
+                                }
+                            }
+                            break;
+                        default:
+                            <dd class="ml-3">@string.Join(", ", formAttributeModel.Values)</dd>
+                            break;
+                    }
+                }
+            }
+        </dl>
+    </div>
+</div>

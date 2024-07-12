@@ -1,0 +1,16 @@
+﻿@model MarkedReadyOrPickedModel
+
+@if (Model.StatusId == (int)PickUpStatusType.OrderInitied)
+{
+    <a asp-controller="PickupInStoreOrder" asp-action="MarkOrderAsReady" asp-route-orderId="@Model.OrderId" class="btn btn-primary">
+        <i class='fa fa-check' aria-hidden='true'></i>
+        @T("Admin.NopStation.PickupInStoreAdvance.Field.MarkAsReady")
+    </a>
+}
+else if (Model.StatusId == (int)PickUpStatusType.ReadyForPick)
+{
+    <a asp-controller="PickupInStoreOrder" asp-action="MarkOrderAsPickedUp" asp-route-orderId="@Model.OrderId" class="btn btn-primary">
+        <i class='fa fa-check' aria-hidden='true'></i>
+        @T("Admin.NopStation.PickupInStoreAdvance.Field.MarkAsPickedUp")
+    </a>
+}

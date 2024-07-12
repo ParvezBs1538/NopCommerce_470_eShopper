@@ -1,0 +1,49 @@
+﻿@using System.Globalization
+@using NopStation.Plugin.Misc.Core.Helpers
+@{
+    var settings = NopInstance.Load<PictureZoomSettings>();
+    var position = ((PictureZoomPosition)((await workContext.GetWorkingLanguageAsync()).Rtl ? settings.RtlPositionTypeId : settings.LtrPositionTypeId)).ToString().ToLower();
+
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "/Plugins/NopStation.Plugin.Widgets.PictureZoom/Contents/js/jquery.imagesloaded.js");
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "/Plugins/NopStation.Plugin.Widgets.PictureZoom/Contents/js/cloud-zoom.1.0.2.js");
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.PictureZoom/Contents/css/cloud-zoom.css",string.Empty);
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.PictureZoom/Contents/css/styles.css",string.Empty);
+
+    System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = new System.Globalization.CultureInfo("en-US");
+
+}
+
+<script type="text/javascript" asp-location="Footer">
+    var position = '@position';
+    var cloudZoom = function (position) {
+        $("a.cloud-zoom").imagesLoaded({
+            done: function ($images) {
+                var width = $(".cloud-zoom-image-size").width() * @settings.ZoomWidth;
+                var height = $(".cloud-zoom-image-size").height() * @settings.ZoomHeight;
+                $('.cloud-zoom').CloudZoom({
+                    zoomWidth: width,
+                    zoomHeight: height,
+                    position: position,
+                    tint: @settings.Tint.ToString().ToLower(),
+                    tintOpacity: @settings.TintOpacity.ToString("N2", new CultureInfo("en-US")),
+                    lensOpacity: @settings.LensOpacity.ToString("N2", new CultureInfo("en-US")),
+                    softFocus: @settings.SoftFocus.ToString().ToLower(),
+                    smoothMove: @settings.SmoothMove,
+                    showTitle: @settings.ShowTitle.ToString().ToLower(),
+                    titleOpacity: @settings.TitleOpacity.ToString("N2", new CultureInfo("en-US")),
+                    adjustX: @settings.AdjustX,
+                    adjustY: @settings.AdjustY
+                });
+            }
+        });
+    }
+
+    var initZoom = function () {
+        if ($(window).width() <= 768) {
+            cloudZoom('inside');
+        }
+        else {
+            cloudZoom(position);
+        }
+    };
+</script>

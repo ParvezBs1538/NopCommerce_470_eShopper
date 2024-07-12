@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Vendor Shop",
+  "SystemName": "NopStation.Plugin.Widgets.VendorShop",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.VendorShop.dll",
+  "Description": "This plugin allows to add vendor shop to your site.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

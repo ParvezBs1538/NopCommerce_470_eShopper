@@ -1,0 +1,327 @@
+﻿.nop-chat-wrapper {
+  z-index: 1000;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  /*bottom: 40px;*/
+  /*right: 40px;*/
+  width: 900px;
+  text-align: right;
+}
+
+.nop-chat {
+  /*display: inline-block;*/
+  display: none;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 750px;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 50px rgba(150, 162, 171, 0.55);
+  border-radius: 10px;
+  text-align: left;
+  overflow: visible;
+}
+
+
+  .nop-chat .title {
+    background: #F1F3F4;
+    border-radius: 10px 10px 0px 0px;
+    padding: 10px 15px;
+  }
+
+  .nop-chat .chat-logo {
+    display: inline-block;
+    width: 50%;
+  }
+
+  .nop-chat .buttons {
+    display: inline-block;
+    width: 50%;
+    text-align: right;
+    margin: 5px 0;
+    vertical-align: top;
+    float: right;
+  }
+
+    .nop-chat .buttons button {
+      height: 25px;
+      width: 25px;
+      align-items: center;
+      text-align: center;
+      border: 1.5px solid #130F26;
+      border-radius: 8px;
+      margin-left: 5px;
+      background: #F1F3F4;
+      color: #130F26;
+    }
+
+
+  .nop-chat .chat-body {
+    height: 500px;
+  }
+
+  .nop-chat .contact-list {
+    display: inline-block;
+    width: 40%;
+    border-right: 2px solid #E5E5E5;
+    vertical-align: top;
+    height: 100%;
+  }
+
+    .nop-chat .contact-list .contact {
+      box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid #E5E5E5;
+      padding: 5px 10px;
+    }
+
+      .nop-chat .contact-list .contact.unread {
+        background: #F5F5F5 url('/Plugins/NopStation.Plugin.Widgets.NopChat/Contents/Images/message-icon.png') 95% no-repeat;
+      }
+
+    .nop-chat .contact-list .contact-picture {
+      display: inline-block;
+      width: 25%;
+      padding: 10px;
+    }
+
+      .nop-chat .contact-list .contact-picture .picture,
+      .nop-chat .chat-box .message-picture .picture {
+        border-radius: 100%;
+        overflow: hidden;
+        position: relative;
+      }
+
+        .nop-chat .contact-list .contact-picture .picture:before,
+        .nop-chat .chat-box .message-picture .picture:before {
+          content: "";
+          display: block;
+          padding-top: 100%;
+        }
+
+        .nop-chat .contact-list .contact-picture .picture img,
+        .nop-chat .chat-box .message-picture .picture img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+
+    .nop-chat .contact-list .contact-body {
+      display: inline-block;
+      width: 60%;
+      vertical-align: top;
+      font-style: normal;
+      font-size: 15px;
+      line-height: 18px;
+      text-transform: capitalize;
+      color: #83898C;
+      margin-top: 15px;
+    }
+
+      .nop-chat .contact-list .contact-body .name {
+        font-weight: bold;
+      }
+
+    .nop-chat .contact-list .contact.unread .contact-body .name {
+      color: #00A0DB;
+    }
+
+    .nop-chat .contact-list .contact-body .message-preview {
+      height: 20px;
+      overflow: hidden;
+    }
+
+  .nop-chat .chat-box {
+    display: inline-block;
+    width: 60%;
+    height: 100%;
+    float: right;
+    position: relative;
+  }
+
+    .nop-chat .chat-box .messages {
+      height: 98%;
+    }
+
+      .nop-chat .chat-box .messages .message {
+        width: 83%;
+        float: left;
+        display: flex;
+      }
+
+        .nop-chat .chat-box .messages .message.self {
+          margin: 0 12px 0 auto;
+          float: right;
+          display: flex;
+          flex-direction: row-reverse;
+        }
+
+    .nop-chat .chat-box .message-picture {
+      display: inline-block;
+      width: 15%;
+      padding: 10px;
+    }
+
+    .nop-chat .chat-box .messages .message.self .message-picture {
+      float: right;
+    }
+
+    .nop-chat .chat-box .message-content {
+      display: inline-block;
+      width: 85%;
+      vertical-align: top;
+      margin-top: 15px;
+    }
+
+    .nop-chat .chat-box .messages .message.self .message-content {
+      float: right;
+    }
+
+
+    .nop-chat .chat-box .message-content .text {
+      padding: 15px;
+      background: #39BFF0;
+      color: #FFF;
+      box-shadow: 0px 4px 10px rgba(78, 204, 251, 0.25);
+      border-radius: 0px 5px 5px 20px;
+      margin-bottom: 10px;
+      word-break: break-all;
+      line-height: 20px;
+    }
+
+    .nop-chat .chat-box .messages .message.self .message-content {
+      text-align: right;
+    }
+
+      .nop-chat .chat-box .messages .message.self .message-content .text {
+        background: #162356;
+        box-shadow: 0px 4px 10px rgba(22, 35, 86, 0.2);
+        border-radius: 5px 0 5px 20px;
+        white-space: pre-wrap;
+      }
+
+    .nop-chat .chat-box .message-content .time-stamp {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 13px;
+      line-height: 16px;
+      letter-spacing: 0.03em;
+      text-transform: lowercase;
+      color: #A8A9B4;
+    }
+
+    .nop-chat .chat-box .text-box {
+      height: 70px;
+      width: 100%;
+      background: #F5F5F5;
+      border-radius: 0px 0px 10px 0px;
+      margin-top: 10px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+
+      .nop-chat .chat-box .text-box textarea {
+        width: 100%;
+        display: inline-block;
+        height: 100%;
+        background: #F5F5F5;
+        border: none;
+        outline: none;
+        padding: 15px 96px 15px 15px;
+        min-height: 80px;
+        max-height: 100px;
+      }
+
+      .nop-chat .chat-box .text-box .send-button {
+        width: auto;
+        display: inline-block;
+        text-align: center;
+        position: absolute;
+        right: 4%;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1;
+      }
+
+        .nop-chat .chat-box .text-box .send-button button {
+          background: #298cb1;
+          box-shadow: 0px 4px 10px rgba(78, 204, 251, 0.25);
+          border-radius: 5px;
+          min-width: 75px;
+          height: 35px;
+          border: none;
+          color: #FFF;
+        }
+
+.nop-chat-wrapper .open-chat {
+  width: 100px;
+  text-align: right;
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+}
+
+  .nop-chat-wrapper .open-chat button {
+    background: #4ab2f1 url('/Plugins/NopStation.Plugin.Widgets.NopChat/Contents/Images/chat-icon.png') center no-repeat;
+    border: none;
+    height: 75px;
+    width: 75px;
+    border-radius: 1000px;
+    font-size: 0;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  }
+
+    .nop-chat-wrapper .open-chat button:hover {
+      box-shadow: 0 14px 28px rgba(0,0,0,0.15), 0 10px 10px rgba(0,0,0,0.12);
+    }
+
+.get-previous-msg {
+  text-align: center;
+  padding-top: 2%;
+}
+
+  .get-previous-msg button {
+    background: #4ECCFB;
+    border: 0;
+    color: white;
+    padding: 1%;
+    border: none;
+    border-radius: 20px;
+  }
+
+
+.active_chat {
+  background: #d3d3d3;
+}
+
+.empty {
+  text-align: center;
+  padding: 20px;
+}
+
+.e-details {
+  padding: 2px;
+}
+
+.e-info {
+  padding: 2px;
+  font-weight: 700;
+}
+
+.e-picture {
+  max-height: 100px;
+  margin-top: 10px;
+}
+
+.os-scrollbar.os-scrollbar-horizontal {
+  display: none;
+}
+
+.disabled-Btn {
+  background: #ccc !important;
+}

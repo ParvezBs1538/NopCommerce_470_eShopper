@@ -1,0 +1,67 @@
+﻿@model QuoteRequestListModel
+@using Nop.Web.Extensions
+@using Nop.Web.Framework.UI
+@inject INopHtmlHelper NopHtml
+
+@{
+    Layout = "_ColumnsTwo";
+
+    //title
+    NopHtml.AddTitleParts(T("PageTitle.Account").Text);
+    //page class
+    NopHtml.AppendPageCssClassParts("html-account-page");
+    NopHtml.AppendPageCssClassParts("html-order-list-page");
+}
+
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = QuoteCartDefaults.ACCOUNT_PANEL_TAB })
+}
+
+<div class="page account-page order-list-page">
+    <div class="page-title">
+        <h1>@T("Account.MyAccount") - @T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.CustomerQuoteRequests")</h1>
+    </div>
+    <div class="page-body">
+        <div class="order-list">
+            @if (Model.QuoteRequests.Any())
+            {
+                foreach (var rfqRequest in Model.QuoteRequests)
+                {
+                    <div class="section order-item">
+                        <div class="title">
+                            <strong>@T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.RequestNumber"): @rfqRequest.Id</strong>
+                        </div>
+                        <ul class="info">
+                            <li>
+                                @rfqRequest.ProductsOverview
+                            </li>
+                            <li>
+                                @T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.Fields.RequestStatus"): @rfqRequest.QuoteRequestStatus
+                            </li>
+                            <li>
+                                @T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.RequestDate"): @rfqRequest.CreatedOn.ToString()
+                            </li>
+                        </ul>
+                        <div class="buttons">
+                            <input type="button" value="@T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.RequestDetails")" class="button-2 order-details-button" onclick="setLocation('@Url.RouteUrl("QuoteCart.RequestDetails", new { requestId = rfqRequest.RequestId })')" />
+                        </div>
+                    </div>
+                }
+                var pager = await Html.PagerAsync(Model.PagerModel);
+                if (!string.IsNullOrEmpty(await pager.RenderHtmlContentAsync()))
+                {
+                    <div class="pager">
+                        @pager
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="no-data">
+                    @T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.NoRequests")
+                </div>
+            }
+        </div>
+    </div>
+</div>

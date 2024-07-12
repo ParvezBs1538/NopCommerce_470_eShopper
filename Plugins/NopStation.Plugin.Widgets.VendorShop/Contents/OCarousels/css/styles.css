@@ -1,0 +1,211 @@
+﻿.carousel-grid-background {
+  padding: 20px;
+  background-size: cover;
+}
+
+.carousel-container.carousel-product {
+  min-height: 520px;
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-container.carousel-category {
+  min-height: 250px;
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-container.carousel-manufacturer {
+  min-height: 400px;
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-container .loader img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.carousel-category {
+  min-height: 300px;
+}
+
+.carousel-manufacturer {
+  min-height: 400px;
+}
+
+
+.carousel-product {
+  min-height: 540px;
+}
+
+.ocarousel .item-box {
+  width: 100% !important;
+}
+
+.ocarousel-grid .ocarousel .owl-nav button.owl-prev,
+.ocarousel-grid .ocarousel .owl-nav button.owl-next {
+  border: 1px solid #ccc;
+  padding: 0 14px 5px !important;
+  background-color: #eee;
+  font-size: 37px;
+  position: absolute;
+  margin: 0;
+}
+
+.ocarousel-grid .ocarousel .owl-nav button.owl-prev {
+  left: 0;
+}
+
+.ocarousel-grid .ocarousel .owl-nav button.owl-next {
+  right: 0;
+}
+
+.ocarousel .owl-nav {
+  position: absolute;
+  top: -79px;
+  width: 100%;
+}
+
+.ocarousel .owl-dots {
+  display: none;
+}
+
+.ocarousel-grid {
+  margin: 0 0 50px;
+}
+
+  .ocarousel-grid .title {
+    margin: 0 0 30px;
+    border-bottom: 1px solid #ddd;
+    padding: 0 0 15px;
+    font-size: 30px;
+    font-weight: normal;
+    color: #444;
+    text-align: center;
+  }
+
+    .ocarousel-grid .title strong {
+      font-weight: 200;
+    }
+
+.ocarousel .category-name,
+.ocarousel .manufacturer-name {
+  font-weight: normal;
+  font-size: 18px;
+  width: 100%;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.ocarousel-item {
+  margin: 0 0 80px;
+}
+
+.ocarousel-background {
+  padding: 50px 0 0;
+  position: relative;
+  margin-bottom: 80px;
+}
+
+  .ocarousel-background::before {
+    content: "";
+    display: block;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(255,255,255,0.7);
+    z-index: 0;
+  }
+
+  .ocarousel-background .custom-container {
+    position: relative;
+    z-index: 1;
+  }
+
+/**CSS Loader Starts**/
+
+.loader {
+  position: relative;
+  min-height: 300px;
+}
+
+  .loader > div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+  .lds-ellipsis div {
+    position: absolute;
+    top: 33px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #4ab2f1;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+  }
+
+    .lds-ellipsis div:nth-child(1) {
+      left: 8px;
+      animation: lds-ellipsis1 0.6s infinite;
+    }
+
+    .lds-ellipsis div:nth-child(2) {
+      left: 8px;
+      animation: lds-ellipsis2 0.6s infinite;
+    }
+
+    .lds-ellipsis div:nth-child(3) {
+      left: 32px;
+      animation: lds-ellipsis2 0.6s infinite;
+    }
+
+    .lds-ellipsis div:nth-child(4) {
+      left: 56px;
+      animation: lds-ellipsis3 0.6s infinite;
+    }
+
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(0);
+  }
+}
+
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+
+/**CSS Loader Ends**/

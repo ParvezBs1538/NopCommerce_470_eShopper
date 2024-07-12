@@ -1,0 +1,152 @@
+@model SliderItemModel
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+<input asp-for="SliderId" type="hidden" />
+
+@if (ViewBag.RefreshPage == true)
+{
+    <script>
+        try {window.opener.document.forms['@(Context.Request.Query["formId"])'].@(Context.Request.Query["btnId"]).click();}
+        catch (e){}
+        window.close();
+    </script>
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-popup">
+                    <div class="card-body">
+                        @(await Html.LocalizedEditorAsync<SliderItemModel, SliderItemLocalizedModel>("slideritem-localized",
+                        @<div>
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <nop-label asp-for="@Model.Locales[item].SliderItemTitle" />
+                                </div>
+                                <div class="col-sm-9">
+                                    <nop-editor asp-for="@Model.Locales[item].SliderItemTitle" />
+                                    <span asp-validation-for="@Model.Locales[item].SliderItemTitle"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <nop-label asp-for="@Model.Locales[item].ShortDescription" />
+                                </div>
+                                <div class="col-sm-9">
+                                    <nop-editor asp-for="@Model.Locales[item].ShortDescription" />
+                                    <span asp-validation-for="@Model.Locales[item].ShortDescription"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <nop-label asp-for="@Model.Locales[item].Link" />
+                                </div>
+                                <div class="col-sm-9">
+                                    <nop-editor asp-for="@Model.Locales[item].Link" />
+                                    <span asp-validation-for="@Model.Locales[item].Link"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <nop-label asp-for="@Model.Locales[item].ImageAltText" />
+                                </div>
+                                <div class="col-sm-9">
+                                    <nop-editor asp-for="@Model.Locales[item].ImageAltText" />
+                                    <span asp-validation-for="@Model.Locales[item].ImageAltText"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <nop-label asp-for="@Model.Locales[item].ShopNowLink" />
+                                </div>
+                                <div class="col-sm-9">
+                                    <nop-editor asp-for="@Model.Locales[item].ShopNowLink" />
+                                    <span asp-validation-for="@Model.Locales[item].ShopNowLink"></span>
+                                </div>
+                            </div>
+                            <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+                        </div>
+                    ,
+                    @<div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <nop-label asp-for="SliderItemTitle" />
+                            </div>
+                            <div class="col-sm-9">
+                                <nop-editor asp-for="SliderItemTitle" />
+                                <span asp-validation-for="SliderItemTitle"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <nop-label asp-for="ShortDescription" />
+                            </div>
+                            <div class="col-sm-9">
+                                <nop-editor asp-for="ShortDescription" />
+                                <span asp-validation-for="ShortDescription"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <nop-label asp-for="Link" />
+                            </div>
+                            <div class="col-sm-9">
+                                <nop-editor asp-for="Link" />
+                                <span asp-validation-for="Link"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <nop-label asp-for="ImageAltText" />
+                            </div>
+                            <div class="col-sm-9">
+                                <nop-editor asp-for="ImageAltText" />
+                                <span asp-validation-for="ImageAltText"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <nop-label asp-for="ShopNowLink" />
+                            </div>
+                            <div class="col-sm-9">
+                                <nop-editor asp-for="ShopNowLink" />
+                                <span asp-validation-for="ShopNowLink"></span>
+                            </div>
+                        </div>
+                    </div>
+                    ))
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <nop-label asp-for="PictureId" />
+                            </div>
+                            <div class="col-sm-9">
+                                <nop-editor asp-for="PictureId" asp-required="true" />
+                                <span asp-validation-for="PictureId"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <nop-label asp-for="MobilePictureId" />
+                            </div>
+                            <div class="col-sm-9">
+                                <nop-editor asp-for="MobilePictureId" asp-required="true" />
+                                <span asp-validation-for="MobilePictureId"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <nop-label asp-for="DisplayOrder" />
+                            </div>
+                            <div class="col-sm-9">
+                                <nop-editor asp-for="DisplayOrder" />
+                                <span asp-validation-for="DisplayOrder"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,184 @@
+﻿@model ConfigurationModel
+
+@using Nop.Services
+
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.ZohoCRM.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("ZohoCRM.Configuration");
+}
+
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.SyncShipment)").click(toggleSyncShipment);
+        $("#@Html.IdFor(model => model.SyncShipmentItem)").click(toggleSyncShipmentItem);
+
+        toggleSyncShipment();
+        toggleSyncShipmentItem();
+    });
+
+    function toggleSyncShipment() {
+        if ($('#@Html.IdFor(model => model.SyncShipment)').is(':checked')) {
+            $('#pnlShipmentModuleName').show();
+            $('#pnlSyncShipmentItem').show();
+            $('#pnlShipmentItemModuleName').show();
+            $('#btnShipmentConfigButton').show();
+            toggleSyncShipmentItem();
+        } else {
+            $('#pnlShipmentModuleName').hide();
+            $('#pnlSyncShipmentItem').hide();
+            $('#pnlShipmentItemModuleName').hide();
+            $('#btnShipmentConfigButton').hide();
+            $('#btnShipmentItemConfigButton').hide();
+        }
+    }
+
+    function toggleSyncShipmentItem() {
+        if ($('#@Html.IdFor(model => model.SyncShipmentItem)').is(':checked')) {
+            $('#pnlShipmentItemModuleName').show();
+            $('#btnShipmentItemConfigButton').show();
+        } else {
+            $('#pnlShipmentItemModuleName').hide();
+            $('#btnShipmentItemConfigButton').hide();
+        }
+    }
+</script>
+
+<form asp-controller="ZohoCRM" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.ZohoCRM.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+            @if (!string.IsNullOrWhiteSpace(Model.ClientId))
+            {
+                <button type="button" class="btn btn-success" onclick="javascript:OpenWindow('@Model.OAuthUrl', 600, 600, true); return false;">
+                    <i class="fa fa-shield-alt"></i>
+                    @T("Admin.NopStation.ZohoCRM.Configuration.OAuthAuthorizationButton")
+                </button>
+
+                if (Model.CanSync)
+                {
+                    <a class="btn btn-success" asp-action="Sync" id="sync-button">
+                        <i class="fa fa-sync-alt"></i>
+                        @T("Admin.NopStation.ZohoCRM.Configuration.SyncButton")
+                    </a>
+                }
+            }
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            @T("Admin.NopStation.ZohoCRM.Configuration.Instructions")
+                            <br />
+                            <div class="form-group row">
+                                <div class="col-md-3">                                  
+                                    <nop-label asp-for="UseSandbox" asp-required="true" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="UseSandbox" />
+                                    <span asp-validation-for="UseSandbox"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="DataCenterId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="DataCenterId" asp-items="@await (((DataCenter)Model.DataCenterId).ToSelectListAsync())" />
+                                    <span asp-validation-for="DataCenterId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="ClientId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="ClientId" asp-required="true" />
+                                    <span asp-validation-for="ClientId"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="ClientSecret" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="ClientSecret" asp-required="true" />
+                                    <span asp-validation-for="ClientSecret"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="SyncShipment" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="SyncShipment" />
+                                    <span asp-validation-for="SyncShipment"></span>
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="SyncShipment">
+                                <div class="form-group row" id="pnlShipmentModuleName">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="ShipmentModuleName" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-select asp-for="ShipmentModuleName" asp-items="@Model.AvailableModules" />
+                                        <span asp-validation-for="ShipmentModuleName"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="pnlSyncShipmentItem">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="SyncShipmentItem" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="SyncShipmentItem" />
+                                        <span asp-validation-for="SyncShipmentItem"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="pnlShipmentItemModuleName">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="ShipmentItemModuleName" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-select asp-for="ShipmentItemModuleName" asp-items="@Model.AvailableModules" />
+                                        <span asp-validation-for="ShipmentItemModuleName"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+
+                            @if (!string.IsNullOrWhiteSpace(Model.ShipmentModuleName))
+                            {
+                                <div class="form-group row">
+                                    <div class="col-md-9 offset-md-3">
+                                        <button type="submit" id="btnShipmentConfigButton" onclick="javascript:OpenWindow('@(Url.Action("MapShipmentFields", "ZohoCRM"))', 800, 750, true);return false;" class="btn btn-primary">
+                                            @T("Admin.NopStation.ZohoCRM.Configuration.MapShipmentFields.Button")
+                                        </button>
+
+                                        @if (!string.IsNullOrWhiteSpace(Model.ShipmentModuleName))
+                                        {
+                                            <button type="submit" id="btnShipmentItemConfigButton" onclick="javascript:OpenWindow('@(Url.Action("MapShipmentItemFields", "ZohoCRM"))', 800, 750, true);return false;" class="btn btn-primary">
+                                                @T("Admin.NopStation.ZohoCRM.Configuration.MapShipmentItemFields.Button")
+                                            </button>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

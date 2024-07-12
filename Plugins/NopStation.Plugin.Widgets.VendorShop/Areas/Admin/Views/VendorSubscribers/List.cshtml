@@ -1,0 +1,270 @@
+﻿@using NopStation.Plugin.Widgets.VendorShop.Areas.Admin.Models.Subscriber
+@model VendorSubscriberSearchModel
+@inject AdminAreaSettings adminAreaSettings
+
+@{
+    NopHtml.SetActiveMenuItemSystemName("VendorShop.Subscriber");
+    ViewBag.PageTitle = T("Admin.NopStation.VendorShop.Subscriber.List").Text;
+}
+@{
+    const string hideCampainMessageBlockAttributeName = "VendorShop.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideCampainMessageBlockAttributeName);
+}
+<div id="vendor-shop-subscriber-success">
+</div>
+
+<div id="vendor-shop-subscriber-error"></div>
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.VendorShop.Subscriber.Title")
+    </h1>
+    <div class="float-right">
+        <button type="button" id="email-selected" class="btn btn-primary">
+            @T("Admin.NopStation.VendorShop.Subscriber.EmailSelected")
+        </button>
+        <button type="button" id="email-to-all" class="btn btn-primary">
+            @T("Admin.NopStation.VendorShop.Subscriber.EmailAll")
+        </button>
+        <nop-action-confirmation asp-button-id="email-selected" />
+        <nop-action-confirmation asp-button-id="email-to-all" />
+    </div>
+</div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            @await Component.InvokeAsync("StoreScopeConfiguration")
+            <script asp-location="Footer">
+                $(document).ready(function () {
+                    $(".col-md-12.store-scope-configuration .checkbox").hide();
+                });
+            </script>
+            <div class="cards-group">
+
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideCampainMessageBlockAttributeName">
+                            <div class="search-text">@T("Admin.NopStation.VendorShop.Campaign.Title")</div>
+                            <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                        </div>
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="Name" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="Name" asp-required="true" type="text" id="name1" />
+                                    <span asp-validation-for="Name"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="Subject" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="Subject" asp-required="true" type="text" />
+                                    <span asp-validation-for="Subject"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="Body" />
+                                </div>
+                                <div class="col-md-9">
+                                    @if (adminAreaSettings.UseRichEditorInMessageTemplates)
+                                    {
+                                        ViewData["nop.RichEditor.EnableFullPage"] = true;
+                                        <div class="input-group-append input-group-required">
+                                            <div class="input-group">
+                                                <nop-editor asp-for="Body" asp-template="RichEditor" />
+                                            </div>
+                                            <div class="input-group-btn">
+                                                <nop-required />
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <nop-textarea asp-for="Body" asp-required="true"></nop-textarea>
+                                        <text>
+                                            <script>
+                                                $(document).ready(function () {
+                                                    $('#@Html.IdFor(model => model.Body)').height($('#@Html.IdFor(model => model.Body)')[0].scrollHeight);
+                                                });
+                                            </script>
+                                        </text>
+                                    }
+                                    <span asp-validation-for="Body"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <script>
+                                    function toggleLoadedAllowedTokens() {
+                                        $('#pnlAllowedTokens').toggleClass('d-none');
+                                        if ($('#pnlAllowedTokens').hasClass('d-none')) {
+                                            $('#allowedTokensShowHide').text('@T("Admin.Common.Show")');
+                                        } else {
+                                            $('#allowedTokensShowHide').text('@T("Admin.Common.Hide")');
+                                        }
+                                    }
+                                </script>
+
+                                <div class="col-md-3">
+                                    <nop-label asp-for="AllowedTokens" />
+                                </div>
+                                <div class="col-md-9">
+                                    <a id="allowedTokensShowHide" href="javascript:toggleLoadedAllowedTokens();">@T("Admin.Common.Show")</a>
+                                    <div id="pnlAllowedTokens" class="d-none">
+                                        <div class="form-text-row">@Model.AllowedTokens</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="SendingDate" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="SendingDate" />
+                                    <span asp-validation-for="SendingDate"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "vendor-subscribers-grid",
+                            UrlRead = new DataUrl("List", "VendorSubscribers", null),
+                            SearchButtonId = "search-vendor-subscriber",
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(VendorSubscriberModel.Id))
+                                {
+                                    IsMasterCheckBox = true,
+                                    Render = new RenderCheckBox("checkbox_transactions"),
+                                    ClassName =  NopColumnClassDefaults.CenterAll,
+                                    Width = "50"
+                                },
+
+                                new ColumnProperty(nameof(VendorSubscriberModel.SubscriberEmail))
+                                {
+                                    Title = T("Admin.NopStation.VendorShop.Subscriber.Email").Text
+                                },
+
+                                new ColumnProperty(nameof(VendorSubscriberModel.SubscribedOn))
+                                {
+                                    Title = T("Admin.NopStation.VendorShop.Subscriber.SubscribedOn").Text,
+                                    Width = "120",
+                                    Render = new RenderDate()
+                                },
+                            }
+                        })
+
+                        <script asp-location="Footer">
+                            $(document).ready(function () {
+                                function sendEmail(sendToAll) {
+                                    var isDefaultEditorEnabled = @Html.Raw(adminAreaSettings.UseRichEditorInMessageTemplates.ToString().ToLower());
+                                    var postData = {
+                                        ToName: $("#@Html.IdFor(model => model.Name)").val(),
+                                        Subject: $("#@Html.IdFor(model => model.Subject)").val(),
+                                        SendingDate: $("#@Html.IdFor(model => model.SendingDate)").val(),
+                                        SendToAll: sendToAll
+                                    };
+
+                                    // Clear the selectedIds array if sendToAll is true
+                                    if (sendToAll) {
+                                        postData.SelectedIds = [];
+                                    } else {
+                                        if (selectedIds.length === 0) {
+                                                $('#email-selected-action-confirmation').modal('toggle');
+                                                showAlert('email-to-subscribers-failed', '@T("Admin.Common.Alert.NothingSelected")');
+                                                return false;
+                                            }
+                                        postData.SelectedIds = selectedIds;
+                                    }
+
+                                    if (isDefaultEditorEnabled) {
+                                        var richEditorContent = tinymce.get("Body").getBody().innerHTML;
+                                        postData.body = richEditorContent;
+                                    } else {
+                                        postData.body = $("#@Html.IdFor(model => model.Body)").val();
+                                    }
+
+                                    addAntiForgeryToken(postData);
+
+                                    $.ajax({
+                                        cache: false,
+                                        type: "POST",
+                                        url: "@(Url.Action("EmailToSubscribers", "VendorSubscribers"))",
+                                        data: postData,
+                                        error: function (jqXHR, textStatus, errorThrown) {
+                                            showAlert('email-to-subscribers-failed', errorThrown);
+                                        },
+                                        success: function (data) {
+                                            var successElement = $('#vendor-shop-subscriber-success');
+                                            var errorElement = $('#vendor-shop-subscriber-error');
+
+                                            if (data.success) {
+                                                errorElement.text('');
+                                                successElement.html(`
+                                                        <div class="alert alert-success alert-dismissable">
+                                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                                            ${data.message}
+                                                        </div>
+                                                    `);
+
+                                                // Clear input fields on success using jQuery
+                                                $("#@Html.IdFor(model => model.Name)").val('');
+                                                $("#@Html.IdFor(model => model.Subject)").val('');
+                                                $("#@Html.IdFor(model => model.SendingDate)").val();
+
+                                                // Clear the rich editor content if it's enabled
+                                                if (isDefaultEditorEnabled) {
+                                                    tinymce.get("Body").setContent('');
+                                                } else {
+                                                    $("#@Html.IdFor(model => model.Body)").val('');
+                                                }
+                                            } else {
+                                                successElement.text('');
+                                                errorElement.html(`
+                                                        <div class="alert alert-danger alert-dismissable">
+                                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                                            ${data.message}
+                                                        </div>
+                                                    `);
+                                            }
+                                        }
+                                    });
+                                   
+                                    
+                                    return false;
+                                }
+
+                                $('#email-selected-action-confirmation-submit-button').bind('click', function () {
+                                    sendEmail(false); // Call the function with sendToAll set to false for "Email Selected"
+                                    $('#email-selected-action-confirmation').modal('toggle');
+                                });
+
+                                $('#email-to-all-action-confirmation-submit-button').bind('click', function () {
+                                    sendEmail(true); // Call the function with sendToAll set to true for "Email All"
+                                    $('#email-to-all-action-confirmation').modal('toggle');
+                                });
+                            });
+                        </script>
+                        <nop-alert asp-alert-id="email-to-subscribers-failed" />
+                        <nop-alert asp-alert-id="nothingSelectedAlert" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+

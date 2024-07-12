@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Product Badge",
+  "SystemName": "NopStation.Plugin.Widgets.ProductBadge",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.ProductBadge.dll",
+  "Description": "This plugin allows to display product badge on public store.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

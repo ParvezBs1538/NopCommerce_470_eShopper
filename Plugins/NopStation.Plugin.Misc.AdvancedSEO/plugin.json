@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Advanced SEO",
+  "SystemName": "NopStation.Plugin.Misc.AdvancedSEO",
+  "Version": "4.60.1.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Misc.AdvancedSEO.dll",
+  "Description": "This plugin enables advanced seo feature for nopCommerce store.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

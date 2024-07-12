@@ -1,0 +1,259 @@
+﻿@model OrderCommissionSearchModel
+@inject Nop.Core.IWebHelper webHelper
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.AffiliateStation.OrderCommissions.List").Text;
+
+    NopHtml.SetActiveMenuItemSystemName("OrderCommissions.List");
+}
+
+@{
+    const string hideSearchBlockAttributeName = "OrderCommissions.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<form asp-controller="OrderCommission" asp-action="List" method="post">
+    <div class="content-header clearfix">
+        <h1 class="pull-left">
+            @T("Admin.NopStation.AffiliateStation.OrderCommissions.List")
+        </h1>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+
+                    <div class="card card-default card-search">
+                        <div class="card-body">
+                            <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                                <div class="search-text">@T("Admin.Common.Search")</div>
+                                <div class="icon-search"><i class="fa fa-search" aria-hidden="true"></i></div>
+                                <div class="icon-collapse"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
+                            </div>
+
+                            <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="StartDate" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="StartDate" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="EndDate" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="EndDate" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="AffiliateFirstName" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="AffiliateFirstName" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="AffiliateLastName" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="AffiliateLastName" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="CommissionStatusIds" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="CommissionStatusIds" asp-items="@Model.AvailableCommissionStatuses" asp-multiple="true" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="OrderStatusIds" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="OrderStatusIds" asp-items="@Model.AvailableOrderStatuses" asp-multiple="true" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="PaymentStatusIds" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="PaymentStatusIds" asp-items="@Model.AvailablePaymentStatuses" asp-multiple="true" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="text-center col-12">
+                                        <button type="button" id="search-order-commission" class="btn btn-primary btn-search">
+                                            <i class="fa fa-search"></i>
+                                            @T("Admin.Common.Search")
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-default">
+                        <div class="card-body">
+                            @await Html.PartialAsync("Table", new DataTablesModel
+                            {
+                                Name = "order-commission-grid",
+                                UrlRead = new DataUrl("GetList", "OrderCommission", null),
+                                SearchButtonId = "search-order-commission",
+                                Length = Model.PageSize,
+                                LengthMenu = Model.AvailablePageSizes,
+                                FooterCallback = "ordersfootercallback",
+                                FooterColumns = 10,
+                                Filters = new List<FilterParameter>
+                                {
+                                    new FilterParameter(nameof(Model.AffiliateFirstName)),
+                                    new FilterParameter(nameof(Model.AffiliateLastName)),
+                                    new FilterParameter(nameof(Model.StartDate)),
+                                    new FilterParameter(nameof(Model.EndDate)),
+                                    new FilterParameter(nameof(Model.CommissionStatusIds)),
+                                    new FilterParameter(nameof(Model.OrderStatusIds)),
+                                    new FilterParameter(nameof(Model.PaymentStatusIds))
+                                },
+                                ColumnCollection = new List<ColumnProperty>
+                                {
+                                    new ColumnProperty(nameof(OrderCommissionModel.OrderId))
+                                    {
+                                        Title = T("Admin.NopStation.AffiliateStation.OrderCommissions.Fields.OrderId").Text,
+                                        Width = "40"
+                                    },
+                                    new ColumnProperty(nameof(OrderCommissionModel.OrderId))
+                                    {
+                                        Title = T("Admin.Common.View").Text,
+                                        Render = new RenderButtonView(new DataUrl("~/Admin/Order/Edit")),
+                                        Width = "80",
+                                        ClassName = NopColumnClassDefaults.CenterAll
+                                    },
+                                    new ColumnProperty(nameof(OrderCommissionModel.AffiliateName))
+                                    {
+                                        Title = T("Admin.NopStation.AffiliateStation.OrderCommissions.Fields.Affiliate").Text,
+                                        Render = new RenderCustom("renderAffiliateUrl"),
+                                        Width = "120"
+                                    },
+                                    new ColumnProperty(nameof(OrderCommissionModel.OrderStatus))
+                                    {
+                                        Title = T("Admin.NopStation.AffiliateStation.OrderCommissions.Fields.OrderStatus").Text,
+                                        Render = new RenderCustom("renderColumnOrderStatus"),
+                                        Width = "80"
+                                    },
+                                    new ColumnProperty(nameof(OrderCommissionModel.PaymentStatus))
+                                    {
+                                        Title = T("Admin.NopStation.AffiliateStation.OrderCommissions.Fields.PaymentStatus").Text,
+                                        Width = "80"
+                                    },
+                                    new ColumnProperty(nameof(OrderCommissionModel.CommissionStatus))
+                                    {
+                                        Title = T("Admin.NopStation.AffiliateStation.OrderCommissions.Fields.CommissionStatus").Text,
+                                        Width = "80"
+                                    },
+                                    new ColumnProperty(nameof(OrderCommissionModel.CommissionPaidOn))
+                                    {
+                                        Title = T("Admin.NopStation.AffiliateStation.OrderCommissions.Fields.CommissionPaidOn").Text,
+                                        Width = "80",
+                                        Render = new RenderDate()
+                                    },
+                                    new ColumnProperty(nameof(OrderCommissionModel.CreatedOn))
+                                    {
+                                        Title = T("Admin.NopStation.AffiliateStation.OrderCommissions.Fields.CreatedOn").Text,
+                                        Width = "80",
+                                        Render = new RenderDate()
+                                    },
+                                    new ColumnProperty(nameof(OrderCommissionModel.TotalCommissionAmountStr))
+                                    {
+                                        Title = T("Admin.NopStation.AffiliateStation.OrderCommissions.Fields.TotalCommissionAmount").Text,
+                                        Width = "80"
+                                    },
+                                    new ColumnProperty(nameof(OrderCommissionModel.OrderId))
+                                    {
+                                        Title = T("Admin.Common.Edit").Text,
+                                        Width = "100",
+                                        ClassName = NopColumnClassDefaults.Button,
+                                        Render = new RenderButtonEdit(new DataUrl("~/Admin/OrderCommission/Edit/"))
+                                    }
+                                }
+                            })
+                        </div>
+
+                        <script>
+                            function renderColumnOrderStatus(data, type, row, meta) {
+                                    var color;
+                                    switch (row.OrderStatusId) {
+                                    case 10:
+                                        color = 'yellow';
+                                        break;
+                                    case 20:
+                                        color = 'blue';
+                                        break;
+                                    case 30:
+                                        color = 'green';
+                                        break;
+                                    case 40:
+                                        color = 'red';
+                                        break;
+                                    }
+                                    return '<span class="grid-report-item ' + color + '">' + data + '</span >';
+                                }
+                            function renderOrderUrl(data, type, row, meta) {
+                                return '<a href="@(webHelper.GetStoreLocation())Admin/Order/Edit/' + row.OrderId + '">' + row.OrderId + '</a>';
+                            }
+                            function renderAffiliateUrl(data, type, row, meta) {
+                                return '<a href="@(webHelper.GetStoreLocation())Admin/Affiliate/Edit/' + row.AffiliateId + '">' + row.AffiliateName + '</a>';
+                            }
+
+                            function ordersfootercallback(tfoot, data, start, end, display) {
+                                //update order totals summary
+                                var postData = {
+                                    StartDate: $('#@Html.IdFor(model => model.StartDate)').val(),
+                                    EndDate: $('#@Html.IdFor(model => model.EndDate)').val(),
+                                    OrderStatusIds: $('#@Html.IdFor(model => model.OrderStatusIds)').val(),
+                                    PaymentStatusIds: $('#@Html.IdFor(model => model.PaymentStatusIds)').val(),
+                                    AffiliateFirstName: $('#@Html.IdFor(model => model.AffiliateFirstName)').val(),
+                                    AffiliateLastName: $('#@Html.IdFor(model => model.AffiliateLastName)').val(),
+                                    CommissionStatusIds: $('#@Html.IdFor(model => model.CommissionStatusIds)').val()
+                                };
+                                addAntiForgeryToken(postData);
+
+                                $.ajax({
+                                    cache: false,
+                                    type: "POST",
+                                    url: "@(Url.Action("ReportAggregates", "OrderCommission"))",
+                                    data: postData,
+                                    success: function (data, textStatus, jqXHR) {
+                                        if (data) {
+                                            for (var key in data) {
+                                                var reportSummary = '<div><strong>@T("Admin.NopStation.AffiliateStation.OrderCommissions.Report.Summary")</strong></div>' +
+                                                    '<div>@T("Admin.NopStation.AffiliateStation.OrderCommissions.Report.Total") <span>' + data['aggregatortotal'] +'</span></div>' +
+                                                    '<div>@T("Admin.NopStation.AffiliateStation.OrderCommissions.Report.Payable") <span>' + data['aggregatorpayable'] + '</span></div>' +
+                                                    '<div>@T("Admin.NopStation.AffiliateStation.OrderCommissions.Report.Paid") <span>' +  data['aggregatorpaid'] + '</span></div>'
+                                                var orderTotalsColumn = $('#order-commission-grid').DataTable().column(8);
+                                                $(orderTotalsColumn.footer()).html(reportSummary);
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

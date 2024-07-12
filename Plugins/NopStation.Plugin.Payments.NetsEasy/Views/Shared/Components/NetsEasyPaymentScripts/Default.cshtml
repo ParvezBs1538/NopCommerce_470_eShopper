@@ -1,0 +1,21 @@
+﻿@model NopStation.Plugin.Payments.NetsEasy.Models.PaymentScriptModel
+@{
+    Layout = "";
+}
+<script src="@Model.CheckoutScriptUrl"></script>
+<script>
+    function InitNetsEasyPayment(paymentId, checkoutKey,lang) {
+        const checkoutOptions = {
+            checkoutKey: checkoutKey,
+            paymentId: paymentId,
+            containerId: "checkout-container-div",
+            language: lang
+        };
+        const checkout = new Dibs.Checkout(checkoutOptions);
+        checkout.on('payment-completed', function (response) {
+            //console.log("Payment Completed!!! ", response);
+            $("#nets-payment-modal").hide();
+            $('button.payment-info-next-step-button').trigger("click");
+        });
+    }
+</script>

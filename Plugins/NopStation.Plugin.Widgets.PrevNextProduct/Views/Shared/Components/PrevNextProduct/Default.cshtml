@@ -1,0 +1,36 @@
+﻿@using Nop.Core
+@using Microsoft.AspNetCore.Mvc
+@inject IWorkContext workContext
+@model NopStation.Plugin.Widgets.PrevNextProduct.Models.PublicInfoModel
+
+@{
+    var supportRtl = (await workContext.GetWorkingLanguageAsync()).Rtl;
+
+    if (supportRtl)
+    {
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.PrevNextProduct/Contents/css/style.rtl.css", string.Empty);
+    }
+    else
+    {
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.PrevNextProduct/Contents/css/style.css", string.Empty);
+    }
+}
+
+<div class="prev-next-container">
+    <div class="previous-product">
+        @if (Model.Previous.HasProduct)
+        {
+            <a href="@("Product/" + Model.Previous.SeName)">
+                @Model.Previous.Name
+            </a>
+        }
+    </div>
+    <div class="next-product">
+        @if (Model.Next.HasProduct)
+        {
+            <a href="@("Product/" + Model.Next.SeName)">
+                @Model.Next.Name
+            </a>
+        }
+    </div>
+</div>

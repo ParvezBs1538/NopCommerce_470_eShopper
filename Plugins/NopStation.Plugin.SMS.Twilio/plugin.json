@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Twilio Sms",
+  "SystemName": "NopStation.Plugin.SMS.Twilio",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.SMS.Twilio.dll",
+  "Description": "This plugin allows to send SMS on multiple events using Twilio gateway.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

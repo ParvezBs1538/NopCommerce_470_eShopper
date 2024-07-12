@@ -1,0 +1,66 @@
+﻿@model OrderDeliverySlotModel
+
+@{
+    const string hideInfoBlockAttributeName = "OrderDeliverySlot.HideInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideInfoBlockAttributeName);
+}
+
+<nop-card asp-name="scheduler-override" asp-icon="fas fa-shipping-fast" asp-title="@T("Admin.NopStation.DeliveryScheduler.OrderDeliverySlots.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">
+    <div class="card-body">
+        <div class="card card-default sub-panel">
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="DeliveryDate" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="DeliveryDate"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="DeliverySlotId" />
+                    </div>
+                    <div class="col-md-6">
+                        <nop-select asp-for="DeliverySlotId" asp-items="Model.AvailableDeliverySlots" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <button class="btn btn-primary" id="btnSaveSlotInfo" type="button">
+                            <i class="far fa-save"></i>
+                            @T("Admin.Common.Save")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nop-card>
+
+<script>
+    $(document).ready(function () {
+        $('#btnSaveSlotInfo').click(function () {
+            var data = {};
+            data.DeliveryDate = $('#@Html.IdFor(x => x.DeliveryDate)').val();
+            data.DeliverySlotId = $('#@Html.IdFor(x => x.DeliverySlotId)').val();
+            data.Id = @Model.Id;
+            addAntiForgeryToken(data);
+
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("Update", "OrderDeliverySlot")",
+                data: data,
+                dataType: "json",
+                success: function (result) {
+                    if (result.result) {
+                        alert('@T("Admin.NopStation.DeliveryScheduler.OrderDeliverySlots.Updated")')
+                    }
+                }
+            });
+
+        });
+    });
+</script>
+

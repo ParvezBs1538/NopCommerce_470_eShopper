@@ -1,0 +1,192 @@
+﻿@model CategoryBannerSearchModel
+
+<div class="card-body">
+    @if (Model.CategoryId > 0)
+    {
+        <div class="sub-panel">
+            @await Html.PartialAsync("Table", new DataTablesModel
+            {
+                Name = "category-banner-grid",
+                UrlRead = new DataUrl("CategoryBannerList", "CategoryBanner", new RouteValueDictionary { [nameof(Model.CategoryId)] = Model.CategoryId}),
+                UrlDelete = new DataUrl("CategoryBannerDelete", "CategoryBanner", null),
+                UrlUpdate = new DataUrl("CategoryBannerUpdate", "CategoryBanner", null),
+                Length = Model.PageSize,
+                LengthMenu = Model.AvailablePageSizes,
+                ColumnCollection = new List<ColumnProperty>
+                    {
+                        new ColumnProperty(nameof(CategoryBannerModel.PictureUrl))
+                        {
+                            Title = T("Admin.NopStation.CategoryBanners.CategoryBanners.Fields.Picture").Text,
+                            Render = new RenderCustom("renderPicturesColumnProductPictureUrl")
+                        },
+                        new ColumnProperty(nameof(CategoryBannerModel.DisplayOrder))
+                        {
+                            Title = T("Admin.NopStation.CategoryBanners.CategoryBanners.Fields.DisplayOrder").Text,
+                            Width = "150",
+                            ClassName = NopColumnClassDefaults.CenterAll,
+                            Editable = true,
+                            EditType = EditType.Number
+                        },
+                        new ColumnProperty(nameof(CategoryBannerModel.OverrideAltAttribute))
+                        {
+                            Title = T("Admin.NopStation.CategoryBanners.CategoryBanners.Fields.OverrideAltAttribute").Text,
+                            Width = "200",
+                            Editable = true,
+                            EditType = EditType.String
+                        },
+                        new ColumnProperty(nameof(CategoryBannerModel.OverrideTitleAttribute))
+                        {
+                            Title = T("Admin.NopStation.CategoryBanners.CategoryBanners.Fields.OverrideTitleAttribute").Text,
+                            Width = "200",
+                            Editable = true,
+                            EditType = EditType.String
+                        },
+                        new ColumnProperty(nameof(CategoryBannerModel.ForMobile))
+                        {
+                            Title = T("Admin.NopStation.CategoryBanners.CategoryBanners.Fields.ForMobile").Text,
+                            Width = "100",
+                            Editable = true,
+                            Render = new RenderBoolean(),
+                            ClassName = NopColumnClassDefaults.CenterAll,
+                            EditType = EditType.Checkbox
+                        },
+                        new ColumnProperty(nameof(CategoryBannerModel.Id))
+                        {
+                            Title = T("Admin.Common.Edit").Text,
+                            Width = "200",
+                            ClassName =  NopColumnClassDefaults.Button,
+                            Render = new RenderButtonsInlineEdit()
+                        },
+                        new ColumnProperty(nameof(CategoryBannerModel.Id))
+                        {
+                            Title = T("Admin.Common.Delete").Text,
+                            Width = "100",
+                            Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                            ClassName = NopColumnClassDefaults.Button
+                        }
+                    }
+            })
+
+            <script>
+                function renderPicturesColumnProductPictureUrl(data, type, row, meta) {
+                    return '<a href="' + row.PictureUrl + '" target="_blank"><img alt="' + row.PictureId + '" src="' + row.PictureUrl + '" width="150" /></a>';
+                }
+            </script>
+        </div>
+
+        <div class="card card-default">
+            <div class="card-header">
+                @T("Admin.NopStation.CategoryBanners.AddNew")
+            </div>
+            <div class="card-body">
+                <script>
+                    $(document).ready(function() {
+                        $('#saveBanner').click(function() {
+                            var pictureId = $("#@Html.IdFor(model => model.CategoryBanner.PictureId)").val();
+                            var displayOrder = $("#@Html.IdFor(model => model.CategoryBanner.DisplayOrder)").val();
+                            var overrideAltAttribute = $("#@Html.IdFor(model => model.CategoryBanner.OverrideAltAttribute)").val();
+                            var overrideTitleAttribute = $("#@Html.IdFor(model => model.CategoryBanner.OverrideTitleAttribute)").val();
+                            var forMobile = $("#@Html.IdFor(model => model.CategoryBanner.ForMobile)").is(':checked');
+
+                            if (pictureId == 0) {
+                                $("#addProductPictureAlert").click();
+                                return;
+                            }
+
+                            $('#saveBanner').attr('disabled', true);
+
+                            var postData = {
+                                PictureId: pictureId,
+                                DisplayOrder: displayOrder,
+                                CategoryId: '@Model.CategoryId',
+                                ForMobile: forMobile,
+                                OverrideAltAttribute: overrideAltAttribute,
+                                OverrideTitleAttribute: overrideTitleAttribute
+                            };
+                            addAntiForgeryToken(postData);
+
+                            $.ajax({
+                                cache: false,
+                                type: "POST",
+                                url: "@(Url.Action("CreateBanner", "CategoryBanner"))",
+                                data: postData,
+                                success: function (data) {
+                                    if (!data.Result) {
+                                        return;
+                                    }
+                                    updateTable('#category-banner-grid');
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    $("#categoryBannerAddAlert").click();
+                                },
+                                complete: function (jqXHR, textStatus) {
+                                    $('#saveBanner').attr('disabled', false);
+                                }
+                            });
+                        });
+                    });
+                </script>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="CategoryBanner.PictureId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="CategoryBanner.PictureId" />
+                        <span asp-validation-for="CategoryBanner.PictureId"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="CategoryBanner.OverrideTitleAttribute" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="CategoryBanner.OverrideTitleAttribute" />
+                        <span asp-validation-for="CategoryBanner.OverrideTitleAttribute"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="CategoryBanner.OverrideAltAttribute" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="CategoryBanner.OverrideAltAttribute" />
+                        <span asp-validation-for="CategoryBanner.OverrideAltAttribute"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="CategoryBanner.DisplayOrder" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="CategoryBanner.DisplayOrder" />
+                        <span asp-validation-for="CategoryBanner.DisplayOrder"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="CategoryBanner.ForMobile" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="CategoryBanner.ForMobile" />
+                        <span asp-validation-for="CategoryBanner.ForMobile"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-9 col-md-offset-3">
+                        <button type="button" id="saveBanner" class="btn btn-primary">@T("Admin.NopStation.CategoryBanners.AddButton")</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card card-default">
+            <div class="card-body">
+                @T("Admin.NopStation.CategoryBanners.SaveBeforeEdit")
+            </div>
+        </div>
+    }
+</div>
+<nop-alert asp-alert-id="addCategoryBannerAlert" asp-alert-message="@T("Admin.NopStation.CategoryBanners.Alert.AddNew")" />
+<nop-alert asp-alert-id="categoryBannerAddAlert" asp-alert-message="@T("Admin.NopStation.CategoryBanners.Alert.BannerAdd")" />

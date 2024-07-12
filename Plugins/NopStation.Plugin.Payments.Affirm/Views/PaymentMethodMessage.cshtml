@@ -1,0 +1,85 @@
+﻿@model PromotionalPaymentInfoModel
+
+<style>
+    #prices {
+        padding: 10px;
+    }
+
+    #buy-button {
+        margin: 10px 0px;
+        width: 240px;
+        height: 20px;
+        background: #0FA0EA;
+        border-radius: 3px;
+        text-align: center;
+        padding: 10px;
+        color: #f2f4f5;
+    }
+
+        #buy-button:hover {
+            cursor: pointer;
+            color: #fff;
+            background: #00C8E5;
+        }
+
+    #regular-price {
+        font-size: 1.8em;
+        font-weight: 700;
+        margin: 10px 0px;
+    }
+</style>
+
+<div id="prices" style="display: none;">
+    <p class="affirm-as-low-as" data-page-type="product" data-amount="@Model.Amount"></p>
+</div>
+
+<script>
+    $(document).ready(function () {
+        if ($('input[name="paymentmethod"]:checked').val() == '@Model.SystemName') {
+            $('#prices').show();
+        }
+
+        $('input:radio[name=paymentmethod]').change(function () {
+            if (this.value == '@Model.SystemName') {
+                $('#prices').show();
+            }
+            else {
+                $('#prices').hide();
+            }
+        });
+    });
+
+    var _affirm_config = {
+        public_api_key: "@Model.PublicApiKey",
+        script: "@Model.JsURL",
+        session_id: "sID"
+    };
+    (function(l, g, m, e, a, f, b) {
+      var d, c = l[m] || {},
+        h = document.createElement(f),
+        n = document.getElementsByTagName(f)[0],
+        k = function(a, b, c) {
+          return function() {
+            a[b]._.push([c, arguments])
+          }
+        };
+      c[e] = k(c, e, "set");
+      d = c[e];
+      c[a] = {};
+      c[a]._ = [];
+      d._ = [];
+      c[a][b] = k(c, a, b);
+      a = 0;
+      for (b = "set add save post open empty reset on off trigger ready setProduct".split(" "); a < b.length; a++) d[b[a]] = k(c, e, b[a]);
+      a = 0;
+      for (b = ["get", "token", "url", "items"]; a < b.length; a++) d[b[a]] = function() {};
+      h.async = !0;
+      h.src = g[f];
+      n.parentNode.insertBefore(h, n);
+      delete g[f];
+      d(g);
+      l[m] = c
+    })(window, _affirm_config, "affirm", "checkout", "ui", "script", "ready");
+    // END AFFIRM.JS EMBED CODE
+
+</script>

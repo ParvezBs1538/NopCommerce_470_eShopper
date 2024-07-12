@@ -1,0 +1,78 @@
+﻿@model ProductRequestModel
+@inject NopStation.Plugin.Widgets.ProductRequests.ProductRequestSettings productRequestSettings
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="CustomerId" />
+                            </div>
+                            <div class="col-md-9">
+                                <a asp-controller="Customer" asp-action="Edit" asp-route-id="@Model.CustomerId">@Model.Customer</a>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="StoreId" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.Store</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="Name" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="Name" asp-required="true" />
+                                <span asp-validation-for="Name"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="Link" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="Link" asp-required="@productRequestSettings.LinkRequired" />
+                                <span asp-validation-for="Link"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="Description" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-textarea asp-for="Description" asp-required="@productRequestSettings.DescriptionRequired" />
+                                <span asp-validation-for="Description"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="AdminComment" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-textarea asp-for="AdminComment" />
+                                <span asp-validation-for="AdminComment"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="CreatedOn" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.CreatedOn</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,112 @@
+﻿@model WebApiQueuedNotificationSearchModel
+@{ 
+    ViewBag.PageTitle = T("Admin.NopStation.WebApiNotification.QueuedPushNotifications.List").Text;
+    NopHtml.SetActiveMenuItemSystemName("WebApiQueuedNotifications"); 
+
+    const string hideSearchBlockAttributeName = "QueuedPushNotifications.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName); 
+}
+
+<form asp-controller="WebApiQueuedNotification" asp-action="List" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.WebApiNotification.QueuedPushNotifications.List")
+        </h1>
+        <div class="float-right">
+            <button type="button" id="delete-sent" class="btn btn-danger">
+                <i class="far fa-trash-alt"></i>
+                @T("Admin.NopStation.WebApiNotification.QueuedPushNotifications.DeleteSent")
+            </button>
+            <nop-action-confirmation asp-button-id="delete-sent" />
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            @{
+                                var gridModel = new DataTablesModel
+                                {
+                                    Name = "device-grid",
+                                    UrlRead = new DataUrl("GetList", "WebApiQueuedNotification", null),
+                                    Length = Model.PageSize,
+                                    LengthMenu = Model.AvailablePageSizes
+                                };
+                                gridModel.ColumnCollection.Add(new ColumnProperty(nameof(WebApiQueuedNotificationModel.Title))
+                                {
+                                    Title = T("Admin.NopStation.WebApiNotification.QueuedPushNotifications.Fields.Title").Text,
+                                    Width = "150"
+                                });
+                                gridModel.ColumnCollection.Add(new ColumnProperty(nameof(WebApiQueuedNotificationModel.CustomerName))
+                                {
+                                    Title = T("Admin.NopStation.WebApiNotification.QueuedPushNotifications.Fields.Customer").Text,
+                                    Width = "100"
+                                });
+                                gridModel.ColumnCollection.Add(new ColumnProperty(nameof(WebApiQueuedNotificationModel.StoreName))
+                                {
+                                    Title = T("Admin.NopStation.WebApiNotification.QueuedPushNotifications.Fields.Store").Text,
+                                    Width = "100"
+                                });
+                                gridModel.ColumnCollection.Add(new ColumnProperty(nameof(WebApiQueuedNotificationModel.CreatedOn))
+                                {
+                                    Title = T("Admin.NopStation.WebApiNotification.QueuedPushNotifications.Fields.CreatedOn").Text,
+                                    Width = "50",
+                                    Render = new RenderDate()
+                                });
+                                gridModel.ColumnCollection.Add(new ColumnProperty(nameof(WebApiQueuedNotificationModel.SentOn))
+                                {
+                                    Title = T("Admin.NopStation.WebApiNotification.QueuedPushNotifications.Fields.SentOn").Text,
+                                    Width = "50",
+                                    Render = new RenderDate()
+                                });
+                                gridModel.ColumnCollection.Add(new ColumnProperty(nameof(WebApiQueuedNotificationModel.DontSendBeforeDate))
+                                {
+                                    Title = T("Admin.NopStation.WebApiNotification.QueuedPushNotifications.Fields.DontSendBeforeDate").Text,
+                                    Width = "50",
+                                    Render = new RenderDate()
+                                });
+                                gridModel.ColumnCollection.Add(new ColumnProperty(nameof(WebApiQueuedNotificationModel.Id))
+                                {
+                                    Title = T("Admin.Common.View").Text,
+                                    Width = "80",
+                                    ClassName = NopColumnClassDefaults.Button,
+                                    Render = new RenderButtonView(new DataUrl("View"))
+                                });
+                            }
+
+                            @await Html.PartialAsync("Table", gridModel)
+                            
+                            <script>
+                                $(document).ready(function () {
+                                    $('#delete-sent-action-confirmation-submit-button').bind('click', function () {
+
+                                        //addAntiForgeryToken(postData);
+                                        $.ajax({
+                                            cache: false,
+                                            type: "GET",
+                                            url: "@(Url.Action("DeleteSentQueuedPushNotification", "WebApiQueuedNotification"))",
+                                            error: function (jqXHR, textStatus, errorThrown) {
+                                                $('#deleteSentFailed-info').text(errorThrown);
+                                                $('#deleteSentFailed').click();
+                                            },
+                                            complete: function (jqXHR, textStatus) {
+                                                updateTable('#device-grid');
+                                            }
+                                        });
+                                        $('#delete-sent-action-confirmation').modal('toggle');
+                                        return false;
+                                    });
+                                });
+                            </script>
+                            <nop-alert asp-alert-id="deleteSentFailed" />
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

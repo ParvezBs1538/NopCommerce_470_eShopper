@@ -1,0 +1,106 @@
+﻿@using NopStation.Plugin.Payments.Dmoney.Models;
+@model ConfigurationModel
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.DmoneyPayment.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("DmoneyPayment.Configuration");
+}
+
+<form asp-controller="DmoneyPayment" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.DmoneyPayment.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="GatewayUrl_OverrideForStore" asp-input="GatewayUrl" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="GatewayUrl" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="GatewayUrl" asp-required="true" />
+                                    <span asp-validation-for="GatewayUrl"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="TransactionVerificationUrl_OverrideForStore" asp-input="TransactionVerificationUrl" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="TransactionVerificationUrl" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="TransactionVerificationUrl" asp-required="true" />
+                                    <span asp-validation-for="TransactionVerificationUrl"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="OrganizationCode_OverrideForStore" asp-input="OrganizationCode" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="OrganizationCode" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="OrganizationCode" asp-required="true" />
+                                    <span asp-validation-for="OrganizationCode"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="Password_OverrideForStore" asp-input="Password" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="Password" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="Password" asp-required="true" />
+                                    <span asp-validation-for="Password"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="SecretKey_OverrideForStore" asp-input="SecretKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="SecretKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="SecretKey" asp-required="true" />
+                                    <span asp-validation-for="SecretKey"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="BillerCode_OverrideForStore" asp-input="BillerCode" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="BillerCode" asp-required="true" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="BillerCode" />
+                                    <span asp-validation-for="BillerCode"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="Description_OverrideForStore" asp-input="Description" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="Description" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-textarea asp-for="Description"></nop-textarea>
+                                    <span asp-validation-for="Description"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

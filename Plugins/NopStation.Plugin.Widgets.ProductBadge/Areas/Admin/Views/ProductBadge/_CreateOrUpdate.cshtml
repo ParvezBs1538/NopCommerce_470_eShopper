@@ -1,0 +1,36 @@
+﻿@model BadgeModel
+
+@{
+    var customer = await workContext.GetCurrentCustomerAsync();
+    const string hideInfoBlockAttributeName = "BadgePage.HideInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideInfoBlockAttributeName);
+
+    const string hideAppliedToProductsBlockAttributeName = "BadgePage.HideAppliedToProductsBlock";
+    var hideAppliedToProductsBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideAppliedToProductsBlockAttributeName, defaultValue: true);
+
+    const string hideAppliedToVendorsBlockAttributeName = "BadgePage.HideAppliedToVendorsBlock";
+    var hideAppliedToVendorsBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideAppliedToVendorsBlockAttributeName, defaultValue: true);
+
+    const string hideAppliedToCategoriesBlockAttributeName = "BadgePage.HideAppliedToCategoriesBlock";
+    var hideAppliedToCategoriesBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideAppliedToCategoriesBlockAttributeName, defaultValue: true);
+
+    const string hideAppliedToManufacturersBlockAttributeName = "BadgePage.HideAppliedToManufacturersBlock";
+    var hideAppliedToManufacturersBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideAppliedToManufacturersBlockAttributeName, defaultValue: true);
+}
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <nop-cards id="badge-cards">
+                <nop-card asp-name="badge-info" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.ProductBadge.Badges.Tab.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</nop-card>
+                <nop-card asp-name="badge-appliedtoproducts" asp-icon="fas fa-object-group" asp-title="@T("Admin.NopStation.ProductBadge.Badges.Tab.AppliedToProducts")" asp-hide-block-attribute-name="@hideAppliedToProductsBlockAttributeName" asp-hide="@hideAppliedToProductsBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.AppliedToProducts", Model)</nop-card>
+                <nop-card asp-name="badge-appliedtocategories" asp-icon="fas fa-list-alt" asp-title="@T("Admin.NopStation.ProductBadge.Badges.Tab.AppliedToCategories")" asp-hide-block-attribute-name="@hideAppliedToCategoriesBlockAttributeName" asp-hide="@hideAppliedToCategoriesBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.AppliedToCategories", Model)</nop-card>
+                <nop-card asp-name="badge-appliedtomanufacturers" asp-icon="fas fa-industry" asp-title="@T("Admin.NopStation.ProductBadge.Badges.Tab.AppliedToManufacturers")" asp-hide-block-attribute-name="@hideAppliedToManufacturersBlockAttributeName" asp-hide="@hideAppliedToManufacturersBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.AppliedToManufacturers", Model)</nop-card>
+                <nop-card asp-name="badge-appliedtovendors" asp-icon="fas fa-object-group" asp-title="@T("Admin.NopStation.ProductBadge.Badges.Tab.AppliedToVendors")" asp-hide-block-attribute-name="@hideAppliedToVendorsBlockAttributeName" asp-hide="@hideAppliedToVendorsBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.AppliedToVendors", Model)</nop-card>
+            </nop-cards>
+        </div>
+    </div>
+</section>

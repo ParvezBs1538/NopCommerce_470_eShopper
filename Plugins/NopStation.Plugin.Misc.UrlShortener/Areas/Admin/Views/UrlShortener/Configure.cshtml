@@ -1,0 +1,67 @@
+﻿@model ConfigureModel
+
+@{
+    Layout = "_AdminLayout";
+
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.UrlShortener.Configure").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("UrlShortener.Configuration");
+}
+
+<form asp-controller="UrlShortener" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @string.Format(T("Admin.NopStation.UrlShortener.Configure").Text)
+        </h1>
+        <div class="float-right">
+            <button type="submit" id="shipment-save" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+    <section class="content">
+       <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <em>
+                                        Follow this instruction to find out bit.ly Access Token.
+                                        <a href="https://support.bitly.com/hc/en-us/articles/230647907-How-do-I-find-my-OAuth-access-token-" target="_blank" title="How do I find my OAuth access token?">
+                                            https://support.bitly.com/hc/en-us/articles/230647907-How-do-I-find-my-OAuth-access-token-
+                                        </a>
+                                        <br />
+                                    </em>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AccessToken_OverrideForStore" asp-input="AccessToken" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AccessToken" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="AccessToken" />
+                                    <span asp-validation-for="AccessToken"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableLog_OverrideForStore" asp-input="EnableLog" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableLog" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableLog" />                      
+                                    <span asp-validation-for="EnableLog"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   </section>
+</form>

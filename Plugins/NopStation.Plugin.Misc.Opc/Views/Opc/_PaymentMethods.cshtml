@@ -1,0 +1,79 @@
+﻿@using Newtonsoft.Json;
+
+@model CheckoutPaymentMethodModel
+
+<div class="checkout-data">
+
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OpCheckoutPaymentMethodTop })
+    <div class="section payment-method">
+        @if (Model.DisplayRewardPoints)
+        {
+            <div class="use-reward-points">
+
+                <input asp-for="UseRewardPoints" onclick="PaymentMethod.toggleUseRewardPoints(this)" />
+                <label asp-for="UseRewardPoints">@string.Format(T("Checkout.UseRewardPoints").Text, Model.RewardPointsToUse, Model.RewardPointsBalance, Model.RewardPointsToUseAmount)</label>
+
+            </div>
+        }
+        @if (Model.PaymentMethods.Count > 0)
+        {
+            <ul class="method-list" id="payment-method-block">
+                @for (var i = 0; i < Model.PaymentMethods.Count; i++)
+                {
+                    var paymentMethod = Model.PaymentMethods[i];
+                    var paymentMethodName = paymentMethod.Name;
+                    if (!string.IsNullOrEmpty(paymentMethod.Fee))
+                    {
+                        paymentMethodName = T("Checkout.SelectPaymentMethod.MethodAndFee", paymentMethodName, paymentMethod.Fee).Text;
+                    }
+                    <li>
+                        <div class="method-name">
+                            @if (!string.IsNullOrEmpty(paymentMethod.LogoUrl))
+                            {
+                                <div class="payment-logo">
+                                    <label for="paymentmethod_@(i)">
+                                        <img src="@paymentMethod.LogoUrl" alt="@paymentMethodName" />
+                                    </label>
+                                </div>
+                            }
+                            <div class="payment-details">
+                                <input id="paymentmethod_@(i)" type="radio" name="paymentmethod" value="@(paymentMethod.PaymentMethodSystemName)" checked="@paymentMethod.Selected" />
+                                <label for="paymentmethod_@(i)">@paymentMethodName</label>
+                                @if (!string.IsNullOrEmpty(paymentMethod.Description))
+                                {
+                                    <div class="payment-description">@paymentMethod.Description</div>
+                                }
+                            </div>
+
+                        </div>
+                    </li>
+                }
+            </ul>
+            <div id="paymentMethodInfo_load">
+                @for (var i = 0; i < Model.PaymentMethods.Count; i++)
+                {
+                    var paymentMethod = Model.PaymentMethods[i];
+                    var paymentMethodName = paymentMethod.Name;
+
+
+                    var info = paymentMethod.CustomProperties.ContainsKey("PaymentInfo") && paymentMethod.CustomProperties["PaymentInfo"] != null ?
+                        JsonConvert.DeserializeObject<CheckoutPaymentInfoModel>(paymentMethod.CustomProperties["PaymentInfo"]) : null;
+
+                    if (info != null)
+                    {
+                        <div id="paymentmethod_info_@(paymentMethod.PaymentMethodSystemName)" style="@(paymentMethod.Selected ? "display:block" : "display:none")">
+                            @await Html.PartialAsync("OpcPaymentInfo", @info)
+                        </div>
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            <div class="message-error">
+                @T("Checkout.NoPaymentMethods")
+            </div>
+        }
+    </div>
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OpCheckoutPaymentMethodBottom })
+</div>

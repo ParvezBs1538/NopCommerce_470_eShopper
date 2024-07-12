@@ -1,0 +1,13 @@
+{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Widget Manager",
+  "SystemName": "NopStation.Plugin.Misc.WidgetManager",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Misc.WidgetManager.dll",
+  "Description": "This plugin is used to manage Nop-Station widget plugins.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}
+  

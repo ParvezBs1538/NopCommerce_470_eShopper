@@ -1,0 +1,24 @@
+﻿@inject Nop.Core.IWorkContext workContext
+
+@{
+    <script src="~/Plugins/NopStation.Plugin.Misc.Opc/Contents/js/public.buynow.js" asp-location="Footer" asp-exclude-from-bundle="true"></script>
+    var supportRtl = (await workContext.GetWorkingLanguageAsync()).Rtl;
+
+    //add main CSS file
+    if (supportRtl)
+    {
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Misc.Opc/Contents/css/styles.rtl.css",string.Empty, true);
+    }
+    else
+    {
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Misc.Opc/Contents/css/styles.css", string.Empty, true);
+    }
+}
+
+<script asp-location="Footer" asp-exclude-from-bundle="true">
+    var localized_data = {
+            AjaxCartFailure: "@T("AjaxCart.Failure")"
+        };
+    BuyNow.init(false, '.header-links .cart-qty', '.header-links .wishlist-qty', '#flyout-cart', localized_data);
+</script>
+@*<script asp-location="Footer" src="~/Plugins/NopStation.Plugin.Misc.Opc/Contents/js/ns.opc.js"></script>*@

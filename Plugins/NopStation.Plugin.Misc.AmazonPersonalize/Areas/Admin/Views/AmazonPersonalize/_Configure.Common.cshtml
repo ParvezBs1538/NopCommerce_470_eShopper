@@ -1,0 +1,84 @@
+﻿@model ConfigurationModel
+
+ <div class="card-body">
+                            
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="EnableAmazonPersonalize_OverrideForStore" asp-input="EnableAmazonPersonalize" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="EnableAmazonPersonalize" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableAmazonPersonalize" />
+            <span asp-validation-for="EnableAmazonPersonalize"></span>
+        </div>
+    </div>
+
+    <nop-nested-setting asp-for="EnableAmazonPersonalize">
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="AccessKey_OverrideForStore" asp-input="AccessKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="AccessKey" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="AccessKey" />
+                <span asp-validation-for="AccessKey"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="SecretKey_OverrideForStore" asp-input="SecretKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="SecretKey" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="SecretKey" />
+                <span asp-validation-for="SecretKey"></span>
+            </div>
+        </div> 
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="SecretKey_OverrideForStore" asp-input="AwsRegionId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="AwsRegionId" />
+            </div>
+            <div class="col-md-9">
+                <nop-select asp-for="AwsRegionId" asp-items="@Model.AvailableAwsRegions" />
+                <span asp-validation-for="AwsRegionId"></span>
+            </div>
+        </div> 
+
+            <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="EventTrackerId_OverrideForStore" asp-input="EventTrackerId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="EventTrackerId" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="EventTrackerId" />
+                <span asp-validation-for="EventTrackerId"></span>
+            </div>
+        </div> 
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="DataSetGroupArn_OverrideForStore" asp-input="DataSetGroupArn" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="DataSetGroupArn" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="DataSetGroupArn" />
+                <span asp-validation-for="DataSetGroupArn"></span>
+            </div>
+        </div> 
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="EnableLogging_OverrideForStore" asp-input="EnableLogging" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="EnableLogging" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="EnableLogging" />
+                <span asp-validation-for="EnableLogging"></span>
+            </div>
+        </div> 
+    </nop-nested-setting>
+</div> 

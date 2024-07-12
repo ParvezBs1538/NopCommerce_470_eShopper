@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop Station",
+  "FriendlyName": "Tiny PNG",
+  "SystemName": "NopStation.Plugin.Misc.TinyPNG",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station team",
+  "DisplayOrder": 2,
+  "FileName": "NopStation.Plugin.Misc.TinyPNG.dll",
+  "Description": "Compress image using Tiny PNG api",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

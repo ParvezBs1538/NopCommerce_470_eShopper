@@ -1,0 +1,30 @@
+﻿@model FlipbookContentModel
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("Flipbooks");
+    ViewBag.PageTitle = T("Admin.NopStation.Flipbooks.FlipbookContents.AddNew").Text;
+}
+
+<form asp-controller="Flipbook" asp-action="ContentCreate" method="post" id="flipbookcontents-form">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Flipbooks.FlipbookContents.AddNew")
+            <small>
+                <i class="fas fa-arrow-circle-left"></i>
+                <a asp-controller="Flipbook" asp-action="Edit" asp-route-id="@Model.FlipbookId">@T("Admin.NopStation.Flipbooks.FlipbookContents.BackToFlipbookDetails")</a>
+            </small>
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+            <button type="submit" name="save-continue" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.SaveContinue")
+            </button>
+        </div>
+    </div>
+    @await Html.PartialAsync("_CreateOrUpdateContent", Model)
+</form>

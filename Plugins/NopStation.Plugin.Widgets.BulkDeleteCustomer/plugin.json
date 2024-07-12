@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Bulk Delete Customer",
+  "SystemName": "NopStation.Plugin.Widgets.BulkDeleteCustomer",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Jaber Kibria",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.BulkDeleteCustomer.dll",
+  "Description": "This plugin allows admin to delete multiple customers at a time.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

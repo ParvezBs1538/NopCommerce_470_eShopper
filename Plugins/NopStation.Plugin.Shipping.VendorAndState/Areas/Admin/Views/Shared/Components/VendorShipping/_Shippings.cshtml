@@ -1,0 +1,356 @@
+﻿@model VendorShippingModel
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.EnableFreeShippingOverAmountX)").change(toggleEnableFreeShippingOverAmountX);
+
+        toggleEnableFreeShippingOverAmountX();
+    });
+    function toggleEnableFreeShippingOverAmountX() {
+        if ($("#@Html.IdFor(model => model.EnableFreeShippingOverAmountX)").is(':checked')) {
+            $('#pnlEnableFreeShippingOverAmountX').show();
+        }
+        else {
+            $('#pnlEnableFreeShippingOverAmountX').hide();
+        }
+    }
+</script>
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <input type="hidden" value="@Model.Id" id="VendorShippingId" />
+            <nop-label asp-for="ShippingMethodId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="ShippingMethodId" asp-items="@Model.AvailableShippingMethods" />
+            <span asp-validation-for="ShippingMethodId"></span>
+        </div>
+    </div>
+    <div class="card card-default">
+        <div class="card-body">
+            <script>
+                $(document).ready(function () {
+                    $("#@Html.IdFor(model => model.ShippingMethodId)").change(function () {
+                        var shippingMethodId = $("#@Html.IdFor(model => model.ShippingMethodId)").val();
+
+                        var postData = {
+                            VendorId: @Model.VendorId,
+                            ShippingMethodId: shippingMethodId
+                        };
+                        addAntiForgeryToken(postData);
+
+                        $.ajax({
+                            cache: false,
+                            type: "GET",
+                            url: "@(Url.Action("ShippingCharge", "ShippingByVendor"))",
+                            data: postData,
+                            success: function (data) {
+                                updateTable('#vendor-stateshipping-grid');
+
+                                $("#VendorShippingId").val(data.Id);
+                                $("#@Html.IdFor(model => model.SellerSideDelivery)").attr('checked', data.SellerSideDelivery);
+                                $("#@Html.IdFor(model => model.HideShippingMethod)").attr('checked',  data.HideShippingMethod);
+                                $("#@Html.IdFor(model => model.EnableFreeShippingOverAmountX)").attr('checked', data.EnableFreeShippingOverAmountX);
+                                $("#@Html.IdFor(model => model.WithDiscounts)").attr('checked', data.WithDiscounts);
+                                $("#@Html.IdFor(model => model.TransitDays)").data("kendoNumericTextBox").value(data.TransitDays);
+                                $("#@Html.IdFor(model => model.AmountX)").data("kendoNumericTextBox").value(data.AmountX);
+                                $("#@Html.IdFor(model => model.DefaultShippingCharge)").data("kendoNumericTextBox").value(data.DefaultShippingCharge);
+                                toggleEnableFreeShippingOverAmountX();
+                            }
+                        });
+                    });
+
+                    $("#@Html.IdFor(model => model.VendorStateProvinceShippingSearchModel.SearchCountryId)").change(function () {
+                        updateTable('#vendor-stateshipping-grid');
+                    });
+
+                    $('#saveInfo').click(function () {
+                        var id = $("#VendorShippingId").val();
+                        var shippingMethodId = $("#@Html.IdFor(model => model.ShippingMethodId)").val();
+                        var sellerSideDelivery = $("#@Html.IdFor(model => model.SellerSideDelivery)").is(':checked');
+                        var defaultShippingCharge = $("#@Html.IdFor(model => model.DefaultShippingCharge)").val();
+                        var hideShippingMethod = $("#@Html.IdFor(model => model.HideShippingMethod)").is(':checked');
+                        var enableFreeShippingOverAmountX = $("#@Html.IdFor(model => model.EnableFreeShippingOverAmountX)").is(':checked');
+                        var amountX = $("#@Html.IdFor(model => model.AmountX)").val();
+                        var withDiscounts = $("#@Html.IdFor(model => model.WithDiscounts)").is(':checked');
+                        var transitDays = $("#@Html.IdFor(model => model.TransitDays)").val();
+
+                        $('#saveInfo').attr('disabled', true);
+
+                        var postData = {
+                            Id: id,
+                            ShippingMethodId: shippingMethodId,
+                            SellerSideDelivery: sellerSideDelivery,
+                            VendorId: '@Model.VendorId',
+                            DefaultShippingCharge: defaultShippingCharge,
+                            EnableFreeShippingOverAmountX: enableFreeShippingOverAmountX,
+                            HideShippingMethod: hideShippingMethod,
+                            AmountX: amountX,
+                            WithDiscounts: withDiscounts,
+                            TransitDays: transitDays
+                        };
+                        addAntiForgeryToken(postData);
+
+                        $.ajax({
+                            cache: false,
+                            type: "POST",
+                            url: "@(Url.Action("ShippingCharge", "ShippingByVendor"))",
+                            data: postData,
+                            success: function (data) {
+                                alert('Data saved!')
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                alert('Failed to save data!')
+                            },
+                            complete: function (jqXHR, textStatus) {
+                                $('#saveInfo').attr('disabled', false);
+                            }
+                        });
+                    });
+                });
+            </script>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="HideShippingMethod" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="HideShippingMethod" />
+                    <span asp-validation-for="HideShippingMethod"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="DefaultShippingCharge" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="DefaultShippingCharge" />
+                    <span asp-validation-for="DefaultShippingCharge"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="SellerSideDelivery" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="SellerSideDelivery" />
+                    <span asp-validation-for="SellerSideDelivery"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="EnableFreeShippingOverAmountX" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="EnableFreeShippingOverAmountX" />
+                    <span asp-validation-for="EnableFreeShippingOverAmountX"></span>
+                </div>
+            </div>
+            <nop-nested-setting asp-for="EnableFreeShippingOverAmountX">
+                <div id="pnlEnableFreeShippingOverAmountX">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="AmountX" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="AmountX" />
+                            <span asp-validation-for="AmountX"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="WithDiscounts" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="WithDiscounts" />
+                            <span asp-validation-for="WithDiscounts"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="TransitDays" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="TransitDays" />
+                            <span asp-validation-for="TransitDays"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-9 offset-md-3">
+                        <button type="button" id="saveInfo" class="btn btn-primary">
+                            @T("Admin.NopStation.ShippingByVendor.Vendor.SaveShippingInfo")
+                        </button>
+                    </div>
+                </div>
+            </nop-nested-setting>
+        </div>
+    </div>
+
+    <div class="card card-default">
+        <div class="card-header">
+            @T("Admin.NopStation.ShippingByVendor.Vendor.StateProviceShipping")
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="VendorStateProvinceShippingSearchModel.SearchCountryId" />
+                </div>
+                <div class="col-md-9">
+                    <nop-select asp-for="VendorStateProvinceShippingSearchModel.SearchCountryId" asp-items="@Model.VendorStateProvinceShippingSearchModel.AvailableCountries" />
+                    <span asp-validation-for="VendorStateProvinceShippingSearchModel.SearchCountryId"></span>
+                </div>
+            </div>
+
+            @await Html.PartialAsync("Table", new DataTablesModel
+            {
+                Name = "vendor-stateshipping-grid",
+                UrlRead = new DataUrl("StateShippingCharges", "ShippingByVendor", new RouteValueDictionary { [nameof(Model.VendorStateProvinceShippingSearchModel.VendorId)] = Model.VendorId }),
+                UrlDelete = new DataUrl("StateShippingChargeDelete", "ShippingByVendor", null),
+                UrlUpdate = new DataUrl("StateShippingChargeUpdate", "ShippingByVendor", null),
+                Length = Model.VendorStateProvinceShippingSearchModel.PageSize,
+                LengthMenu = Model.VendorStateProvinceShippingSearchModel.AvailablePageSizes,
+                Filters = new List<FilterParameter>
+                {
+                    new FilterParameter(nameof(VendorStateProvinceShippingSearchModel.SearchCountryId), nameof(VendorStateProvinceShippingSearchModel)),
+                    new FilterParameter(nameof(Model.ShippingMethodId)),
+                },
+                ColumnCollection = new List<ColumnProperty>
+                {
+                    new ColumnProperty(nameof(VendorStateProvinceShippingModel.StateProvince))
+                    {
+                        Title = T("Admin.NopStation.ShippingByVendor.VendorStateProvinceShippings.Fields.StateProvince").Text,
+                        Width = "250"
+                    },
+                    new ColumnProperty(nameof(VendorStateProvinceShippingModel.HideShippingMethod))
+                    {
+                        Title = T("Admin.NopStation.ShippingByVendor.VendorStateProvinceShippings.Fields.HideShippingMethod").Text,
+                        Width = "100",
+                        Render = new RenderCustom("renderHideShippingMethod"),
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        Editable = true,
+                        EditType = EditType.Checkbox
+                    },
+                    new ColumnProperty(nameof(VendorStateProvinceShippingModel.ShippingCharge))
+                    {
+                        Title = T("Admin.NopStation.ShippingByVendor.VendorStateProvinceShippings.Fields.ShippingCharge").Text,
+                        Width = "100",
+                        Editable = true,
+                        Render = new RenderCustom("renderShippingCharge"),
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        EditType = EditType.Number
+                    },
+                    new ColumnProperty(nameof(VendorStateProvinceShippingModel.EnableFreeShippingOverAmountX))
+                    {
+                        Title = T("Admin.NopStation.ShippingByVendor.VendorStateProvinceShippings.Fields.EnableFreeShippingOverAmountX").Text,
+                        Width = "100",
+                        Editable = true,
+                        Render = new RenderCustom("renderEnableFreeShippingOverAmountX"),
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        EditType = EditType.Checkbox
+                    },
+                    new ColumnProperty(nameof(VendorStateProvinceShippingModel.AmountX))
+                    {
+                        Title = T("Admin.NopStation.ShippingByVendor.VendorStateProvinceShippings.Fields.AmountX").Text,
+                        Width = "100",
+                        Editable = true,
+                        Render = new RenderCustom("renderAmountX"),
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        EditType = EditType.Number
+                    },
+                    new ColumnProperty(nameof(VendorStateProvinceShippingModel.WithDiscounts))
+                    {
+                        Title = T("Admin.NopStation.ShippingByVendor.VendorStateProvinceShippings.Fields.WithDiscounts").Text,
+                        Width = "100",
+                        Editable = true,
+                        Render = new RenderCustom("renderWithDiscounts"),
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        EditType = EditType.Checkbox
+                    },
+                    new ColumnProperty(nameof(VendorStateProvinceShippingModel.TransitDays))
+                    {
+                        Title = T("Admin.NopStation.ShippingByVendor.VendorStateProvinceShippings.Fields.TransitDays").Text,
+                        Width = "100",
+                        Editable = true,
+                        Render = new RenderCustom("renderTransitDays"),
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        EditType = EditType.Number
+                    },
+                    new ColumnProperty(nameof(VendorStateProvinceShippingModel.ComplexId))
+                    {
+                        Title = T("Admin.Common.Edit").Text,
+                        Width = "200",
+                        ClassName =  NopColumnClassDefaults.Button,
+                        Render = new RenderButtonsInlineEdit()
+                    },
+                    new ColumnProperty(nameof(VendorStateProvinceShippingModel.Id))
+                    {
+                        Title = T("Admin.Common.Delete").Text,
+                        Width = "100",
+                        Render = new RenderButtonRemove(T("Admin.NopStation.ShippingByVendor.Vendor.Reset").Text),
+                        ClassName = NopColumnClassDefaults.Button
+                    }
+                }
+            })
+
+            <script>
+                function renderShippingCharge(data, type, row, meta) {
+                    if (!row.IsSet) {
+                        return '';
+                    }
+                    else {
+                        return row.ShippingCharge;
+                    }
+                }
+                function renderAmountX(data, type, row, meta) {
+                    if (!row.IsSet) {
+                        return '';
+                    }
+                    else {
+                        return row.AmountX;
+                    }
+                }
+                function renderTransitDays(data, type, row, meta) {
+                    if (!row.IsSet) {
+                        return '';
+                    }
+                    else {
+                        return row.TransitDays;
+                    }
+                }
+                function renderHideShippingMethod(data, type, row, meta) {
+                    if (!row.IsSet) {
+                        return '';
+                    }
+                    else if (row.HideShippingMethod) {
+                        return '<i class="fas fa-check true-icon" nop-value="true"></i>';
+                    }
+                    else {
+                        return '<i class="fas fa-times false-icon" nop-value="false"></i>';
+                    }
+                }
+                function renderEnableFreeShippingOverAmountX(data, type, row, meta) {
+                    if (!row.IsSet) {
+                        return '';
+                    }
+                    else if (row.EnableFreeShippingOverAmountX) {
+                        return '<i class="fas fa-check true-icon" nop-value="true"></i>';
+                    }
+                    else {
+                        return '<i class="fas fa-times false-icon" nop-value="false"></i>';
+                    }
+                }
+                function renderWithDiscounts(data, type, row, meta) {
+                    if (!row.IsSet) {
+                        return '';
+                    }
+                    else if (row.WithDiscounts) {
+                        return '<i class="fas fa-check true-icon" nop-value="true"></i>';
+                    }
+                    else {
+                        return '<i class="fas fa-times false-icon" nop-value="false"></i>';
+                    }
+                }
+            </script>
+        </div>
+    </div>
+</div>

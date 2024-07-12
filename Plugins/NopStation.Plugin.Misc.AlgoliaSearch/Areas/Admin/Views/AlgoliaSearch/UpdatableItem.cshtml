@@ -1,0 +1,50 @@
+﻿@model UpdatableItemSearchModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.AlgoliaSearch.UpdatableItem.Title").Text;
+
+    NopHtml.SetActiveMenuItemSystemName("AlgoliaSearch.UpdatableItems");
+}
+
+@{
+    const string hideProductBlockAttributeName = "AlgoliaUpdatableItemPage.HideProductBlock";
+    var hideProductBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideProductBlockAttributeName);
+
+    const string hideCategoryBlockAttributeName = "AlgoliaUpdatableItemPage.HideCategoryBlock";
+    var hideCategoryBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideCategoryBlockAttributeName);
+
+    const string hideManufacturerBlockAttributeName = "AlgoliaUpdatableItemPage.HideManufacturerBlock";
+    var hideManufacturerBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideManufacturerBlockAttributeName);
+
+    const string hideVendorBlockAttributeName = "AlgoliaUpdatableItemPage.HideVendorBlock";
+    var hideVendorBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideVendorBlockAttributeName);
+}
+
+<form asp-controller="AlgoliaSearch" asp-action="UpdatableItem" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.AlgoliaSearch.UpdatableItem.Title")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.NopStation.AlgoliaSearch.UpdatableItem.UpdateAll")
+            </button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div asp-validation-summary="All"></div>
+
+                <nop-cards id="algoliasettings-panels">
+                    <nop-card asp-name="updatableitems-product" asp-icon="fa fa-outdent" asp-title="@T("Admin.NopStation.AlgoliaSearch.UpdatableItem.BlockTitle.Product")" asp-hide-block-attribute-name="@hideProductBlockAttributeName" asp-hide="@hideProductBlock" asp-advanced="false">@await Html.PartialAsync("_UpdatableItem.Product", Model)</nop-card>
+                    <nop-card asp-name="updatableitems-category" asp-icon="fa fa-outdent" asp-title="@T("Admin.NopStation.AlgoliaSearch.UpdatableItem.BlockTitle.Category")" asp-hide-block-attribute-name="@hideCategoryBlockAttributeName" asp-hide="@hideCategoryBlock" asp-advanced="false">@await Html.PartialAsync("_UpdatableItem.Category", Model)</nop-card>
+                    <nop-card asp-name="updatableitems-manufacturer" asp-icon="fa fa-outdent" asp-title="@T("Admin.NopStation.AlgoliaSearch.UpdatableItem.BlockTitle.Manufacturer")" asp-hide-block-attribute-name="@hideManufacturerBlockAttributeName" asp-hide="@hideManufacturerBlock" asp-advanced="true">@await Html.PartialAsync("_UpdatableItem.Manufacturer", Model)</nop-card>
+                    <nop-card asp-name="updatableitems-vendor" asp-icon="fa fa-outdent" asp-title="@T("Admin.NopStation.AlgoliaSearch.UpdatableItem.BlockTitle.Vendor")" asp-hide-block-attribute-name="@hideManufacturerBlockAttributeName" asp-hide="@hideVendorBlock" asp-advanced="true">@await Html.PartialAsync("_UpdatableItem.Vendor", Model)</nop-card>
+                </nop-cards>
+            </div>
+        </div>
+    </div>
+</form>

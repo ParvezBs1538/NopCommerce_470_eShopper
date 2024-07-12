@@ -1,0 +1,107 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("QuickStream.Configuration");
+    ViewBag.PageTitle = T("Admin.NopStation.QuickStream.Configuration").Text;
+}
+
+<form asp-controller="QuickStream" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.QuickStream.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                @T("Admin.NopStation.QuickStream.Instructions")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="UseSandbox_OverrideForStore" asp-input="UseSandbox" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="UseSandbox" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="UseSandbox" />
+                                    <span asp-validation-for="UseSandbox"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="PublishableApiKey_OverrideForStore" asp-input="PublishableApiKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="PublishableApiKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="PublishableApiKey" />
+                                    <span asp-validation-for="PublishableApiKey"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="SecretApiKey_OverrideForStore" asp-input="SecretApiKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="SecretApiKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="SecretApiKey" />
+                                    <span asp-validation-for="SecretApiKey"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="SupplierBusinessCode_OverrideForStore" asp-input="SupplierBusinessCode" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="SupplierBusinessCode" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="SupplierBusinessCode" />
+                                    <span asp-validation-for="SupplierBusinessCode"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="CommunityCode_OverrideForStore" asp-input="CommunityCode" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="CommunityCode" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="CommunityCode" />
+                                    <span asp-validation-for="CommunityCode"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="IpAddress_OverrideForStore" asp-input="IpAddress" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="IpAddress" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="IpAddress" />
+                                    <span asp-validation-for="IpAddress"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

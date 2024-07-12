@@ -1,0 +1,48 @@
+﻿@model InvoicePaymentSearchModel
+
+<div class="card-body">
+    @await Html.PartialAsync("Table", new DataTablesModel
+    {
+        Name = "invoicepayments-grid",
+        UrlRead = new DataUrl("List", "WalletInvoicePayment", new RouteValueDictionary { [nameof(Model.SearchWalletCustomerId)] = Model.SearchWalletCustomerId }),
+        SearchButtonId = "search-invoicepayments",
+        Length = Model.PageSize,
+        LengthMenu = Model.AvailablePageSizes,
+        ColumnCollection = new List<ColumnProperty>
+        {
+            new ColumnProperty(nameof(InvoicePaymentModel.PaymentDateStr))
+            {
+                Title = T("Admin.NopStation.CreditWallet.InvoicePayments.Fields.PaymentDate").Text,
+                Width = "80",
+                Render = new RenderDate()
+            },
+            new ColumnProperty(nameof(InvoicePaymentModel.Amount))
+            {
+                Title = T("Admin.NopStation.CreditWallet.InvoicePayments.Fields.Amount").Text,
+                Width = "80"
+            },
+            new ColumnProperty(nameof(InvoicePaymentModel.InvoiceReference))
+            {
+                Title = T("Admin.NopStation.CreditWallet.InvoicePayments.Fields.InvoiceReference").Text,
+                Width = "100"
+            },
+            new ColumnProperty(nameof(InvoicePaymentModel.Id))
+            {
+                Title = T("Admin.Common.Edit").Text,
+                Width = "80",
+                ClassName =  NopColumnClassDefaults.Button,
+                Render = new RenderCustom("renderInvoiceEditUrl")
+            }
+        }
+    })
+    <script>
+        function renderInvoiceEditUrl(data, type, row, meta) {
+            return '<a class="btn btn-default" href="@Url.Content("~/Admin/WalletInvoicePayment/Edit/")' + row.Id + '?fromCustomerPage=true"><i class="fas fa-pencil-alt"></i>@T("Admin.Common.Edit")</a>';
+        }
+    </script>
+</div>
+<div class="card-footer">
+    <a class="btn btn-primary" asp-controller="WalletInvoicePayment" asp-action="Create" asp-route-customerWalletId="@Model.SearchWalletCustomerId" asp-route-fromCustomerPage="true" >
+        @T("Admin.NopStation.CreditWallet.InvoicePayments.AddNew")
+    </a>
+</div>

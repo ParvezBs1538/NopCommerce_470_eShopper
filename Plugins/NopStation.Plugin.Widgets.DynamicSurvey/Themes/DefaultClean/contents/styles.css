@@ -1,0 +1,110 @@
+﻿.survey-page .button-1:hover {
+  background-color: #248ece;
+}
+
+.survey-page .button-1 {
+  min-width: 140px;
+  border: none;
+  background-color: #4ab2f1;
+  padding: 10px 30px;
+  text-align: center;
+  font-size: 15px;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.survey-page .date-picker-wrapper {
+  display: inline;
+}
+
+  .survey-page .date-picker-wrapper select {
+    width: 31%;
+    max-width: 126px;
+  }
+
+@media (min-width: 1001px) {
+  .survey-page select + select {
+    margin: 0 0 0 11px;
+  }
+}
+
+.survey-page select + select {
+  margin: 0 0 0 10px;
+}
+
+
+.attribute-square-container {
+  margin: 3px;
+}
+
+.attribute-squares input:checked + span .attribute-square {
+  box-shadow: 0 0 0 5px #4ab2f1;
+}
+
+.inputs .option-list.attribute-squares li {
+  padding: 0;
+}
+
+.inputs {
+  font-size: inherit;
+}
+
+.file-uploader-container {
+  display: inline-block;
+}
+
+.file-uploader-control {
+  margin-top: 5px;
+}
+
+.survey-input label {
+  position: relative;
+}
+  .survey-input label sup {
+      position: relative;
+  }
+  .survey-input label sup .attribute-description {
+    position: absolute;
+    opacity: 0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background-color: #fff;
+    font-size: 12px;
+    top: 80%;
+    transition: 0.3s;
+    padding: 2px 8px;
+    left: 0;
+  }
+
+  .survey-input label sup:hover .attribute-description {
+    opacity: 1;
+  }
+
+.survey-input.inputs > label {
+  display: block;
+  white-space: normal;
+  text-align: left;
+  margin: 0.4rem 0;
+}
+
+.survey-page .title {
+  line-height: 1.4;
+}
+
+.survey-input.inputs {
+  margin: 0 auto 15px;
+  width: min(95%, 400px);
+  text-align: left;
+}
+
+  .survey-input.inputs .option-list {
+    white-space: normal;
+    max-width: auto;
+  }
+
+    .survey-input.inputs .option-list li {
+      display: inline-block;
+      margin: 5px;
+      border: 1px solid #ddd;
+      background-color: #fff;
+    }

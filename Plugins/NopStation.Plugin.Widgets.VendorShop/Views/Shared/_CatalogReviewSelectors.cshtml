@@ -1,0 +1,47 @@
+﻿@model VendorProfileModel
+
+@if (Model.Reviews.Count <= 0)
+{
+    return;
+}
+
+<div class="vendor-review-selectors">
+    @*view mode*@
+
+    <div class="vendor-review-sorting">
+        <span>@T("Admin.NopStation.VendorShop.ProfileTabs.Reviews.OrderBy")</span>
+        @Html.DropDownList("reviews-orderby", Model.AvailableSortOptions, new { aria_label = T("Admin.NopStation.VendorShop.ProfileTabs.Reviews.OrderBy.Label") })
+    </div>
+    <script asp-location="Footer">
+        $(document).ready(function () {
+            var $orderByEl = $('#reviews-orderby');
+            $orderByEl.on('change', function () {
+                CatalogReviews.getReviews();
+            });
+
+            $(CatalogReviews).on('before', function (e) {
+                e.payload.urlBuilder
+                    .addParameter('orderby', $orderByEl.val());
+            });
+        });
+    </script>
+    <div class="vendor-review-page-size">
+        <span>@T("Admin.NopStation.VendorShop.ProfileTabs.Reviews.FilterByStar")</span>
+        @Html.DropDownList("reviews-filterby-star", Model.AvailableFilterOptions, new { aria_label = T("Admin.NopStation.VendorShop.ProfileTabs.Reviews.FilterByStar.Label") })
+    </div>
+
+    <script asp-location="Footer">
+        $(document).ready(function () {
+            var $filterByEl = $('#reviews-filterby-star');
+            $filterByEl.on('change', function () {
+                CatalogReviews.getReviews();
+            });
+
+            $(CatalogReviews).on('before', function (e) {
+                e.payload.urlBuilder
+                    .addParameter('filterby', $filterByEl.val());
+            });
+        });
+    </script>
+
+</div>

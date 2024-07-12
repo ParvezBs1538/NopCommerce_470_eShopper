@@ -1,0 +1,226 @@
+﻿@model OCarouselModel
+@using NopStation.Plugin.Widgets.VendorShop
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.DataSourceTypeId)").change(toggleDataSourceType);
+        $("#@Html.IdFor(model => model.AutoPlay)").change(toggleAutoPlay);
+        $("#@Html.IdFor(model => model.LazyLoad)").click(toggleLazyLoad);
+        $("#@Html.IdFor(model => model.ShowBackgroundPicture)").click(toggleShowBackgroundPicture);
+
+        toggleDataSourceType();
+        toggleAutoPlay();
+        toggleLazyLoad();
+        toggleShowBackgroundPicture();
+    });
+
+    function toggleDataSourceType() {
+        var selectedDataSourceTypeId = $("#@Html.IdFor(model => model.DataSourceTypeId)").val();
+        if (selectedDataSourceTypeId == @(((int)DataSourceTypeEnum.CustomProducts).ToString())) {
+            $('#ocarousel-items').show();
+            $('#pnlNumberOfItemsToShow').hide();
+        } else {
+            $('#ocarousel-items').hide();
+            $('#pnlNumberOfItemsToShow').show();
+        }
+    }
+
+    function toggleAutoPlay() {
+        if ($('#@Html.IdFor(model => model.AutoPlay)').is(':checked')) {
+            $('#pnlAutoPlay').show();
+        } else {
+            $('#pnlAutoPlay').hide();
+        }
+    }
+
+    function toggleLazyLoad() {
+        if ($('#@Html.IdFor(model => model.LazyLoad)').is(':checked')) {
+            $('#pnlLazyLoad').show();
+        } else {
+            $('#pnlLazyLoad').hide();
+        }
+    }
+
+    function toggleShowBackgroundPicture() {
+        if ($('#@Html.IdFor(model => model.ShowBackgroundPicture)').is(':checked')) {
+            $('#pnlBackgroundPicture').show();
+        } else {
+            $('#pnlBackgroundPicture').hide();
+        }
+    }
+</script>
+<input asp-for="VendorId" type="hidden" />
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Name" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Name" asp-required="true" />
+            <span asp-validation-for="Name"></span>
+        </div>
+    </div>
+    @(await Html.LocalizedEditorAsync<OCarouselModel, OCarouselLocalizedModel>("ocarousel-info-localized",
+        @<div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.Locales[item].Title" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="@Model.Locales[item].Title" />
+                    <span asp-validation-for="@Model.Locales[item].Title"></span>
+                </div>
+            </div>
+
+            <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+        </div>
+        ,@<div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="Title" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="Title" asp-required="true" />
+                    <span asp-validation-for="Title"></span>
+                </div>
+            </div>
+        </div>)
+    )
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DisplayTitle" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DisplayTitle" />
+            <span asp-validation-for="DisplayTitle"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="WidgetZoneId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="WidgetZoneId" asp-items="@Model.AvailableWidgetZones" asp-required="true" />
+            <span asp-validation-for="WidgetZoneId"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DataSourceTypeId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="DataSourceTypeId" asp-items="@Model.AvailableDataSources" asp-required="true" />
+            <span asp-validation-for="DataSourceTypeId"></span>
+        </div>
+    </div>
+
+    <nop-nested-setting asp-for="DataSourceTypeId">
+        <div class="form-group row" id="pnlNumberOfItemsToShow">
+            <div class="col-md-3">
+                <nop-label asp-for="NumberOfItemsToShow" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="NumberOfItemsToShow" />
+                <span asp-validation-for="NumberOfItemsToShow"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ShowBackgroundPicture" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ShowBackgroundPicture" />
+            <span asp-validation-for="ShowBackgroundPicture"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="ShowBackgroundPicture">
+        <div class="form-group row" id="pnlBackgroundPicture">
+            <div class="col-md-3">
+                <nop-label asp-for="BackgroundPictureId" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="BackgroundPictureId" asp-require="true" />
+                <span asp-validation-for="BackgroundPictureId"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DisplayOrder" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DisplayOrder" />
+            <span asp-validation-for="DisplayOrder"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SelectedStoreIds" />
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-4">
+                    <nop-select asp-for="SelectedStoreIds" asp-items="Model.AvailableStores" asp-multiple="true" />
+                    <script>
+                        $(document).ready(function() {
+                            var storesIdsInput = $('#@Html.IdFor(model => model.SelectedStoreIds)').data("kendoMultiSelect");
+                            storesIdsInput.setOptions({
+                                autoClose: false,
+                                filter: "contains"
+                            });
+
+                            @if (Model.AvailableStores.Count == 0)
+                            {
+                                <text>
+                                    storesIdsInput.setOptions({
+                                        enable: false,
+                                        placeholder: 'No stores available'
+                                    });
+                                    storesIdsInput._placeholder();
+                                    storesIdsInput._enable();
+                                </text>
+                            }
+                        });
+                    </script>
+                </div>
+                <div class="col-md-8">
+                    @await Component.InvokeAsync("MultistoreDisabledWarning")
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Active" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Active" />
+            <span asp-validation-for="Active"></span>
+        </div>
+    </div>
+    @if (Model.Id > 0)
+    {
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="CreatedOn" />
+            </div>
+            <div class="col-md-9">
+                <div class="form-text-row">@Model.CreatedOn</div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="UpdatedOn" />
+            </div>
+            <div class="col-md-9">
+                <div class="form-text-row">@Model.UpdatedOn</div>
+            </div>
+        </div>
+    }
+</div>

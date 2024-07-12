@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Quickstream",
+  "SystemName": "NopStation.Plugin.Payments.Quickstream",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "NopStation Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.Quickstream.dll",
+  "Description": "This plugin integrates payment with quickstream",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

@@ -1,0 +1,63 @@
+﻿@model NopStation.Plugin.Payout.Stripe.Areas.Admin.Models.VendorStripeConfigurationModel
+@{
+    Layout = "";
+}
+<script>
+    $(document).ready(function () {
+        $('#savevendorstripeConfigurationAlert@(Model.VendorId)').click(function () {
+            var vendorId = @Model.VendorId;
+            var accountId = $("#@Html.IdFor(model => model.AccountId)").val();
+            var postData = {
+                VendorId: vendorId,
+                AccountId: accountId
+            };
+            addAntiForgeryToken(postData);
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@(Url.Action("ConfigureVendorStripe", "StripePayout"))",
+                data: postData,
+                success: function (data, textStatus, jqXHR) {
+
+                    var $alertInfoEl = $("#savevendorstripeConfigurationAlert-info");
+                    let response = jqXHR.responseJSON;
+                    if (response instanceof Object && response.hasOwnProperty('Errors')) {
+                        var errorMessages = '';
+                        $.each(response.Errors, function (i, error) {
+                            errorMessages += error;
+                            if (response.Errors.length - 1 != i)
+                                errorMessages += '</br>';
+                        });
+                        $alertInfoEl.html(errorMessages);
+                        $("#savevendorstripeConfigurationAlert").click();
+
+                        return;
+                    }
+                    $alertInfoEl.html('@T("NopStation.Plugin.Payout.Stripe.Configuration.Saved")');
+                    $("#savevendorstripeConfigurationAlert").click();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    var $alertInfoEl = $("#savevendorstripeConfigurationAlert-info");
+                    $alertInfoEl.html('@T("NopStation.Plugin.Payout.Stripe.Configuration.FailedToSave")');
+                    $("#savevendorstripeConfigurationAlert").click();
+                }
+            });
+        });
+    });
+</script>
+
+<div class="form-group row">
+    <div class="col-md-3 accountid-label-col">
+        <nop-label asp-for="AccountId" />
+    </div>
+    <div class="col-md-9 accountid-data-col">
+        <div class="accountid-data-input">
+            <nop-editor asp-for="AccountId" />
+        </div>
+        <div class="accountid-data-buttons">
+            <button type="button" id="savevendorstripeConfigurationAlert@(Model.VendorId)" class="btn btn-primary">@T("NopStation.Plugin.Payout.Stripe.Configuration.Save")</button>
+        </div>
+    </div>
+</div>
+
+<nop-alert asp-alert-id="savevendorstripeConfigurationAlert" />

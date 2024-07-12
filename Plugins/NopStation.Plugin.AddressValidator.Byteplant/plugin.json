@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Address Validator (Byteplant)",
+  "SystemName": "NopStation.Plugin.AddressValidator.Byteplant",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Jaber Kibria",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.AddressValidator.Byteplant.dll",
+  "Description": "This plugin allows to validate address using Byteplant API.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

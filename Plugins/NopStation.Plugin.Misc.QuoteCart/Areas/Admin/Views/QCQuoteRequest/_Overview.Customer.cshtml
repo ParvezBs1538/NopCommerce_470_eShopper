@@ -1,0 +1,55 @@
+﻿@model QuoteRequestDetailsModel
+
+<div class="card card-default">
+    <div class="card-body">
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="CustomerModel.FullName" />
+            </div>
+            <div class="col-md-9">
+                <div class="form-text-row">@Model.CustomerModel.FullName</div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="CustomerModel.Email" />
+            </div>
+            <div class="col-md-9">
+                <div class="form-text-row">@Model.CustomerModel.Email</div>
+            </div>
+        </div>
+        @if (!string.IsNullOrEmpty(Model.CustomerModel.Phone))
+        {
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="CustomerModel.Phone" />
+                </div>
+                <div class="col-md-9">
+                    <div class="form-text-row">@Model.CustomerModel.Phone</div>
+                </div>
+            </div>
+        }
+        @if (!string.IsNullOrEmpty(Model.CustomerModel.Gender))
+        {
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="CustomerModel.Gender" />
+                </div>
+                <div class="col-md-9">
+                    <div class="form-text-row">@Model.CustomerModel.Gender</div>
+                </div>
+            </div>
+        }
+        @if (Model.CustomerModel.DateOfBirth.HasValue)
+        {
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="CustomerModel.DateOfBirth" />
+                </div>
+                <div class="col-md-9">
+                    <div class="form-text-row">@Html.DisplayFor(x => x.CustomerModel.DateOfBirth)</div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

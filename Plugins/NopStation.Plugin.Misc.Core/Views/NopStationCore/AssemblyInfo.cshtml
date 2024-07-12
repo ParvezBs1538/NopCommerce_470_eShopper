@@ -1,0 +1,94 @@
+﻿@model IEnumerable<PluginInfoModel>
+
+@{
+    Layout = "_AdminLayout";
+
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.Core.AssemblyInfo").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("NopStationCore.AssemblyInfo");
+
+    var i = 1;
+}
+
+<style>
+    .plugin-item {
+        border-bottom: 1px solid #eee;
+        padding: 15px 10px;
+    }
+
+        .plugin-item span.a-version {
+            background: yellow;
+            padding: 0px 9px;
+            border-radius: 10px;
+            font-weight: normal;
+            display: inline-block;
+        }
+
+        .plugin-item span.f-version {
+            background: #80FF00;
+            padding: 0px 9px;
+            border-radius: 10px;
+            font-weight: normal;
+            display: inline-block;
+        }
+
+        .plugin-item span.build {
+            background: green;
+            padding: 0px 9px;
+            border-radius: 10px;
+            font-weight: normal;
+            color: white;
+            display: inline-block;
+        }
+
+    .plugin-item-flie {
+        color: white;
+        background: #03a1db;
+        width: fit-content;
+        padding: 0 8px;
+        border-radius: 10px;
+    }
+</style>
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.Core.AssemblyInfo")
+    </h1>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        @foreach (var item in Model)
+                        {
+                            <div class="plugin-item">
+                                <div style="font-weight: bold;">
+                                    @(i++.ToString("00")). @item.AssemblyName
+                                    <span class="a-version">Assembly version=@(item.AssemblyVersion)</span>
+                                    <span class="f-version">File version=@(item.FileVersion)</span>
+                                    @if (!string.IsNullOrWhiteSpace(item.BuildType))
+                                    {
+                                        <span class="build">Build=@(item.BuildType)</span>
+                                    }
+                                </div>
+                                <i>@item.FilePath</i>
+                                <div class="plugin-item-flie">@item.FileName</div>
+                                <div class="plugin-item-description">@item.Description</div>
+                                <span>
+                                    <span style="font-weight: bold">Created on:</span>
+                                    @item.CreatedOn.ToLongDateString()
+                                    @item.CreatedOn.ToLongTimeString()
+                                    @item.CreatedOn.ToString("\"GMT\" zzz")
+                                </span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

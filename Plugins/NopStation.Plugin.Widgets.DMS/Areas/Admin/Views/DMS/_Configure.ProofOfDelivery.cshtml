@@ -1,0 +1,58 @@
+﻿@model ConfigurationModel
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store asp-for="EnabledProofOfDelivery_OverrideForStore" asp-input="EnabledProofOfDelivery" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="EnabledProofOfDelivery" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="EnabledProofOfDelivery" />
+            <span asp-validation-for="EnabledProofOfDelivery"></span>
+        </div>
+    </div>
+    <div class="form-group row" id="pnlProofOfDeliveryTypeId">
+        <div class="col-md-4">
+            <nop-override-store asp-for="ProofOfDeliveryTypeId_OverrideForStore" asp-input="ProofOfDeliveryTypeId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="ProofOfDeliveryTypeId" />
+        </div>
+        <div class="col-md-8">
+            <nop-select asp-for="ProofOfDeliveryTypeId" asp-items="@Model.AvailableProofOfDeliveryType"/>
+            <span asp-validation-for="ProofOfDeliveryTypeId"></span>
+        </div>
+    </div>
+    <div class="form-group row" id="pnlOtherProofOfDeliveryType">
+        <div class="col-md-4">
+            <nop-override-store asp-for="ProofOfDeliveryRequired_OverrideForStore" asp-input="ProofOfDeliveryRequired" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="ProofOfDeliveryRequired" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="ProofOfDeliveryRequired" />
+            <span asp-validation-for="ProofOfDeliveryRequired"></span>
+        </div>
+    </div>
+    <div id="pnl-pod-image-max-size">
+        <div class="form-group row" >
+            <div class="col-md-4">
+                <nop-override-store asp-for="ProofOfDeliveryImageMaxSize_OverrideForStore" asp-input="ProofOfDeliveryImageMaxSize" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="ProofOfDeliveryImageMaxSize" />
+            </div>
+            <div class="col-md-8">
+                <nop-editor asp-for="ProofOfDeliveryImageMaxSize" />
+                <span asp-validation-for="ProofOfDeliveryImageMaxSize"></span>
+            </div>
+        </div>
+    </div>
+    <div id="pnl-pod-Otp">
+        <div class="form-group row" >
+            <div class="col-md-4">
+                <nop-override-store asp-for="OtpLength_OverrideForStore" asp-input="OtpLength" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="OtpLength" />
+            </div>
+            <div class="col-md-8">
+                <nop-editor asp-for="OtpLength" />
+                <span asp-validation-for="OtpLength"></span>
+            </div>
+        </div>
+    </div>
+</div>

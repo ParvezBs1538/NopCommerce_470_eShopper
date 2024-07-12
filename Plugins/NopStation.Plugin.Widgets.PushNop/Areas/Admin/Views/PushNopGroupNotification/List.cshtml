@@ -1,0 +1,83 @@
+﻿@model GroupNotificationSearchModel
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.PushNop.GroupNotifications.List").Text;
+
+    NopHtml.SetActiveMenuItemSystemName("PushNop.SmartGroupNotifications");
+}
+
+@{
+    const string hideSearchBlockAttributeName = "GroupNotifications.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<form asp-controller="PushNopGroupNotification" asp-action="List" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.PushNop.GroupNotifications.List")
+        </h1>
+        <div class="float-right">
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus-square"></i>
+                @T("Admin.Common.AddNew")
+            </a>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "pushnotificationcampaign-grid",
+                            UrlRead = new DataUrl("GetList", "PushNopGroupNotification", null),
+                            SearchButtonId = "search-pushnotificationCampaign",
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(GroupNotificationModel.Name))
+                                {
+                                    Title = T("Admin.NopStation.PushNop.GroupNotifications.Fields.Name").Text,
+                                    Width = "150"
+                                },
+                                new ColumnProperty(nameof(GroupNotificationModel.Title))
+                                {
+                                    Title = T("Admin.NopStation.PushNop.GroupNotifications.Fields.Title").Text,
+                                    Width = "150"
+                                },
+                                new ColumnProperty(nameof(GroupNotificationModel.SendToAll))
+                                {
+                                    Title = T("Admin.NopStation.PushNop.GroupNotifications.Fields.SendToAll").Text,
+                                    Width = "80",
+                                    ClassName =  NopColumnClassDefaults.CenterAll,
+                                    Render = new RenderBoolean()
+                                },
+                                new ColumnProperty(nameof(GroupNotificationModel.Subscriptions))
+                                {
+                                    Title = T("Admin.NopStation.PushNop.GroupNotifications.Fields.Subscriptions").Text,
+                                    Width = "80",
+                                    ClassName =  NopColumnClassDefaults.CenterAll
+                                },
+                                new ColumnProperty(nameof(GroupNotificationModel.SendingWillStartOn))
+                                {
+                                    Title = T("Admin.NopStation.PushNop.GroupNotifications.Fields.SendingWillStartOn").Text,
+                                    Width = "100",
+                                    Render = new RenderDate()
+                                },
+                                new ColumnProperty(nameof(GroupNotificationModel.Id))
+                                {
+                                    Title = T("Admin.Common.Edit").Text,
+                                    Width = "80",
+                                    ClassName =  NopColumnClassDefaults.Button,
+                                    Render = new RenderButtonEdit(new DataUrl("Edit"))
+                                }
+                            }
+                        })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

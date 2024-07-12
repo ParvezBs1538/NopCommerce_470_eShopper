@@ -1,0 +1,40 @@
+﻿@model NopStation.Plugin.Widgets.CancelOrder.Models.PublicInfoModel
+
+<style>
+    .button-1.cancel-button {
+        display: inline-block;
+        min-width: 165px;
+        margin: 5px;
+        border: none;
+        background-color: #aaa;
+        background-image: none;
+        padding: 10px 20px;
+        font-size: 15px;
+        color: #fff;
+    }
+</style>
+
+<div class="actions">
+    <input type="button" class="button-1 cancel-button" id="cancelOrderButton" value="@T("NopStation.CancelOrder.Button")" />
+</div>
+
+<script asp-location="Footer" asp-exclude-from-bundle="true">
+    $(document).ready(function () {
+        $('#cancelOrderButton').click(function () {
+            if (!confirm('@T("NopStation.CancelOrder.Confirm")'))
+                return;
+
+            var data = {};
+            data.orderId = @Model.OrderId;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.RouteUrl("CustomerCancelOrder")',
+                data: data,
+                dataType: 'json',
+                success: function (resultData) {
+                    location.reload();
+                }
+            });
+        });
+    });
+</script>

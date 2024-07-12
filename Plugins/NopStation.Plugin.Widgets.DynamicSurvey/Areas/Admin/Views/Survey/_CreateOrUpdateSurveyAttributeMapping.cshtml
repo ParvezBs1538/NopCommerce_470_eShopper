@@ -1,0 +1,33 @@
+﻿@model SurveyAttributeMappingModel
+
+@{
+    const string hideInfoBlockAttributeName = "SurveyAttributeMappingPage.HideCommonBlock";
+    var customer = await workContext.GetCurrentCustomerAsync();
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideInfoBlockAttributeName);
+
+    const string hideValuesBlockAttributeName = "SurveyAttributeMappingPage.HideValuesBlock";
+    var hideValuesBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideValuesBlockAttributeName);
+
+    const string hideConditionBlockAttributeName = "SurveyAttributeMappingPage.HideConditionBlock";
+    var hideConditionBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideConditionBlockAttributeName);
+}
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+ <section class="content">
+     <div class="container-fluid">
+        <div class="form-horizontal">
+        
+            <nop-cards id="survey-attribute-mapping-cards">
+                <nop-card asp-name="survey-attribute-mapping-info" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.DynamicSurvey.Surveys.SurveyAttributes.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdateSurveyAttributeMapping.Info", Model)</nop-card>
+                <nop-card asp-name="survey-attribute-mapping-values" asp-icon="fas fa-check-square" asp-title="@T("Admin.NopStation.DynamicSurvey.Surveys.SurveyAttributes.Values")" asp-hide-block-attribute-name="@hideValuesBlockAttributeName" asp-hide="@hideValuesBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdateSurveyAttributeMapping.Values", Model)</nop-card>
+
+                @if (Model.ConditionAllowed)
+                {
+                    <nop-card asp-name="survey-attribute-mapping-condition" asp-icon="fas fa-arrow-right" asp-title="@T("Admin.NopStation.DynamicSurvey.Surveys.SurveyAttributes.Condition")" asp-hide-block-attribute-name="@hideConditionBlockAttributeName" asp-hide="@hideConditionBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdateSurveyAttributeMapping.Condition", Model)</nop-card>
+                }
+            </nop-cards>
+        </div>
+    </div>
+</section>

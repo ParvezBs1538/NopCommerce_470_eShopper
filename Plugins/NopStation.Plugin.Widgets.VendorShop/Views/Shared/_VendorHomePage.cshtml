@@ -1,0 +1,8 @@
+﻿@model Nop.Web.Models.Catalog.VendorModel
+
+<div class="vendor-shop-home-page-body">
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = VendorShopWidgetZones.VendorShopTop,additionalData = Model })
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = VendorShopWidgetZones.VendorShopFeaturedProducts,additionalData = Model })
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = VendorShopWidgetZones.VendorShopMiddle,additionalData = Model })
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = VendorShopWidgetZones.VendorShopBottom,additionalData = Model })
+</div>

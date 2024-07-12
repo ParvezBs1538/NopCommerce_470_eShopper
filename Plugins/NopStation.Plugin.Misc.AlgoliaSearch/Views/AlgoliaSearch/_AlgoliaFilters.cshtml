@@ -1,0 +1,199 @@
+﻿@model AlgoliaPagingFilteringModel
+@using System.Globalization
+
+<style>
+    .listbox li span {
+        display: @(Model.ShowProductsCount ? "initial": "none");
+    }
+    .range-max {
+        float: right;
+    }
+    .main-range{
+        margin-bottom:5px;
+    }
+    .current-range input {
+        text-align: center;
+        width: 75px;
+        max-width: 100%;
+        margin-top: 5px;
+    }
+    .current-range .cmax {
+        float: right;
+    }
+    .price-range-slider-container {
+        padding: 0 8px;
+    }
+    .ui-slider .ui-slider-range {
+        background: #4ab2f1 !important;
+    }
+    .ui-widget.ui-widget-content {
+        border: 1px solid #4ab2f1 !important;
+    }
+</style>
+
+@if (Model.PriceRangeFilter.Enabled)
+{
+    <script asp-location="Footer" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+
+    <div class="block block-price-navigation">
+        <div class="title">
+            <strong>@T("NopStation.AlgoliaSearch.Filterings.Price")</strong>
+        </div>
+        <div class="listbox">
+            <p class="main-range">
+                <span class="range-min">@Model.PriceRangeFilter.MinPriceStr</span>
+                <span class="range-max">@Model.PriceRangeFilter.MaxPriceStr</span>
+            </p>
+            <div class="price-range-slider-container">
+                <div id="slider-range"></div>
+            </div>
+            <div class="current-range">
+                <input id="currentMin" class="price-input cmin" value="@Model.PriceRangeFilter.CurrentMinPrice.ToString(new CultureInfo("en-US"))">
+                <input id="currentMax" class="price-input cmax" value="@Model.PriceRangeFilter.CurrentMaxPrice.ToString(new CultureInfo("en-US"))">
+            </div>
+
+            <input type="hidden" id="min" value="@Model.PriceRangeFilter.MinPrice.ToString(new CultureInfo("en-US"))">
+            <input type="hidden" id="max" value="@Model.PriceRangeFilter.MaxPrice.ToString(new CultureInfo("en-US"))">
+        </div>
+    </div>
+
+    <script type="text/javascript" asp-location="Footer">
+        function changeUrl() {
+            var url = '@Html.Raw(Model.PriceRangeFilter.NonFiteredUrl)'
+
+            var cmin = $('#currentMin').val();
+            var cmax = $('#currentMax').val();
+
+            var param = cmin + '-' + cmax;
+            url += '&price=' + param;
+            window.location = url;
+        }
+
+        $(function () {
+            $('.price-input').on("change", function () {
+                changeUrl();
+            });
+
+            $("#slider-range").slider({
+                range: true,
+                min: @Model.PriceRangeFilter.MinPrice.ToString(new CultureInfo("en-US")),
+                max: @Model.PriceRangeFilter.MaxPrice.ToString(new CultureInfo("en-US")),
+                values: [@Model.PriceRangeFilter.CurrentMinPrice.ToString(new CultureInfo("en-US")), @Model.PriceRangeFilter.CurrentMaxPrice.ToString(new CultureInfo("en-US"))],
+                slide: function (event, ui) {
+                    $("#currentMin").val(ui.values[0]);
+                    $("#currentMax").val(ui.values[1]);
+                },
+                change: function (event, ui) {
+                    changeUrl();
+                }
+            });
+        });
+    </script>
+}
+
+@if (Model.CategoryFilter.Enabled)
+{
+    <div class="block block-category-navigation">
+        <div class="title">
+            <strong>@T("NopStation.AlgoliaSearch.Filterings.Categories")</strong>
+        </div>
+        <div class="listbox">
+            <ul class="list">
+                @foreach (var item in Model.CategoryFilter.Items.OrderByDescending(x => x.Selected).ThenByDescending(x => x.Count))
+                {
+                    <li class="@(item.Selected ? "active" : "inactive")">
+                        <label><input type="checkbox" value="@item.FilterUrl" onchange="setLocation('@item.FilterUrl');" @(item.Selected ? "checked" : "")> @item.Text</label>
+                        <span>(@item.Count)</span>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@if (Model.ManufacturerFilter.Enabled)
+{
+    <div class="block block-manufacturer-navigation">
+        <div class="title">
+            <strong>@T("NopStation.AlgoliaSearch.Filterings.Manufacturers")</strong>
+        </div>
+        <div class="listbox">
+            <ul class="list">
+                @foreach (var item in Model.ManufacturerFilter.Items.OrderByDescending(x => x.Selected).ThenByDescending(x => x.Count))
+                {
+                    <li class="@(item.Selected ? "active" : "inactive")">
+                        <label><input type="checkbox" value="@item.FilterUrl" onchange="setLocation('@item.FilterUrl');" @(item.Selected ? "checked" : "")> @item.Text</label>
+                        <span>(@item.Count)</span>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@if (Model.VendorFilter.Enabled)
+{
+    <div class="block block-vendor-navigation">
+        <div class="title">
+            <strong>@T("NopStation.AlgoliaSearch.Filterings.Vendors")</strong>
+        </div>
+        <div class="listbox">
+            <ul class="list">
+                @foreach (var item in Model.VendorFilter.Items.OrderByDescending(x => x.Selected).ThenByDescending(x => x.Count))
+                {
+                    <li class="@(item.Selected ? "active" : "inactive")">
+                        <label><input type="checkbox" value="@item.FilterUrl" onchange="setLocation('@item.FilterUrl');" @(item.Selected ? "checked" : "")> @item.Text</label>
+                        <span>(@item.Count)</span>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@if (Model.SpecificationFilter.Enabled)
+{
+    var groups = Model.SpecificationFilter.Items.GroupBy(x => x.SpecificationAttributeName);
+    foreach (var group in groups)
+    {
+        var groupList = group.ToList();
+
+        <div class="block block-@(groupList[0].SpecificationAttributeName)-navigation">
+            <div class="title">
+                <strong>@groupList[0].SpecificationAttributeName</strong>
+            </div>
+            <div class="listbox">
+                <ul class="list">
+                    @foreach (var item in groupList.OrderByDescending(x => x.Count))
+                    {
+                        <li class="@(item.Selected ? "active" : "inactive")">
+                            <label><input type="checkbox" value="@item.FilterUrl" onchange="setLocation('@item.FilterUrl');" @(item.Selected ? "checked" : "")> @item.SpecificationAttributeOptionName</label>
+                            <span>(@item.Count)</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+    }
+}
+
+@if (Model.RatingFilter.Enabled)
+{
+    <div class="block block-vendor-navigation">
+        <div class="title">
+            <strong>@T("NopStation.AlgoliaSearch.Filterings.Ratings")</strong>
+        </div>
+        <div class="listbox">
+            <ul class="list">
+                @foreach (var item in Model.RatingFilter.Items.OrderBy(x => x.Id))
+                {
+                    <li class="@(item.Selected ? "active" : "inactive")">
+                        <label><input type="checkbox" value="@item.FilterUrl" onchange="setLocation('@item.FilterUrl');" @(item.Selected ? "checked" : "")> @item.Text</label>
+                        <span>(@item.Count)</span>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}

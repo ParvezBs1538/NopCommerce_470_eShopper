@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Upay (Manual)",
+  "SystemName": "NopStation.Plugin.Payments.UpayBdManual",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.UpayBdManual.dll",
+  "Description": "This plugin enables Upay (BD) manual payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

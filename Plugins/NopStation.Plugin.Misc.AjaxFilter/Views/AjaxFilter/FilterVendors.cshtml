@@ -1,0 +1,67 @@
+﻿@model FilterVendorsModel
+@using NopStation.Plugin.Misc.AjaxFilter.Domains;
+@using NopStation.Plugin.Misc.AjaxFilter.Domains.Enums
+@using NopStation.Plugin.Misc.AjaxFilter.Models;
+@using Nop.Web.Framework.UI;
+
+@if (Model.Vendors != null && Model.Vendors.Count > 0)
+{
+    <div id="vendors-filter-section">
+        <div class="vendors-section">
+            <div class="filter-section">
+                <div class="title">
+                    <h5 class="mb-0 collapsed ajaxfilter-title"
+                    data-toggle="collapse"
+                    data-parent="#accordionEx"
+                    data-target="#VendorsNavigation"
+                    aria-expanded="true"
+                    aria-controls="collapseOne">
+                    @T("NopStation.Plugin.Misc.AjaxFilter.Filters.Vendors")
+                </h5>
+                </div>
+                
+                <div class="listbox collapse show" id="VendorsNavigation" aria-labelledby="VendorsNavigation">
+                    <div class="ajaxfilter-section">
+                        @if (Model.CheckOrDropdown == FiltersUI.UseCheckboxes)
+                        {
+                            <ul class="itemsThree">
+                                @for (int i = 0; i < Model.Vendors.OrderBy(pva => pva.Name).Count(); i++)
+                                {
+                                    var vendorFilterItem = Model.Vendors.OrderBy(pva => pva.Name).ElementAt(i);
+                                    <li class="itemThree">
+                                        <input class="Name-@vendorFilterItem.Id d-none" 
+                                                   type="checkbox"
+                                                   data-vendor-id="@vendorFilterItem.Id"
+                                                   data-vendor-name="@vendorFilterItem.Name"
+                                                   value="@vendorFilterItem.Id"
+                                                   onclick="AjaxFilter.setFilter(this, 'v')"
+                                                  
+                                                   @(vendorFilterItem.CheckedState == CheckedState.Checked ? "Checked" : "")
+                                                   @(vendorFilterItem.CheckedState == CheckedState.Disabled ? "Disabled" : "")
+                                                   @(vendorFilterItem.CheckedState == CheckedState.CheckedDisabled ? "Disabled Checked" : "") />
+                                        <label for="vendorsModel_Vendors_@(i)_Id">
+                                            <span class="square @(vendorFilterItem.CheckedState == CheckedState.Checked ? "active" : "") Name-@(vendorFilterItem.Id)" id="square_specyficationModel_SpecificationAttributes__@(vendorFilterItem.Id)_@(i)_Id"> </span>
+                                            <i>@vendorFilterItem.Name </i>
+                                            <span>(@vendorFilterItem.Count)</span>
+                                        </label>
+
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else if (Model.CheckOrDropdown == FiltersUI.UseDropdowns)
+                        {
+                            <select onchange="AjaxFilter.setFilter('v')">
+                                <option value="" selected="selected">@(Model.Vendors.Where(x => x.CheckedState != CheckedState.Disabled).Count() > 0 ? T("NopStation.Plugin.Misc.AjaxFilter.Filters.All") : T("NopStation.Plugin.Misc.AjaxFilter.Filters.Empty")) </option>
+                                @foreach (var vendorFilterItem in Model.Vendors.Where(x => x.CheckedState != CheckedState.Disabled).OrderBy(pva => pva.Name))
+                                {
+                                    <!option value="@vendorFilterItem.Id" @(vendorFilterItem.CheckedState == CheckedState.Checked || vendorFilterItem.CheckedState == CheckedState.CheckedDisabled ? "Selected" : "")>@vendorFilterItem.Name</!option>
+                                }
+                            </select>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

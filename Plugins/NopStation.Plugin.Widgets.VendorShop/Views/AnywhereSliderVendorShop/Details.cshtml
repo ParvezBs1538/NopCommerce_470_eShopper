@@ -1,0 +1,60 @@
+﻿@model SliderModel
+
+<div class="owl-carousel slider" id="slider-@(Model.Id)">
+    @foreach (var item in Model.Items)
+    {
+        <div class="slider-item">
+            <div class="slider-picture">
+                <a href="@item.Link" title="@item.Title">
+                    <img alt="@item.ImageAltText" src="@item.PictureUrl" title="" />
+                </a>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(item.ShortDescription) || !string.IsNullOrWhiteSpace(item.Title) || !string.IsNullOrWhiteSpace(item.Link))
+            {
+                <div class="slider-caption">
+                    <div class="slider-caption-inner">
+                        @if (!string.IsNullOrWhiteSpace(item.ShortDescription))
+                        {
+                            <h3 class="slider-subtitle">@item.ShortDescription</h3>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(item.Title))
+                        {
+                            <h2 class="slider-title">@item.Title</h2>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(item.Link))
+                        {
+                            <a href="@item.Link" class="slider-btn">@T("NopStation.VendorShop.AnywhereSlider.ShopNow")</a>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<script asp-location="Footer" asp-exclude-from-bundle="true">
+    $(document).ready(function () {
+        $('#slider-@Model.Id').owlCarousel({
+            nav: @Model.Nav.ToString().ToLower(),
+            loop: @Model.Loop.ToString().ToLower(),
+            dots: true,
+            margin: @Model.Margin,
+            autoplay: @Model.AutoPlay.ToString().ToLower(),
+            rtl: @Model.RTL.ToString().ToLower(),
+            autoplayTimeout: @Model.AutoPlayTimeout,
+            autoplayHoverPause: @Model.AutoPlayHoverPause.ToString().ToLower(),
+            lazyLoad: @Model.LazyLoad.ToString().ToLower(),
+            lazyLoadEager: @Model.LazyLoadEager,
+            startPosition: @Model.StartPosition,
+            animateOut: '@Model.AnimateOut',
+            animateIn: '@Model.AnimateIn',
+            responsive: {
+                0: {
+                    items: 1
+                }
+            }
+        });
+    });
+</script>
+
+@NopHtml.GenerateInlineScripts(ResourceLocation.Footer)

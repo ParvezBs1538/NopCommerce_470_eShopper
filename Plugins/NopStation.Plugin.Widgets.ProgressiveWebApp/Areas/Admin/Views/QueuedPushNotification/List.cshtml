@@ -1,0 +1,71 @@
+﻿@model QueuedPushNotificationSearchModel
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.PWA.QueuedPushNotifications.List").Text;
+
+    NopHtml.SetActiveMenuItemSystemName("PWA.QueuedPushNotifications");
+}
+
+@{
+    const string hideSearchBlockAttributeName = "QueuedPushNotifications.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<form asp-controller="QueuedPushNotification" asp-action="List" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.PWA.QueuedPushNotifications.List")
+        </h1>
+    </div>
+    
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            @await Html.PartialAsync("Table", new DataTablesModel
+                            {
+                                Name = "device-grid",
+                                UrlRead = new DataUrl("GetList", "QueuedPushNotification", null),
+                                SearchButtonId = "search-device",
+                                Length = Model.PageSize,
+                                LengthMenu = Model.AvailablePageSizes,
+                                ColumnCollection = new List<ColumnProperty>
+                                {
+                                    new ColumnProperty(nameof(QueuedPushNotificationModel.Title))
+                                    {
+                                        Title = T("Admin.NopStation.PWA.QueuedPushNotifications.Fields.Title").Text,
+                                        Width = "150"
+                                    },
+                                    new ColumnProperty(nameof(QueuedPushNotificationModel.CustomerName))
+                                    {
+                                        Title = T("Admin.NopStation.PWA.QueuedPushNotifications.Fields.Customer").Text,
+                                        Width = "100"
+                                    },
+                                    new ColumnProperty(nameof(QueuedPushNotificationModel.StoreName))
+                                    {
+                                        Title = T("Admin.NopStation.PWA.QueuedPushNotifications.Fields.Store").Text,
+                                        Width = "100"
+                                    },
+                                    new ColumnProperty(nameof(QueuedPushNotificationModel.CreatedOn))
+                                    {
+                                        Title = T("Admin.NopStation.PWA.QueuedPushNotifications.Fields.CreatedOn").Text,
+                                        Width = "50",
+                                        Render = new RenderDate()
+                                    },
+                                    new ColumnProperty(nameof(QueuedPushNotificationModel.Id))
+                                    {
+                                        Title = T("Admin.Common.View").Text,
+                                        Width = "80",
+                                        ClassName =  NopColumnClassDefaults.Button,
+                                        Render = new RenderButtonView(new DataUrl("View"))
+                                    }
+                                }
+                            })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

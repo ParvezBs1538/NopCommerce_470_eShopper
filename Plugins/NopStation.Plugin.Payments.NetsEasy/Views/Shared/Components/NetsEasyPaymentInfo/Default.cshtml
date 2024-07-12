@@ -1,0 +1,95 @@
+﻿@using Nop.Web.Framework.UI
+@model NopStation.Plugin.Payments.NetsEasy.Models.PublicInfoModel
+@{
+    Layout = "";
+}
+<style>
+    .open-payment-window {
+        border: 2px solid #444;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 10px;
+        font-weight: bold;
+        background: #fff;
+    }
+
+    /* The Modal (background) */
+    .nets-easy-modal {
+        display: block; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 999; /* Sit on top */
+        padding-top: 70px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .nets-easy-modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    /* The Close Button */
+    .close-nets-payment-window {
+        color: #aaaaaa;
+        float: right;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+        .close-nets-payment-window:hover,
+        .close-nets-payment-window:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    .html-checkout-page .master-wrapper-content {
+        z-index: 10;
+    }
+</style>
+
+<div style="text-align: center;margin-top: 25px;">
+    <span id="nets-easy-window-button" class="open-payment-window">@T("NopStation.NetsEasyPayment.OpenPaymentWindow")</span>
+</div>
+
+<!-- The Payment window -->
+<div id="nets-payment-modal" class="nets-easy-modal">
+    <!-- Modal content -->
+    <div class="nets-easy-modal-content">
+        <span class="close-nets-payment-window">&times;</span>
+        <div id="checkout-container-div">
+            <!-- checkout iframe will be embedded here -->
+        </div>
+    </div>
+</div>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $("#nets-easy-window-button").on("click", function () {
+            $("#nets-payment-modal").show();
+        });
+
+        // Get the <span> element that closes the modal
+        var span = $(".close-nets-payment-window");
+
+        span.on("click", function() {
+            $("#nets-payment-modal").hide();
+        });
+
+        InitNetsEasyPayment('@Model.PaymentId', '@Model.CheckoutKey', '@Model.CurrentLanguage');
+    });
+</script>
+
+@if (orderSettings.OnePageCheckoutEnabled)
+{
+    @NopHtml.GenerateInlineScripts(ResourceLocation.Footer)
+}

@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "mPAY24",
+  "SystemName": "NopStation.Plugin.Payments.MPay24",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.MPay24.dll",
+  "Description": "This plugin allows paying with mPAY24 Gateway",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

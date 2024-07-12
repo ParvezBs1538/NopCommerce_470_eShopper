@@ -1,0 +1,175 @@
+﻿@model NewsletterPopupModel
+
+<style>
+    #newsletter-email{
+        display: none;
+    }
+
+    .newsletter .newsletter-email .newsletter-subscribe-button {
+        float: none;
+        padding: 0 24%;
+        font-size: 14px;
+        width: auto;
+    }
+
+</style>
+
+@if (Model.HasBackgroundPicture)
+{
+    <style>
+        .news-letter-popup-modal .modal-content {
+            background-image: url(@Model.BackgroundPicture.ImageUrl);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    </style>
+}
+
+<div style="display: none" class="news-letter-popup" id="news-letter-popup-modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <div class="newsletter-container">
+            <h1>@Model.Title</h1>
+            @if (!string.IsNullOrWhiteSpace(Model.Desctiption))
+            {
+                @Html.Raw(Model.Desctiption)
+            }
+            <div class="newsletter-subscribe" id="newsletter-subscribe-block-popup">
+                <div class="newsletter-email-info">
+                    <input asp-for="@Model.NewsletterEmail" id="newsletter-email-popup" class="newsletter-subscribe-box" placeholder=@T("Newsletter.Email.Placeholder") aria-label="@T("Newsletter.Subscribe")" />
+
+                    <button type="button" id="newsletter-subscribe-button-popup" class="button-1 newsletter-subscribe-button">@T(Model.AllowToUnsubscribe ? "Newsletter.Options.Send" : "Newsletter.Options.Subscribe")</button>
+                </div>            
+                @if (Model.AllowCustomerToSelectDoNotShowThisPopupAgain)
+                {
+                    var ticked = Model.PreSelectedDoNotShowThisPopupAgain ? "checked=checked" : "";
+                    <div class="do-not-show-popup">
+                        <input type="checkbox" name="AllowCustomerToSelectDoNotShowThisPopupAgain" id="hide-newsletter-popup" @ticked>
+                        <label for="hide-newsletter-popup">@T("NopStation.Popups.Popups.HideThisPopup")</label>
+                    </div>
+                }
+                <div class="newsletter-validation">
+                    <span id="subscribe-loading-progress-popup" style="display: none;" class="please-wait">@T("Common.Wait")</span>
+                    <span asp-validation-for="@Model.NewsletterEmail"></span>
+                </div>
+            </div>
+            <div class="newsletter-result" id="newsletter-result-block-popup"></div>
+            <nop-antiforgery-token />
+        </div>
+    </div>
+
+    <script asp-location="Footer">
+        function toggleModal(prop) {
+            if (prop) {
+                $("#news-letter-popup-modal").dialog("open");
+            }
+            else {
+                $("#news-letter-popup-modal").dialog('close');
+            }
+        }
+
+        $(document).ready(function () {
+            $("#newsletter-subscribe-button").attr('onclick', 'toggleModal(true); return;');
+            var button = $("#newsletter-subscribe-button");
+            var parent = $("#newsletter-subscribe-button").parent();
+            $("#newsletter-subscribe-button").remove();
+            parent.append(button);
+
+            $('#news-letter-popup-modal .close-button').click(function() {
+                toggleModal(false);
+                
+                if ($('#hide-newsletter-popup').is(':checked')) { 
+                    sessionStorage.setItem("hide-newsletter-popup", true);
+                }
+            });
+            
+            $("#news-letter-popup-modal").dialog({ 
+                modal: true, 
+                autoOpen: false,
+                classes: {
+                    "ui-dialog": "news-letter-popup-modal",
+                    'ui-dialog-titlebar-close': 'hidden'
+                },
+                width: 450,
+                draggable: false,
+                position: { my: "center", at: "center", of: window  },
+                open: function(event, ui) {
+                    $(".ui-dialog-titlebar", $(this).parent())
+                        .hide();
+                    $("body").addClass("stop-scrolling");
+                },
+                close: function(event, ui) {
+                    $("body").removeClass("stop-scrolling");
+                }
+            });
+            
+            @if (Model.OpenPopupOnLoadPage)
+            {
+                <text>
+                if (!sessionStorage.getItem("hide-newsletter-popup")) {
+                    setTimeout(function() {
+                        toggleModal(true);
+                    }, @Model.DelayTime);
+                }
+                </text>
+            }
+        });
+    </script>
+
+    <script asp-location="Footer">
+        function newsletter_subscribe_popup(subscribe) {
+            var subscribeProgress = $("#subscribe-loading-progress-popup");
+            subscribeProgress.show();
+            var postData = {
+                subscribe: subscribe,
+                email: $("#newsletter-email-popup").val()
+            };
+            addAntiForgeryToken(postData);
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@(Url.RouteUrl("SubscribeNewsletter"))",
+                data: postData,
+                success: function (data, textStatus, jqXHR) {
+                    $("#newsletter-result-block-popup").html(data.Result);
+                    if (data.Success) {
+                        $('#newsletter-subscribe-block-popup').hide();
+                        $('#newsletter-result-block-popup').show();
+                    } else {
+                        $('#newsletter-result-block-popup').fadeIn("slow").delay(2000).fadeOut("slow");
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('Failed to subscribe.');
+                },
+                complete: function (jqXHR, textStatus) {
+                    subscribeProgress.hide();
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $('#newsletter-subscribe-button-popup').on('click', function () {
+                @if (Model.AllowToUnsubscribe)
+                {
+                    <text>if ($('#newsletter_subscribe').is(':checked')) {
+                    newsletter_subscribe_popup('true');
+                } else {
+                    newsletter_subscribe_popup('false');
+                }</text>
+                }
+                else
+                {
+                    <text>newsletter_subscribe_popup('true');</text>
+                }
+            });
+            $("#newsletter-email").on("keydown", function (event) {
+                if (event.keyCode == 13) {
+                    $("#newsletter-subscribe-button-popup").trigger("click");
+                    return false;
+                }
+            });
+        });
+    </script>
+</div>

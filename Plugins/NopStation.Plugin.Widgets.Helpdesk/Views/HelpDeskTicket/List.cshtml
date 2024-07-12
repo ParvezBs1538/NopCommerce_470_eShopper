@@ -1,0 +1,68 @@
+﻿@using Nop.Web.Framework.UI
+@model TicketListModel
+@{
+    Layout = "_ColumnsTwo";
+    NopHtml.AddTitleParts(T("NopStation.Helpdesk.Account.MyTickets").Text);
+}
+
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = -1 })
+}
+
+<div class="page account-page customer-info-page">
+    <div class="page-title">
+        <h1>@T("Account.MyAccount") - @T("NopStation.Helpdesk.Account.MyTickets")</h1>
+    </div>
+    <div class="page-body">
+        @if (Model.Tickets.Count > 0)
+        {
+            <div class="table-wrapper">
+                <table class="cart">
+                    <thead>
+                        <tr>
+                            <th>@T("NopStation.Helpdesk.Tickets.Subject").Text</th>
+                            @if (Model.EnableTicketCategory)
+                            {
+                                <th>@T("NopStation.Helpdesk.Tickets.Category").Text</th>
+                            }
+                            @if (Model.EnableTicketDepartment)
+                            {
+                                <th>@T("NopStation.Helpdesk.Tickets.Deparment").Text</th>
+                            }
+                            <th>@T("NopStation.Helpdesk.Tickets.Status").Text</th>
+                            <th>@T("NopStation.Helpdesk.Tickets.CreatedOn").Text</th>
+                            <th>@T("NopStation.Helpdesk.Tickets.View").Text</th>
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model.Tickets)
+                    {
+                        <tr>
+                            <td>@item.Subject</td>
+                            @if (Model.EnableTicketCategory)
+                            {
+                                <td>@item.Category </td>
+                            }
+                            @if (Model.EnableTicketDepartment)
+                            {
+                                <td>@item.Department </td>
+                            }
+                            <td>@item.Status</td>
+                            <td>@item.CreatedOn.ToString("dd MMM, yyyy hh:mm tt")</td>
+                            <td> @Html.RouteLink(T("NopStation.Helpdesk.Tickets.View").Text, "HelpdeskTicketDetails", new { Id = item.Id })</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="no-data">
+                @T("NopStation.Helpdesk.Tickets.ListIsEmpty")
+            </div>
+        }
+        <div class="buttons">
+            <input type="button" class="button-1" value="@T("NopStation.Helpdesk.Tickets.CreateTicket")" onclick="location.href = '@Url.RouteUrl("HelpdeskAddNewTicket")'; return false;"> 
+        </div>
+    </div>
+</div>

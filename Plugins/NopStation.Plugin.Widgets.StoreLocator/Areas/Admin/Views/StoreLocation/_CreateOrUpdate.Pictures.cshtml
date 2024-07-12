@@ -1,0 +1,170 @@
+@model StoreLocationModel
+
+<div class="card-body">
+    @if (Model.Id > 0)
+    {
+        @await Html.PartialAsync("Table", new DataTablesModel
+        {
+            Name = "storelocationpictures-grid",
+            UrlRead = new DataUrl("StoreLocationPictureList", "StoreLocation", new RouteValueDictionary { [nameof(Model.StoreLocationPictureSearchModel.StoreLocationId)] = Model.StoreLocationPictureSearchModel.StoreLocationId }),
+            UrlDelete = new DataUrl("StoreLocationPictureDelete", "StoreLocation", null),
+            UrlUpdate = new DataUrl("StoreLocationPictureUpdate", "StoreLocation", null),
+            Length = Model.StoreLocationPictureSearchModel.PageSize,
+            LengthMenu = Model.StoreLocationPictureSearchModel.AvailablePageSizes,
+            ColumnCollection = new List<ColumnProperty>
+                {
+                    new ColumnProperty(nameof(StoreLocationPictureModel.PictureUrl))
+                    {
+                        Title = T("Admin.NopStation.StoreLocator.StoreLocations.Pictures.Fields.Picture").Text,
+                        Render = new RenderCustom("renderPicturesColumnStoreLocationPictureUrl")
+                    },
+                    new ColumnProperty(nameof(StoreLocationPictureModel.DisplayOrder))
+                    {
+                        Title = T("Admin.NopStation.StoreLocator.StoreLocations.Pictures.Fields.DisplayOrder").Text,
+                        Width = "150",
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        Editable = true,
+                        EditType = EditType.Number
+                    },
+                    new ColumnProperty(nameof(StoreLocationPictureModel.OverrideAltAttribute))
+                    {
+                        Title = T("Admin.NopStation.StoreLocator.StoreLocations.Pictures.Fields.OverrideAltAttribute").Text,
+                        Width = "200",
+                        Editable = true,
+                        EditType = EditType.String
+                    },
+                    new ColumnProperty(nameof(StoreLocationPictureModel.OverrideTitleAttribute))
+                    {
+                        Title = T("Admin.NopStation.StoreLocator.StoreLocations.Pictures.Fields.OverrideTitleAttribute").Text,
+                        Width = "200",
+                        Editable = true,
+                        EditType = EditType.String
+                    },
+                    new ColumnProperty(nameof(StoreLocationPictureModel.Id))
+                    {
+                        Title = T("Admin.Common.Edit").Text,
+                        Width = "200",
+                        ClassName =  NopColumnClassDefaults.Button,
+                        Render = new RenderButtonsInlineEdit()
+                    },
+                    new ColumnProperty(nameof(StoreLocationPictureModel.Id))
+                    {
+                        Title = T("Admin.Common.Delete").Text,
+                        Width = "100",
+                        Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                        ClassName = NopColumnClassDefaults.Button
+                    }
+                }
+        })
+        
+        <script>
+            function renderPicturesColumnStoreLocationPictureUrl(data, type, row, meta) {
+                return '<a href="' + row.PictureUrl + '" target="_blank"><img alt="' + row.PictureId + '" src="' + row.PictureUrl + '" width="150" /></a>';
+            }
+        </script>
+
+        <div class="card card-default">
+            <div class="card-header">
+                @T("Admin.NopStation.StoreLocator.StoreLocations.Pictures.AddNew")
+            </div>
+            <div class="card-body">
+                <script>
+                    $(document).ready(function() {
+                        $('#addStoreLocationPicture').click(function() {
+                            var pictureId = $("#@Html.IdFor(model => model.AddPictureModel.PictureId)").val();
+                            var overrideAltAttribute = $("#@Html.IdFor(model => model.AddPictureModel.OverrideAltAttribute)").val();
+                            var overrideTitleAttribute = $("#@Html.IdFor(model => model.AddPictureModel.OverrideTitleAttribute)").val();
+                            var displayOrder = $("#@Html.IdFor(model => model.AddPictureModel.DisplayOrder)").val();
+
+                            if (pictureId == 0) {
+                                $("#addStoreLocationPictureAlert").click();
+                                return;
+                            }
+
+                            $('#addStoreLocationPicture').attr('disabled', true);
+
+                            var postData = {
+                                pictureId: pictureId,
+                                displayOrder: displayOrder,
+                                overrideAltAttribute: overrideAltAttribute,
+                                overrideTitleAttribute: overrideTitleAttribute,
+                                storeLocationId: '@Model.Id'
+                            };
+                            addAntiForgeryToken(postData);
+
+                            $.ajax({
+                                cache: false,
+                                type: "POST",
+                                url: "@(Url.Action("StoreLocationPictureAdd", "StoreLocation"))",
+                                data: postData,
+                                success: function (data, textStatus, jqXHR) {
+                                    if (!data.Result) {
+                                        return;
+                                    }                                        
+                                    updateTable('#storelocationpictures-grid');
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    $("#storeLocationPictureAddAlert").click();
+                                },
+                                complete: function (jqXHR, textStatus) {
+                                    $('#addStoreLocationPicture').attr('disabled', false);
+                                }
+                            });
+                        });
+                    });
+                </script>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="AddPictureModel.PictureId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="AddPictureModel.PictureId" />
+                        <span asp-validation-for="AddPictureModel.PictureId"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="AddPictureModel.OverrideAltAttribute" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="AddPictureModel.OverrideAltAttribute" />
+                        <span asp-validation-for="AddPictureModel.OverrideAltAttribute"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="AddPictureModel.OverrideTitleAttribute" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="AddPictureModel.OverrideTitleAttribute" />
+                        <span asp-validation-for="AddPictureModel.OverrideTitleAttribute"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="AddPictureModel.DisplayOrder" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="AddPictureModel.DisplayOrder" />
+                        <span asp-validation-for="AddPictureModel.DisplayOrder"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-9 offset-md-3">
+                        <button type="button" id="addStoreLocationPicture" class="btn btn-primary">@T("Admin.NopStation.StoreLocator.StoreLocations.Pictures.AddButton")</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card card-default">
+            <div class="card-body" id="storelocation-pictures-area">
+                @T("Admin.NopStation.StoreLocator.StoreLocations.Pictures.SaveBeforeEdit")
+            </div>
+        </div>
+    }
+</div>
+<nop-alert asp-alert-id="addStoreLocationPictureAlert" asp-alert-message="@T("Admin.NopStation.StoreLocator.StoreLocations.Pictures.Alert.AddNew")" />
+<nop-alert asp-alert-id="storeLocationPictureAddAlert" asp-alert-message="@T("Admin.NopStation.StoreLocator.StoreLocations.Pictures.Alert.PictureAdd")" />

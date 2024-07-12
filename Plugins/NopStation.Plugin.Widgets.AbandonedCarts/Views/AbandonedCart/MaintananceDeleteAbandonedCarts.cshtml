@@ -1,0 +1,74 @@
+﻿@model AbandonmentMaintenanceModel
+@{
+    const string hideDeleteAbandonedDeletedCartsBlockAttributeName = "MaintenancePage.HideDeleteAbandonedDeletedCartsBlock";
+    var customer = await workContext.GetCurrentCustomerAsync();
+    var hideDeleteAbandonedDeletedCartsBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideDeleteAbandonedDeletedCartsBlockAttributeName);
+}
+
+<div class="col-md-6">
+    <nop-card class="col-md-6 col-xs-12 margin-t-5" asp-name="delete-abandoned-carts" asp-icon="fas fa-trash-alt" asp-title="@T("Plugins.Widgets.AbandonedCarts.Fields.DeletingMaintenance")" asp-hide-block-attribute-name="@hideDeleteAbandonedDeletedCartsBlockAttributeName" asp-hide="@hideDeleteAbandonedDeletedCartsBlock" asp-advanced="false">
+
+        <div class="card-body">
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <nop-label asp-for="StatusId" />
+                </div>
+                <div class="col-md-6">
+                    <nop-select asp-for="StatusId" asp-items="@await (((ClearAbandonedStatus)Model.StatusId).ToSelectListAsync())" />
+                    <span asp-validation-for="StatusId"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <nop-label asp-for="LastActivityBefore" />
+                </div>
+                <div class="col-md-6">
+                    <nop-editor asp-for="LastActivityBefore" />
+                    <span asp-validation-for="LastActivityBefore"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-6 offset-md-6">
+                    <button type="button" id="delete-button" class="btn btn-default">
+                        <i class="far fa-trash-alt"></i>
+                        @T("Admin.Common.Delete")
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group row" id="hide-alert" style="display:none">
+                <div class="col-md-12">
+                    <div class="alert alert-success alert-dismissible no-margin">
+                        <button type="button" class="close" aria-hidden="true">×</button>
+                        <span id="outputString"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </nop-card>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#delete-button").click(function () {
+            var StatusId = $('#@Html.IdFor(e=>e.StatusId)').val();
+            var LastActivityBefore = $('#@Html.IdFor(e=>e.LastActivityBefore)').val();
+            var json = { lastActivityBefore: LastActivityBefore, statusId: StatusId };
+            var cnt = 0;
+            addAntiForgeryToken(json);
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("DeleteAbandonedCarts", "WidgetsAbandonedCarts")',
+                data: json,
+                success: function (response) {
+                    document.getElementById("hide-alert").style = "display:flex "
+                    document.getElementById("outputString").textContent = response.NumberOfDeletedItems + " items were deleted";
+                }
+            });
+        });
+        $(".close").click(function () {
+            document.getElementById("hide-alert").style = "display:none "
+        });
+    });
+</script>

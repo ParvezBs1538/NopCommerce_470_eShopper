@@ -1,0 +1,40 @@
+﻿<div class="header-middle">
+    <!--header-middle-->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="logo pull-left">
+                    @await Component.InvokeAsync(typeof(LogoViewComponent))
+                </div>
+                <div class="btn-group pull-right">
+                    @await Component.InvokeAsync(typeof(TaxTypeSelectorViewComponent))
+
+                    @await Component.InvokeAsync(typeof(CurrencySelectorViewComponent))
+
+                    @await Component.InvokeAsync(typeof(LanguageSelectorViewComponent))
+
+                </div>
+            </div>
+                <div class="col-sm-8">
+                    <div class="shop-menu pull-right">
+                       @await Component.InvokeAsync(typeof(HeaderLinksViewComponent))
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            @await Html.PartialAsync("_Notifications")
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+

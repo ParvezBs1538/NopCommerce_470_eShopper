@@ -1,0 +1,58 @@
+﻿@model SmartGroupSearchModel
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.PushNop.SmartGroups.List").Text;
+
+    NopHtml.SetActiveMenuItemSystemName("PushNop.SmartGroups");
+}
+
+<form asp-controller="SmartGroup" asp-action="List" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.PushNop.SmartGroups.List")
+        </h1>
+        <div class="float-right">
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus-square"></i>
+                @T("Admin.Common.AddNew")
+            </a>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="form-horizontal">
+            <div class=" card card-default">
+                <div class="card-body">
+                    @await Html.PartialAsync("Table", new DataTablesModel
+                    {
+                        Name = "SmartGroup-grid",
+                        UrlRead = new DataUrl("GetList", "PushNopSmartGroup", null),
+                        SearchButtonId = "search-SmartGroup",
+                        Length = Model.PageSize,
+                        LengthMenu = Model.AvailablePageSizes,
+                        ColumnCollection = new List<ColumnProperty>
+                        {
+                            new ColumnProperty(nameof(SmartGroupModel.Name))
+                            {
+                                Title = T("Admin.NopStation.PushNop.SmartGroups.Fields.Name").Text,
+                                Width = "100"
+                            },
+                            new ColumnProperty(nameof(SmartGroupModel.CreatedOn))
+                            {
+                                Title = T("Admin.NopStation.PushNop.SmartGroups.Fields.CreatedOn").Text,
+                                Width = "80",
+                                Render = new RenderDate()
+                            },
+                            new ColumnProperty(nameof(SmartGroupModel.Id))
+                            {
+                                Title = T("Admin.Common.Edit").Text,
+                                Width = "80",
+                                ClassName =  NopColumnClassDefaults.Button,
+                                Render = new RenderButtonEdit(new DataUrl("Edit"))
+                            }
+                        }
+                    })
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

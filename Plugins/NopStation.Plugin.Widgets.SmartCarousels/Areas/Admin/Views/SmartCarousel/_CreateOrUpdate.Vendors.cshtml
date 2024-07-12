@@ -1,0 +1,79 @@
+@model SmartCarouselModel
+
+<div class="card-body">
+    @if (Model.Id > 0)
+    {
+        <div class="sub-panel">
+            @await Html.PartialAsync("Table", new DataTablesModel
+            {
+                Name = "carouselvendors-grid",
+                UrlRead = new DataUrl("VendorList", "SmartCarousel", new RouteValueDictionary { [nameof(Model.CarouselVendorSearchModel.CarouselId)] = Model.CarouselVendorSearchModel.CarouselId }),
+                UrlUpdate = new DataUrl("VendorUpdate", "SmartCarousel", new RouteValueDictionary { [nameof(Model.CarouselVendorSearchModel.CarouselId)] = Model.CarouselVendorSearchModel.CarouselId }),
+                UrlDelete = new DataUrl("VendorDelete", "SmartCarousel", new RouteValueDictionary { [nameof(Model.CarouselVendorSearchModel.CarouselId)] = Model.CarouselVendorSearchModel.CarouselId }),
+                Length = Model.CarouselVendorSearchModel.PageSize,
+                LengthMenu = Model.CarouselVendorSearchModel.AvailablePageSizes,
+                ColumnCollection = new List<ColumnProperty>
+                {
+                    new ColumnProperty(nameof(SmartCarouselVendorModel.VendorName))
+                    {
+                        Title = T("Admin.NopStation.SmartCarousels.Carousels.Vendors.Fields.Vendor").Text,
+                        Width = "350",
+                    },
+                    new ColumnProperty(nameof(SmartCarouselVendorModel.VendorId))
+                    {
+                        Title = T("Admin.Common.View").Text,
+                        Width = "150",
+                        ClassName =  NopColumnClassDefaults.Button,
+                        Render = new RenderButtonView(new DataUrl("~/Admin/Vendor/Edit/"))
+                    },
+                    new ColumnProperty(nameof(SmartCarouselVendorModel.DisplayOrder))
+                    {
+                        Title = T("Admin.NopStation.SmartCarousels.Carousels.Vendors.Fields.DisplayOrder").Text,
+                        Width = "150",
+                        Editable = true,
+                        EditType = EditType.Number,
+                        ClassName = NopColumnClassDefaults.CenterAll
+                    },
+                    new ColumnProperty(nameof(SmartCarouselVendorModel.Id))
+                    {
+                        Title = T("Admin.Common.Edit").Text,
+                        Width = "100",
+                        ClassName =  NopColumnClassDefaults.Button,
+                        Render = new RenderButtonsInlineEdit()
+                    },
+                    new ColumnProperty(nameof(SmartCarouselVendorModel.Id))
+                    {
+                        Title = T("Admin.Common.Delete").Text,
+                        Width = "100",
+                        Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                        ClassName =  NopColumnClassDefaults.Button
+                    }
+                }
+            })
+        </div>
+        <div class="card-footer">
+            <button type="submit" id="btnAddNewVendor" onclick="javascript:OpenWindow('@(Url.Action("VendorAddPopup", "SmartCarousel", new { CarouselId = Model.Id, btnId = "btnRefreshCarouselsVendors", formId = "carousel-form" }))', 800, 800, true); return false;" class="btn btn-primary">
+                @T("Admin.NopStation.SmartCarousels.Carousels.Vendors.AddNew")
+            </button>
+            <input type="submit" id="btnRefreshCarouselsVendors" style="display: none" />
+            <script>
+                $(document).ready(function () {
+                    $('#btnRefreshCarouselsVendors').click(function () {
+                        //refresh grid
+                        updateTable('#carouselvendors-grid');
+                        //return false to don't reload a page
+                        return false;
+                    });
+                });
+            </script>
+        </div>
+    }
+    else
+    {
+        <div class="card card-default">
+            <div class="card-body">
+                @T("Admin.NopStation.SmartCarousels.Carousels.Vendors.SaveBeforeEdit")
+            </div>
+        </div>
+    }
+</div>

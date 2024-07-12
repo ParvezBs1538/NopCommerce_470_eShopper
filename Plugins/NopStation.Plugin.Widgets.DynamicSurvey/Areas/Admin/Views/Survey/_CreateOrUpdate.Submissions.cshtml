@@ -1,0 +1,51 @@
+@model SurveyModel
+
+<div class="card-body">
+    @{ 
+        var table = new DataTablesModel
+        {
+            Name = "surveysubmissons-grid",
+            UrlRead = new DataUrl("GetSurveySubmissionList", "Survey", new RouteValueDictionary { [nameof(Model.SurveySubmissionSearchModel.SurveyId)] = Model.SurveySubmissionSearchModel.SurveyId }),
+            Length = Model.SurveySubmissionSearchModel.PageSize,
+            LengthMenu = Model.SurveySubmissionSearchModel.AvailablePageSizes
+        };
+
+        var columns = new List<ColumnProperty>();
+        columns.Add(new ColumnProperty(nameof(SurveySubmissionModel.CustomerEmail))
+        {
+            Title = T("Admin.NopStation.DynamicSurvey.SurveySubmissions.Fields.CustomerEmail").Text,
+            Width = "150"
+        });
+        columns.Add(new ColumnProperty(nameof(SurveySubmissionModel.AttributeDescription))
+        {
+            Title = T("Admin.NopStation.DynamicSurvey.SurveySubmissions.Fields.Attribute").Text,
+            Width = "200",
+            Render = new RenderCustom("renderAttributeDescription")
+        });
+        columns.Add(new ColumnProperty(nameof(SurveySubmissionModel.CreatedOn))
+        {
+            Title = T("Admin.NopStation.DynamicSurvey.SurveySubmissions.Fields.CreatedOn").Text,
+            Width = "100",
+            Render = new RenderDate(),
+            ClassName = NopColumnClassDefaults.CenterAll
+        });
+        columns.Add(new ColumnProperty(nameof(SurveySubmissionModel.Id))
+        {
+            Title = T("Admin.Common.View").Text,
+            Width = "100",
+            ClassName = NopColumnClassDefaults.Button,
+            Render = new RenderButtonView(new DataUrl("~/Admin/SurveySubmission/Details/"))
+        });
+
+        table.ColumnCollection = columns;
+    }
+
+    @await Html.PartialAsync("Table", table)
+
+    <script>
+        function renderAttributeDescription(data, type, row, meta) {
+            var items = data.split('<br />');
+            return items.length > 3 ? items.slice(0, 3).join('<br />') + ' ...' : data;
+        }
+    </script>
+</div>

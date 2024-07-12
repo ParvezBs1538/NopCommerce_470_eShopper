@@ -1,0 +1,63 @@
+﻿@model ConfigurationModel
+
+ <div class="card-body">
+                            
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="EnableBestSellers_OverrideForStore" asp-input="EnableBestSellers" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="EnableBestSellers" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableBestSellers" />
+            <span asp-validation-for="EnableBestSellers"></span>
+        </div>
+    </div>
+
+    <nop-nested-setting asp-for="EnableBestSellers">
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="BestSellersARN_OverrideForStore" asp-input="BestSellersARN" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="BestSellersARN" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="BestSellersARN" />
+                <span asp-validation-for="BestSellersARN"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="BestSellersWidgetZoneId_OverrideForStore" asp-input="BestSellersWidgetZoneId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="BestSellersWidgetZoneId" />
+            </div>
+            <div class="col-md-9">
+                <nop-select asp-for="BestSellersWidgetZoneId" asp-items="@Model.AvailableWidgetZones" />
+                <span asp-validation-for="BestSellersWidgetZoneId"></span>
+            </div>
+        </div> 
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="BestSellersNumberOfItems_OverrideForStore" asp-input="BestSellersNumberOfItems" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="BestSellersNumberOfItems" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="BestSellersNumberOfItems" />
+                <span asp-validation-for="BestSellersNumberOfItems"></span>
+            </div>
+        </div> 
+
+         <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="BestSellersAllowForGuestCustomer_OverrideForStore" asp-input="BestSellersAllowForGuestCustomer" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="BestSellersAllowForGuestCustomer" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="BestSellersAllowForGuestCustomer" />
+                <span asp-validation-for="BestSellersAllowForGuestCustomer"></span>
+            </div>
+        </div> 
+        
+    </nop-nested-setting>
+</div> 

@@ -1,0 +1,70 @@
+﻿@model ManufacturerSEOTemplateModel
+@{
+
+    const string hideGeneralBlockAttributeName = "ManufacturerSEOTemplate.HideGeneralBlock";
+    var customer = await workContext.GetCurrentCustomerAsync();
+    var hideGeneralBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideGeneralBlockAttributeName);
+
+    
+    const string hideSEOFormatBlockAttributeName = "ManufacturerSEOTemplate.HideSEOFormatBlock";
+    var hideSEOFormatBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideSEOFormatBlockAttributeName, defaultValue: true);
+
+    const string entityMapBlockAttributeName = "ManufacturerSEOTemplate.EntityMapBlock";
+    var entityMapBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, entityMapBlockAttributeName, defaultValue: true);
+
+}
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-md-12 clearfix">
+                    <div class="float-left">
+                    </div>
+                </div>
+            </div>
+            <nop-cards id="manufacturer-seo-template-cards">
+                <nop-card asp-name="manufacturer-seo-template-general" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.Plugin.Misc.AdvancedSEO.ManufacturerSEOTemplate.General")" asp-hide-block-attribute-name="@hideGeneralBlockAttributeName" asp-hide="@hideGeneralBlock" asp-advanced="false">
+                    @await Html.PartialAsync("_CreateOrUpdate.General", Model)
+                </nop-card>
+                <nop-card asp-name="manufacturer-seo-template-seo-format" asp-icon="fas fa-tv" asp-title="@T("Admin.NopStation.Plugin.Misc.AdvancedSEO.ManufacturerSEOTemplate.Format")" asp-hide-block-attribute-name="@hideSEOFormatBlockAttributeName" asp-hide="@hideSEOFormatBlock" asp-advanced="false">
+                    @await Html.PartialAsync("_CreateOrUpdate.SEOFormat", Model)
+                </nop-card>
+                <nop-card asp-name="manufacturer-seo-template-seo-format-entity-map" id="manufacturer-seo-template-seo-format-entity-map" asp-icon="fas fa-tv" asp-title="@T("Admin.NopStation.Plugin.Misc.AdvancedSEO.ManufacturerSEOTemplate.EntityMap")" asp-hide-block-attribute-name="@entityMapBlockAttributeName" asp-hide="@entityMapBlock" asp-advanced="false">
+                    @if(Model.Id > 0)
+                    {
+                        @await Html.PartialAsync("_CreateOrUpdate.EntityMap", Model)
+                    }
+                </nop-card>
+            </nop-cards>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#@Html.IdFor(model => model.IsGlobalTemplate)").click(toggleMappedPnl);
+            $("#@Html.IdFor(model => model.IncludeProductNamesOnKeyword)").click(toggleProductNumberPnl);
+            toggleProductNumberPnl();
+            toggleMappedPnl();
+        });
+        function toggleMappedPnl() {
+            if ($('#@Html.IdFor(model => model.IsGlobalTemplate)').is(':checked')) {
+                $('#manufacturer-seo-template-seo-format-entity-map').hideElement();
+            }
+            else {
+                $('#manufacturer-seo-template-seo-format-entity-map').showElement();
+            }
+        }
+        function toggleProductNumberPnl() {
+            if ($('#@Html.IdFor(model => model.IncludeProductNamesOnKeyword)').is(':checked')) {
+                $('.pnl-product-number').showElement();
+            }
+            else {
+                $('.pnl-product-number').hideElement();
+            }
+        }
+    </script>
+</section>

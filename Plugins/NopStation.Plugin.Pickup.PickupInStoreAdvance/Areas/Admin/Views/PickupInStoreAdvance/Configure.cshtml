@@ -1,0 +1,90 @@
+﻿@model PickupInStoreSettingsModel
+@inject IGenericAttributeService genericAttributeService
+@inject IWorkContext workContext
+@{
+    Layout = "_AdminLayout";
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.PickupInStoreAdvance.Configure.PageTitle").Text;
+    Html.SetActiveMenuItemSystemName("PickupInStoreAdvance.Configuration");
+}
+@{
+    const string hideSettingsBlockAttributeName = "PickupInStoreAdvance.HideSettingsBlock";
+    //var hideSettingsBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSettingsBlockAttributeName);
+    var hideSettingsBlock = false;
+
+    const string hidePickupPointsBlockAttributeName = "PickupInStoreAdvance.HidePickupPointsBlock";
+    //var hidePickupPointsBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hidePickupPointsBlockAttributeName, defaultValue: true);
+    var hidePickupPointsBlock = false;
+}
+
+<div class="content-header clearfix">
+    <div class="float-right">
+        <button type="button" class="btn bg-olive" onclick="window.location.href='ExportToXlsx'">
+            <i class="fa fa-download"></i>
+            @T("Admin.NopStation.PickupInStoreAdvance.ExportPickupPoints")
+        </button>
+        <button type="button" name="importexcel" class="btn bg-olive" data-toggle="modal" data-target="#importexcel-window">
+            <i class="fa fa-upload"></i>
+            @T("Admin.NopStation.PickupInStoreAdvance.ImportPickupPoints")
+        </button>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            @await Component.InvokeAsync("StoreScopeConfiguration")
+            <div class="row">
+                <div class="col-md-12 clearfix">
+                    <div class="float-left">
+
+                    </div>
+                </div>
+            </div>
+            <nop-cards id="PickupInStoreAdvance-cards">
+                <nop-card asp-name="PickupInStoreAdvance-Settings" asp-icon="fas fa-cogs" asp-title="@T("Admin.NopStation.PickupInStoreAdvance.Configure.Settings.Title")" asp-hide-block-attribute-name="@hideSettingsBlockAttributeName" asp-hide="@hideSettingsBlock" asp-advanced="false">@await Html.PartialAsync("_PickupInStore.Settings", Model)</nop-card>
+                <nop-card asp-name="PickupInStoreAdvance-PickupPoints" asp-icon="fa fa-list" asp-title="@T("Admin.NopStation.PickupInStoreAdvance.Configure.PickupPoints.Title")" asp-hide-block-attribute-name="@hidePickupPointsBlockAttributeName" asp-hide="@hidePickupPointsBlock" asp-advanced="false">@await Html.PartialAsync("_PickupInStore.Configuration", Model.StorePickupPointSearchModel)</nop-card>
+            </nop-cards>
+        </div>
+    </div>
+</section>
+
+<div id="importexcel-window" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importexcel-window-title">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="importexcel-window-title">@T("Admin.Common.ImportFromExcel")</h4>
+            </div>
+            <form asp-controller="PickupInStoreAdvance" asp-action="ImportFromXlsx" method="post" enctype="multipart/form-data">
+                <div class="form-horizontal">
+                    <div class="modal-body">
+                        <ul class="common-list">
+                            <li>
+                                <em>@T("Admin.Common.ImportFromExcel.ManyRecordsWarning")</em>
+                            </li>
+                        </ul>
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <div class="label-wrapper">
+                                    <label class="control-label">
+                                        @T("Admin.Common.ExcelFile")
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="file" id="importexcelfile" name="importexcelfile" class="form-control" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            @T("Admin.Common.ImportFromExcel")
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

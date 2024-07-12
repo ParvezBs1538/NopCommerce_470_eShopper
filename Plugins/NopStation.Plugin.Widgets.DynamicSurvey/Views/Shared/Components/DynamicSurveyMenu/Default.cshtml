@@ -1,0 +1,6 @@
+﻿@model SurveyTopMenuModel
+
+@foreach (var survey in Model.Surveys)
+{
+    <li><a href="@Url.RouteUrl("DynamicSurvey", new { SeName = survey.SeName })">@survey.Name</a></li>
+}

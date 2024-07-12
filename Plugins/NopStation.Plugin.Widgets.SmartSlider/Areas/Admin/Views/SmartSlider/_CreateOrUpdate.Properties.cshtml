@@ -1,0 +1,251 @@
+﻿@model SmartSliderModel
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnableAutoPlay" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableAutoPlay" />
+            <span asp-validation-for="EnableAutoPlay"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="EnableAutoPlay">
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="AutoPlayTimeout" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="AutoPlayTimeout" />
+                <span asp-validation-for="AutoPlayTimeout"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="AutoPlayHoverPause" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="AutoPlayHoverPause" />
+                <span asp-validation-for="AutoPlayHoverPause"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnableLoop" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableLoop" />
+            <span asp-validation-for="EnableLoop"></span>
+        </div>
+    </div>
+    <div class="form-group row advanced-setting">
+        <div class="col-md-3">
+            <nop-label asp-for="StartPosition" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="StartPosition" />
+            <span asp-validation-for="StartPosition"></span>
+        </div>
+    </div>
+    <div class="form-group row advanced-setting">
+        <div class="col-md-3">
+            <nop-label asp-for="EnableKeyboardControl" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableKeyboardControl" />
+            <span asp-validation-for="EnableKeyboardControl"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="EnableKeyboardControl">
+        <div class="form-group row advanced-setting">
+            <div class="col-md-3">
+                <nop-label asp-for="KeyboardControlOnlyInViewport" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="KeyboardControlOnlyInViewport" />
+                <span asp-validation-for="KeyboardControlOnlyInViewport"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnableLazyLoad" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableLazyLoad" />
+            <span asp-validation-for="EnableLazyLoad"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnableNavigation" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableNavigation" />
+            <span asp-validation-for="EnableNavigation"></span>
+        </div>
+    </div>
+
+    <div class="form-group row advanced-setting">
+        <div class="col-md-3">
+            <nop-label asp-for="EnablePagination" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnablePagination" />
+            <span asp-validation-for="EnablePagination"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="EnablePagination">
+        <div class="form-group row advanced-setting">
+            <div class="col-md-3">
+                <nop-label asp-for="PaginationClickable" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="PaginationClickable" />
+                <span asp-validation-for="PaginationClickable"></span>
+            </div>
+        </div>
+        <div class="form-group row advanced-setting">
+            <div class="col-md-3">
+                <nop-label asp-for="PaginationTypeId" />
+            </div>
+            <div class="col-md-9">
+                <nop-select asp-for="PaginationTypeId" asp-items="Model.AvailablePaginationTypes" />
+                <span asp-validation-for="PaginationTypeId"></span>
+            </div>
+        </div>
+        <div class="form-group row advanced-setting">
+            <div class="col-md-3">
+                <nop-label asp-for="PaginationDynamicBullets" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="PaginationDynamicBullets" />
+                <span asp-validation-for="PaginationDynamicBullets"></span>
+            </div>
+        </div>
+        <div class="form-group row advanced-setting">
+            <div class="col-md-3">
+                <nop-label asp-for="PaginationDynamicMainBullets" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="PaginationDynamicMainBullets" />
+                <span asp-validation-for="PaginationDynamicMainBullets"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+
+    <div class="form-group row advanced-setting">
+        <div class="col-md-3">
+            <nop-label asp-for="EnableZoom" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableZoom" />
+            <span asp-validation-for="EnableZoom"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="EnableZoom">
+        <div class="form-group row advanced-setting">
+            <div class="col-md-3">
+                <nop-label asp-for="ZoomMaximumRatio" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="ZoomMaximumRatio" />
+                <span asp-validation-for="ZoomMaximumRatio"></span>
+            </div>
+        </div>
+        <div class="form-group row advanced-setting">
+            <div class="col-md-3">
+                <nop-label asp-for="ZoomMinimumRatio" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="ZoomMinimumRatio" />
+                <span asp-validation-for="ZoomMinimumRatio"></span>
+            </div>
+        </div>
+        <div class="form-group row advanced-setting">
+            <div class="col-md-3">
+                <nop-label asp-for="ToggleZoom" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="ToggleZoom" />
+                <span asp-validation-for="ToggleZoom"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+
+    <div class="form-group row advanced-setting">
+        <div class="col-md-3">
+            <nop-label asp-for="EnableEffect" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableEffect" />
+            <span asp-validation-for="EnableEffect"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="EnableEffect">
+        <div class="form-group row advanced-setting">
+            <div class="col-md-3">
+                <nop-label asp-for="EffectTypeId" />
+            </div>
+            <div class="col-md-9">
+                <nop-select asp-for="EffectTypeId" asp-items="@Model.AvailableEffectTypes" />
+                <span asp-validation-for="EffectTypeId"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+
+    <div class="form-group row advanced-setting">
+        <div class="col-md-3">
+            <nop-label asp-for="EnableMousewheelControl" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableMousewheelControl" />
+            <span asp-validation-for="EnableMousewheelControl"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="EnableMousewheelControl">
+        <div class="form-group row advanced-setting">
+            <div class="col-md-3">
+                <nop-label asp-for="MousewheelControlForceToAxis" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="MousewheelControlForceToAxis" />
+                <span asp-validation-for="MousewheelControlForceToAxis"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+    
+    <div class="form-group row advanced-setting">
+        <div class="col-md-3">
+            <nop-label asp-for="VerticalDirection" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="VerticalDirection" />
+            <span asp-validation-for="VerticalDirection"></span>
+        </div>
+    </div>
+    
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="AutoHeight" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="AutoHeight" />
+            <span asp-validation-for="AutoHeight"></span>
+        </div>
+    </div>
+    
+    <div class="form-group row advanced-setting">
+        <div class="col-md-3">
+            <nop-label asp-for="AllowTouchMove" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="AllowTouchMove" />
+            <span asp-validation-for="AllowTouchMove"></span>
+        </div>
+    </div>
+</div>

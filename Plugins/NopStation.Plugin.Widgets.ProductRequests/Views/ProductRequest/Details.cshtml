@@ -1,0 +1,74 @@
+﻿@using Nop.Web.Framework.UI
+@model ProductRequestModel
+
+@{
+    Layout = "_ColumnsTwo";
+    NopHtml.AddTitleParts(T("NopStation.ProductRequests.Account.ProductRequestDetails").Text);
+}
+
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = -1 })
+}
+
+<style>
+    .product-requests td, .product-requests th {
+        min-width: 50px;
+        border-width: 1px;
+        border-style: solid;
+        border-color: #ddd;
+        background-color: #fff;
+        padding: 20px;
+        color: #444;
+    }
+</style>
+
+<div class="page account-page customer-info-page">
+    <div class="page-title">
+        <h1>@T("Account.MyAccount") - @T("NopStation.ProductRequests.Account.ProductRequestDetails")</h1>
+    </div>
+    <div class="page-body">
+        <div class="table-wrapper">
+            <table id="requestdetails-table" cellspacing="0" class="product-requests">
+                <thead>
+                    <tr>
+                        <th>
+                            @T("NopStation.ProductRequests.ProductRequests.Fields.Name").Text
+                        </th>
+                        <td>
+                            @Model.Name
+                        </td>
+                        <th>
+                            @T("NopStation.ProductRequests.ProductRequests.Fields.CreatedOn").Text
+                        </th>
+                        <td>
+                            @Model.CreatedOn
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>
+                            @T("NopStation.ProductRequests.ProductRequests.Fields.Link").Text
+                        </th>
+                        <td colspan="3">
+                            @Model.Link
+                        </td>
+                    </tr>
+                    @if (!string.IsNullOrWhiteSpace(Model.AdminComment))
+                    {
+                        <tr>
+                            <th>
+                                @T("NopStation.ProductRequests.ProductRequests.Fields.AdminComment").Text
+                            </th>
+                            <td colspan="3">
+                                @Html.Raw(Model.AdminComment)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

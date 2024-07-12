@@ -1,0 +1,30 @@
+﻿.product-item .offer-content,
+.product-details-page .offer-content {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: auto;
+  text-transform: uppercase;
+}
+
+.offer-content .bestseller-label,
+.offer-content .new-product-label,
+.offer-content .discount-info-label {
+  padding: 15px 25px;
+  background-color: #ddd;
+  color: #333;
+  text-align: center;
+}
+
+.product-details-page .offer-content {
+  z-index: 10000;
+}
+
+.product-item .offer-content {
+  z-index: 999;
+}
+
+.product-essential .gallery,
+.product-essential .picture {
+  position: relative;
+}

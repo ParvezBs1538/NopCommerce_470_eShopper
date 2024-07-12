@@ -1,0 +1,42 @@
+﻿@model PublicModel
+@using Nop.Web.Framework.UI
+
+@{
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "/Plugins/NopStation.Plugin.Widgets.QuickView/Contents/js/quickview.js");
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "/Plugins/NopStation.Plugin.Widgets.QuickView/Contents/js/jquery.fullscreen-popup.min.js");
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "/Plugins/NopStation.Plugin.Widgets.QuickView/Contents/js/jquery.magnific-popup.min.js");
+    
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.QuickView/Contents/css/magnific-popup.css",string.Empty);
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.QuickView/Contents/css/styles.css",string.Empty);
+
+    var qvlbl = T("NopStation.QuickView.Button.QuickView").Text;
+}
+
+<div class="qv-modal" id="qv-modal">
+    <div class="loader">
+        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    </div>
+    <div class="qv-details"></div>
+</div>
+<button type="button" class="qvclick-button"></button>
+
+<script asp-location="Footer">
+    var quickviewdata = {};
+    quickviewdata.QuickViewFailure = '@T("NopStation.QuickView.Failed")';
+
+    $(document).ready(function () {
+        QuickView.init(@Model.PictureZoomEnabled.ToString().ToLower(), '@Url.RouteUrl("QuickViewProductDetails")', '#qv-modal', '.qvclick-button', '.qv-modal .loader', quickviewdata);
+        QuickView.render_quickview_button('@qvlbl');
+    });
+
+    $(document).on('ajaxSuccess', function () {
+        QuickView.init(@Model.PictureZoomEnabled.ToString().ToLower(), '@Url.RouteUrl("QuickViewProductDetails")', '#qv-modal', '.qvclick-button', '.qv-modal .loader', quickviewdata);
+        QuickView.render_quickview_button('@qvlbl');
+    });
+
+    $(window).on('resize', function () {
+        if (/Android|webOS|iPhone|iPad|Mac|Macintosh|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            $('.quick-view-btn').hide();
+        }
+    });
+</script>

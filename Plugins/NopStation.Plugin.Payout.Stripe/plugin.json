@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Payout",
+  "FriendlyName": "Stripe Payout",
+  "SystemName": "Payout.Stripe",
+  "Version": "4.6.0.0",
+  "SupportedVersions": [ "4.60" ],
+  "Author": "nopStation team",
+  "DisplayOrder": 3,
+  "FileName": "NopStation.Plugin.Payout.Stripe.dll",
+  "Description": "This plugin integrates with Stripe payout",
+  "DependsOnSystemNames": [ "NopStation.Core", "NopStation.Plugin.Widgets.VendorCommission" ]
+}

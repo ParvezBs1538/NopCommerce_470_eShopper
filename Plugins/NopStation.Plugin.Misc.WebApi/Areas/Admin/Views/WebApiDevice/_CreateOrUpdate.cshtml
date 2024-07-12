@@ -1,0 +1,77 @@
+@model DeviceModel
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="CustomerId" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">
+                                    <a asp-controller="Customer" asp-action="Edit" asp-route-id="@Model.CustomerId">@Model.CustomerName - @T("Admin.Common.View")</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="DeviceTypeStr" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.DeviceTypeStr</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="DeviceToken" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.DeviceToken</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="SubscriptionId" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.SubscriptionId</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="StoreName" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">
+                                    <a asp-controller="Store" asp-action="Edit" asp-route-id="@Model.StoreId">@Model.StoreName - @T("Admin.Common.View")</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="CreatedOn" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.CreatedOn</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="UpdatedOn" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.UpdatedOn</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

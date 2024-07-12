@@ -1,0 +1,324 @@
+﻿@model ConfigurationModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.Plugin.Misc.AjaxFilter.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("AjaxFilter.Configuration");
+}
+@{
+    const string hideResourcesBlockAttributeName = "AjaxFilterSettingsPage.HideResourcesBlock";
+    var hideResourcesBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideResourcesBlockAttributeName);
+}
+
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model=>model.EnableFilter)").click(toggleFilterEnableField);
+        $("#@Html.IdFor(model => model.EnableManufacturerFilter)").click(toggleManufacturerEnabledField);
+        $("#@Html.IdFor(model => model.CloseManufactureFilterByDefualt)").click(toggleManufacturerEnabledField);
+
+        $("#@Html.IdFor(model => model.EnableCategoryFilter)").click(toggleCategoryEnabledField);
+        $("#@Html.IdFor(model => model.CloseCategoryFilterByDefualt)").click(toggleCategoryEnabledField);
+
+        $("#@Html.IdFor(model => model.EnablePriceRangeFilter)").click(togglePriceRangeEnabledField);
+        $("#@Html.IdFor(model => model.ClosePriceRangeFilterByDefualt)").click(togglePriceRangeEnabledField);
+
+        $("#@Html.IdFor(model => model.EnableSpecificationAttributeFilter)").click(toggleSpecificationAttributeEnabledField);
+
+        $("#@Html.IdFor(model => model.EnableProductRatingsFilter)").click(toggleRatingsEnabledField);
+        $("#@Html.IdFor(model => model.EnableProductTagsFilter)").click(toggleTagsEnabledField);
+
+        $("#@Html.IdFor(model => model.EnableMiscFilter)").click(toggleMiscFilterEnabledField);
+
+        $("#@Html.IdFor(model => model.EnableProductAttributeFilter)").click(toggleProductAttributeFilterEnabledField);
+
+
+        toggleFilterEnableField();
+        toggleManufacturerEnabledField();
+        toggleCategoryEnabledField();
+        togglePriceRangeEnabledField();
+        toggleSpecificationAttributeEnabledField();
+        toggleRatingsEnabledField();
+        toggleTagsEnabledField();
+        toggleStockEnabledField();
+        toggleMiscFilterEnabledField();
+        toggleProductAttributeFilterEnabledField();
+    });
+
+    function toggleManufacturerEnabledField() {
+        if ($('#@Html.IdFor(model => model.EnableManufacturerFilter)').is(':checked')) {
+            $('#pnlCloseManufactureFilterByDefualt').showElement();
+        } else {
+            $('#pnlCloseManufactureFilterByDefualt').hideElement();
+        }
+    }
+
+    function toggleCategoryEnabledField() {
+        if ($('#@Html.IdFor(model => model.EnableCategoryFilter)').is(':checked')) {
+            $('#pnlCloseCategoryFilterByDefualt').showElement();
+        } else {
+            $('#pnlCloseCategoryFilterByDefualt').hideElement();
+        }
+    }
+
+    function togglePriceRangeEnabledField() {
+        if ($('#@Html.IdFor(model => model.EnablePriceRangeFilter)').is(':checked')) {
+            $('#pnlClosePriceRangeFilterByDefualt').showElement();
+        } else {
+            $('#pnlClosePriceRangeFilterByDefualt').hideElement();
+        }
+    }
+
+    function toggleFilterEnableField() {
+        if ($('#@Html.IdFor(model => model.EnableFilter)').is(':checked')) {
+            $('#pnlCloseFilterByDefualt').showElement();
+        } else {
+            $('#pnlCloseFilterByDefualt').hideElement();
+        }
+    }
+
+    function toggleRatingsEnabledField() {
+        if ($('#@Html.IdFor(model => model.EnableProductRatingsFilter)').is(':checked')) {
+            $('#pnlCloseProductRatingsFilterByDefualt').showElement();
+        } else {
+            $('#pnlCloseProductRatingsFilterByDefualt').hideElement();
+        }
+    }
+
+    function toggleTagsEnabledField() {
+        if ($('#@Html.IdFor(model => model.EnableProductTagsFilter)').is(':checked')) {
+            $('#pnlCloseProductTagsFilterByDefualt').showElement();
+        } else {
+            $('#pnlCloseProductTagsFilterByDefualt').hideElement();
+        }
+    }
+
+    function toggleMiscFilterEnabledField() {
+        if ($('#@Html.IdFor(model => model.EnableMiscFilter)').is(':checked')) {
+            $('#pnlCloseMiscFilterByDefualt').showElement();
+        } else {
+            $('#pnlCloseMiscFilterByDefualt').hideElement();
+        }
+    }
+
+    function toggleProductAttributeFilterEnabledField() {
+        if ($('#@Html.IdFor(model => model.EnableProductAttributeFilter)').is(':checked')) {
+            $('#pnlCloseProductAttributeFilterByDefualt').showElement();
+        } else {
+            $('#pnlCloseProductAttributeFilterByDefualt').hideElement();
+        }
+    }
+
+</script>
+<form asp-controller="AjaxFilter" asp-action="Configure" method="post" id="ajaxfilter-config-form">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Plugin.Misc.AjaxFilter.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableFilter_OverrideForStore" asp-input="EnableFilter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableFilter" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableFilter" />
+                                </div>
+                            </div>
+
+                            <nop-nested-setting asp-for="EnableManufacturerFilter">
+                                <div id="pnlCloseFilterByDefualt">
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-override-store-checkbox asp-for="EnableProductCount_OverrideForStore" asp-input="EnableProductCount" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="EnableProductCount" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="EnableProductCount" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-override-store-checkbox asp-for="HideManufacturerProductCount_OverrideForStore" asp-input="HideManufacturerProductCount" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="HideManufacturerProductCount" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="HideManufacturerProductCount" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-override-store-checkbox asp-for="EnablePriceRangeFilter_OverrideForStore" asp-input="EnablePriceRangeFilter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="EnablePriceRangeFilter" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="EnablePriceRangeFilter" />
+                                        </div>
+                                    </div>
+
+                                    <nop-nested-setting asp-for="EnablePriceRangeFilter">
+                                        <div class="form-group row" id="pnlClosePriceRangeFilterByDefualt">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="ClosePriceRangeFilterByDefualt" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="ClosePriceRangeFilterByDefualt" />
+                                                <span asp-validation-for="ClosePriceRangeFilterByDefualt"></span>
+                                            </div>
+                                        </div>
+                                    </nop-nested-setting>
+
+
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-override-store-checkbox asp-for="EnableProductAttributeFilter_OverrideForStore" asp-input="EnableProductAttributeFilter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="EnableProductAttributeFilter" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="EnableProductAttributeFilter" />
+                                        </div>
+                                    </div>
+
+                                    <nop-nested-setting asp-for="EnableProductAttributeFilter">
+                                        <div class="form-group row" id="pnlCloseProductAttributeFilterByDefualt">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="CloseProductAttributeFilterByDefualt" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="CloseProductAttributeFilterByDefualt" />
+                                                <span asp-validation-for="CloseProductAttributeFilterByDefualt"></span>
+                                            </div>
+                                        </div>
+                                    </nop-nested-setting>
+
+
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-override-store-checkbox asp-for="EnableSpecificationAttributeFilter_OverrideForStore" asp-input="EnableSpecificationAttributeFilter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="EnableSpecificationAttributeFilter" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="EnableSpecificationAttributeFilter" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-override-store-checkbox asp-for="EnableManufacturerFilter_OverrideForStore" asp-input="EnableManufacturerFilter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="EnableManufacturerFilter" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="EnableManufacturerFilter" />
+                                        </div>
+                                    </div>
+                                    <nop-nested-setting asp-for="EnableManufacturerFilter">
+                                        <div class="form-group row" id="pnlCloseManufactureFilterByDefualt">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="CloseManufactureFilterByDefualt" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="CloseManufactureFilterByDefualt" />
+                                                <span asp-validation-for="CloseManufactureFilterByDefualt"></span>
+                                            </div>
+                                        </div>
+                                    </nop-nested-setting>
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-override-store-checkbox asp-for="MaxDisplayForManufacturers_OverrideForStore" asp-input="MaxDisplayForManufacturers" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="MaxDisplayForManufacturers" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="MaxDisplayForManufacturers" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-override-store-checkbox asp-for="EnableProductRatingsFilter_OverrideForStore" asp-input="EnableProductRatingsFilter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="EnableProductRatingsFilter" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="EnableProductRatingsFilter" />
+                                        </div>
+                                    </div>
+                                    <nop-nested-setting asp-for="EnableProductRatingsFilter">
+                                        <div class="form-group row" id="pnlCloseProductRatingsFilterByDefualt">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="CloseProductRatingsFilterByDefualt" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="CloseProductRatingsFilterByDefualt" />
+                                                <span asp-validation-for="CloseProductRatingsFilterByDefualt"></span>
+                                            </div>
+                                        </div>
+                                    </nop-nested-setting>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-override-store-checkbox asp-for="EnableProductTagsFilter_OverrideForStore" asp-input="EnableProductTagsFilter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="EnableProductTagsFilter" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="EnableProductTagsFilter" />
+                                        </div>
+                                    </div>
+                                    <nop-nested-setting asp-for="EnableProductTagsFilter">
+                                        <div class="form-group row" id="pnlCloseProductTagsFilterByDefualt">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="CloseProductTagsFilterByDefualt" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="CloseProductTagsFilterByDefualt" />
+                                                <span asp-validation-for="CloseProductTagsFilterByDefualt"></span>
+                                            </div>
+                                        </div>
+                                    </nop-nested-setting>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-override-store-checkbox asp-for="EnableMiscFilter_OverrideForStore" asp-input="EnableMiscFilter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="EnableMiscFilter" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="EnableMiscFilter" />
+                                        </div>
+                                    </div>
+                                    <nop-nested-setting asp-for="EnableMiscFilter">
+                                        <div class="form-group row" id="pnlCloseMiscFilterByDefualt">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="CloseMiscFilterByDefualt" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="CloseMiscFilterByDefualt" />
+                                                <span asp-validation-for="CloseMiscFilterByDefualt"></span>
+                                            </div>
+                                        </div>
+                                    </nop-nested-setting>
+                                </div>
+                            </nop-nested-setting>
+                        </div>
+                    </div>
+                </div>
+                <nop-cards id="ajaxfiltersettings-panels">
+                    <nop-card asp-name="ajaxfiltersettings-resources" asp-icon="fa fa-database" asp-title="@T("Admin.NopStation.Plugin.Misc.AjaxFilter.Configuration.Blocktitle.SpecificationAttribute")" asp-hide-block-attribute-name="@hideResourcesBlockAttributeName" asp-hide="@hideResourcesBlock" asp-advanced="true">@await Html.PartialAsync("~/Plugins/NopStation.Plugin.Misc.AjaxFilter/Areas/Admin/Views/AjaxFilter/_Configure.SpecificationAttributes.cshtml", Model)</nop-card>
+                </nop-cards>
+            </div>
+        </div>
+    </section>
+
+</form>

@@ -1,0 +1,103 @@
+﻿@model AjaxFilterParentCategorySearchModel
+
+@{
+    Layout = "_AdminPopupLayout";
+
+    //page title
+    ViewBag.PageTitle = T("Admin.Nopstation.Ajaxfilter.Resources.AddFromExistingCategories").Text;
+}
+
+@if (ViewBag.RefreshPage == true)
+{
+    <script>
+        try {window.opener.document.forms['@(Context.Request.Query["formId"])'].@(Context.Request.Query["btnId"]).click();}
+        catch (e) { }
+        window.close();
+    </script>
+}
+
+<form asp-controller="AjaxFilter" asp-action="ParentCategoryPopup"
+      asp-route-btnId="@Context.Request.Query["btnId"]"
+      asp-route-formId="@Context.Request.Query["formId"]">
+    <div class="content-header clearfix">
+        <h1 class="pull-left">
+            @T("Admin.Nopstation.Ajaxfilter.Resources.AddFromExistingCategories")
+        </h1>
+        <div class="pull-right">
+            &nbsp;
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default card-search card-popup">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group row">
+                                        <div class="col-sm-4">
+                                            <nop-label asp-for="SearchParentCategoryName" />
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <nop-editor asp-for="SearchParentCategoryName" />
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="button" id="search-parentCategories" class="btn btn-primary btn-search">
+                                        <i class="fas fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-default">
+                        <div class="card-body">
+                            @await Html.PartialAsync("Table", new DataTablesModel
+                            {
+                                Name = "resources-grid",
+                                UrlRead = new DataUrl("GetExistingParentCategoryPopup", "AjaxFilter", null),
+                                SearchButtonId = "search-parentCategories",
+                                Length = Model.PageSize,
+                                LengthMenu = Model.AvailablePageSizes,
+                                Filters = new List<FilterParameter>
+                                {
+                                    new FilterParameter(nameof(Model.SearchParentCategoryName)),
+                                    
+                                },
+                                ColumnCollection = new List<ColumnProperty>
+                                {
+                                    new ColumnProperty(nameof(AjaxFilterParentCategoryModel.Id))
+                                    {
+                                        IsMasterCheckBox = true,
+                                        Render = new RenderCheckBox(nameof(AddParentCategoryToAjaxFilterModel.SelectedParentCategoryIds)),
+                                        ClassName =  NopColumnClassDefaults.CenterAll,
+                                        Width = "50",
+                                    },
+                                    new ColumnProperty(nameof(CategoryModel.Name))
+                                    {
+                                        Title = T("Admin.Configuration.ParentCategories.Fields.Name").Text,
+                                        Width = "100"
+                                    }
+                                }
+                            })
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" name="save" class="btn btn-primary">
+                                <i class="far fa-save"></i>
+                                @T("Admin.Common.Save")
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

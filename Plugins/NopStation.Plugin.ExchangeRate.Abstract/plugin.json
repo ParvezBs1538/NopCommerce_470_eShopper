@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Abstract Api exchange rate provider",
+  "SystemName": "NopStation.Plugin.ExchangeRate.Abstract",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Jaber Kibria",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.ExchangeRate.Abstract.dll",
+  "Description": "This plugin allows getting exchange rates from Abstract Api.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

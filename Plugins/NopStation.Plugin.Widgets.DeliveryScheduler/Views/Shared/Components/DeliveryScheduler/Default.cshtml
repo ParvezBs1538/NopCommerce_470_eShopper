@@ -1,0 +1,55 @@
+﻿@using Nop.Web.Framework.UI
+@inject Nop.Core.Domain.Orders.OrderSettings orderSettings
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        displayAjaxLoading(true);
+        loadDeliverySlots();
+
+        $('input[name=shippingoption]').change(function () {
+            displayAjaxLoading(true);
+            loadDeliverySlots();
+        });
+
+        function loadDeliverySlots() {
+            var selectedShippingOption = $('input[name=shippingoption]:checked').val();
+            if (selectedShippingOption == null) {
+                displayAjaxLoading(false);
+                return;
+            }
+
+            var tokens = selectedShippingOption.split("___", 2);
+            var methodName = tokens[0];
+            var methodSystemName = tokens[1];
+
+            $.ajax({
+                cache: false,
+                url: "@Url.RouteUrl("DeliverySlots")",
+                data: { methodName: methodName, methodSystemName: methodSystemName },
+                type: "POST",
+                success: function (response) {
+                    if (!response.result) {
+                        $("#shipping-slots").html('');
+                        return;
+                    }
+                    $("#shipping-slots").html(response.html);
+                },
+                complete: function () {
+                    displayAjaxLoading(false);
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        }
+    });
+</script>
+
+<div id="shipping-slots">
+
+</div>
+
+@if (orderSettings.OnePageCheckoutEnabled)
+{
+    @NopHtml.GenerateInlineScripts(ResourceLocation.Footer)
+}

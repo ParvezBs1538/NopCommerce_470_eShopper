@@ -1,0 +1,84 @@
+@model SurveyModel
+
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.DynamicSurvey.Surveys.EditSurveyDetails").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("Surveys");
+}
+
+<form asp-controller="Survey" asp-action="Edit" method="post" id="survey-form">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.DynamicSurvey.Surveys.EditSurveyDetails") - @Model.Name
+            <small>
+                <i class="fas fa-arrow-circle-left"></i>
+                <a asp-action="List">@T("Admin.NopStation.DynamicSurvey.Surveys.BackToList")</a>
+            </small>
+        </h1>
+        <div class="float-right">
+            <a href="@Url.RouteUrl("DynamicSurvey", new { SeName = Model.SeName })" class="btn btn-info" target="_blank">
+                <i class="far fa-eye"></i>
+                @T("Admin.Common.Preview")
+            </a>
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+            <button type="submit" name="save-continue" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.SaveContinue")
+            </button>
+            <button type="button" name="copysurvey" class="btn bg-olive" data-toggle="modal" data-target="#copysurvey-window">
+                <i class="far fa-clone"></i>
+                @T("Admin.NopStation.DynamicSurvey.Surveys.Copy")
+            </button>
+            <span id="survey-delete" class="btn btn-danger">
+                <i class="far fa-trash-alt"></i>
+                @T("Admin.Common.Delete")
+            </span>
+        </div>
+    </div>
+    @await Html.PartialAsync("_CreateOrUpdate", Model)
+</form>
+<nop-delete-confirmation asp-model-id="@Model.Id" asp-button-id="survey-delete" />
+
+@*copy survey form*@
+<div id="copysurvey-window" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="copysurvey-window-title">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="copysurvey-window-title">@T("Admin.NopStation.DynamicSurvey.Surveys.Copy")</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>                
+            </div>
+            <form asp-controller="Survey" asp-action="CopySurvey" method="post">
+                <div class="form-horizontal">
+                    <div class="modal-body">
+                        <input asp-for="CopySurveyModel.Id" type="hidden" />
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <nop-label asp-for="CopySurveyModel.Name" />
+                            </div>
+                            <div class="col-md-8">
+                                <nop-editor asp-for="CopySurveyModel.Name" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <nop-label asp-for="CopySurveyModel.Published" />
+                            </div>
+                            <div class="col-md-8">
+                                <nop-editor asp-for="CopySurveyModel.Published" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            @T("Admin.NopStation.DynamicSurvey.Surveys.Copy")
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

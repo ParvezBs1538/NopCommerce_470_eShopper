@@ -1,0 +1,1029 @@
+[
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.AbandonedCarts",
+    "DirectoryPath": "NopStation.Plugin.Widgets.AbandonedCarts/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.AffiliateStation",
+    "DirectoryPath": "NopStation.Plugin.Widgets.AffiliateStation/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.AllInOneContactUs",
+    "DirectoryPath": "NopStation.Plugin.Widgets.AllInOneContactUs/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.Announcement",
+    "DirectoryPath": "NopStation.Plugin.Widgets.Announcement/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.AnywhereSlider",
+    "DirectoryPath": "NopStation.Plugin.Widgets.AnywhereSlider/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.Berry",
+    "DirectoryPath": "NopStation.Plugin.Widgets.Berry/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.BulkDeleteCustomer",
+    "DirectoryPath": "NopStation.Plugin.Widgets.BulkDeleteCustomer/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.CancelOrder",
+    "DirectoryPath": "NopStation.Plugin.Widgets.CancelOrder/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.CategoryBanners",
+    "DirectoryPath": "NopStation.Plugin.Widgets.CategoryBanners/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.Clarity",
+    "DirectoryPath": "NopStation.Plugin.Widgets.Clarity/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.CrawlerManager",
+    "DirectoryPath": "NopStation.Plugin.Widgets.CrawlerManager/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.CrispChat",
+    "DirectoryPath": "NopStation.Plugin.Widgets.CrispChat/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.DeliveryScheduler",
+    "DirectoryPath": "NopStation.Plugin.Widgets.DeliveryScheduler/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.DMS",
+    "DirectoryPath": "NopStation.Plugin.Widgets.DMS/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.Documentation",
+    "DirectoryPath": "NopStation.Plugin.Widgets.Documentation/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.DooFinder",
+    "DirectoryPath": "NopStation.Plugin.Widgets.DooFinder/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.DynamicSurvey",
+    "DirectoryPath": "NopStation.Plugin.Widgets.DynamicSurvey/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.ExportImportTopic",
+    "DirectoryPath": "NopStation.Plugin.Widgets.ExportImportTopic/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.FacebookMessenger",
+    "DirectoryPath": "NopStation.Plugin.Widgets.FacebookMessenger/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.FAQ",
+    "DirectoryPath": "NopStation.Plugin.Widgets.FAQ/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.Flipbooks",
+    "DirectoryPath": "NopStation.Plugin.Widgets.Flipbooks/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.Fullstory",
+    "DirectoryPath": "NopStation.Plugin.Widgets.Fullstory/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.GoogleAnalytics",
+    "DirectoryPath": "NopStation.Plugin.Widgets.GoogleAnalytics/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.GoogleTagManager",
+    "DirectoryPath": "NopStation.Plugin.Widgets.GoogleTagManager/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.Heap",
+    "DirectoryPath": "NopStation.Plugin.Widgets.Heap/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.Helpdesk",
+    "DirectoryPath": "NopStation.Plugin.Widgets.Helpdesk/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.Hotjar",
+    "DirectoryPath": "NopStation.Plugin.Widgets.Hotjar/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.Howuku",
+    "DirectoryPath": "NopStation.Plugin.Widgets.Howuku/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.LuckyOrange",
+    "DirectoryPath": "NopStation.Plugin.Widgets.LuckyOrange/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.MegaMenu",
+    "DirectoryPath": "NopStation.Plugin.Widgets.MegaMenu/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.Mouseflow",
+    "DirectoryPath": "NopStation.Plugin.Widgets.Mouseflow/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.NopChat",
+    "DirectoryPath": "NopStation.Plugin.Widgets.NopChat/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.OCarousels",
+    "DirectoryPath": "NopStation.Plugin.Widgets.OCarousels/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.OrderRatings",
+    "DirectoryPath": "NopStation.Plugin.Widgets.OrderRatings/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.PaldeskChat",
+    "DirectoryPath": "NopStation.Plugin.Widgets.PaldeskChat/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.PictureZoom",
+    "DirectoryPath": "NopStation.Plugin.Widgets.PictureZoom/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.PinterestAnalytics",
+    "DirectoryPath": "NopStation.Plugin.Widgets.PinterestAnalytics/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.PopupLogin",
+    "DirectoryPath": "NopStation.Plugin.Widgets.PopupLogin/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.Popups",
+    "DirectoryPath": "NopStation.Plugin.Widgets.Popups/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.PrevNextProduct",
+    "DirectoryPath": "NopStation.Plugin.Widgets.PrevNextProduct/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.Product360View",
+    "DirectoryPath": "NopStation.Plugin.Widgets.Product360View/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.ProductQuestionAnswer",
+    "DirectoryPath": "NopStation.Plugin.Widgets.ProductQuestionAnswer/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.ProductRequests",
+    "DirectoryPath": "NopStation.Plugin.Widgets.ProductRequests/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.ProductRibbon",
+    "DirectoryPath": "NopStation.Plugin.Widgets.ProductRibbon/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.ProductTabs",
+    "DirectoryPath": "NopStation.Plugin.Widgets.ProductTabs/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.ProgressiveWebApp",
+    "DirectoryPath": "NopStation.Plugin.Widgets.ProgressiveWebApp/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.PushNop",
+    "DirectoryPath": "NopStation.Plugin.Widgets.PushNop/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.QuickSearch",
+    "DirectoryPath": "NopStation.Plugin.Widgets.QuickSearch/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.QuickView",
+    "DirectoryPath": "NopStation.Plugin.Widgets.QuickView/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.SEOExpert",
+    "DirectoryPath": "NopStation.Plugin.Widgets.SEOExpert/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.Smartlook",
+    "DirectoryPath": "NopStation.Plugin.Widgets.Smartlook/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.SmartMegaMenu",
+    "DirectoryPath": "NopStation.Plugin.Widgets.SmartMegaMenu/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.SmartProductRating",
+    "DirectoryPath": "NopStation.Plugin.Widgets.SmartProductRating/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.Smartsupp",
+    "DirectoryPath": "NopStation.Plugin.Widgets.Smartsupp/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.StoreLocator",
+    "DirectoryPath": "NopStation.Plugin.Widgets.StoreLocator/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.Theme.CapeTown",
+    "DirectoryPath": "NopStation.Plugin.Widgets.Theme.CapeTown/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.Theme.CookiesBakery",
+    "DirectoryPath": "NopStation.Plugin.Widgets.Theme.CookiesBakery/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.TidioChat",
+    "DirectoryPath": "NopStation.Plugin.Widgets.TidioChat/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.VendorShop",
+    "DirectoryPath": "NopStation.Plugin.Widgets.VendorShop/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.WidgetPush",
+    "DirectoryPath": "NopStation.Plugin.Widgets.WidgetPush/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.ZohoSalesIQ",
+    "DirectoryPath": "NopStation.Plugin.Widgets.ZohoSalesIQ/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Theme.Crimson",
+    "DirectoryPath": "NopStation.Plugin.Theme.Crimson/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Theme.Rosea",
+    "DirectoryPath": "NopStation.Plugin.Theme.Rosea/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Theme.Viridi",
+    "DirectoryPath": "NopStation.Plugin.Theme.Viridi/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Theme.NopKalles",
+    "DirectoryPath": "NopStation.Plugin.Theme.NopKalles/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Theme.Tulip",
+    "DirectoryPath": "NopStation.Plugin.Theme.Tulip/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Theme.Zwart",
+    "DirectoryPath": "NopStation.Plugin.Theme.Zwart/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Theme.Aureum",
+    "DirectoryPath": "NopStation.Plugin.Theme.Aureum/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Theme.Fortune",
+    "DirectoryPath": "NopStation.Plugin.Theme.Fortune/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Theme.KidsToys",
+    "DirectoryPath": "NopStation.Plugin.Theme.KidsToys/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Theme.Valley",
+    "DirectoryPath": "NopStation.Plugin.Theme.Valley/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Theme.Orchid",
+    "DirectoryPath": "NopStation.Plugin.Theme.Orchid/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Theme.Lily",
+    "DirectoryPath": "NopStation.Plugin.Theme.Lily/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Theme.BeautyShop",
+    "DirectoryPath": "NopStation.Plugin.Theme.BeautyShop/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Theme.Kingdom",
+    "DirectoryPath": "NopStation.Plugin.Theme.Kingdom/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Theme.FreshLand",
+    "DirectoryPath": "NopStation.Plugin.Theme.FreshLand/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.AamarPay",
+    "DirectoryPath": "NopStation.Plugin.Payments.AamarPay/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.Affirm",
+    "DirectoryPath": "NopStation.Plugin.Payments.Affirm/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.AfterPay",
+    "DirectoryPath": "NopStation.Plugin.Payments.AfterPay/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.AmazonPay",
+    "DirectoryPath": "NopStation.Plugin.Payments.AmazonPay/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.bKash",
+    "DirectoryPath": "NopStation.Plugin.Payments.bKash/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.BkashManual",
+    "DirectoryPath": "NopStation.Plugin.Payments.BkashManual/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.BlueSnapHosted",
+    "DirectoryPath": "NopStation.Plugin.Payments.BlueSnapHosted/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.CBL",
+    "DirectoryPath": "NopStation.Plugin.Payments.CBL/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.CopyAndPay",
+    "DirectoryPath": "NopStation.Plugin.Payments.CopyAndPay/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.CreditWallet",
+    "DirectoryPath": "NopStation.Plugin.Payments.CreditWallet/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.DBBL",
+    "DirectoryPath": "NopStation.Plugin.Payments.DBBL/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.Dmoney",
+    "DirectoryPath": "NopStation.Plugin.Payments.Dmoney/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.EveryPay",
+    "DirectoryPath": "NopStation.Plugin.Payments.EveryPay/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.Instamojo",
+    "DirectoryPath": "NopStation.Plugin.Payments.Instamojo/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.iPayBd",
+    "DirectoryPath": "NopStation.Plugin.Payments.iPayBd/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.MPay24",
+    "DirectoryPath": "NopStation.Plugin.Payments.MPay24/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.Nagad",
+    "DirectoryPath": "NopStation.Plugin.Payments.Nagad/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.NagadManual",
+    "DirectoryPath": "NopStation.Plugin.Payments.NagadManual/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.NetsEasy",
+    "DirectoryPath": "NopStation.Plugin.Payments.NetsEasy/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.OABIPayment",
+    "DirectoryPath": "NopStation.Plugin.Payments.OABIPayment/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.PayHere",
+    "DirectoryPath": "NopStation.Plugin.Payments.PayHere/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.Paykeeper",
+    "DirectoryPath": "NopStation.Plugin.Payments.Paykeeper/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.Paystack",
+    "DirectoryPath": "NopStation.Plugin.Payments.Paystack/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.POLiPay",
+    "DirectoryPath": "NopStation.Plugin.Payments.POLiPay/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.Quickstream",
+    "DirectoryPath": "NopStation.Plugin.Payments.Quickstream/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.Razorpay",
+    "DirectoryPath": "NopStation.Plugin.Payments.Razorpay/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.RocketManual",
+    "DirectoryPath": "NopStation.Plugin.Payments.RocketManual/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.SSLCommerz",
+    "DirectoryPath": "NopStation.Plugin.Payments.SSLCommerz/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.Stripe",
+    "DirectoryPath": "NopStation.Plugin.Payments.Stripe/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.StripeAlipay",
+    "DirectoryPath": "NopStation.Plugin.Payments.StripeAlipay/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.StripeBoleto",
+    "DirectoryPath": "NopStation.Plugin.Payments.StripeBoleto/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.StripeGrabPay",
+    "DirectoryPath": "NopStation.Plugin.Payments.StripeGrabPay/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.StripeHostedCheckout",
+    "DirectoryPath": "NopStation.Plugin.Payments.StripeHostedCheckout/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.StripeIdeal",
+    "DirectoryPath": "NopStation.Plugin.Payments.StripeIdeal/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.StripeKlarna",
+    "DirectoryPath": "NopStation.Plugin.Payments.StripeKlarna/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.StripeKonbini",
+    "DirectoryPath": "NopStation.Plugin.Payments.StripeKonbini/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.StripeOxxo",
+    "DirectoryPath": "NopStation.Plugin.Payments.StripeOxxo/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.StripePaymentElement",
+    "DirectoryPath": "NopStation.Plugin.Payments.StripePaymentElement/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.StripeSofort",
+    "DirectoryPath": "NopStation.Plugin.Payments.StripeSofort/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.StripeWallet",
+    "DirectoryPath": "NopStation.Plugin.Payments.StripeWallet/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.StripeWeChatPay",
+    "DirectoryPath": "NopStation.Plugin.Payments.StripeWeChatPay/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.Unzer",
+    "DirectoryPath": "NopStation.Plugin.Payments.Unzer/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Payments.UpayBdManual",
+    "DirectoryPath": "NopStation.Plugin.Payments.UpayBdManual/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.AddressValidator.Google",
+    "DirectoryPath": "NopStation.Plugin.AddressValidator.Google/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.AddressValidator.EasyPost",
+    "DirectoryPath": "NopStation.Plugin.AddressValidator.EasyPost/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.AddressValidator.Byteplant",
+    "DirectoryPath": "NopStation.Plugin.AddressValidator.Byteplant/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.CRM.Zoho",
+    "DirectoryPath": "NopStation.Plugin.CRM.Zoho/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.DiscountRules.AffiliatedCustomers",
+    "DirectoryPath": "NopStation.Plugin.DiscountRules.AffiliatedCustomers/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.DiscountRules.DaysOfWeek",
+    "DirectoryPath": "NopStation.Plugin.DiscountRules.DaysOfWeek/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.DiscountRules.TimeOfDay",
+    "DirectoryPath": "NopStation.Plugin.DiscountRules.TimeOfDay/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.DiscountRules.PaymentMethod",
+    "DirectoryPath": "NopStation.Plugin.DiscountRules.PaymentMethod/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.DiscountRules.CustomerBirthday",
+    "DirectoryPath": "NopStation.Plugin.DiscountRules.CustomerBirthday/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.DiscountRules.CustomerGender",
+    "DirectoryPath": "NopStation.Plugin.DiscountRules.CustomerGender/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.DiscountRules.OrderRange",
+    "DirectoryPath": "NopStation.Plugin.DiscountRules.OrderRange/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.DiscountRules.ShippingCountry",
+    "DirectoryPath": "NopStation.Plugin.DiscountRules.ShippingCountry/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.EmailValidator.Abstract",
+    "DirectoryPath": "NopStation.Plugin.EmailValidator.Abstract/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.EmailValidator.Verifalia",
+    "DirectoryPath": "NopStation.Plugin.EmailValidator.Verifalia/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.ExchangeRate.Abstract",
+    "DirectoryPath": "NopStation.Plugin.ExchangeRate.Abstract/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.ExternalAuth.Google",
+    "DirectoryPath": "NopStation.Plugin.ExternalAuth.Google/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.WebApi",
+    "DirectoryPath": "NopStation.Plugin.Misc.WebApi/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.AlgoliaSearch",
+    "DirectoryPath": "NopStation.Plugin.Misc.AlgoliaSearch/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.AmazonS3",
+    "DirectoryPath": "NopStation.Plugin.Misc.AmazonS3/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.PowerBI",
+    "DirectoryPath": "NopStation.Plugin.Misc.PowerBI/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.WebApiNotification",
+    "DirectoryPath": "NopStation.Plugin.Misc.WebApiNotification/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.FacebookShop",
+    "DirectoryPath": "NopStation.Plugin.Misc.FacebookShop/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.SqlManager",
+    "DirectoryPath": "NopStation.Plugin.Misc.SqlManager/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.AdminApi",
+    "DirectoryPath": "NopStation.Plugin.Misc.AdminApi/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.MergeGuestOrder",
+    "DirectoryPath": "NopStation.Plugin.Misc.MergeGuestOrder/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.AutoCancelOrder",
+    "DirectoryPath": "NopStation.Plugin.Misc.AutoCancelOrder/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.Opc",
+    "DirectoryPath": "NopStation.Plugin.Misc.Opc/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.TinyPNG",
+    "DirectoryPath": "NopStation.Plugin.Misc.TinyPNG/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.IpFilter",
+    "DirectoryPath": "NopStation.Plugin.Misc.IpFilter/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.AdminReportExporter",
+    "DirectoryPath": "NopStation.Plugin.Misc.AdminReportExporter/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.AmazonPersonalize",
+    "DirectoryPath": "NopStation.Plugin.Misc.AmazonPersonalize/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.UrlShortener",
+    "DirectoryPath": "NopStation.Plugin.Misc.UrlShortener/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.QuoteCart",
+    "DirectoryPath": "NopStation.Plugin.Misc.QuoteCart/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.AjaxFilter",
+    "DirectoryPath": "NopStation.Plugin.Misc.AjaxFilter/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.CloudinaryCdn",
+    "DirectoryPath": "NopStation.Plugin.Misc.CloudinaryCdn/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.AdvancedSEO",
+    "DirectoryPath": "NopStation.Plugin.Misc.AdvancedSEO/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.SolrSearch",
+    "DirectoryPath": "NopStation.Plugin.Misc.SolrSearch/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Misc.Core",
+    "DirectoryPath": "NopStation.Plugin.Misc.Core/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Pickup.PickupInStoreAdvance",
+    "DirectoryPath": "NopStation.Plugin.Pickup.PickupInStoreAdvance/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Widgets.Berry",
+    "DirectoryPath": "NopStation.Plugin.Widgets.Berry/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Shipping.DHL",
+    "DirectoryPath": "NopStation.Plugin.Shipping.DHL/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Shipping.VendorAndState",
+    "DirectoryPath": "NopStation.Plugin.Shipping.VendorAndState/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Shipping.Redx",
+    "DirectoryPath": "NopStation.Plugin.Shipping.Redx/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.SMS.Twilio",
+    "DirectoryPath": "NopStation.Plugin.SMS.Twilio/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.SMS.Afilnet",
+    "DirectoryPath": "NopStation.Plugin.SMS.Afilnet/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.SMS.Vonage",
+    "DirectoryPath": "NopStation.Plugin.SMS.Vonage/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.SMS.MessageBird",
+    "DirectoryPath": "NopStation.Plugin.SMS.MessageBird/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.SMS.Messente",
+    "DirectoryPath": "NopStation.Plugin.SMS.Messente/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.SMS.BulkSms",
+    "DirectoryPath": "NopStation.Plugin.SMS.BulkSms/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.SMS.SmsTo",
+    "DirectoryPath": "NopStation.Plugin.SMS.SmsTo/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.SMS.TeleSign",
+    "DirectoryPath": "NopStation.Plugin.SMS.TeleSign/"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.70",
+    "SystemName": "NopStation.Plugin.Tax.TaxJar",
+    "DirectoryPath": "NopStation.Plugin.Tax.TaxJar/"
+  }
+
+]

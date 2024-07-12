@@ -1,0 +1,98 @@
+@model WebAppDeviceModel
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <input type="hidden" asp-for="Id">
+
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="CustomerName" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">
+                                    @if (Model.CustomerId > 0)
+                                    {
+                                        <a asp-controller="Customer" asp-action="Edit" asp-route-id="@Model.CustomerId">@Model.CustomerName - @T("Admin.Common.View")</a>
+                                    }
+                                    else
+                                    {
+                                        <span>@Model.CustomerName</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="StoreName" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">
+                                    @if (Model.StoreId > 0)
+                                    {
+                                        <a asp-controller="Store" asp-action="Edit" asp-route-id="@Model.StoreId">@Model.StoreName - @T("Admin.Common.View")</a>
+                                    }
+                                    else
+                                    {
+                                        <span>@Model.StoreName</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="PushP256DH" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-div asp-for="PushP256DH" asp-check-access="true" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="PushEndpoint" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-div asp-for="PushEndpoint" asp-check-access="true" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="PushAuth" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-div asp-for="PushAuth" asp-check-access="true" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="VapidPublicKey" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-div asp-for="VapidPublicKey" asp-check-access="true" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="VapidPrivateKey" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-div asp-for="VapidPrivateKey" asp-check-access="true" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="CreatedOn" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-div asp-for="CreatedOn" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

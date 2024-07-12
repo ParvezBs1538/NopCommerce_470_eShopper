@@ -1,0 +1,225 @@
+﻿@using Nop.Web.Framework.Mvc.Routing;
+@model QuoteRequestDetailsModel
+@{
+    Layout = "_ColumnsOne";
+    //title
+    NopHtml.AddTitleParts(T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.RequestInformation").Text);
+    NopHtml.AppendPageCssClassParts("html-private-messages");
+    NopHtml.AppendPageCssClassParts("html-private-message-send-page");
+    NopHtml.AppendPageCssClassParts("html-quote-request-page");
+    var currentCustomer = await workContext.GetCurrentCustomerAsync();
+}
+
+@if (ViewData.ContainsKey("NewResponse"))
+{
+    <script asp-location="Footer">
+        $(function () {
+            displayBarNotification("Response sent successfully!", "success", 3500);
+        });
+    </script>
+}
+
+<div class="page order-details-page">
+    <div class="page-title">
+        <h1>@T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.RequestInformation")</h1>
+    </div>
+    <div class="page-body">
+        <div class="order-overview">
+            <div class="quote-title order-number">
+                <strong>@T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.RequestNumber"): @Model.Id</strong>
+            </div>
+            <ul class="order-details">
+                <li class="request-date">@T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.RequestDate"): @Model.CreatedOn.ToString("D")</li>
+                <li class="request-status">@T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.RequestStatus"): @Model.RequestStatus</li>
+                <li class="order-total">@T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.RequestTotal"): <strong>@Model.RequestTotals</strong></li>
+            </ul>
+        </div>
+        <div class="order-details-area">
+            <div class="request-details-area">
+                <div class="title">
+                    <strong>@T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.RequestDetails")</strong>
+                </div>
+                <ul class="info-list">
+                    <li>
+                        Type: @Model.RequestType
+                    </li>
+                    <li>
+                        Store: @Model.Store
+                    </li>
+
+                    @foreach (var formAttributeModel in Model.SubmittedFormAttributes)
+                    {
+                        @if (formAttributeModel != null)
+                        {
+                            var controlId = $"{QuoteCartDefaults.FormFieldPrefix}{formAttributeModel.FormAttributeId}";
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <strong>
+                                        <div class="label-wrapper">
+                                            <label class="col-form-label" for="@controlId">
+                                                @formAttributeModel.Name
+                                            </label>
+                                            <div title="" data-toggle="tooltip" class="ico-help" data-original-title="@T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.Fields.UserData.Hint", formAttributeModel.Description)"><i class="fas fa-question-circle"></i></div>
+                                        </div>
+                                    </strong>
+                                </div>
+                                <div class="col-md-9">
+                                    @switch (formAttributeModel.AttributeControlType)
+                                    {
+                                        case AttributeControlType.TextBox:
+                                        case AttributeControlType.MultilineTextbox:
+                                        case AttributeControlType.Datepicker:
+                                        case AttributeControlType.DropdownList:
+                                        case AttributeControlType.RadioList:
+                                        case AttributeControlType.Checkboxes:
+                                            <div class="form-control-static form-text-row">@string.Join(", ", formAttributeModel.Values)</div>
+                                            break;
+                                        case AttributeControlType.ColorSquares:
+                                            foreach (var color in formAttributeModel.Values)
+                                            {
+                                                <span class="color-square" style="background-color: @color;"></span>
+                                            }
+                                            break;
+                                        case AttributeControlType.ImageSquares:
+                                            foreach (var imageUrl in formAttributeModel.Values)
+                                            {
+                                                <img class="image-square" src="@imageUrl" alt="*" />
+                                            }
+                                            break;
+                                        case AttributeControlType.FileUpload:
+                                            <div class="form-control-static form-text-row">
+                                                @foreach (var value in formAttributeModel.Values)
+                                                {
+                                                    <a href="@(Url.Action("GetFileUpload", "Download", new { downloadId = value }))" class="download-quote-attachment">@T("Common.FileUploader.DownloadUploadedFile")</a>
+                                                }
+                                            </div>
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="section products">
+            <div class="title">
+                <strong>@T("NopStation.Plugin.Misc.QuoteCart.Cart.Product(s)")</strong>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <colgroup>
+                        <col width="1">
+                        <col>
+                        <col width="1">
+                        <col width="1">
+                        <col width="1">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="sku">@T("NopStation.Plugin.Misc.QuoteCart.Cart.SKU")</th>
+                            <th class="name">@T("NopStation.Plugin.Misc.QuoteCart.Cart.ProductName")</th>
+                            @if (Model.CustomProperties["DisplayPrice"] == "True")
+                            {
+                                <th class="price">@T("NopStation.Plugin.Misc.QuoteCart.Cart.UnitPrice")</th>
+                            }
+                            <th class="quantity">@T("NopStation.Plugin.Misc.QuoteCart.Cart.Quantity")</th>
+                            @if (Model.CustomProperties["DisplayPrice"] == "True")
+                            {
+                                <th class="total">@T("NopStation.Plugin.Misc.QuoteCart.Cart.ItemTotal")</th>
+                            }
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var requestItem in Model.QuoteRequestItems)
+                        {
+                            <tr>
+                                <td class="sku">
+                                    <label class="td-title">@T("NopStation.Plugin.Misc.QuoteCart.Cart.SKU"):</label> <span class="sku-number">@requestItem.ProductSku</span>
+                                </td>
+                                <td class="product">
+                                    <em><a href="@(Url.RouteUrl<Nop.Core.Domain.Catalog.Product>(new { SeName = requestItem.ProductSeName }))">@requestItem.ProductName</a></em>
+                                    @if (!string.IsNullOrEmpty(requestItem.RentalInfo))
+                                    {
+                                        <div class="rental-info">
+                                            @Html.Raw(requestItem.RentalInfo)
+                                        </div>
+                                    }
+                                </td>
+                                @if(Model.CustomProperties["DisplayPrice"] == "True")
+                                    {
+                                        <td class="unit-price">
+                                            <label class="td-title">@T("NopStation.Plugin.Misc.QuoteCart.Cart.UnitPrice"):</label> <span class="product-unit-price">@requestItem.ProductPrice</span>
+                                        </td>
+                                    }
+                                <td class="quantity">
+                                    <label class="td-title">@T("NopStation.Plugin.Misc.QuoteCart.Cart.Quantity"):</label> <span class="product-quantity">@requestItem.Quantity</span>
+                                </td>
+                                @if(Model.CustomProperties["DisplayPrice"] == "True")
+                                {
+                                    <td class="total">
+                                        <label class="td-title">@T("NopStation.Plugin.Misc.QuoteCart.Cart.ItemTotal"):</label> <span class="product-subtotal">@requestItem.ItemTotal</span>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @if (Model.CustomerId == currentCustomer?.Id)
+        {
+            <div class="quote-conversation">
+                <div class="quote-title">
+                    <strong>@T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.QuoteConversation")</strong>
+                </div>
+                @{
+                    var hasMessage = "messages";
+                    if (Model.RequestMessages.Count == 0)
+                    {
+                        hasMessage = "";
+                        <div class="conversation-start">
+                            <p>@T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.QuoteConversationStart")</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="@hasMessage">
+                            @foreach (var message in Model.RequestMessages)
+                            {
+                                var current = message.IsWriter ? "right" : "left";
+                                <div class="card card-@current">
+
+                                    <h5 class="card-title mb-2">@(message.IsWriter ? T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.MessageYou").Text : $"{message.CustomerName} ({message.CustomerEmail})")</h5>
+                                    <div class="card-body">
+                                        <div class="card-header mb-2">
+                                            @message.SentOn.ToString("f")
+                                        </div>
+                                        <p class="card-text">@Html.Raw(message.Content) </p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    <form method="post" asp-controller="QuoteRequest" asp-action="SendResponse" class="customer-response @(Model.QuoteRequestItems.Count > 5 ? "sticky " : "")">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="fieldset">
+                            <div class="form-fields">
+                                <div class="inputs message">
+                                    <nop-bb-code-editor asp-for="ResponseMessage" />
+                                    <textarea asp-for="ResponseMessage" required></textarea>
+                                    <span asp-validation-for="ResponseMessage"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="sendResponse message-send-button">@T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.SendResponse")</button>
+                    </form>
+                }
+            </div>
+        }
+    </div>
+</div>

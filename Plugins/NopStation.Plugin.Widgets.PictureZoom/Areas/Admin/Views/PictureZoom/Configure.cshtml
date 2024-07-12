@@ -1,0 +1,234 @@
+﻿@model ConfigurationModel
+@using Nop.Services
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("PictureZoom.Configuration");
+    ViewBag.PageTitle = T("Admin.NopStation.PictureZoom.Configuration").Text;
+}
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.Tint)").change(toggleTint);
+        $("#@Html.IdFor(model => model.ShowTitle)").change(toggleShowTitle);
+        $("#@Html.IdFor(model => model.EnablePictureZoom)").change(toggleEnablePictureZoom);
+
+        toggleTint();
+        toggleShowTitle();
+        toggleEnablePictureZoom();
+    });
+
+    function toggleTint() {
+        if ($('#@Html.IdFor(model => model.Tint)').is(':checked')) {
+            $('#pnlTint').show();
+        } else {
+            $('#pnlTint').hide();
+        }
+    }
+
+    function toggleShowTitle() {
+        if ($('#@Html.IdFor(model => model.ShowTitle)').is(':checked')) {
+            $('#pnlShowTitle').show();
+        } else {
+            $('#pnlShowTitle').hide();
+        }
+    }
+
+    function toggleEnablePictureZoom() {
+        if ($('#@Html.IdFor(model => model.EnablePictureZoom)').is(':checked')) {
+            $('#pnlEnablePictureZoom').show();
+        } else {
+            $('#pnlEnablePictureZoom').hide();
+        }
+    }
+</script>
+
+<form asp-controller="PictureZoom" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.PictureZoom.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnablePictureZoom_OverrideForStore" asp-input="EnablePictureZoom" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnablePictureZoom" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnablePictureZoom" />
+                                </div>
+                            </div>
+
+                            <div id="pnlEnablePictureZoom">
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="ZoomWidth_OverrideForStore" asp-input="ZoomWidth" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="ZoomWidth" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="ZoomWidth" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="ZoomHeight_OverrideForStore" asp-input="ZoomHeight" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="ZoomHeight" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="ZoomHeight" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="LtrPositionTypeId_OverrideForStore" asp-input="LtrPositionTypeId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="LtrPositionTypeId" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-select asp-for="LtrPositionTypeId" asp-items="@(await((PictureZoomPosition)Model.LtrPositionTypeId).ToSelectListAsync())" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="RtlPositionTypeId_OverrideForStore" asp-input="RtlPositionTypeId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="RtlPositionTypeId" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-select asp-for="RtlPositionTypeId" asp-items="@(await((PictureZoomPosition)Model.RtlPositionTypeId).ToSelectListAsync())" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="Tint_OverrideForStore" asp-input="Tint" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="Tint" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="Tint" />
+                                    </div>
+                                </div>
+
+                                <nop-nested-setting asp-for="Tint">
+                                    <div class="form-group row" id="pnlTint">
+                                        <div class="col-md-3">
+                                            <nop-override-store-checkbox asp-for="TintOpacity_OverrideForStore" asp-input="TintOpacity" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="TintOpacity" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="TintOpacity" />
+                                        </div>
+                                    </div>
+                                </nop-nested-setting>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="LensOpacity_OverrideForStore" asp-input="LensOpacity" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="LensOpacity" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="LensOpacity" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="SoftFocus_OverrideForStore" asp-input="SoftFocus" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="SoftFocus" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="SoftFocus" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="SmoothMove_OverrideForStore" asp-input="SmoothMove" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="SmoothMove" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="SmoothMove" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="ShowTitle_OverrideForStore" asp-input="ShowTitle" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="ShowTitle" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="ShowTitle" />
+                                    </div>
+                                </div>
+
+                                <nop-nested-setting asp-for="ShowTitle">
+                                    <div class="form-group row" id="pnlShowTitle">
+                                        <div class="col-md-3">
+                                            <nop-override-store-checkbox asp-for="TitleOpacity_OverrideForStore" asp-input="TitleOpacity" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="TitleOpacity" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="TitleOpacity" />
+                                        </div>
+                                    </div>
+                                </nop-nested-setting>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="AdjustX_OverrideForStore" asp-input="AdjustX" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="AdjustX" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="AdjustX" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="AdjustY_OverrideForStore" asp-input="AdjustY" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="AdjustY" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="AdjustY" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="ImageSize_OverrideForStore" asp-input="ImageSize" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="ImageSize" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="ImageSize" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="FullSizeImage_OverrideForStore" asp-input="FullSizeImage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="FullSizeImage" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="FullSizeImage" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

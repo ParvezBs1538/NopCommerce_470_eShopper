@@ -1,0 +1,28 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Nop.Web.Framework
+@addTagHelper *, NopStation.Plugin.Misc.Actions
+@inherits Nop.Web.Framework.Mvc.Razor.NopRazorPage<TModel>
+@inject INopHtmlHelper NopHtml
+@inject Nop.Core.IWorkContext workContext
+
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@using Microsoft.AspNetCore.Routing
+@using Nop.Core.Domain.Common
+@using Nop.Core.Infrastructure
+@using Nop.Services.Events
+@using Nop.Web.Components
+@using Nop.Web.Extensions
+@using Nop.Web.Framework.Events
+@using Nop.Web.Framework.Extensions
+@using Nop.Web.Framework.Infrastructure
+@using Nop.Web.Framework.Models.DataTables
+@using Nop.Web.Framework.UI
+@using Nop.Web.Models.Checkout
+@using Nop.Web.Models.Common
+@using Nop.Web.Models.ShoppingCart
+@using NopStation.Plugin.Misc.Opc
+@using NopStation.Plugin.Misc.Opc.Components
+@using NopStation.Plugin.Misc.Opc.Models
+@using System.Text.Encodings.Web
+@using Nop.Web.Models.Catalog

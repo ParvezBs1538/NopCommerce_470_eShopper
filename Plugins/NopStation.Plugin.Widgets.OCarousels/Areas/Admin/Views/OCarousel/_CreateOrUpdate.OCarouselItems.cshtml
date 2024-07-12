@@ -1,0 +1,87 @@
+@model OCarouselModel
+
+<div class="card-body">
+    @if (Model.Id > 0)
+    {
+        <div class="sub-panel">
+            @await Html.PartialAsync("Table", new DataTablesModel
+            {
+                Name = "carouselitems-grid",
+                UrlRead = new DataUrl("OCarouselItemList", "OCarousel", new RouteValueDictionary { [nameof(Model.OCarouselItemSearchModel.OCarouselId)] = Model.OCarouselItemSearchModel.OCarouselId }),
+                UrlUpdate = new DataUrl("OCarouselItemEdit", "OCarousel", new RouteValueDictionary { [nameof(Model.OCarouselItemSearchModel.OCarouselId)] = Model.OCarouselItemSearchModel.OCarouselId }),
+                UrlDelete = new DataUrl("OCarouselItemDelete", "OCarousel", new RouteValueDictionary { [nameof(Model.OCarouselItemSearchModel.OCarouselId)] = Model.OCarouselItemSearchModel.OCarouselId }),
+                BindColumnNameActionDelete = nameof(OCarouselItemModel.Id),
+                Length = Model.OCarouselItemSearchModel.PageSize,
+                LengthMenu = Model.OCarouselItemSearchModel.AvailablePageSizes,
+                ColumnCollection = new List<ColumnProperty>
+                {
+                    new ColumnProperty(nameof(OCarouselItemModel.PictureUrl))
+                    {
+                        Title = T("Admin.NopStation.OCarousels.OCarouselItems.Fields.Picture").Text,
+                        Width = "120",
+                        Render = new RenderPicture(),
+                        ClassName = NopColumnClassDefaults.CenterAll
+                    },
+                    new ColumnProperty(nameof(OCarouselItemModel.ProductName))
+                    {
+                        Title = T("Admin.NopStation.OCarousels.OCarouselItems.Fields.Product").Text,
+                        Width = "350",
+                    },
+                    new ColumnProperty(nameof(OCarouselItemModel.ProductId))
+                    {
+                        Title = T("Admin.Common.View").Text,
+                        Width = "150",
+                        ClassName =  NopColumnClassDefaults.Button,
+                        Render = new RenderButtonView(new DataUrl("~/Admin/Product/Edit/"))
+                    },
+                    new ColumnProperty(nameof(OCarouselItemModel.DisplayOrder))
+                    {
+                        Title = T("Admin.NopStation.OCarousels.OCarouselItems.Fields.DisplayOrder").Text,
+                        Width = "150",
+                        Editable = true,
+                        EditType = EditType.Number,
+                        ClassName = NopColumnClassDefaults.CenterAll
+                    },
+                    new ColumnProperty(nameof(OCarouselItemModel.Id))
+                    {
+                        Title = T("Admin.Common.Edit").Text,
+                        Width = "100",
+                        ClassName =  NopColumnClassDefaults.Button,
+                        Render = new RenderButtonsInlineEdit()
+                    },
+                    new ColumnProperty(nameof(OCarouselItemModel.Id))
+                    {
+                        Title = T("Admin.Common.Delete").Text,
+                        Width = "100",
+                        Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                        ClassName =  NopColumnClassDefaults.Button
+                    }
+                }
+            })
+        </div>
+        <div class="card-footer">
+            <button type="submit" id="btnAddNewProduct" onclick="javascript:OpenWindow('@(Url.Action("ProductAddPopup", "OCarousel", new { OCarouselId = Model.Id, btnId = "btnRefreshCarouselItems", formId = "ocarsouel-form" }))', 800, 800, true); return false;" class="btn btn-primary">
+                @T("Admin.NopStation.OCarousels.OCarouselItems.AddNew")
+            </button>
+            <input type="submit" id="btnRefreshCarouselItems" style="display: none" />
+            <script>
+                $(document).ready(function () {
+                    $('#btnRefreshCarouselItems').click(function () {
+                        //refresh grid
+                        updateTable('#carouselitems-grid');
+                        //return false to don't reload a page
+                        return false;
+                    });
+                });
+            </script>
+        </div>
+    }
+    else
+    {
+        <div class="card card-default">
+            <div class="card-body">
+                @T("Admin.NopStation.OCarousels.OCarouselItems.SaveBeforeEdit")
+            </div>
+        </div>
+    }
+</div>

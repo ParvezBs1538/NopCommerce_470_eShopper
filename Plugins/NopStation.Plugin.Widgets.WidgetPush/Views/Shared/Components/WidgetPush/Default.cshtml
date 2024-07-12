@@ -1,0 +1,9 @@
+﻿@model WidgetPushModel
+
+@if (Model.WidgetPushItems.Any())
+{
+    foreach (var item in Model.WidgetPushItems)
+    {
+        @Html.Raw(item.Content)
+    }
+}

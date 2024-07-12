@@ -1,0 +1,110 @@
+﻿@model DeliverySlotDetailsModel
+@inject ISettingService settingService
+
+<style>
+    .delivery-slot th {
+        border: 1px solid #ddd;
+        background-color: #f6f6f6;
+        padding: 10px;
+        white-space: nowrap;
+        font-weight: normal;
+    }
+
+    .delivery-slot td {
+        min-width: 50px;
+        border-width: 1px;
+        border-style: solid;
+        border-color: transparent #ddd #ddd;
+        background-color: #fff;
+        padding: 10px;
+        color: #444;
+    }
+
+    .delivery-slot tr {
+        text-align: center;
+    }
+
+    .delivery-slot .disabled-cell {
+        background-color: #eee;
+    }
+
+    .delivery-slot .date-cell {
+        background-color: #4ab2f1;
+        color: white;
+    }
+
+    .delivery-slot .disabled-cell input {
+        display: none;
+    }
+
+    .delivery-slot label {
+        display: block;
+    }
+
+    td.not-disabled {
+        position: relative;
+    }
+
+        td.not-disabled input[type="checkbox"], td.not-disabled input[type="radio"] {
+            position: absolute;
+            left: 41%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+</style>
+
+@if (Model.DeliveryCapacities.Any())
+{
+    var capc = Model.DeliveryCapacities.First().Value;
+    <table class="delivery-slot">
+        <tr>
+            <th class="date-cell"></th>
+            @foreach (var item in capc)
+            {
+                <th>@item.SlotName</th>
+            }
+        </tr>
+
+        @foreach (var item in Model.DeliveryCapacities)
+        {
+            <tr>
+                <td class="date-cell">@item.Key</td>
+                @foreach (var val in item.Value)
+                {
+                    var disabled = "";
+                    var cellClass = "";
+                    if (!Model.ShowRemainingCapacity)
+                        cellClass = "not-disabled";
+
+                    var controlId = $"slot-{val.SlotDate.Ticks}-{val.SlotId}";
+                    var label = T("NopStation.DeliveryScheduler.Slots.SlotsAvailable", val.Capacity).Text;
+                    var checkedItem = "";
+
+                    if (Model.SavedSlotId == val.SlotId && Model.SavedShippingMethodId == Model.ShippingMethodId && Model.SavedDeliveryDate == val.SlotDate)
+                    {
+                        checkedItem = "checked";
+                    }
+
+                    if (val.Capacity < 1)
+                    {
+                        disabled = "disabled";
+                        cellClass = "disabled-cell";
+                        label = T("NopStation.DeliveryScheduler.Slots.Booked").Text;
+                    }
+                    else if (val.Capacity == 1)
+                    {
+                        label = T("NopStation.DeliveryScheduler.Slots.SlotAvailable", val.Capacity).Text;
+                    }
+
+                    <td class="@cellClass">
+                        <input type="radio" id="@controlId" name="deliveryslot" @checkedItem value="@($"{val.SlotDate}___{val.SlotId}")" @disabled />
+                        @if (val.Capacity == 0 || Model.ShowRemainingCapacity)
+                        {
+                            <label for="@controlId">@label</label>
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+}

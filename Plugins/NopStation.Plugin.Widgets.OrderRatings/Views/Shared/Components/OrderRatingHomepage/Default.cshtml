@@ -1,0 +1,58 @@
+﻿@using Nop.Web.Framework.UI
+
+@{
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "/Plugins/NopStation.Plugin.Widgets.OrderRatings/Contents/js/jquery.fullscreen-popup.min.js");
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "/Plugins/NopStation.Plugin.Widgets.OrderRatings/Contents/js/jquery.magnific-popup.min.js");
+
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.OrderRatings/Contents/css/magnific-popup.css",string.Empty);
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.OrderRatings/Contents/css/styles.css",string.Empty);
+}
+
+<div style="display: none" id="order-ratings-modal">
+</div>
+<button type="button" style="display: none" id="order-ratings-button"></button>
+
+<script asp-location="Footer" asp-exclude-from-bundle="true">
+    displayAjaxLoading(true);
+    $.ajax({
+        type: 'POST',
+        url: '@Url.RouteUrl("LoadRateableOrders")',
+        success: function (response) {
+            if (response.Result) {
+                $("#order-ratings-modal").html(response.html);
+                $("#order-ratings-modal").show();
+                $("#order-ratings-button").magnificPopup({
+                    items: {
+                        src: '#order-ratings-modal',
+                        type: 'inline'
+                    },
+                    preloader: true
+                });
+                $("#order-ratings-button").click();
+            }
+        },
+        error: function (result) {
+            displayAjaxLoading(false);
+        },
+        complete: function () {
+            displayAjaxLoading(false);
+        }
+    });
+
+    $("#order-ratings-modal .mfp-close").on("click", function () {
+        $("#order-ratings-modal").hide();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.RouteUrl("SkipOrderRatings")',
+            data: $('#order-ratings-form').serialize(),
+            success: function (response) {
+            },
+            error: function (result) {
+                displayAjaxLoading(false);
+            },
+            complete: function () {
+                displayAjaxLoading(false);
+            }
+        });
+    });
+</script>

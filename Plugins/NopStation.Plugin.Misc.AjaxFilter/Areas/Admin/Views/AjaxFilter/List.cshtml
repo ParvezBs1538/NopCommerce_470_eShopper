@@ -1,0 +1,90 @@
+﻿@model AjaxFilterParentCategorySearchModel
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.Plugin.Misc.AjaxFilter.CategoryList").Text;
+    NopHtml.SetActiveMenuItemSystemName("AjaxFilter.CategoryList");
+}
+<form id="ajaxfilter-list-form">
+    <div class="card-body">
+        <div class="cards-group">
+            <div class="card card-search">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="SearchParentCategoryName" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="SearchParentCategoryName" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-7 offset-md-5">
+                            <button type="button" id="search-parentCategories" class="btn btn-primary btn-search">
+                                <i class="fa fa-search"></i>
+                                @T("Admin.Common.Search")
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-default">
+                <div class="card-body">
+                    @await Html.PartialAsync("Table", new DataTablesModel
+                    {
+                        Name = "parentCategories-grid",
+                        UrlRead = new DataUrl("GetSelectedParentCategories", "AjaxFilter", null),
+                        SearchButtonId = "search-parentCategories",
+                        Length = Model.PageSize,
+                        LengthMenu = Model.AvailablePageSizes,
+                        Filters = new List<FilterParameter>
+                        {
+                            new FilterParameter(nameof(Model.SearchParentCategoryName)),
+                        },
+                        ColumnCollection = new List<ColumnProperty>
+                        {
+                            new ColumnProperty(nameof(AjaxFilterParentCategoryModel.CategoryName))
+                            {
+                                Title = T("Admin.Catalog.Categories.Fields.Name").Text,
+                                Width = "300",
+                                Editable = true,
+                                EditType = EditType.String
+                            },
+                            new ColumnProperty(nameof(AjaxFilterParentCategoryModel.Id))
+                            {
+                                Title = T("Admin.Common.Edit").Text,
+                                Width = "100",
+                                ClassName =  NopColumnClassDefaults.Button,
+                                Render =  new RenderButtonEdit(new DataUrl("EditParentCategory")),
+                            }
+                        }
+                    })
+                    <div class="card-footer mt-2">
+                        <button type="button" id="addFromExistingResources" class="btn btn-primary">@T("Admin.Nopstation.Ajaxfilter.Resources.AddFromExistingCategories")</button>
+                    </div>
+                    <input type="submit" id="btnStringParentCategory" style="display: none" />
+                    <script>
+                        $(document).ready(function () {
+                            $('#addFromExistingResources').click(function () {
+
+                                javascript: OpenWindow('/Admin/AjaxFilter/ParentCategoryPopup?btnId=btnStringParentCategory&formId=ajaxfilter-list-form', 800, 800, true);
+                                return false;
+                            })
+
+                            $('#btnStringParentCategory').click(function () {
+                                //refresh grid
+                                updateTable('#parentCategories-grid');
+
+                                //return false to don't reload a page
+                                return false;
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

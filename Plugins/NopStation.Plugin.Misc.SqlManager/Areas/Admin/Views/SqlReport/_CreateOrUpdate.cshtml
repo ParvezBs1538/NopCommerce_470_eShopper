@@ -1,0 +1,171 @@
+@model SqlReportModel
+@using NopStation.Plugin.Misc.SqlManager
+
+@{
+    var parameters = "";
+    var jsParameters = "";
+    int i = 0;
+    foreach (var item in Model.AvailableParameters)
+    {
+        if (i != 0)
+        {
+            parameters += ", ";
+            jsParameters += ", ";
+        }
+        parameters += string.Format(SqlManagerDefaults.ParamerFormat, item);
+        jsParameters += "\"" + string.Format(SqlManagerDefaults.ParamerFormat, item) + "\"";
+        i++;
+    }
+}
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="Name" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="Name" asp-required="true" />
+                                <span asp-validation-for="Name"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="Description" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="Description" />
+                                <span asp-validation-for="Description"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="AvailableParameters" />
+                            </div>
+                            <div class="col-md-9">
+                                <input class="form-control" type="text" value="@parameters" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="Query" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-textarea asp-for="Query" asp-required="true"></nop-textarea>
+                                <span asp-validation-for="Query"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="SelectedCustomerRoleIds" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-select asp-for="SelectedCustomerRoleIds" asp-items="Model.AvailableCustomerRoles" asp-multiple="true" />
+                                <script>
+						            $(document).ready(function() {
+							            var rolesIdsInput = $('#@Html.IdFor(model => model.SelectedCustomerRoleIds)')
+								            .data("kendoMultiSelect");
+							            rolesIdsInput.setOptions({
+								            autoClose: false,
+								            filter: "contains"
+							            });
+
+							            @if (Model.AvailableCustomerRoles.Count == 0)
+				                        {
+					                        <text>
+						                        rolesIdsInput.setOptions({
+							                        enable: false,
+							                        placeholder: 'No customer roles available'
+						                        });
+						                        rolesIdsInput._placeholder();
+						                        rolesIdsInput._enable();
+					                        </text>
+				                        }
+						            });
+                                </script>
+                            </div>
+                        </div>
+
+                        @if (Model.Id > 0)
+                        {
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="CreatedOn" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Model.CreatedOn</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="UpdatedOn" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Model.UpdatedOn</div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    $(function() {
+        function split(val) {
+            return val.split(' ');
+        }
+        function extractLast(term) {
+            var ss = split(term).pop();
+            return ss;
+        }
+
+        var availableParams = [@Html.Raw(jsParameters)];
+        $( "#@Html.IdFor(x => x.Query)" )
+            // don't navigate away from the field on tab when selecting an item
+            .on( "keydown", function( event ) {
+                if ( event.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active ) {
+                    event.preventDefault();
+                }
+            })
+            .autocomplete({
+                source: function (request, response) {
+                    // delegate back to autocomplete, but extract the last term
+                    response($.ui.autocomplete.filter(
+                        availableParams, extractLast(request.term)));
+                },
+                search: function () {
+                    // custom minLength
+                    var term = extractLast(this.value);
+                    if (term.length < 1 || !term.startsWith("@@")) {
+                        return false;
+                    }
+                },
+                focus: function () {
+                    // prevent value inserted on focus
+                    return false;
+                },
+                select: function (event, ui) {
+                    var terms = split(this.value);
+                    // remove the current input
+                    terms.pop();
+                    // add the selected item
+                    terms.push(ui.item.value);
+                    // add placeholder to get the comma-and-space at the end
+                    terms.push("");
+                    this.value = terms.join(" ");
+                    return false;
+                }
+        });
+    });
+</script>

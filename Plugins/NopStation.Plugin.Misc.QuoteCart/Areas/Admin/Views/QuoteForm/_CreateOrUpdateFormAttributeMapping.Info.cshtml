@@ -1,0 +1,243 @@
+﻿@model FormAttributeMappingModel
+@using Nop.Services
+
+<script>
+    $(function() {
+        $("#@Html.IdFor(model => model.AttributeControlTypeId)").change(toggleAttributeControlType);
+
+        toggleAttributeControlType();
+    });
+
+    function toggleAttributeControlType() {
+        var selectedAttributeControlTypeId = $("#@Html.IdFor(model => model.AttributeControlTypeId)").val();
+        //validation
+        if (selectedAttributeControlTypeId == @(((int) AttributeControlType.TextBox).ToString())) {
+            $('#pnlValidationMinLength').showElement();
+            $('#pnlValidationMaxLength').showElement();
+            $('#pnlValidationMinDate').hideElement();
+            $('#pnlValidationMaxDate').hideElement();
+            $('#pnlDefaultDate').hideElement();
+            $('#pnlValidationFileMaximumSize').hideElement();
+            $('#pnlValidationFileAllowedExtensions').hideElement();
+            $('#pnlDefaultValueLocalized').showElement();
+            $('#pnlDefaultValue').showElement();
+        } else if (selectedAttributeControlTypeId == @(((int) AttributeControlType.Datepicker).ToString())) {
+            $('#pnlValidationMinLength').hideElement();
+            $('#pnlValidationMaxLength').hideElement();
+            $('#pnlValidationMinDate').showElement();
+            $('#pnlValidationMaxDate').showElement();
+            $('#pnlDefaultDate').showElement();
+            $('#pnlValidationFileMaximumSize').hideElement();
+            $('#pnlValidationFileAllowedExtensions').hideElement();
+            $('#pnlDefaultValueLocalized').hideElement();
+            $('#pnlDefaultValue').hideElement();
+        } else if (selectedAttributeControlTypeId == @(((int) AttributeControlType.MultilineTextbox).ToString())) {
+            $('#pnlValidationMinLength').showElement();
+            $('#pnlValidationMaxLength').showElement();
+            $('#pnlValidationMinDate').hideElement();
+            $('#pnlValidationMaxDate').hideElement();
+            $('#pnlDefaultDate').hideElement();
+            $('#pnlValidationFileMaximumSize').hideElement();
+            $('#pnlValidationFileAllowedExtensions').hideElement();
+            $('#pnlDefaultValueLocalized').showElement();
+            $('#pnlDefaultValue').showElement();
+        } else if (selectedAttributeControlTypeId == @(((int) AttributeControlType.FileUpload).ToString())) {
+            $('#pnlValidationMinLength').hideElement();
+            $('#pnlValidationMaxLength').hideElement();
+            $('#pnlValidationMinDate').hideElement();
+            $('#pnlValidationMaxDate').hideElement();
+            $('#pnlDefaultDate').hideElement();
+            $('#pnlValidationFileMaximumSize').showElement();
+            $('#pnlValidationFileAllowedExtensions').showElement();
+            $('#pnlDefaultValueLocalized').hideElement();
+            $('#pnlDefaultValue').hideElement();
+            $("#@Html.IdFor(model => model.DefaultValue)").val('');
+            @for (var item = 0; item < Model.Locales.Count; item++)
+            {
+                <text>$("#@Html.IdFor(model => model.Locales[item].DefaultValue)").val('');</text>
+            }
+        } else {
+            $('#pnlValidationMinLength').hideElement();
+            $('#pnlValidationMaxLength').hideElement();
+            $('#pnlValidationMinDate').hideElement();
+            $('#pnlValidationMaxDate').hideElement();
+            $('#pnlDefaultDate').hideElement();
+            $('#pnlValidationFileMaximumSize').hideElement();
+            $('#pnlValidationFileAllowedExtensions').hideElement();
+            $('#pnlDefaultValueLocalized').hideElement();
+            $('#pnlDefaultValue').hideElement();
+            $("#@Html.IdFor(model => model.DefaultValue)").val('');
+            @for (var item = 0; item < Model.Locales.Count; item++)
+            {
+                <text>$("#@Html.IdFor(model => model.Locales[item].DefaultValue)").val('');</text>
+            }
+        }
+
+        //values
+        if (selectedAttributeControlTypeId == @(((int) AttributeControlType.DropdownList).ToString()) ||
+            selectedAttributeControlTypeId == @(((int) AttributeControlType.RadioList).ToString()) ||
+            selectedAttributeControlTypeId == @(((int) AttributeControlType.Checkboxes).ToString()) ||
+            selectedAttributeControlTypeId == @(((int) AttributeControlType.ColorSquares).ToString()) ||
+            selectedAttributeControlTypeId == @(((int) AttributeControlType.ImageSquares).ToString()) ||
+            selectedAttributeControlTypeId == @(((int) AttributeControlType.ReadonlyCheckboxes).ToString())) {
+            $('[data-card-name=form-attribute-mapping-values]').showElement();
+        } else {
+            $('[data-card-name=form-attribute-mapping-values]').hideElement();
+        }
+    }
+</script>
+<input asp-for="FormId" type="hidden" />
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="FormAttributeId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="FormAttributeId" asp-items="Model.AvailableFormAttributes" />
+            <span asp-validation-for="FormAttributeId"></span>
+        </div>
+    </div>
+    @(await Html.LocalizedEditorAsync<FormAttributeMappingModel, FormAttributeMappingLocalizedModel>("formattribute-localized",
+    @<div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="@Model.Locales[item].TextPrompt" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="@Model.Locales[item].TextPrompt" />
+                <span asp-validation-for="@Model.Locales[item].TextPrompt"></span>
+            </div>
+        </div>
+        <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+    </div>
+,
+    @<div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="TextPrompt" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="TextPrompt" />
+                <span asp-validation-for="TextPrompt"></span>
+            </div>
+        </div>
+    </div>
+))
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="IsRequired" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="IsRequired" />
+            <span asp-validation-for="IsRequired"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="AttributeControlTypeId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="AttributeControlTypeId" asp-items="@await (AttributeControlType.TextBox).ToSelectListAsync()" />
+            <span asp-validation-for="AttributeControlTypeId"></span>
+        </div>
+    </div>
+    @(await Html.LocalizedEditorAsync<FormAttributeMappingModel, FormAttributeMappingLocalizedModel>("pnlDefaultValueLocalized",
+    @<div>
+        <div class="form-group row advanced-setting">
+            <div class="col-md-3">
+                <nop-label asp-for="@Model.Locales[item].DefaultValue"/>
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="@Model.Locales[item].DefaultValue"/>
+                <span asp-validation-for="@Model.Locales[item].DefaultValue"></span>
+            </div>
+        </div>
+        <input type="hidden" asp-for="@Model.Locales[item].LanguageId" /> 
+    </div>
+,
+    @<div>
+        <div class="form-group row advanced-setting" id="pnlDefaultValue">
+            <div class="col-md-3">
+                <nop-label asp-for="DefaultValue"/>
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="DefaultValue"/>
+                <span asp-validation-for="DefaultValue"></span>
+            </div>
+        </div>
+     </div>
+))
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DisplayOrder" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DisplayOrder" />
+            <span asp-validation-for="DisplayOrder"></span>
+        </div>
+    </div>
+    <div class="form-group row" id="pnlValidationMinLength">
+        <div class="col-md-3">
+            <nop-label asp-for="ValidationMinLength" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ValidationMinLength" />
+            <span asp-validation-for="ValidationMinLength"></span>
+        </div>
+    </div>
+    <div class="form-group row" id="pnlValidationMaxLength">
+        <div class="col-md-3">
+            <nop-label asp-for="ValidationMaxLength" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ValidationMaxLength" />
+            <span asp-validation-for="ValidationMaxLength"></span>
+        </div>
+    </div>
+    <div class="form-group row" id="pnlDefaultDate">
+        <div class="col-md-3">
+            <nop-label asp-for="DefaultDate" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DefaultDate" />
+            <span asp-validation-for="DefaultDate"></span>
+        </div>
+    </div>
+    <div class="form-group row" id="pnlValidationMinDate">
+        <div class="col-md-3">
+            <nop-label asp-for="ValidationMinDate" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ValidationMinDate" />
+            <span asp-validation-for="ValidationMinDate"></span>
+        </div>
+    </div>
+    <div class="form-group row" id="pnlValidationMaxDate">
+        <div class="col-md-3">
+            <nop-label asp-for="ValidationMaxDate" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ValidationMaxDate" />
+            <span asp-validation-for="ValidationMaxDate"></span>
+        </div>
+    </div>
+    <div class="form-group row" id="pnlValidationFileAllowedExtensions">
+        <div class="col-md-3">
+            <nop-label asp-for="ValidationFileAllowedExtensions" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ValidationFileAllowedExtensions" />
+            <span asp-validation-for="ValidationFileAllowedExtensions"></span>
+        </div>
+    </div>
+    <div class="form-group row" id="pnlValidationFileMaximumSize">
+        <div class="col-md-3">
+            <nop-label asp-for="ValidationFileMaximumSize" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ValidationFileMaximumSize" />
+            <span asp-validation-for="ValidationFileMaximumSize"></span>
+        </div>
+    </div>
+</div>

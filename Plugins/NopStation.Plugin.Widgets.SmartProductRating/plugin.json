@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Smart Product Rating",
+  "SystemName": "NopStation.Plugin.Widgets.SmartProductRating",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Jaber Kibria",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.SmartProductRating.dll",
+  "Description": "This plugin allows you to show product rating scorecard (review).",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

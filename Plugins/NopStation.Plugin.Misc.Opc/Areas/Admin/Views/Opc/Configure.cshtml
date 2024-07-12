@@ -1,0 +1,54 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("Opc.Configuration");
+
+    ViewBag.PageTitle = T("Admin.NopStation.Opc.Configuration").Text;
+
+    var customer = await workContext.GetCurrentCustomerAsync();
+    const string hideGeneralBlockAttributeName = "OpcConfigurationPage.HideGeneralBlock";
+    var hideGeneralBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideGeneralBlockAttributeName, defaultValue: true);
+    
+    const string hideBillingAddressBlockAttributeName = "OpcConfigurationPage.HideBillingAddressBlock";
+    var hideBillingAddressBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideBillingAddressBlockAttributeName, defaultValue: true);
+
+    const string hideShippingAddressBlockAttributeName = "OpcConfigurationPage.HideShippingAddressBlock";
+    var hideShippingAddressBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideShippingAddressBlockAttributeName, defaultValue: true);
+    
+    const string hideShippingMethodBlockAttributeName = "OpcConfigurationPage.HideShippingMethodBlock";
+    var hideShippingMethodBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideShippingMethodBlockAttributeName, defaultValue: true);
+    
+    const string hidePaymentMethodBlockAttributeName = "OpcConfigurationPage.HidePaymentMethodBlock";
+    var hidePaymentMethodBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hidePaymentMethodBlockAttributeName, defaultValue: true);
+}
+
+<form asp-controller="Opc" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Opc.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <nop-cards id="opc-panels">
+                    <nop-card asp-name="opc-info" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.Opc.Configuration.TabTitle.General")" asp-hide-block-attribute-name="@hideGeneralBlockAttributeName" asp-hide="@hideGeneralBlock" asp-advanced="true">@await Html.PartialAsync("_Configure.General", Model)</nop-card>
+                    <nop-card asp-name="opc-billing-address" asp-icon="fas fa-address-card" asp-title="@T("Admin.NopStation.Opc.Configuration.TabTitle.BillingAddress")" asp-hide-block-attribute-name="@hideBillingAddressBlockAttributeName" asp-hide="@hideBillingAddressBlock" asp-advanced="true">@await Html.PartialAsync("_Configure.BillingAddress", Model)</nop-card>
+                    <nop-card asp-name="opc-shipping-address" asp-icon="fas fa-address-card" asp-title="@T("Admin.NopStation.Opc.Configuration.TabTitle.ShippingAddress")" asp-hide-block-attribute-name="@hideShippingAddressBlockAttributeName" asp-hide="@hideShippingAddressBlock" asp-advanced="true">@await Html.PartialAsync("_Configure.ShippingAddress", Model)</nop-card>
+                    <nop-card asp-name="opc-shipping-method" asp-icon="fas fa-shipping-fast" asp-title="@T("Admin.NopStation.Opc.Configuration.TabTitle.ShippingMethod")" asp-hide-block-attribute-name="@hideShippingMethodBlockAttributeName" asp-hide="@hideShippingMethodBlock" asp-advanced="true">@await Html.PartialAsync("_Configure.ShippingMethod", Model)</nop-card>
+                    <nop-card asp-name="opc-payment-method" asp-icon="fas fa-credit-card" asp-title="@T("Admin.NopStation.Opc.Configuration.TabTitle.PaymentMethod")" asp-hide-block-attribute-name="@hidePaymentMethodBlockAttributeName" asp-hide="@hidePaymentMethodBlock" asp-advanced="true">@await Html.PartialAsync("_Configure.PaymentMethod", Model)</nop-card>
+                </nop-cards>
+            </div>
+        </div>
+    </section>
+</form>

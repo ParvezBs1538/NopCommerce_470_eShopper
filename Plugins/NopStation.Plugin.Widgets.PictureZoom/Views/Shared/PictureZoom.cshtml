@@ -1,0 +1,62 @@
+﻿@model ProductDetailsModel
+@using NopStation.Plugin.Misc.Core.Helpers
+
+@{
+    var settings = NopInstance.Load<PictureZoomSettings>();
+    var position = ((PictureZoomPosition)((await workContext.GetWorkingLanguageAsync()).Rtl ? settings.RtlPositionTypeId : settings.LtrPositionTypeId)).ToString().ToLower();
+
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "/Plugins/NopStation.Plugin.Widgets.PictureZoom/Contents/js/jquery.imagesloaded.js");
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "/Plugins/NopStation.Plugin.Widgets.PictureZoom/Contents/js/cloud-zoom.1.0.2.js");
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.PictureZoom/Contents/css/cloud-zoom.css",string.Empty);
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.PictureZoom/Contents/css/styles.css",string.Empty);
+}
+
+<div data-popup="#dialogForImgPopUp" style="float:left">
+    <link rel="image_src" href="@Model.DefaultPictureModel.FullSizeImageUrl" />
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ProductDetailsBeforePictures, additionalData = Model })
+    <a href="@Model.DefaultPictureModel.FullSizeImageUrl" class="cloud-zoom">
+        <img alt="@Model.DefaultPictureModel.AlternateText" src="@Model.DefaultPictureModel.ImageUrl" title="@Model.DefaultPictureModel.Title" style="height:auto; width:100%; border-width: 0px;" class="cloud-zoom-image cloud-zoom-image-size" width="400" id="main-product-img-lightbox-anchor-@Model.Id" />
+    </a>
+
+    @if (Model.PictureModels.Count > 1)
+    {
+        <div class="cloud-zoom-thumb-container">
+            @foreach (var picture in Model.PictureModels)
+            {
+                <div class="cloud-zoom-thumb">
+                    <a href="@picture.FullSizeImageUrl" rel="lightbox-p" class="src-zoom-anchor" onclick="return false;" data-halfimgurl="@picture.FullSizeImageUrl">
+                        <img src="@picture.ImageUrl" alt="@picture.AlternateText" title="@picture.Title" class="src-zoom-image" style="height:100px; width:100px" />
+                    </a>
+                </div>
+            }
+        </div>
+    }
+    <div class="imgForMobile" id="dialogForImgPopUp">
+        <img alt="" src="" />
+    </div>
+</div>
+
+<script type="text/javascript" asp-location="Footer">
+    $(document).ready(function () {
+        $('.src-zoom-anchor').on({
+            'click': function () {
+                var aSrc = $(this).attr('href');
+                var imgSrc = $(this).attr('data-halfimgurl');
+                $('.cloud-zoom-image').attr('src', imgSrc);
+                $('.cloud-zoom').attr('href', aSrc);
+                $("a.cloud-zoom").data('zoom').destroy();
+                initZoom();
+            }
+        });
+        initZoom();
+    });
+
+    $(window).resize(function () {
+        initZoom();
+    });
+</script>
+
+@if (Model.CustomProperties.TryGetValue("AjaxLoad", out string ajaxLoad) && bool.Parse(ajaxLoad))
+{
+    @NopHtml.GenerateInlineScripts(ResourceLocation.Footer)
+}

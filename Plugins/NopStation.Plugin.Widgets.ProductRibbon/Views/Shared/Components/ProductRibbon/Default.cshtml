@@ -1,0 +1,22 @@
+﻿@model ProductRibbonModel
+
+<div class="offer-content">
+    @if (Model.IsNew)
+    {
+        <div class="new-product-label">
+            @T("NopStation.ProductRibbon.RibbonText.New")
+        </div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.Discount))
+    {
+        <div class="discount-info-label">@Model.Discount</div>
+    }
+
+    @if (Model.IsBestSeller)
+    {
+        <div class="bestseller-label">
+            @T("NopStation.ProductRibbon.RibbonText.BestSeller")
+        </div>
+    }
+</div>

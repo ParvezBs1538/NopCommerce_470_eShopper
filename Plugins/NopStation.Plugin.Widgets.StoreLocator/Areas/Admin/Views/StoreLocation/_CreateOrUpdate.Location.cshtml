@@ -1,0 +1,213 @@
+﻿@using NopStation.Plugin.Widgets.StoreLocator;
+
+@model StoreLocationModel
+@inject StoreLocatorSettings storlocatorSettings
+
+@{
+    var url = "https://maps.googleapis.com/maps/api/js?key=" + storlocatorSettings.GoogleMapApiKey + "&libraries=places&callback=initMap";
+}
+
+<style>
+    div#map {
+        width: 100%;
+        height: 300px;
+        float: left;
+    }
+
+    .gmap_storeMap {
+        padding-top: 10px;
+    }
+</style>
+
+<script src=@url async defer></script>
+
+<script>
+    function initMap() {
+        var latitude = "@Model.Latitude";
+        var longitude = "@Model.Longitude";
+        var marker = "";
+        if (latitude == "" && longitude == "") {
+            latitude = 23.7812697;
+            longitude = 90.40000379999992;
+            Name = "Default Position";
+        }
+
+        var pos = new google.maps.LatLng(latitude, longitude);
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: pos,
+            zoom: 12
+        });
+
+        function addMarker(pos) {
+            marker = new google.maps.Marker({
+                position: pos,
+                map: map,
+                draggable: true
+            });
+        }
+        function dragMarker() {
+            google.maps.event.addListener(marker, 'dragend', function (evt) {
+                var lat = evt.latLng.lat();
+                var lng = evt.latLng.lng();
+                $('#@Html.IdFor(x=> x.Latitude)').val(lat);
+                $('#@Html.IdFor(x=> x.Longitude)').val(lng);
+
+            });
+        };
+        //Load map on tab select
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+
+            google.maps.event.trigger(map, 'resize');
+            var presentLatitude = $('#@Html.IdFor(x=> x.Latitude)').val();
+            var presentLongitude = $('#@Html.IdFor(x=> x.Longitude)').val();
+            if (presentLatitude != "" && presentLongitude != "") {
+                var pos = new google.maps.LatLng(presentLatitude, presentLongitude);
+                map.setCenter(pos);
+                addMarker(pos);
+                dragMarker();
+            }
+            $('#@Html.IdFor(x=> x.Latitude)').click(function () {
+
+                $("#@Html.IdFor(x=> x.Latitude)").keyup(function () {
+                    if ($('#@Html.IdFor(x=> x.Latitude)').val() != "" && $('#@Html.IdFor(x=> x.Longitude)').val() != "") {
+                        var newPos = new google.maps.LatLng($('#@Html.IdFor(x=> x.Latitude)').val(), $('#@Html.IdFor(x=> x.Longitude)').val());
+                        map = new google.maps.Map(document.getElementById('map'), {
+                            center: newPos,
+                            zoom: 12
+                        });
+
+                        addMarker(newPos);
+                        dragMarker();
+
+                    }
+                });
+                var inputLatitude = document.getElementById('@Html.IdFor(x=> x.Latitude)');
+                //Prevent Enter key press form submission
+                google.maps.event.addDomListener(inputLatitude, 'keydown', function (event) {
+                    if (event.keyCode === 13) {
+                        event.preventDefault();
+                    }
+                });
+            });
+            $('#@Html.IdFor(x=> x.Longitude)').click(function () {
+
+                $("#@Html.IdFor(x=> x.Longitude)").keyup(function () {
+                    if ($('#@Html.IdFor(x=> x.Latitude)').val() != "" && $('#@Html.IdFor(x=> x.Longitude)').val() != "") {
+                        var newPos = new google.maps.LatLng($('#@Html.IdFor(x=> x.Latitude)').val(), $('#@Html.IdFor(x=> x.Longitude)').val());
+                        map = new google.maps.Map(document.getElementById('map'), {
+                            center: newPos,
+                            zoom: 12
+                        });
+                        addMarker(newPos);
+                        dragMarker();
+
+                    }
+                });
+                var inputLatitude = document.getElementById('@Html.IdFor(x=> x.Longitude)');
+                //Prevent Enter key press form submission
+                google.maps.event.addDomListener(inputLatitude, 'keydown', function (event) {
+                    if (event.keyCode === 13) {
+                        event.preventDefault();
+                    }
+                });
+            });
+        });
+
+        var input = document.getElementById('@Html.IdFor(x=> x.FullAddress)');
+        //Prevent Enter key press form submission
+        google.maps.event.addDomListener(input, 'keydown', function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+            }
+        });
+
+        var autocomplete = new google.maps.places.Autocomplete(input);
+
+        // Bind the map's bounds (viewport) property to the autocomplete object,
+        // so that the autocomplete requests use the current map bounds for the
+        // bounds option in the request.
+        autocomplete.bindTo('bounds', map);
+
+        var infowindow = new google.maps.InfoWindow();
+        var infowindowContent = document.getElementById('infowindow-content');
+        infowindow.setContent(infowindowContent);
+
+        autocomplete.addListener('place_changed', function () {
+            infowindow.close();
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                // User entered the name of a Place that was not suggested and
+                // pressed the Enter key, or the Place Details request failed.
+                window.alert("No details available for input: '" + place.name + "'");
+                return;
+            }
+
+            var place = autocomplete.getPlace();
+            $('#@Html.IdFor(x=> x.Latitude)').val(place.geometry.location.lat());
+            $('#@Html.IdFor(x=> x.Longitude)').val(place.geometry.location.lng());
+            $('#@Html.IdFor(x=> x.GoogleMapLocation)').val(place.url);
+
+            // Get each component of the address from the place details
+            // and fill the corresponding field on the form.
+            var newPos = new google.maps.LatLng($('#@Html.IdFor(x=> x.Latitude)').val(), $('#@Html.IdFor(x=> x.Longitude)').val());
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: newPos,
+                zoom: 12
+            });
+            addMarker(newPos);
+            dragMarker();
+        });
+        $("#@Html.IdFor(x=> x.FullAddress)").bind("keyup change paste input click", function () {
+            var location = document.getElementById("@Html.IdFor(x=> x.FullAddress)");
+        });
+    }
+</script>
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-12">
+            <div class="col-md-12" id="map">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="FullAddress" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="FullAddress" />
+            <span asp-validation-for="FullAddress"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="GoogleMapLocation" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="GoogleMapLocation" />
+            <span asp-validation-for="GoogleMapLocation"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Latitude" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Latitude" />
+            <span asp-validation-for="Latitude"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Longitude" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Longitude" />
+            <span asp-validation-for="Longitude"></span>
+        </div>
+    </div>
+</div>
+

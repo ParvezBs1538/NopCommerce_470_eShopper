@@ -1,0 +1,49 @@
+﻿@model NopStation.Plugin.Payments.CopyAndPay.Models.CopyAndPayModel
+
+@{
+    Layout = "_ColumnsOne";
+
+    //title
+    NopHtml.AddTitleParts(T("NopStation.CopyAndPay.Checkout.PaymentTitle").Text);
+    //page class
+    NopHtml.AppendPageCssClassParts("html-checkout-page");
+    NopHtml.AppendPageCssClassParts("html-order-completed-page");
+}
+
+<script asp-location="Footer" src="@Model.RequestUrl/v1/paymentWidgets.js?checkoutId=@Model.FormId"></script>
+
+<form action="@Model.ValidateUrl" class="paymentWidgets" data-brands=@Model.DataBrands></form>
+
+<script asp-location="Footer">
+    var wpwlOptions = {
+        style: "card",
+        paymentTarget: "_top",
+        onReady: function (e) {
+            $('.wpwl-form-card').find('.wpwl-button-pay').on('click', function (e) {
+                validateHolder(e);
+            });
+        },
+        onChangeBrand: function (e) {
+            if (e != '@Model.SelectedBrand') {
+                var href = '@Model.PaymentUrl' + '?selectedBrand=' + e;
+                window.location.href = href;
+            }
+        },
+        onBeforeSubmitCard: function (e) {
+            return validateHolder(e);
+        }
+    }
+    function validateHolder(e) {
+        var holder = $('.wpwl-control-cardHolder').val();
+        if (holder.trim().length < 2) {
+            $('.wpwl-control-cardHolder').addClass('wpwl-has-error').after('<div class="wpwl-hint wpwl-hint-cardHolderError">Invalid card holder</div>');
+            return false;
+        }
+        return true;
+    }
+</script>
+
+@if (orderSettings.OnePageCheckoutEnabled)
+{
+    @NopHtml.GenerateInlineScripts(ResourceLocation.Footer)
+}

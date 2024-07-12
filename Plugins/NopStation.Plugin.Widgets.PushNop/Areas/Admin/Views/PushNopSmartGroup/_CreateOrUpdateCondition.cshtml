@@ -1,0 +1,135 @@
+@model SmartGroupConditionModel
+
+    <script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.ConditionColumnTypeId)").click(toggleConditionTypes);
+
+        toggleConditionTypes();
+    });
+
+    function toggleConditionTypes() {
+        var conditionColumnType = $('#@Html.IdFor(model => model.ConditionColumnTypeId)').val();
+
+        if (conditionColumnType == @((int)ConditionColumnType.NeverOrdered)) {
+            $('#pnlConditionTypeId').hide();
+            $('#pnlValues').hide();
+        } else if (conditionColumnType == @((int)ConditionColumnType.OrderedAfterDateUtc) ||
+            conditionColumnType == @((int)ConditionColumnType.OrderedBeforeDateUtc)) {
+            $('#pnlConditionTypeId').hide();
+            $('#pnlValues').show();
+            $('#divValueInt').hide();
+            $('#divValueDateTime').show();
+            $('#divValueString').hide();
+        } else if (conditionColumnType == @((int)ConditionColumnType.SubscribedOnUtc) ||
+            conditionColumnType == @((int)ConditionColumnType.CustomerLastLoginDateUtc) ||
+            conditionColumnType == @((int)ConditionColumnType.CustomerLastActivityDateUtc) ||
+            conditionColumnType == @((int)ConditionColumnType.CustomerRegisteredOnUtc)) {
+            $('#pnlConditionTypeId').show();
+            $('#pnlValues').show();
+            $('#divValueInt').hide();
+            $('#divValueDateTime').show();
+            $('#divValueString').hide();
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.Contains)"]').prop('disabled', true);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.StartsWith)"]').prop('disabled', true);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.EndsWith)"]').prop('disabled', true);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.DoesNotContain)"]').prop('disabled', true);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.GreaterThan)"]').prop('disabled', false);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.GreaterThanOrEqual)"]').prop('disabled', false);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.IsEqualTo)"]').prop('disabled', false);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.LessThan)"]').prop('disabled', false);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.LessThanOrEqual)"]').prop('disabled', false);
+        } else if (conditionColumnType == @((int)ConditionColumnType.TotalNumberOfProductsOrdered) ||
+            conditionColumnType == @((int)ConditionColumnType.TotalSpentAmountOnOrder) ||
+            conditionColumnType == @((int)ConditionColumnType.PurchasedFromCategoryId) ||
+            conditionColumnType == @((int)ConditionColumnType.PurchasedFromVendorId) ||
+            conditionColumnType == @((int)ConditionColumnType.PurchasedFromManufacturerId) ||
+            conditionColumnType == @((int)ConditionColumnType.PurchasedWithDiscountId)) {
+            $('#pnlConditionTypeId').show();
+            $('#pnlValues').show();
+            $('#divValueInt').show();
+            $('#divValueDateTime').hide();
+            $('#divValueString').hide();
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.Contains)"]').prop('disabled', true);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.StartsWith)"]').prop('disabled', true);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.EndsWith)"]').prop('disabled', true);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.DoesNotContain)"]').prop('disabled', true);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.GreaterThan)"]').prop('disabled', false);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.GreaterThanOrEqual)"]').prop('disabled', false);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.IsEqualTo)"]').prop('disabled', false);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.LessThan)"]').prop('disabled', false);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.LessThanOrEqual)"]').prop('disabled', false);
+        } else if (conditionColumnType == @((int)ConditionColumnType.CustomerEmail)) {
+            $('#pnlConditionTypeId').show();
+            $('#pnlValues').show();
+            $('#divValueInt').hide();
+            $('#divValueDateTime').hide();
+            $('#divValueString').show();
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.Contains)"]').prop('disabled', false);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.StartsWith)"]').prop('disabled', false);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.EndsWith)"]').prop('disabled', false);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.DoesNotContain)"]').prop('disabled', false);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.GreaterThan)"]').prop('disabled', true);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.GreaterThanOrEqual)"]').prop('disabled', true);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.IsEqualTo)"]').prop('disabled', false);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.LessThan)"]').prop('disabled', true);
+            $('#@(Html.IdFor(model => model.ConditionTypeId)) option[Value="@((int)ConditionType.LessThanOrEqual)"]').prop('disabled', true);
+        }
+    }
+    </script>
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+<input asp-for="SmartGroupId" type="hidden" />
+
+<div class="form-horizontal">
+    <div class="card-body">
+        <div class="card card-default">
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="LogicTypeId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-select asp-for="LogicTypeId" asp-items="@Model.AvailableLogicTypes" />
+                        <span asp-validation-for="LogicTypeId"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="ConditionColumnTypeId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-select asp-for="ConditionColumnTypeId" asp-items="@Model.AvailableConditionColumnTypes" />
+                        <span asp-validation-for="ConditionColumnTypeId"></span>
+                    </div>
+                </div>
+                <div class="form-group row" id="pnlConditionTypeId">
+                    <div class="col-md-3">
+                        <nop-label asp-for="ConditionTypeId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-select asp-for="ConditionTypeId" asp-items="@Model.AvailableConditionTypes" />
+                        <span asp-validation-for="ConditionTypeId"></span>
+                    </div>
+                </div>
+                <div class="form-group row" id="pnlValues">
+                    <div class="col-md-3">
+                        <nop-label asp-for="ValueString" />
+                    </div>
+                    <div class="col-md-9">
+                        <div id="divValueString">
+                            <nop-editor asp-for="ValueString" />
+                        </div>
+                        <div id="divValueDateTime">
+                            <nop-editor asp-for="ValueDateTime" />
+                        </div>
+                        <div id="divValueInt">
+                            <nop-editor asp-for="ValueInt" />
+                        </div>
+                        <span asp-validation-for="ValueString"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

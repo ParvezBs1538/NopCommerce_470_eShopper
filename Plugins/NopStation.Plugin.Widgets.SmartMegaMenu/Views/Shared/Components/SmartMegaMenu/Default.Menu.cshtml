@@ -1,0 +1,119 @@
+﻿@model MegaMenuModel
+@using Nop.Web.Models.Catalog
+
+@{
+    var viewType = "list-view";
+    var imageView = "show-image";
+
+    if (Model.ViewType == ViewType.GridView)
+    {
+        viewType = "grid-view";
+    }
+
+    if (Model.WithoutImages)
+    {
+        imageView = "no-view";
+    }
+
+    <script asp-location="Footer">
+        const menu = document.querySelector(".mobile-mm-navbar");
+        const menuMain = menu.querySelector(".nav-menu");
+        const goBack = menu.querySelector(".go-back");
+        const menuTrigger = document.querySelector(".mobile-menu-trigger");
+        const closeMenu = menu.querySelector(".mobile-menu-close");
+        let subMenu;
+        menuMain.addEventListener("click", (e) => {
+            if(!menu.classList.contains("active")) {
+                return;
+            }
+            if(e.target.closest(".has-children")) {
+                const hasChildren = e.target.closest(".has-children");
+                showSubMenu(hasChildren);
+            }
+        });
+        goBack.addEventListener("click", () => {
+            hideSubMenu();
+        })
+        menuTrigger.addEventListener("click", () => {
+            toggleMenu();
+        })
+        closeMenu.addEventListener("click", () => {
+            toggleMenu();
+        })
+        document.querySelector(".menu-overlay").addEventListener("click", () => {
+            toggleMenu();
+        })
+        function toggleMenu() {
+            $(".sublist").removeClass("active");
+            menu.querySelector(".current-menu-title").innerHTML = "";
+            menu.querySelector(".mobile-menu-head").classList.remove("active");
+            if (menu.classList.contains("active")) {
+                document.querySelector('body').style.overflow = 'visible';
+            } else {
+                document.querySelector('body').style.overflow = 'hidden';
+            }
+            menu.classList.toggle("active");
+            document.querySelector(".menu-overlay").classList.toggle("active");
+        }
+        function showSubMenu(hasChildren) {
+            subMenu = hasChildren.querySelector(".sublist");
+            subMenu.classList.add("active");
+            subMenu.style.animation = "slideLeft 0.3s ease forwards";
+            const menuTitle = hasChildren.querySelector(".right-arrow").parentNode.childNodes[0].childNodes[1].textContent;
+            menu.querySelector(".current-menu-title").innerHTML = menuTitle;
+            menu.querySelector(".mobile-menu-head").classList.add("active");
+        }
+
+        function hideSubMenu() {
+            subMenu.style.animation = "slideRight 0.3s ease forwards";
+            subMenu.classList.remove("active");
+            subMenu = subMenu.parentNode.parentNode;
+            if (!subMenu.classList.contains("sublist")) {
+                menu.querySelector(".current-menu-title").innerHTML = "";
+                menu.querySelector(".mobile-menu-head").classList.remove("active");
+            }
+            else {
+                menu.querySelector(".current-menu-title").innerHTML = subMenu.parentNode.childNodes[0].childNodes[1].textContent;
+            }
+        }
+        window.onresize = function () {
+            if (this.innerWidth > 1000) {
+                if (menu.classList.contains("active")) {
+                    toggleMenu();
+                }
+            }
+        }
+        $(document).ready(function () {
+            $(".mm-navbar .nav-menu > li > .sublist").addClass("@viewType @imageView show-ribbon"); //no-view/show-image, grid-view/list-view, show-ribbon/no-ribbon
+            if ($(window).width() > 1000) {
+                $('.sublist.grid-view').masonry({
+                    columnWidth: '.sublist.grid-view > li',
+                    itemSelector: '.sublist.grid-view > li',
+                    percentPosition: true,
+                    horizontalOrder: true
+                });
+            }
+        });
+    </script>
+}
+
+<div class="mobile-menu-trigger">
+    <span></span>
+</div>
+<div class="menu-overlay"></div>
+<div class="mm-navbar navbar mobile-mm-navbar @Model.CssClass">
+    <nav class="nav-navbar">
+        <div class="mobile-menu-head">
+            <div class="go-back">@T("NopStation.SmartMegaMenu.Back")</div>
+            <div class="current-menu-title"></div>
+            <div class="mobile-menu-close">&times;</div>
+        </div>
+        <ul class="nav-menu nav-center">
+            @foreach (var menu in Model.MenuItems)
+            {
+                @await Html.PartialAsync("_MenuItem.MegaMenu.cshtml", menu)
+            }
+        </ul>
+    </nav>
+</div>
+

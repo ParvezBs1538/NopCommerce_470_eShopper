@@ -1,0 +1,35 @@
+@model WebApiNotificationTemplateModel
+
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.WebApiNotification.PushNotificationTemplates.EditDetails").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("WebApiNotificationTemplates");
+
+    NopHtml.AddCssFileParts("/Plugins/NopStation.Plugin.Misc.WebApiNotification/Contents/dist/emojionearea.min.css",string.Empty);
+}
+
+<script src="~/Plugins/NopStation.Plugin.Misc.WebApiNotification/Contents/dist/emojionearea.min.js"></script>
+
+<form asp-controller="WebApiNotificationTemplate" asp-action="Edit" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.WebApiNotification.PushNotificationTemplates.EditDetails") - @Model.Name
+            <small>
+                <i class="fas fa-arrow-circle-left"></i>
+                <a asp-action="List">@T("Admin.NopStation.WebApiNotification.PushNotificationTemplates.BackToList")</a>
+            </small>
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+            <button type="submit" name="save-continue" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.SaveContinue")
+            </button>
+        </div>
+    </div>
+    @await Html.PartialAsync("_CreateOrUpdate", Model)
+</form>

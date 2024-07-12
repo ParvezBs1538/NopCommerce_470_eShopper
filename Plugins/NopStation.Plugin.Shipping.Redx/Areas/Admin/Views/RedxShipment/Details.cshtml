@@ -1,0 +1,73 @@
+﻿@model RedxShipmentModel
+
+<div class="card card-default" id="redx-shipment-details">
+    <div class="card-header">
+        @T("Admin.NopStation.Redx.RedxShipments.Info")
+    </div>
+    <div class="card-body">
+        @if (!Model.CanSendShipmentToRedx)
+        {
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="TrackingId" />
+                </div>
+                <div class="col-md-9">
+                    <div class="form-text-row">@Model.TrackingId</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="RedxAreaId" />
+                </div>
+                <div class="col-md-9">
+                    <div class="form-text-row">@Model.RedxAreaName</div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="RedxAreaId" />
+                </div>
+                <div class="col-md-9">
+                    <div class="input-group">
+                        <nop-select asp-for="RedxAreaId" asp-items="@Model.AvailableRedxAreas" />
+                    </div>
+                </div>
+            </div>
+
+            <script asp-location="Footer">
+                function sendShipmentToRedx() {
+                    if(!confirm('@T("Admin.NopStation.Redx.RedxShipments.ConfirmRedxShipment")'))
+                        return;
+                
+                    var redxAreaId = $('#@Html.IdFor(x => x.RedxAreaId)').val();
+
+                    var postData = {
+                        shipmentId: @Model.ShipmentId,
+                        redxAreaId: redxAreaId
+                    };
+                    addAntiForgeryToken(postData);
+                    $.ajax({
+                        type: "POST",
+                        url: "@(Url.Action("SendShipmentRequest", "RedxShipment"))",
+                        data: postData,
+                        success: function (data, textStatus, jqXHR) {
+                            if (data.success) {
+                                $('#redx-shipment-details').replaceWith(data.html);
+                                $('#redx-parcel-submit').remove();
+                            }
+                            if (data.message) {
+                                alert(data.message);
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                        }
+                    });
+                }
+            </script>
+            @NopHtml.GenerateInlineScripts(ResourceLocation.Footer)
+        }
+    </div>
+</div>

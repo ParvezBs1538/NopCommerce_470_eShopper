@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Pinterest Analytics",
+  "SystemName": "NopStation.Plugin.Widgets.PinterestAnalytics",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.PinterestAnalytics.dll",
+  "Description": "This plugin seamlessly integrates with Pinterest Analytics, monitoring website visitor statistics and ecommerce conversion metrics.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

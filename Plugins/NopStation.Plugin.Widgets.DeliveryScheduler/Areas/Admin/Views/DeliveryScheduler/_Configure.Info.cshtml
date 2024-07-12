@@ -1,0 +1,54 @@
+﻿@model ConfigurationModel
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="EnableScheduling_OverrideForStore" asp-input="EnableScheduling" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="EnableScheduling" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="EnableScheduling" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="DisplayDayOffset_OverrideForStore" asp-input="DisplayDayOffset" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="DisplayDayOffset" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="DisplayDayOffset" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="ShowRemainingCapacity_OverrideForStore" asp-input="ShowRemainingCapacity" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="ShowRemainingCapacity" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="ShowRemainingCapacity" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="NumberOfDaysToDisplay_OverrideForStore" asp-input="NumberOfDaysToDisplay" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="NumberOfDaysToDisplay" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="NumberOfDaysToDisplay" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="DateFormat_OverrideForStore" asp-input="DateFormat" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="DateFormat" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="DateFormat" />
+            <em>@T("Admin.NopStation.DeliveryScheduler.Configuration.Fields.DateFormat.Sample", DateTime.Now.ToString(Model.DateFormat))</em>
+        </div>
+    </div>
+</div>

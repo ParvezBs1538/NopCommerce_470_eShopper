@@ -1,0 +1,147 @@
+﻿@model ConfigurationModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.ProductQuestionAnswer.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("ProductQA.Configuration");
+    Layout = "_AdminLayout";
+}
+
+<form asp-controller="ProductQAConfiguration" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.ProductQuestionAnswer.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="IsEnable_OverrideForStore" asp-input="IsEnable" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="IsEnable" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="IsEnable" />
+                                    <span asp-validation-for="IsEnable"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="QuestionAnonymous_OverrideForStore" asp-input="IsEnable" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="QuestionAnonymous" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="QuestionAnonymous" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="LimitedStoreId_OverrideForStore" asp-input="SelectedLimitedStoreId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="LimitedStoreId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="SelectedLimitedStoreId" asp-items="Model.AvailableLimitedStoreId" asp-multiple="true" />
+                                    <script>
+                                        $(document).ready(function() {
+                                            var storeIdsInput = $('#@Html.IdFor(model => model.SelectedLimitedStoreId)').data("kendoMultiSelect");
+                                            storeIdsInput.setOptions({
+                                                storeIdsInput: false,
+                                                filter: "contains"
+                                            });
+
+                                        @if (Model.AvailableLimitedStoreId.Count == 0)
+                                        {
+                                            <text>
+                                                storeIdsInput.setOptions({
+                                                    enable: false,
+                                                    placeholder: '@T("Admin.NopStation.ProductQuestionAnswer.Configuration.NoStore")'
+                                                });
+                                                storeIdsInput._placeholder();
+                                                storeIdsInput._enable();
+                                            </text>
+                                        }
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="LimitedCustomer_OverrideForStore" asp-input="SelectedLimitedCustomerRoleIds" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="LimitedCustomerRole" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="SelectedLimitedCustomerRoleIds" asp-items="Model.AvailableLimitedCustomerRoles" asp-multiple="true" />
+                                    <span asp-validation-for="LimitedCustomerRole"></span>
+                                    <script>
+                                        $(document).ready(function() {
+                                            var lmitedCustomerRoleIdsInput = $('#@Html.IdFor(model => model.SelectedLimitedCustomerRoleIds)').data("kendoMultiSelect");
+                                            lmitedCustomerRoleIdsInput.setOptions({
+                                                lmitedCustomerRoleIdsInput: false,
+                                                filter: "contains"
+                                            });
+
+                                        @if (Model.AvailableLimitedCustomerRoles.Count == 0)
+                                        {
+                                            <text>
+                                                lmitedCustomerRoleIdsInput.setOptions({
+                                                        enable: false,
+                                                        placeholder: '@T("Admin.NopStation.ProductQuestionAnswer.Configuration.NoLimitedCustomerRole")'
+                                                    });
+                                                    lmitedCustomerRoleIdsInput._placeholder();
+                                                    lmitedCustomerRoleIdsInput._enable();
+                                            </text>
+                                        }
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AnswerdCustomerRole_OverrideForStore" asp-input="SelectedAnsweredCustomerRoleIds" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AnswerdCustomerRole" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="SelectedAnsweredCustomerRoleIds" asp-items="Model.AvailableAnsweredCustomerRoles" asp-multiple="true" />
+                                    <span asp-validation-for="AnswerdCustomerRole"></span>
+                                    <script>
+                                        $(document).ready(function() {
+                                            var answeredCustomerRoleIdsInput = $('#@Html.IdFor(model => model.SelectedAnsweredCustomerRoleIds)').data("kendoMultiSelect");
+                                            answeredCustomerRoleIdsInput.setOptions({
+                                                answeredCustomerRoleIdsInput: false,
+                                                filter: "contains"
+                                            });
+
+                                            @if (Model.AvailableAnsweredCustomerRoles.Count == 0)
+                                            {
+                                                <text>
+                                                    answeredCustomerRoleIdsInput.setOptions({
+                                                            enable: false,
+                                                            placeholder: '@T("Admin.NopStation.ProductQuestionAnswer.Configuration.NoAnsweredCustomerRole")'
+                                                        });
+                                                        answeredCustomerRoleIdsInput._placeholder();
+                                                        answeredCustomerRoleIdsInput._enable();
+                                                </text>
+                                            }
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</form>

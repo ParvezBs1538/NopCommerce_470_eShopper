@@ -1,0 +1,30 @@
+@model GroupNotificationModel
+
+@inject AdminAreaSettings adminAreaSettings
+@inject Nop.Services.Media.IPictureService pictureService
+@using Nop.Core.Domain.Common
+
+@{
+    const string hideInfoBlockAttributeName = "PWACampaignsPage.HideInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideInfoBlockAttributeName);
+
+    const string hideViewAsBlockAttributeName = "PWACampaignsPage.HideViewAsBlock";
+    var hideViewAsBlockBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideViewAsBlockAttributeName);
+
+    NopHtml.AddCssFileParts("/Plugins/NopStation.Plugin.Widgets.PushNop/Contents/dist/emojionearea.min.css", string.Empty);
+}
+
+<script src="~/Plugins/NopStation.Plugin.Widgets.PushNop/Contents/dist/emojionearea.min.js"></script>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <nop-cards id="algoliasettings-panels">
+                <nop-card asp-name="campaigns-info" asp-icon="fa fa-info" asp-title="@T("Admin.NopStation.PushNop.GroupNotifications.Tabs.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</nop-card>
+                <nop-card asp-name="campaigns-viewas" asp-icon="fa fa-eye" asp-title="@T("Admin.NopStation.PushNop.GroupNotifications.Tabs.ViewAs")" asp-hide-block-attribute-name="@hideViewAsBlockAttributeName" asp-hide="@hideViewAsBlockBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.ViewAs", Model)</nop-card>
+            </nop-cards>
+        </div>
+    </div>
+</section>
+
+

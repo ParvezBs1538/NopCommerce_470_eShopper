@@ -1,0 +1,111 @@
+﻿@model ConfigurationModel
+@using Nop.Web.Areas.Admin.Models.Catalog
+
+<style>
+    .dataTable td span {
+        background-color: #f39c12;
+        color: #fff;
+        padding: .2em .6em .3em;
+        border-radius: .25em;
+    }
+</style>
+
+<div class="card-body">
+    <div class="search-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <nop-label asp-for="CategorySearchModel.SearchCategoryName" />
+                    </div>
+                    <div class="col-md-8">
+                        <nop-editor asp-for="CategorySearchModel.SearchCategoryName" />
+                    </div>
+                </div>
+                <div class="form-group row" @(Model.CategorySearchModel.HideStoresList ? Html.Raw("style=\"display:none\"") : null)>
+                    <div class="col-md-4">
+                        <nop-label asp-for="CategorySearchModel.SearchStoreId" />
+                    </div>
+                    <div class="col-md-8">
+                        <nop-select asp-for="CategorySearchModel.SearchStoreId" asp-items="Model.CategorySearchModel.AvailableStores" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <nop-label asp-for="CategorySearchModel.SearchPublishedId" />
+                    </div>
+                    <div class="col-md-8">
+                        <nop-select asp-for="CategorySearchModel.SearchPublishedId" asp-items="Model.CategorySearchModel.AvailablePublishedOptions" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="text-center col-12">
+                <button type="button" id="search-categories" class="btn btn-primary btn-search"><i class="fas fa-search"></i>@T("Admin.Common.Search")</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card-body">
+    <div class="sub-card">
+        @await Html.PartialAsync("Table", new DataTablesModel
+        {
+            Name = "deliveryscheduler-items-grid",
+            UrlRead = new DataUrl("SpecialOffsetList", "DeliveryScheduler", null),
+            UrlDelete = new DataUrl("SpecialOffsetReset", "DeliveryScheduler", null),
+            UrlUpdate = new DataUrl("SpecialOffsetUpdate", "DeliveryScheduler", null),
+            SearchButtonId = "search-categories",
+            Length = Model.CategorySearchModel.PageSize,
+            LengthMenu = Model.CategorySearchModel.AvailablePageSizes,
+            Filters = new List<FilterParameter>
+            {
+                new FilterParameter(nameof(Model.CategorySearchModel.SearchCategoryName), nameof(CategorySearchModel)),
+                new FilterParameter(nameof(Model.CategorySearchModel.SearchStoreId), nameof(CategorySearchModel)),
+                new FilterParameter(nameof(Model.CategorySearchModel.SearchPublishedId), nameof(CategorySearchModel))
+            },
+            ColumnCollection = new List<ColumnProperty>
+                {
+                    new ColumnProperty(nameof(SpecialDeliveryOffsetModel.CategoryName))
+                    {
+                        Title = T("Admin.NopStation.DeliveryScheduler.SpecialDeliveryOffsets.Fields.CategoryName").Text,
+                        Width = "150"
+                    },
+                    new ColumnProperty(nameof(SpecialDeliveryOffsetModel.DaysOffset))
+                    {
+                        Title = T("Admin.NopStation.DeliveryScheduler.SpecialDeliveryOffsets.Fields.DaysOffset").Text,
+                        Width = "100",
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        Editable = true,
+                        EditType = EditType.Number,
+                        Render = new RenderCustom("renderOffset")
+                    },
+                    new ColumnProperty(nameof(SpecialDeliveryOffsetModel.Id))
+                    {
+                        Title = T("Admin.Common.Edit").Text,
+                        Width = "100",
+                        ClassName =  NopColumnClassDefaults.Button,
+                        Render = new RenderButtonsInlineEdit()
+                    },
+                    new ColumnProperty(nameof(SpecialDeliveryOffsetModel.Id))
+                    {
+                        Title = T("Admin.NopStation.DeliveryScheduler.Configuration.Button.Reset").Text,
+                        Width = "100",
+                        Render = new RenderButtonRemove(T("Admin.NopStation.DeliveryScheduler.Configuration.Button.Reset").Text),
+                        ClassName = NopColumnClassDefaults.Button
+                    }
+                }
+            })
+
+        <script>
+            function renderOffset(data, type, row, meta) {
+                if (row.Overridden)
+                    return data;
+                return '<span>default (@Model.DisplayDayOffset)</span>';
+            }
+        </script>
+    </div>
+</div>

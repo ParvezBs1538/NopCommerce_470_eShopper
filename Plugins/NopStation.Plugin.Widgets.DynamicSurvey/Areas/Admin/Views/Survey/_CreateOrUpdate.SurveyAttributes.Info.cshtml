@@ -1,0 +1,74 @@
+@model SurveyModel
+
+<div class="cards-group">
+    <div class="card card-default">
+        <div class="card-body">
+            @await Html.PartialAsync("Table", new DataTablesModel
+            {
+                Name = "surveyattributemappings-grid",
+                UrlRead = new DataUrl("SurveyAttributeMappingList", "Survey", new RouteValueDictionary { [nameof(Model.SurveyAttributeMappingSearchModel.SurveyId)] = Model.SurveyAttributeMappingSearchModel.SurveyId }),
+                Length = Model.SurveyAttributeMappingSearchModel.PageSize,
+                LengthMenu = Model.SurveyAttributeMappingSearchModel.AvailablePageSizes,
+                ColumnCollection = new List<ColumnProperty>
+                {
+                    new ColumnProperty(nameof(SurveyAttributeMappingModel.SurveyAttribute))
+                    {
+                        Title = T("Admin.NopStation.DynamicSurvey.Surveys.SurveyAttributes.Fields.Attribute").Text,
+                        Width = "200"
+                    },
+                    new ColumnProperty(nameof(SurveyAttributeMappingModel.TextPrompt))
+                    {
+                        Title = T("Admin.NopStation.DynamicSurvey.Surveys.SurveyAttributes.Fields.TextPrompt").Text,
+                        Width = "150"
+                    },
+                    new ColumnProperty(nameof(SurveyAttributeMappingModel.IsRequired))
+                    {
+                        Title = T("Admin.NopStation.DynamicSurvey.Surveys.SurveyAttributes.Fields.IsRequired").Text,
+                        Width = "100",
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        Render = new RenderBoolean()
+                    },
+                    new ColumnProperty(nameof(SurveyAttributeMappingModel.AttributeControlType))
+                    {
+                        Title = T("Admin.NopStation.DynamicSurvey.Surveys.SurveyAttributes.Fields.AttributeControlType").Text,
+                        Width = "250"
+                    },
+                    new ColumnProperty(nameof(SurveyAttributeMappingModel.DisplayOrder))
+                    {
+                        Title = T("Admin.NopStation.DynamicSurvey.Surveys.SurveyAttributes.Fields.DisplayOrder").Text,
+                        Width = "150",
+                        ClassName =  NopColumnClassDefaults.CenterAll
+                    },
+                    new ColumnProperty(nameof(SurveyAttributeMappingModel.ValidationRulesString))
+                    {
+                        Title = T("Admin.NopStation.DynamicSurvey.Surveys.SurveyAttributes.ValidationRules").Text,
+                        Width = "150",
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        Encode = false
+                    },
+                    new ColumnProperty(nameof(SurveyAttributeMappingModel.ConditionString))
+                    {
+                        Title = T("Admin.NopStation.DynamicSurvey.Surveys.SurveyAttributes.Condition").Text,
+                        Width = "150",
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        Encode = false
+                    },
+                    new ColumnProperty(nameof(SurveyAttributeMappingModel.Id))
+                    {
+                        Title = T("Admin.Common.Edit").Text,
+                        Width = "100",
+                        ClassName =  NopColumnClassDefaults.Button,
+                        Render = new RenderButtonEdit(new DataUrl("~/Admin/Survey/SurveyAttributeMappingEdit/"))
+                    }
+                }
+            })
+        </div>
+
+        <div class="card-footer">
+            <a asp-action="SurveyAttributeMappingCreate" asp-route-surveyId="@Model.Id" class="btn btn-primary">
+                <i class="fas fa-plus-square"></i>
+                @T("Admin.NopStation.DynamicSurvey.Surveys.SurveyAttributes.AddNew")
+            </a>
+        </div>
+    </div>
+</div>

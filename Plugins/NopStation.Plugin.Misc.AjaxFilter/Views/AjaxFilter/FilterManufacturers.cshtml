@@ -1,0 +1,135 @@
+﻿@model FilterManufacturersModel
+@using NopStation.Plugin.Misc.AjaxFilter.Domains;
+@using NopStation.Plugin.Misc.AjaxFilter.Domains.Enums
+@using NopStation.Plugin.Misc.AjaxFilter.Models;
+@inject AjaxFilterSettings ajaxFilterSettings
+@{
+    var maxManufacturerToDisplay = Model.MaxManufacturersToDisplay;
+}
+
+<script>
+
+    $(".collaspe-man").accordion({
+        collapsible: (((`@(ajaxFilterSettings.CloseManufactureFilterByDefualt)`).toLowerCase()) == "true" ? true : false),
+        active: ((`@(ajaxFilterSettings.CloseManufactureFilterByDefualt)`).toLowerCase()) == "true" ? true : false
+    });
+
+</script>
+
+@if (Model.Manufacturers != null && Model.Manufacturers.Count > 0)
+{
+    <div id="manufacturers-filter-section">
+        <div class="manufacturer-section m-0">
+            <div class="filter-section man-filter-section collaspe-man" data-id="ms">
+                <div class="title">
+                    <h5 class="mb-0 collapsed ajaxfilter-title"
+                    data-toggle="collapse"
+                    data-parent="#accordionEx"
+                    data-target="#manufacturerNavigation"
+                    aria-expanded="true"
+                    aria-controls="collapseOne">
+                        @T("NopStation.Plugin.Misc.AjaxFilter.Filters.Manufacturers")
+                        <i class="fa fa-angle-down rotate-icon float-right"></i>
+                        <span id="manfacturerFilterClear"
+                          class="reset-specification-filter"
+                          onclick="AjaxFilter.resetManufacturerFilter(this, 'ms')">
+                            <i class="fa fa-undo floated-icon @(Model.Manufacturers.Any(x => x.CheckedState == CheckedState.Checked)?"":"d-none")"></i>
+                        </span>
+                    </h5>
+                </div>
+                <div class="listbox collapse show" id="manufacturerNavigation" aria-labelledby="manufacturerNavigation">
+                    <div class="ajaxfilter-section pb-0">
+                        @if (Model.CheckOrDropdown == FiltersUI.UseCheckboxes)
+                        {
+                            <ul class="filterManufacturer">
+                                @{
+                                    var manufacturerCount = Model.Manufacturers.Count;
+                                    var manufacturers = Model.Manufacturers.OrderBy(x => x.Name).ToList();
+                                    var displayCount = Math.Min(manufacturerCount, maxManufacturerToDisplay);
+                                    var checkedCount = Model.Manufacturers.Count(x => x.CheckedState == CheckedState.Checked);
+                                    if (displayCount < checkedCount)
+                                    {
+                                        displayCount = checkedCount;
+                                    }
+                                    int position = 0;
+                                    for (position = 0; position < displayCount; position++)
+                                    {
+                                        var manufacturerFilterItem = manufacturers.ElementAt(position);
+                                        <li class="manufactureListItem item" data-id="@manufacturerFilterItem.Id">
+                                            <input class="Name-@manufacturerFilterItem.Id d-none manfacturerFilterClear"
+                                       type="checkbox"
+                                       data-manufacturer-id="@manufacturerFilterItem.Id"
+                                       data-manufacturer-name="@manufacturerFilterItem.Name"
+                                       value="@manufacturerFilterItem.Id"
+                                       onclick="AjaxFilter.setFilter(this, 'ms')"
+                                       id="ManufacturerModel_Manufacturers_@(position)_Id"
+                                       @(manufacturerFilterItem.CheckedState == CheckedState.Checked ? "Checked" : "")
+                                       @(manufacturerFilterItem.CheckedState == CheckedState.Disabled ? "Disabled" : "")
+                                       @(manufacturerFilterItem.CheckedState == CheckedState.CheckedDisabled ? "Disabled Checked" : "") />
+
+                                            <label for="ManufacturerModel_Manufacturers_@(position)_Id">
+                                                <span class="square @(manufacturerFilterItem.CheckedState == CheckedState.Checked ? "active" : "") Name-@(manufacturerFilterItem.Id)" id="square_specyficationModel_SpecificationAttributes_@(manufacturerFilterItem.Id)_@(position)_Id"></span>
+                                                <i>@manufacturerFilterItem.Name</i>
+                                                @if (!ajaxFilterSettings.HideManufacturerProductCount)
+                                                {
+                                                    <span> (@manufacturerFilterItem.Count)</span>
+                                                }
+                                            </label>
+                                        </li>
+                                    }
+                                    if (manufacturerCount > maxManufacturerToDisplay)
+                                    {
+                                        <li class="view-more-manufacturer" style="display: none;">
+                                            <ul class="show-more-list">
+                                                @for (; position < manufacturerCount; position++)
+                                                {
+                                                    var manufacturerFilterItem = manufacturers.ElementAt(position);
+
+                                                    <li class="manufactureListItem item" data-id="@manufacturerFilterItem.Id">
+                                                        <input class="Name-@manufacturerFilterItem.Id d-none manfacturerFilterClear"
+                                               type="checkbox"
+                                               data-manufacturer-id="@manufacturerFilterItem.Id"
+                                               data-manufacturer-name="@manufacturerFilterItem.Name"
+                                               value="@manufacturerFilterItem.Id"
+                                               onclick="AjaxFilter.setFilter(this, 'ms')"
+                                               id="ManufacturerModel_Manufacturers_@(position)_Id"
+                                               @(manufacturerFilterItem.CheckedState == CheckedState.Checked ? "Checked" : "")
+                                               @(manufacturerFilterItem.CheckedState == CheckedState.Disabled ? "Disabled" : "")
+                                               @(manufacturerFilterItem.CheckedState == CheckedState.CheckedDisabled ? "Disabled Checked" : "") />
+
+                                                        <label for="ManufacturerModel_Manufacturers_@(position)_Id">
+                                                            <span class="square @(manufacturerFilterItem.CheckedState == CheckedState.Checked ? "active" : "") Name-@(manufacturerFilterItem.Id)" id="square_specyficationModel_SpecificationAttributes_@(manufacturerFilterItem.Id)_@(position)_Id"></span>
+                                                            <i>@manufacturerFilterItem.Name</i>
+                                                            @if (!ajaxFilterSettings.HideManufacturerProductCount)
+                                                            {
+                                                                <span> (@manufacturerFilterItem.Count)</span>
+                                                            }
+                                                        </label>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </li>
+                                        <script>
+                                            AjaxFilterChildren.viewMoreManufacturer('.filterManufacturer')
+                                        </script>
+                                        <li><a class="showControl" style="margin-top:0;" data-manufacturer-id="@(manufacturerCount)">Show More</a></li>
+                                    }
+                                }
+                            </ul>
+                        }
+                        else if (Model.CheckOrDropdown == FiltersUI.UseDropdowns)
+                        {
+                            <select name="ManufacturerModel][Manufacturers][0][Id" class="group-dropdown" id="ManufacturerModel_Manufacturers_0_Id" onchange="AjaxFilter.setFilter('m'), AjaxFilterChildren.listenToSelect('ManufacturerModel_Manufacturers_0_Id')">
+                                <option value="" selected="selected"> @(Model.Manufacturers.Where(x => x.CheckedState != CheckedState.Disabled).Count() > 0 ? T("NopStation.Plugin.Misc.AjaxFilter.Filters.All") : T("NopStation.Plugin.Misc.AjaxFilter.Filters.Empty"))</option>
+                                @foreach (var manufacturerFilterItem in Model.Manufacturers.Where(x => x.CheckedState != CheckedState.Disabled).OrderBy(pva => pva.Name))
+                                {
+                                    <option value="@manufacturerFilterItem.Id" selected=@(manufacturerFilterItem.CheckedState == CheckedState.Checked || manufacturerFilterItem.CheckedState == CheckedState.CheckedDisabled ? "Selected" : "" )>@manufacturerFilterItem.Name</option>
+                                }
+                            </select>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

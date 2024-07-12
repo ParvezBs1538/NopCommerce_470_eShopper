@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Paykeeper (Russia)",
+  "SystemName": "NopStation.Plugin.Payments.Paykeeper",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.Paykeeper.dll",
+  "Description": "This plugin allows you to integrate with Paykeeper payment module",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

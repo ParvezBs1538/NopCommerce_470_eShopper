@@ -1,0 +1,143 @@
+﻿@model NopStation.Plugin.Payments.NetsEasy.Areas.Admin.Models.ConfigurationModel
+@{ 
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.NetsEasy.Menu.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("NetsEasy.Configuration");
+}
+
+<form asp-controller="NetsEasyPayment" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.NetsEasy.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="TestMode_OverrideForStore" asp-input="TestMode" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="TestMode" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="TestMode" />
+                                    <span asp-validation-for="TestMode"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="CheckoutKey_OverrideForStore" asp-input="CheckoutKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="CheckoutKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="CheckoutKey" />
+                                    <span asp-validation-for="CheckoutKey"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="SecretKey_OverrideForStore" asp-input="SecretKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="SecretKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="SecretKey" />
+                                    <span asp-validation-for="SecretKey"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="SelectedCountryIds_OverrideForStore" asp-input="SelectedCountryIds" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="SelectedCountryIds" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="SelectedCountryIds" asp-items="@Model.AvailableCountries" asp-multiple="true" />
+                                    <script>
+                                        $(document).ready(function() {
+                                            var categoryIdsInput = $('#@Html.IdFor(model => model.SelectedCountryIds)').data("kendoMultiSelect");
+                                            categoryIdsInput.setOptions({
+                                                autoClose: false
+                                            });
+
+                                            @if (Model.AvailableCountries.Count == 0)
+                                            {
+                                                <text>
+                                                    categoryIdsInput.setOptions({
+                                                        enable: false,
+                                                        placeholder: '@T("Admin.Catalog.Products.Fields.Categories.NoCategoriesAvailable")'
+                                                    });
+                                                    categoryIdsInput._placeholder();
+                                                    categoryIdsInput._enable();
+                                                </text>
+                                            }
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="TransactModeId_OverrideForStore" asp-input="TransactModeId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="TransactModeId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="TransactModeId" asp-items="Model.TransactModeValues" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AdditionalFee_OverrideForStore" asp-input="AdditionalFee" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AdditionalFee" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AdditionalFee" />
+                                    <span asp-validation-for="AdditionalFee"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AdditionalFeePercentage_OverrideForStore" asp-input="AdditionalFeePercentage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AdditionalFeePercentage" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AdditionalFeePercentage" />
+                                    <span asp-validation-for="AdditionalFeePercentage"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnsureRecurringInterval_OverrideForStore" asp-input="EnsureRecurringInterval" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnsureRecurringInterval" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnsureRecurringInterval" />
+                                    <span asp-validation-for="EnsureRecurringInterval"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableLog_OverrideForStore" asp-input="EnableLog" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableLog" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableLog" />
+                                    <span asp-validation-for="EnableLog"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

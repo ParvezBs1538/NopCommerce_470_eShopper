@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Razorpay",
+  "SystemName": "NopStation.Plugin.Payments.Razorpay",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Jaber Kibria",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.Razorpay.dll",
+  "Description": "This plugin enables Razorpay gateway payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

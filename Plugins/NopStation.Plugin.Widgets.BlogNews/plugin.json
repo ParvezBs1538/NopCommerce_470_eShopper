@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Blog & News",
+  "SystemName": "NopStation.Plugin.Widgets.BlogNews",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.BlogNews.dll",
+  "Description": "This plugin allows to display rich blog and news in store.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

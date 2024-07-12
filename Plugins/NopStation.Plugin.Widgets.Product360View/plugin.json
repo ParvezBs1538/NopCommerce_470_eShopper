@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Product 360 View",
+  "SystemName": "NopStation.Plugin.Widgets.Product360View",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.Product360View.dll",
+  "Description": "This plugin enables Product 360 degree view and Panorama view."
+}

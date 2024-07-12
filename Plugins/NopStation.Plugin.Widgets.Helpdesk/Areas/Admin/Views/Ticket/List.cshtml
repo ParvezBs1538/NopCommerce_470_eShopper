@@ -1,0 +1,176 @@
+@model TicketSearchModel
+
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.Helpdesk.Tickets.List").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("Tickets");
+}
+
+@{
+    const string hideSearchBlockAttributeName = "AffiliateCustomers.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.Helpdesk.Tickets.List")
+    </h1>
+    <div class="float-right">
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus-square"></i>
+            @T("Admin.Common.AddNew")
+        </a>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fa fa-search" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
+                        </div>
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="Email" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="Email" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="CategoryId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="CategoryId" asp-items="@Model.AvailableCategory" asp-multiple="true" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="PriorityId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="PriorityId" asp-items="@Model.AvailablePriority" asp-multiple="true" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="StatusId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="StatusId" asp-items="@Model.AvailableStatus" asp-multiple="true" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="CreatedFrom" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="CreatedFrom" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="CreatedTo" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="CreatedTo" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="text-center col-12">
+                                    <button type="button" id="search-tickets-list" class="btn btn-primary btn-search">
+                                        <i class="fa fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "tickets-grid",
+                            UrlRead = new DataUrl("List", "Ticket", null),
+                            SearchButtonId = "search-tickets-list",
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            Filters = new List<FilterParameter>
+                            {
+                                new FilterParameter(nameof(Model.Email)),
+                                new FilterParameter(nameof(Model.CategoryId)),
+                                new FilterParameter(nameof(Model.PriorityId)),
+                                new FilterParameter(nameof(Model.StatusId)),
+                                new FilterParameter(nameof(Model.CreatedTo)),
+                                new FilterParameter(nameof(Model.CreatedFrom))
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(TicketModel.Email))
+                                {
+                                    Title = T("Admin.NopStation.Helpdesk.Tickets.Fields.Email").Text,
+                                    Width = "150",
+                                    Render = new RenderCustom("renderCustomerName")
+                                },
+                                new ColumnProperty(nameof(TicketModel.PhoneNumber))
+                                {
+                                    Title = T("Admin.NopStation.Helpdesk.Tickets.Fields.PhoneNumber").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(TicketModel.Category))
+                                {
+                                    Title = T("Admin.NopStation.Helpdesk.Tickets.Fields.CategoryId").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(TicketModel.Priority))
+                                {
+                                    Title = T("Admin.NopStation.Helpdesk.Tickets.Fields.PriorityId").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(TicketModel.Status))
+                                {
+                                    Title = T("Admin.NopStation.Helpdesk.Tickets.Fields.StatusId").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(TicketModel.CreatedOn))
+                                {
+                                    Title = T("Admin.NopStation.Helpdesk.Tickets.Fields.CreatedOn").Text,
+                                    Width = "100",
+                                    Render = new RenderDate()
+                                },
+                                new ColumnProperty(nameof(TicketModel.Id))
+                                {
+                                    Title = T("Admin.Common.Edit").Text,
+                                    Width = "100",
+                                    ClassName =  NopColumnClassDefaults.Button,
+                                    Render = new RenderButtonEdit(new DataUrl("Edit"))
+                                }
+                            }
+                        })
+                    </div>
+
+                    <script>
+                        function renderCustomerName(data, type, row, meta) {
+                            return '<a href="/Admin/Customer/Edit/' + row.CustomerId + '">' + data + '</a>'
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

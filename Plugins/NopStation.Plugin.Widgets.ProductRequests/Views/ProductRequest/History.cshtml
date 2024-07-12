@@ -1,0 +1,51 @@
+﻿@using Nop.Web.Framework.UI
+@model ProductRequestListModel
+
+@{
+    Layout = "_ColumnsTwo";
+    NopHtml.AddTitleParts(T("NopStation.ProductRequests.Account.MyProductRequests").Text);
+}
+
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = -1 })
+}
+
+<div class="page account-page customer-info-page">
+    <div class="page-title">
+        <h1>@T("Account.MyAccount") - @T("NopStation.ProductRequests.Account.MyProductRequests")</h1>
+    </div>
+    <div class="page-body">
+        @if (Model.Requests.Count > 0)
+        {
+            <div class="table-wrapper">
+                <table class="cart">
+                    <thead>
+                        <tr>
+                            <th>@T("NopStation.ProductRequests.ProductRequests.Fields.Name")</th>
+                            <th>@T("NopStation.ProductRequests.ProductRequests.Fields.Link")</th>
+                            <th>@T("NopStation.ProductRequests.ProductRequests.Fields.CreatedOn").Text</th>
+                            <th>@T("NopStation.ProductRequests.ProductRequests.View").Text</th>
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model.Requests)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td><a href="@item.Link" target="_blank">@T("NopStation.ProductRequests.ProductRequests.Fields.Link")</a></td>
+                            <td>@item.CreatedOn</td>
+                            <td> @Html.RouteLink(T("NopStation.ProductRequests.ProductRequests.View").Text, "ProductRequestDetails", new { Id = item.Id })</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="no-data">
+                @T("NopStation.ProductRequests.ProductRequests.ListIsEmpty")
+            </div>
+        }
+    </div>
+</div>
+

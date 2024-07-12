@@ -1,0 +1,58 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("ExportImportTopic.Configure");
+    ViewBag.PageTitle = T("Admin.NopStation.ExportImportTopic.Configuration").Text;
+}
+
+<form asp-controller="ExportImportTopic" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.ExportImportTopic.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="CheckBodyMaximumLength_OverrideForStore" asp-input="CheckBodyMaximumLength" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="CheckBodyMaximumLength" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="CheckBodyMaximumLength" />
+                                    <span asp-validation-for="CheckBodyMaximumLength"></span>
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="CheckBodyMaximumLength">
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="BodyMaximumLength_OverrideForStore" asp-input="BodyMaximumLength" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="BodyMaximumLength" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="BodyMaximumLength" />
+                                        <span asp-validation-for="BodyMaximumLength"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

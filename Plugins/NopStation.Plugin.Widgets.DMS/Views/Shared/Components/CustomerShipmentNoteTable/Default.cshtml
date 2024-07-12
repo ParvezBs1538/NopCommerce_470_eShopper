@@ -1,0 +1,41 @@
+﻿@model DMSShipmentNoteListModel
+
+@if (Model.ShipmentNotes.Count > 0)
+{
+    <div class="section dms-shipment-notes order-notes">
+        <div class="title">
+            <strong>@T("NopStation.DMS.Shipments.Notes")</strong>
+        </div>
+        <div class="table-wrapper">
+            <table class="data-table dms-shipment-note-table">
+                <colgroup>
+                    <col />
+                    <col />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="created-on">
+                            @T("NopStation.DMS.Shipments.Notes.CreatedOn")
+                        </th>
+                        <th class="note">
+                            @T("NopStation.DMS.Shipments.Notes.Note")
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ShipmentNotes)
+                    {
+                        <tr>
+                            <td class="created-on">
+                                @item.CreatedOn.ToString()
+                            </td>
+                            <td class="note">
+                                @Html.Raw(item.Note)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

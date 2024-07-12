@@ -1,0 +1,14 @@
+﻿@model ConfigurationModel
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="UpdateShippingMethodsOnChangeShippingAddressFields_OverrideForStore" asp-input="UpdateShippingMethodsOnChangeShippingAddressFields" asp-store-scope="Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="UpdateShippingMethodsOnChangeShippingAddressFields" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="UpdateShippingMethodsOnChangeShippingAddressFields" asp-items="Model.AvailableAddressFields" asp-multiple="true" />
+        </div>
+    </div>
+</div>
+

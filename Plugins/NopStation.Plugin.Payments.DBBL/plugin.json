@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "DBBL",
+  "SystemName": "NopStation.Plugin.Payments.DBBL",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Jaber Kibria",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.DBBL.dll",
+  "Description": "This plugin enables DBBL gateway payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

@@ -1,0 +1,107 @@
+﻿@model ManufacturerToMapSearchModel
+
+@{
+    Layout = "_AdminPopupLayout";
+
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.Plugin.Misc.AdvancedSEO.ManufacturerToMap.AddManufacturerToMap.Popup.Title").Text;
+}
+<div asp-validation-summary="All"></div>
+<input asp-for="ManufacturerSEOTemplateId" type="hidden" />
+
+@if (ViewBag.RefreshPage == true)
+{
+    <script>
+        try {window.opener.document.forms['@(Context.Request.Query["formId"])'].@(Context.Request.Query["btnId"]).click();}
+        catch (e) { }
+        window.close();
+    </script>
+}
+<form asp-controller="ManufacturerSEOTemplate" asp-action="ManufacturerAddPopup"
+      asp-route-manufacturerSEOTemplateId="@Context.Request.Query["manufacturerSEOTemplateId"]"
+      asp-route-btnId="@Context.Request.Query["btnId"]"
+      asp-route-formId="@Context.Request.Query["formId"]">
+    <div class="content-header clearfix">
+        <h1 class="pull-left">
+            @T("Admin.NopStation.Plugin.Misc.AdvancedSEO.ManufacturerToMap.AddManufacturerToMap.Popup")
+        </h1>
+        <div class="pull-right">
+            &nbsp;
+        </div>
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default card-search card-popup">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group row">
+                                        <div class="col-sm-4">
+                                            <nop-label asp-for="ManufacturerName" />
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <nop-editor asp-for="ManufacturerName" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="button" id="search-manufacturer-to-map" class="btn btn-primary btn-search">
+                                        <i class="fas fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-default">
+                        <div class="card-body">
+                            @await Html.PartialAsync("Table", new DataTablesModel
+                            {
+                                Name = "manufacturer-to-map-grid",
+                                UrlRead = new DataUrl("GetManufacturerListToMap", "ManufacturerSEOTemplate", new RouteValueDictionary { [nameof(ManufacturerToMapSearchModel.ManufacturerSEOTemplateId)] = Model.ManufacturerSEOTemplateId }),
+                                SearchButtonId = "search-manufacturer-to-map",
+                                Length = Model.PageSize,
+                                LengthMenu = Model.AvailablePageSizes,
+                                Filters = new List<FilterParameter>
+                                {
+                                    new FilterParameter(nameof(Model.ManufacturerName))
+                                },
+                                ColumnCollection = new List<ColumnProperty>
+                                {
+                                    new ColumnProperty(nameof(ManufacturerToMapModel.Id))
+                                    {
+                                        IsMasterCheckBox = true,
+                                        Render = new RenderCheckBox(nameof(ManufacturerToMapSearchModel.SelectedManufacturerIds)),
+                                        ClassName =  NopColumnClassDefaults.CenterAll,
+                                        Width = "50",
+                                    },
+                                    new ColumnProperty(nameof(ManufacturerToMapModel.ManufacturerName))
+                                    {
+                                        Title = T("Admin.NopStation.Plugin.Misc.AdvancedSEO.ManufacturerToMap.Fields.ManufacturerName").Text,
+                                        Width = "100"
+                                    },
+                                    //new ColumnProperty(nameof(ManufacturerToMapModel.ManufacturerBreadCrumb))
+                                    //{
+                                    //    Title = T("Admin.NopStation.Plugin.Misc.AdvancedSEO.ManufacturerToMap.Fields.ManufacturerBreadCrumb").Text,
+                                    //    Width = "100"
+                                    //}
+                                }
+                            })
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" name="save" class="btn btn-primary">
+                                <i class="far fa-save"></i>
+                                @T("Admin.Common.Save")
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

@@ -1,0 +1,35 @@
+﻿@using Nop.Core
+@inject IWorkContext workContext
+@inject SmartSliderSettings smartSliderSettings
+
+@{
+    var supportRtl = (await workContext.GetWorkingLanguageAsync()).Rtl;
+
+    if (supportRtl)
+    {
+        NopHtml.AppendCssFileParts("~/Plugins/NopStation.Plugin.Widgets.SmartSliders/contents/css/styles.rtl.css", string.Empty);
+    }
+    else
+    {
+        NopHtml.AppendCssFileParts("~/Plugins/NopStation.Plugin.Widgets.SmartSliders/contents/css/styles.css", string.Empty);
+    }
+    NopHtml.AppendCssFileParts($"/Plugins/NopStation.Plugin.Widgets.SmartSliders/contents/css/swiper-bundle.min.css", string.Empty);
+}
+
+<script asp-location="Footer" src="~/Plugins/NopStation.Plugin.Widgets.SmartSliders/contents/script/swiper-bundle.min.js"></script>
+
+@if (!smartSliderSettings.EnableAjaxLoad)
+{
+    return;
+}
+
+<script asp-location="Footer" src="~/Plugins/NopStation.Plugin.Widgets.SmartSliders/contents/script/nopstation.smartslider.js"></script>
+
+<script asp-location="Footer">
+    var sliderdata = {};
+    sliderdata.SliderFailure = '@T("NopStation.SmartSliders.LoadingFailed")';
+
+    $(document).ready(function () {
+        SmartSlider.init('@Url.RouteUrl("SmartSlider")', '.slider-container', '.slider-container .loader', carouseldata);
+    });
+</script>

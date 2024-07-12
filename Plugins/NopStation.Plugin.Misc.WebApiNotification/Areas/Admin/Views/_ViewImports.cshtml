@@ -1,0 +1,24 @@
+﻿@inherits Nop.Web.Framework.Mvc.Razor.NopRazorPage<TModel>
+@inject Nop.Services.Common.IGenericAttributeService genericAttributeService
+@inject Nop.Core.IWorkContext workContext
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Nop.Web.Framework
+@addTagHelper *, NopStation.Plugin.Misc.Actions
+@inject INopHtmlHelper NopHtml
+
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@using Nop.Web.Framework.UI
+@using Nop.Web.Framework.Extensions
+@using System.Text.Encodings.Web
+@using Nop.Services.Events
+@using Nop.Web.Framework.Events
+@using NopStation.Plugin.Misc.WebApiNotification.Areas.Admin.Models
+@using NopStation.Plugin.Misc.WebApiNotification.Domains
+@using Nop.Web.Framework.Models.DataTables
+@using Nop.Web.Framework
+@using Nop.Web.Framework.Models
+@using Nop.Web.Framework.Infrastructure
+@using Nop.Web.Framework.Security.Captcha
+@using Nop.Web.Framework.Security.Honeypot
+@using Nop.Web.Framework.Themes
+@using Nop.Web.Areas.Admin.Components

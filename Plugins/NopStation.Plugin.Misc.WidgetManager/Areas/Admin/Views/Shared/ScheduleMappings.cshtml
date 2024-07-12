@@ -1,0 +1,165 @@
+﻿@model IScheduleSupportedModel
+@using NopStation.Plugin.Misc.WidgetManager.Domain.Schedules
+
+@{
+    var column1Str = (string)ViewData["Column1Grid"];
+    var column1 = 3;
+    if (!string.IsNullOrWhiteSpace(column1Str) && int.TryParse(column1Str, out int c1))
+    {
+        column1 = c1;
+    }
+    var column2 = 12 - column1;
+}
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.Schedule.ScheduleTypeId)").change(toggleScheduleType);
+
+        toggleScheduleType();
+    });
+
+    function toggleScheduleType() {
+        var selectedScheduleTypeId = $("#@Html.IdFor(model => model.Schedule.ScheduleTypeId)").val();
+        if (selectedScheduleTypeId == @(((int) ScheduleType.Monthly).ToString())) {
+            $('#pnlDaysOfWeek').hideElement();
+            $('#pnlDaysOfMonth').showElement();
+        }
+        else if (selectedScheduleTypeId == @(((int) ScheduleType.Weekly).ToString())) {
+            $('#pnlDaysOfWeek').showElement();
+            $('#pnlDaysOfMonth').hideElement();
+        } else {
+            $('#pnlDaysOfWeek').hideElement();
+            $('#pnlDaysOfMonth').hideElement();
+        }
+    }
+</script>
+
+<style>
+    .picker-wrapper {
+        width: 270px; 
+        max-width: 100%;
+        float: left
+    }
+    .picker-deivider {
+        width: 50px; 
+        text-align: center; 
+        float: left; 
+        height: 38px; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center;
+    }
+</style>
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-@column1">
+            <nop-label asp-for="Schedule.AvaliableDateTimeFromUtc" />
+        </div>
+        <div class="col-md-@column2">
+            <div class="picker-wrapper">
+                <nop-editor asp-for="Schedule.AvaliableDateTimeFromUtc" />
+            </div>
+            <div class="picker-deivider">@T("Admin.NopStation.WidgetManager.Schedules.To")</div>
+            <div class="picker-wrapper">
+                <nop-editor asp-for="Schedule.AvaliableDateTimeToUtc" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-@column1">
+            <nop-label asp-for="Schedule.TimeOfDayFromUtc" />
+        </div>
+        <div class="col-md-@column2">
+            <div class="picker-wrapper">
+                <nop-editor asp-for="Schedule.TimeOfDayFromUtc" />
+            </div>
+            <div class="picker-deivider">@T("Admin.NopStation.WidgetManager.Schedules.To")</div>
+            <div class="picker-wrapper">
+                <nop-editor asp-for="Schedule.TimeOfDayToUtc" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-@column1">
+            <nop-label asp-for="Schedule.ScheduleTypeId" />
+        </div>
+        <div class="col-md-@column2">
+            <nop-select asp-for="Schedule.ScheduleTypeId" asp-items="Model.Schedule.AvailableScheduleTypes" />
+            <span asp-validation-for="Schedule.ScheduleTypeId"></span>
+        </div>
+    </div>
+
+    <div class="form-group row" id="pnlDaysOfMonth">
+        <div class="col-md-@column1">
+            <nop-label asp-for="Schedule.SelectedDaysOfMonth" />
+        </div>
+        <div class="col-md-@column2">
+            <table class="table table-hover table-bordered">
+                <tr>
+                @foreach (var item in Model.Schedule.AvailableDaysOfMonth.Take(7))
+                {
+                    <td>
+                        <input type="checkbox" checked="@item.Selected" id="Schedule_SelectedDaysOfMonth_@item.Value" name="Schedule.SelectedDaysOfMonth" value="@item.Value">
+                        <label for="Schedule_SelectedDaysOfMonth_@item.Value">@item.Text</label>
+                    </td>
+                }
+                </tr>
+                <tr>
+                @foreach (var item in Model.Schedule.AvailableDaysOfMonth.Skip(7).Take(7))
+                {
+                    <td>
+                        <input type="checkbox" checked="@item.Selected" id="Schedule_SelectedDaysOfMonth_@item.Value" name="Schedule.SelectedDaysOfMonth" value="@item.Value">
+                        <label for="Schedule_SelectedDaysOfMonth_@item.Value">@item.Text</label>
+                    </td>
+                }
+                </tr>
+                <tr>
+                @foreach (var item in Model.Schedule.AvailableDaysOfMonth.Skip(14).Take(7))
+                {
+                    <td>
+                        <input type="checkbox" checked="@item.Selected" id="Schedule_SelectedDaysOfMonth_@item.Value" name="Schedule.SelectedDaysOfMonth" value="@item.Value">
+                        <label for="Schedule_SelectedDaysOfMonth_@item.Value">@item.Text</label>
+                    </td>
+                }
+                </tr>
+                <tr>
+                @foreach (var item in Model.Schedule.AvailableDaysOfMonth.Skip(21).Take(7))
+                {
+                    <td>
+                        <input type="checkbox" checked="@item.Selected" id="Schedule_SelectedDaysOfMonth_@item.Value" name="Schedule.SelectedDaysOfMonth" value="@item.Value">
+                        <label for="Schedule_SelectedDaysOfMonth_@item.Value">@item.Text</label>
+                    </td>
+                }
+                </tr>
+                <tr>
+                @foreach (var item in Model.Schedule.AvailableDaysOfMonth.Skip(28).Take(7))
+                {
+                    <td>
+                        <input type="checkbox" checked="@item.Selected" id="Schedule_SelectedDaysOfMonth_@item.Value" name="Schedule.SelectedDaysOfMonth" value="@item.Value">
+                        <label for="Schedule_SelectedDaysOfMonth_@item.Value">@item.Text</label>
+                    </td>
+                }
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="form-group row" id="pnlDaysOfWeek">
+        <div class="col-md-@column1">
+            <nop-label asp-for="Schedule.SelectedDaysOfWeek" />
+        </div>
+        <div class="col-md-@column2">
+            @foreach (var item in Model.Schedule.AvailableDaysOfWeek.Take(7))
+            {
+                <input type="checkbox" checked="@item.Selected" id="Schedule_SelectedDaysOfWeek_@item.Value" name="Schedule.SelectedDaysOfWeek" value="@item.Value">
+                <label for="Schedule_SelectedDaysOfWeek_@item.Value">@item.Text</label><br />
+            }
+        </div>
+    </div>
+
+</div>

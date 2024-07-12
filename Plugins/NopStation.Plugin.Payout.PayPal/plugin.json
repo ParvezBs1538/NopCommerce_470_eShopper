@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Payout",
+  "FriendlyName": "PayPal Payout",
+  "SystemName": "Payout.PayPal",
+  "Version": "4.6.0.0",
+  "SupportedVersions": [ "4.60" ],
+  "Author": "nopStation team",
+  "DisplayOrder": 3,
+  "FileName": "NopStation.Plugin.Payout.PayPal.dll",
+  "Description": "This plugin integrates with PayPal payout",
+  "DependsOnSystemNames": [ "NopStation.Core", "NopStation.Plugin.Widgets.VendorCommission" ]
+}

@@ -1,0 +1,32 @@
+@model WebAppDeviceModel
+
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.PWA.WebAppDevices.ViewDetails").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("PWA.WebAppDevices");
+}
+
+<form asp-controller="WebAppDevice" asp-action="View" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.PWA.WebAppDevices.ViewDetails")
+            <small>
+                <i class="fas fa-arrow-circle-left"></i>
+                <a asp-action="List">@T("Admin.NopStation.PWA.WebAppDevices.BackToList")</a>
+            </small>
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary" onclick="return confirm('@T("Admin.Common.ActionConfirmation")')">
+                <i class="fa fa-paper-plane"></i>
+                @T("Admin.NopStation.PWA.WebAppDevices.SendTestNotification")
+            </button>
+            <span id="device-delete" class="btn btn-danger">
+                <i class="far fa-trash-alt"></i>
+                @T("Admin.Common.Delete")
+            </span>
+        </div>
+    </div>
+    @await Html.PartialAsync("_CreateOrUpdate", Model)
+</form>
+<nop-delete-confirmation asp-model-id="@Model.Id" asp-button-id="device-delete" />

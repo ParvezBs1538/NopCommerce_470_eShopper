@@ -1,0 +1,222 @@
+/*custom home page slider css*/
+.home-top-slider .home-top-slider-inner .owl-nav {
+    position: absolute;
+    bottom: 15px;
+    left: 45px;
+    color: #fff;
+}
+/*top slider*/
+
+.home-top-slider .home-top-slider-inner .slider-text {
+    height: auto;
+}
+
+.home-top-slider .home-top-slider-inner .owl-nav {
+    height: auto;
+}
+
+.home-top-slider {
+    width: 100%;
+    flex: 0 0 100%;
+    height: 100%;
+    padding: 30px 70px;
+}
+
+    .home-top-slider .OCarousel-item {
+        overflow: hidden;
+    }
+
+        .home-top-slider .OCarousel-item:hover .slider-text {
+            background: rgba(255, 88, 116, 0.8);
+        }
+
+        .home-top-slider .OCarousel-item img {
+            transition: all 0.4s
+        }
+
+        .home-top-slider .OCarousel-item:hover img {
+            transform: scale(1.1);
+        }
+
+
+    .home-top-slider .home-top-slider-inner .slider-text {
+        background: rgba(0, 0, 0, 0.7);
+        margin: auto;
+        position: absolute;
+        width: 100%;
+        bottom: 50px;
+        color: #fff;
+        text-align: center;
+        padding: 12px;
+        font-size: 14px;
+        font-weight: bold;
+        text-transform: uppercase;
+        z-index: 5;
+        transition: all 0.3s;
+    }
+
+    .home-top-slider * {
+        height: 100%;
+    }
+
+.home-page-slider-container .owl-carousel .owl-nav {
+    display: none;
+    position: absolute;
+    top: auto;
+    bottom: 39%;
+    left: 0;
+    width: 100%;
+    justify-content: space-between;
+    margin-left: 1px;
+    padding: 0 20px;
+    color: #fff;
+    -webkit-transform: translate(0, -50%);
+    transform: translate(0, -50%);
+}
+
+    .home-page-slider-container .owl-carousel .owl-nav button.owl-prev,
+    .home-page-slider-container .owl-carousel .owl-nav button.owl-next {
+        background: #56cfe1;
+    }
+
+.home-page-slider-container .owl-carousel .owl-dots {
+    position: absolute;
+    bottom: 20px;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+    .home-page-slider-container .owl-carousel .owl-dots button {
+        background: #878787 !important;
+    }
+
+.home-page-slider-container .owl-carousel button.owl-dot.active {
+    background: #56cfe1 !important;
+}
+
+.slider-caption {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.slider-caption-inner {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    padding: 15px 15px;
+    text-align: left;
+    -webkit-transform: translate(0,-50%);
+    transform: translate(0,-50%);
+}
+
+.slider-title,
+.slider-subtitle {
+    margin: 0;
+    color: #222;
+    font-family: Poppins;
+    line-height: 1;
+}
+
+.slider-title {
+    padding-top: 7px;
+    font-size: 50px;
+    font-weight: 600;
+}
+
+.slider-subtitle {
+    padding-left: 2px;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.slider-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 150px;
+    min-height: 40px;
+    margin-top: 15px;
+    padding: 5px 25px;
+    background-color: #222;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    border: 2px solid #222;
+    border-radius: 0;
+    border-color: #222;
+    cursor: pointer;
+    -moz-transition: .3s;
+    -webkit-transition: .3s;
+    transition: .3s;
+}
+
+    .slider-btn:hover,
+    .slider-btn:active {
+        color: #fff;
+        opacity: 0.8;
+    }
+
+@media all and (max-width: 767px) {
+    .slider-title, .slider-subtitle {
+        line-height: 1.22857143;
+    }
+
+    .slider-title {
+        padding-top: 5px;
+        font-size: 25px;
+    }
+
+    .slider-subtitle {
+        font-size: 12px;
+    }
+}
+
+@media(max-width: 575px) {
+    .home-top-slider .home-top-slider-inner .slider-text {
+        font-size: 12px;
+    }
+
+    .home-top-slider {
+        margin-top: 0;
+    }
+
+    .home-top-slider {
+        padding: 20px 20px;
+    }
+
+    .slider-caption-inner {
+        width: calc(100% - 40px);
+        padding: 0px 15px 0px 25px;
+    }
+
+    .home-page-slider-container .owl-carousel .owl-dots {
+        bottom: 39%;
+        right: -25px;
+        width: auto;
+        margin-top: 0;
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+    .home-top-slider {
+        padding: 30px 40px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .home-top-slider {
+        padding: 30px 40px;
+    }
+
+    .slider-title {
+        font-size: 40px;
+    }
+}

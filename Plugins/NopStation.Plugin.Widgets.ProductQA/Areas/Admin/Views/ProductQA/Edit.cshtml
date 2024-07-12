@@ -1,0 +1,35 @@
+﻿@model ProductQAModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.ProductQuestionAnswer.EditDetails").Text;
+    NopHtml.SetActiveMenuItemSystemName("ProductQAList");
+}
+
+<form asp-controller="ProductQA" asp-action="Edit" method="post" id="productQA-edit-form">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.ProductQuestionAnswer.EditDetails")
+            <small>
+                <i class="fa fa-arrow-circle-left"></i>
+                <a asp-action="List">@T("Admin.NopStation.ProductQuestionAnswer.List.BackToList")</a>
+            </small>
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+            <button type="submit" name="save-continue" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.SaveContinue")
+            </button>
+            <span id="productQa-delete" class="btn btn-danger">
+                <i class="far fa-trash-alt"></i>
+                @T("Admin.Common.Delete")
+            </span>
+        </div>
+    </div>
+    @await Html.PartialAsync("_UpdateQuestionAnswer", Model)
+</form>
+<nop-delete-confirmation asp-model-id="@Model.Id" asp-button-id="productQa-delete" />

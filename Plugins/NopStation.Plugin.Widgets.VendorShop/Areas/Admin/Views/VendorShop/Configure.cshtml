@@ -1,0 +1,85 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("VendorShop.Configuration");
+    ViewBag.PageTitle = T("Admin.NopStation.VendorShop.Configuration.PageTitle").Text;
+}
+
+<form asp-controller="VendorShop" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.VendorShop.Configuration.PageTitle")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="EnableOCarousel_OverrideForStore" asp-input="EnableOCarousel" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableOCarousel" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="EnableOCarousel" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="EnableSlider_OverrideForStore" asp-input="EnableSlider" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableSlider" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="EnableSlider" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="EnableProductTabs_OverrideForStore" asp-input="EnableProductTabs" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableProductTabs" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="EnableProductTabs" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="EnableVendorShopCampaign_OverrideForStore" asp-input="EnableVendorShopCampaign" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableVendorShopCampaign" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="EnableVendorShopCampaign" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="EnableVendorCustomCss_OverrideForStore" asp-input="EnableVendorCustomCss" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableVendorCustomCss" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="EnableVendorCustomCss" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

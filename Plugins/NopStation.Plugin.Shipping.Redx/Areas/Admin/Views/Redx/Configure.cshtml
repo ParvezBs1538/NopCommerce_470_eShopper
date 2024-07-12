@@ -1,0 +1,121 @@
+﻿@model ConfigurationModel
+
+@{
+    NopHtml.SetActiveMenuItemSystemName("Redx.Configuration");
+    ViewBag.PageTitle = T("Admin.NopStation.Redx.Configuration").Text;
+}
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.UseSandbox)").change(toggleUseSandbox);
+        toggleUseSandbox();
+    });
+
+    function toggleUseSandbox() {
+        if ($('#@Html.IdFor(model => model.UseSandbox)').is(':checked')) {
+            $('#pnlSandboxUrl').show();
+            $('#pnlBaseUrl').hide();
+        } else {
+            $('#pnlSandboxUrl').hide();
+            $('#pnlBaseUrl').show();
+        }
+    }
+</script>
+
+<form asp-controller="Redx" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Redx.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="FlatShippingCharge_OverrideForStore" asp-input="FlatShippingCharge" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="FlatShippingCharge" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="FlatShippingCharge" />
+                                    <span asp-validation-for="FlatShippingCharge"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ApiAccessToken_OverrideForStore" asp-input="ApiAccessToken" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ApiAccessToken" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ApiAccessToken" />
+                                    <span asp-validation-for="ApiAccessToken"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ParcelTrackUrl_OverrideForStore" asp-input="ParcelTrackUrl" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ParcelTrackUrl" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ParcelTrackUrl" />
+                                    <span asp-validation-for="ParcelTrackUrl"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ShipmentEventsUrl_OverrideForStore" asp-input="ShipmentEventsUrl" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShipmentEventsUrl" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ShipmentEventsUrl" />
+                                    <span asp-validation-for="ShipmentEventsUrl"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="UseSandbox_OverrideForStore" asp-input="UseSandbox" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="UseSandbox" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="UseSandbox" />
+                                    <span asp-validation-for="UseSandbox"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" id="pnlSandboxUrl">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="SandboxUrl_OverrideForStore" asp-input="SandboxUrl" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="SandboxUrl" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="SandboxUrl" />
+                                    <span asp-validation-for="SandboxUrl"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" id="pnlBaseUrl">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="BaseUrl_OverrideForStore" asp-input="BaseUrl" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="BaseUrl" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="BaseUrl" />
+                                    <span asp-validation-for="BaseUrl"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

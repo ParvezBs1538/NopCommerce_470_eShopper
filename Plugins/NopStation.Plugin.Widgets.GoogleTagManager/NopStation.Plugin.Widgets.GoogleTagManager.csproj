@@ -1,0 +1,98 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Copyright>Nop-Station Team</Copyright>
+		<Version>4.70.1.0</Version>
+		<Authors>Nop-Station Team</Authors>
+		<Product>Nop-Station Google Tag Manager </Product>
+		<Company>Nop-Station</Company>
+		<AssemblyVersion>4.70.1.0</AssemblyVersion>
+		<FileVersion>4.70.1.0</FileVersion>
+		<NeutralLanguage>en</NeutralLanguage>
+		<PackageTags>NopStation,Google Tag Manager,NopCommerce,Plugin</PackageTags>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+		<Description>This plugin allows you to connect with google tag manager.</Description>
+		<OutputPath>..\..\Presentation\Nop.Web\Plugins\NopStation.Plugin.Widgets.GoogleTagManager</OutputPath>
+		<OutDir>$(OutputPath)</OutDir>
+		<CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+  
+	<ItemGroup>
+	  <None Remove="Areas\Admin\Views\GoogleTagManager\Configure.cshtml" />
+	  <None Remove="Areas\Admin\Views\GoogleTagManager\ExportFile.cshtml" />
+	  <None Remove="Areas\Admin\Views\_ViewImports.cshtml" />
+	  <None Remove="Content\js\ns.gtm.js" />
+	  <None Remove="GTMPlugin.json" />
+	  <None Remove="logo.png" />
+	  <None Remove="plugin.json" />
+	  <None Remove="Views\Shared\Components\GoogleTagManager\Default.cshtml" />
+	  <None Remove="Views\_ViewImports.cshtml" />
+	</ItemGroup>
+  
+	<ItemGroup>
+	  <Content Include="Areas\Admin\Views\GoogleTagManager\Configure.cshtml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Areas\Admin\Views\GoogleTagManager\ExportFile.cshtml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Areas\Admin\Views\_ViewImports.cshtml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Content\js\ns.gtm.js">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="GTMPlugin.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="logo.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="plugin.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Views\Shared\Components\GoogleTagManager\Default.cshtml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Views\_ViewImports.cshtml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="NopStation.Plugin.Misc.Actions">
+      <HintPath>..\NopStation.Plugin.Misc.Core\NopStation.Plugin.Misc.Actions.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\Presentation\Nop.Web.Framework\Nop.Web.Framework.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Presentation\Nop.Web\Nop.Web.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\NopStation.Plugin.Misc.Core\NopStation.Plugin.Misc.Core.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ClearPluginAssemblies Include="$(MSBuildProjectDirectory)\..\..\Build\ClearPluginAssemblies.proj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="release_note.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  
+	<!-- This target execute after "Build" target -->
+	<Target Name="NopTarget" AfterTargets="Build">
+		<!-- Delete unnecessary libraries from plugins path -->
+		<MSBuild Projects="$(MSBuildProjectDirectory)\..\..\Build\ClearPluginAssemblies.proj" Properties="PluginPath=$(MSBuildProjectDirectory)\$(OutDir)" Targets="NopClear" />
+
+    <!--  Delete Extra Folder and files from plugin output directory-->
+    <RemoveDir Directories="$(OutDir)\refs;$(OutDir)\ref" />
+    <Delete Files="$(OutDir)\$(AssemblyName).deps.Json;$(OutDir)\$(AssemblyName).pdb;$(OutDir)\$(AssemblyName).staticwebassets.runtime.json" />
+
+  </Target>
+</Project>

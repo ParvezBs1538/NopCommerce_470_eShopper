@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Abandoned Carts",
+  "SystemName": "NopStation.Plugin.Widgets.AbandonedCarts",
+  "Version": "4.60.1.1",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.AbandonedCarts.dll",
+  "Description": "This plugin enables to manage Abandoned Carts and send notifications",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

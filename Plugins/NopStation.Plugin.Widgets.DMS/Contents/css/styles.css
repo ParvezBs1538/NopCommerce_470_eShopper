@@ -1,0 +1,29 @@
+﻿.user-details-button {
+  display: block;
+  margin: 10px auto;
+  text-align: center;
+}
+
+
+.button-1.shipment-button-submit {
+  min-width: 120px;
+  border: none;
+  background-color: #4ab2f1;
+  padding: 10px 25px;
+  text-align: center;
+  font-size: 15px;
+  color: #fff;
+  text-transform: uppercase;
+  margin: 10px 0;
+}
+
+input#ShippedDate,
+input#DeliveryDate {
+  padding: 2px;
+  margin: 5px 0;
+  display: block;
+}
+
+.shipment-details-area .label-wrapper {
+  margin: 2px 0;
+}

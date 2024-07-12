@@ -1,0 +1,26 @@
+@model TicketModel
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+@{
+    const string hideInfoBlockAttributeName = "TicketPage.HideInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideInfoBlockAttributeName, defaultValue: true);
+
+    const string hideResponseBlockAttributeName = "TicketPage.HideResponseBlock";
+    var hideResponseBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideResponseBlockAttributeName, defaultValue: true);
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <nop-cards id="ticket-panels">
+                <nop-card asp-name="ticket-info" asp-icon="fa fa-info" asp-title="@T("Admin.NopStation.Helpdesk.Tickets.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</nop-card>
+                @if (Model.Id > 0)
+                {
+                    <nop-card asp-name="ticket-responses" asp-icon="fa fa-plus-square" asp-title="@T("Admin.NopStation.Helpdesk.Tickets.Responses")" asp-hide-block-attribute-name="@hideResponseBlockAttributeName" asp-hide="@hideResponseBlock" asp-advanced="true">@await Html.PartialAsync("_CreateOrUpdate.Responses", Model)</nop-card>
+                }
+            </nop-cards>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,153 @@
+﻿@using Nop.Core
+@using Nop.Web.Framework.Themes
+@model MegaMenuModel
+@{
+    NopHtml.AddCssFileParts($"/Plugins/NopStation.Plugin.Widgets.MegaMenu/Contents/css/styles.css",string.Empty);
+}
+
+<ul class="mm-navbar-nav top-menu notmobile">
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HeaderMenuBefore })
+    @if (Model.DisplayHomePageMenuItem)
+    {
+        <li class="mm-nav-item first-level-nav"><a href="@Url.RouteUrl("HomePage")">@T("Home")</a></li>
+    }
+
+    @if (Model.Categories.Any())
+    {
+        <li class="mm-nav-item dropdown-menu-list">
+            <a href="#">@T("NopStation.MegaMenu.Public.Categories")</a>
+            <div class="mm-dropdown sublist">
+                <ul class="mm-dropdown-list">
+                    @foreach (var category in Model.Categories)
+                    {
+                        var categoryLineModel = new MegaMenuModel.CategoryLineModel
+                        {
+                            Category = category,
+                            MaxLevel = Model.MaxCategoryLevelsToShow
+                        };
+                        @await Html.PartialAsync("_CategoryLine.MegaMenu.cshtml", categoryLineModel)
+                    }
+                </ul>
+            </div>
+        </li>
+    }
+    @if (Model.Manufacturers.Any())
+    {
+        <li class="mm-nav-item dropdown-menu-list">
+            <a href="#">@T("NopStation.MegaMenu.Public.Manufacturers")</a>
+            <div class="mm-dropdown sublist">
+                <ul class="mm-dropdown-list">
+                    @foreach (var manufacturer in Model.Manufacturers)
+                    {
+                        <li class="nav-item dropdown">
+                            <a href="@Url.RouteUrl("Manufacturer", new { SeName = manufacturer.SeName })">
+                                @if (manufacturer.PictureModel != null && !string.IsNullOrEmpty(manufacturer.PictureModel.ImageUrl))
+                                {
+                                    <img class="img-fluid" src="@manufacturer.PictureModel.ImageUrl" alt="@manufacturer.PictureModel.ThumbImageUrl" />
+                                }
+                                <span>@manufacturer.Name</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+                <div class="all-manufacture text-center"><a href="@Url.RouteUrl("ManufacturerList")">@T("NopStation.MegaMenu.Public.AllManufacturers")</a></div>
+            </div>
+        </li>
+    }
+
+    @foreach (var topic in Model.Topics)
+    {
+        <li class="mm-nav-item first-level-nav"><a href="@Url.RouteUrl("Topic", new { SeName = topic.SeName })">@topic.Name</a></li>
+    }
+
+    @if (Model.NewProductsEnabled && Model.DisplayNewProductsMenuItem)
+    {
+        <li class="mm-nav-item first-level-nav"><a href="@Url.RouteUrl("NewProducts")">@T("Products.NewProducts")</a></li>
+    }
+
+    @if (Model.DisplayProductSearchMenuItem)
+    {
+        <li class="mm-nav-item first-level-nav"><a href="@Url.RouteUrl("ProductSearch")">@T("Search")</a></li>
+    }
+    @if (Model.DisplayCustomerInfoMenuItem)
+    {
+        <li class="mm-nav-item first-level-nav"><a href="@Url.RouteUrl("CustomerInfo")">@T("Account.MyAccount")</a></li>
+    }
+    @if (Model.BlogEnabled && Model.DisplayBlogMenuItem)
+    {
+        <li class="mm-nav-item first-level-nav"><a href="@Url.RouteUrl("Blog")">@T("Blog")</a></li>
+    }
+    @if (Model.ForumEnabled && Model.DisplayForumsMenuItem)
+    {
+        <li class="mm-nav-item first-level-nav"><a href="@Url.RouteUrl("Boards")">@T("Forum.Forums")</a></li>
+    }
+    @if (Model.DisplayContactUsMenuItem)
+    {
+        <li class="mm-nav-item first-level-nav"><a href="@Url.RouteUrl("ContactUs")">@T("ContactUs")</a></li>
+    }
+
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HeaderMenuAfter })
+</ul>
+
+
+<div class="menu-toggle"><span class="icon-nav">@T("NopStation.MegaMenu.Public.Categories")</span></div>
+<ul class="top-menu mobile mobile-menu">
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.MobHeaderMenuBefore })
+
+    @if (Model.DisplayHomePageMenuItem)
+    {
+        <li class="nav-item"><a href="@Url.RouteUrl("HomePage")">@T("HomePage")</a></li>
+    }
+    @foreach (var category in Model.Categories)
+    {
+        var categoryLineModel = new MegaMenuModel.CategoryLineModel
+        {
+            Category = category
+        };
+        @await Html.PartialAsync("_CategoryLine.MegaMenu.cshtml", categoryLineModel)
+    }
+    @foreach (var topic in Model.Topics)
+    {
+        <li class="nav-item"><a href="@Url.RouteUrl("Topic", new { SeName = topic.SeName })">@topic.Name</a></li>
+    }
+    @if (Model.NewProductsEnabled && Model.DisplayNewProductsMenuItem)
+    {
+        <li class="nav-item"><a href="@Url.RouteUrl("NewProducts")">@T("Products.NewProducts")</a></li>
+    }
+    @if (Model.DisplayProductSearchMenuItem)
+    {
+        <li class="nav-item"><a href="@Url.RouteUrl("ProductSearch")">@T("Search")</a></li>
+    }
+    @if (Model.DisplayCustomerInfoMenuItem)
+    {
+        <li class="nav-item"><a href="@Url.RouteUrl("CustomerInfo")">@T("Account.MyAccount")</a></li>
+    }
+    @if (Model.BlogEnabled && Model.DisplayBlogMenuItem)
+    {
+        <li class="nav-item"><a href="@Url.RouteUrl("Blog")">@T("Blog")</a></li>
+    }
+    @if (Model.ForumEnabled && Model.DisplayForumsMenuItem)
+    {
+        <li class="nav-item"><a href="@Url.RouteUrl("Boards")">@T("Forum.Forums")</a></li>
+    }
+    @if (Model.DisplayContactUsMenuItem)
+    {
+        <li class="nav-item"><a href="@Url.RouteUrl("ContactUs")">@T("ContactUs")</a></li>
+    }
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.MobHeaderMenuAfter })
+</ul>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $('.menu-toggle').on('click', function () {
+            $(this).siblings('.top-menu.mobile').slideToggle('slow');
+        });
+        $('.top-menu.mobile .sublist-toggle').on('click', function () {
+            $(this).siblings('.sublist').slideToggle('slow');
+        });
+    });
+    //close
+    $("#close-menu").on("click", function () {
+        $('.mobile-menu').removeClass('isActive');
+    })
+</script>

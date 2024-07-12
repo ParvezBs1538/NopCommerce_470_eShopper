@@ -1,0 +1,49 @@
+﻿@model ConfigurationModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.PWA.Configuration.Title").Text;
+    NopHtml.SetActiveMenuItemSystemName("PWA.Configuration");
+
+    NopHtml.AddScriptParts(ResourceLocation.Footer,"/lib_npm/farbstastic/farbtastic.min.js");
+    NopHtml.AddCssFileParts("/lib_npm/farbstastic/farbtastic.css", string.Empty);
+}
+
+@{
+    const string hideVapidBlockAttributeName = "PWASettingsPage.HideVapidBlock";
+    var hideVapidBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideVapidBlockAttributeName);
+
+    const string hideNotificationBlockAttributeName = "PWASettingsPage.HideNotificationBlock";
+    var hideNotificationBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideNotificationBlockAttributeName);
+
+    const string hideManifestBlockAttributeName = "PWASettingsPage.HideManifestBlock";
+    var hideManifestBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideManifestBlockAttributeName);
+}
+
+<form asp-controller="ProgressiveWebApp" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.PWA.Configuration.Title")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+
+                <nop-cards id="algoliasettings-panels">
+                    <nop-card asp-name="pwa-vapidkeys" asp-icon="fa fa-cog" asp-title="@T("Admin.NopStation.PWA.Configuration.BlockTitle.VapidDetails")" asp-hide-block-attribute-name="@hideVapidBlockAttributeName" asp-hide="@hideVapidBlock" asp-advanced="false">@await Html.PartialAsync("_Configure.VapidDetails", Model)</nop-card>
+                    <nop-card asp-name="pwa-notification" asp-icon="fa fa-bell" asp-title="@T("Admin.NopStation.PWA.Configuration.BlockTitle.Notification")" asp-hide-block-attribute-name="@hideNotificationBlockAttributeName" asp-hide="@hideNotificationBlock" asp-advanced="false">@await Html.PartialAsync("_Configure.Notification", Model)</nop-card>
+                    <nop-card asp-name="pwa-manifest" asp-icon="fa fa-cog" asp-title="@T("Admin.NopStation.PWA.Configuration.BlockTitle.Manifest")" asp-hide-block-attribute-name="@hideManifestBlockAttributeName" asp-hide="@hideManifestBlock" asp-advanced="false">@await Html.PartialAsync("_Configure.Manifest", Model)</nop-card>
+                </nop-cards>
+            </div>
+        </div>
+    </section>
+</form>

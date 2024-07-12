@@ -1,0 +1,44 @@
+﻿@model IEnumerable<CarouselOverviewModel>
+
+@foreach (var carousel in Model)
+{
+    var carouselType = carousel.CarouselType.ToString().ToLower();
+    var bg = "";
+    var bgClass = "";
+
+    if (carousel.ShowBackground)
+    {
+        if (carousel.BackgroundType == BackgroundType.Picture)
+        {
+           bg = $"background:url('{carousel.BackgroundPictureUrl}') no-repeat center; background-size: cover;";
+           bgClass = $"bg-class";
+        }
+        else
+        {
+           bg = $"background-color:{carousel.BackgroundColor};";
+           bgClass = $"bg-class;";
+        }
+    }
+
+    <div class="carousel-grid carousel-@carouselType @carousel.CustomCssClass @bgClass" style="@bg">
+        @if (carousel.DisplayTitle)
+        {
+            <div class="title">
+                <strong>@carousel.Title</strong>
+            </div>
+        }
+
+        <div class="carousel-container" data-carouselid="@carousel.Id">
+            <div class="loader">
+                <img src="@Url.Content("~/Plugins/NopStation.Plugin.Widgets.SmartCarousels/Contents/images/loader.gif")" />
+            </div>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(carousel.CustomUrl))
+        {
+            <div class="see-more">
+                <a class="see-more-button" href="@carousel.CustomUrl">@T("NopStation.SmartCarousels.SeeMore")</a>
+            </div>
+        }
+    </div>
+}

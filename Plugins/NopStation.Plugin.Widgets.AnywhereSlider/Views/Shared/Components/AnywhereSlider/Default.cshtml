@@ -1,0 +1,14 @@
+﻿@model SliderListModel
+
+@foreach (var slider in Model.Sliders)
+{
+    var bg = slider.ShowBackgroundPicture ? $"style=background:url('{slider.BackgroundPictureUrl}') no-repeat center;" : "";
+
+    <div class="slider-grid @Html.Raw(slider.ShowBackgroundPicture? "slider-grid-background" : "")" @bg>
+        <div class="slider-container " data-sliderid="@slider.Id">
+            <div class="loader">
+                <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+            </div>
+        </div>
+    </div>
+}

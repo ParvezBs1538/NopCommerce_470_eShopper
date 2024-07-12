@@ -1,0 +1,31 @@
+﻿@model CategoryNavigationModel
+
+
+@if (Model.Categories.Count > 0)
+{
+    <div class="block category-filter collaps-filter">
+        <h2>@T("Categories")</h2>
+        <div class="panel-group category-products category-navigation-div filter-content" id="accordion">
+            @foreach (var category in Model.Categories)
+            {
+                var categoryLineModel = new CategoryNavigationModel.CategoryLineModel
+                {
+                    CurrentCategoryId = Model.CurrentCategoryId,
+                    Category = category
+                };
+                <div class="panel panel-default">
+
+                    @await Html.PartialAsync("_CategoryLine.Navigation.Block", categoryLineModel)
+
+                </div>
+            }
+        </div>
+    </div>
+
+}
+<script asp-location="Footer">
+    $(".collaps-filter h2").click(function(){
+  $(this).toggleClass("expanded");
+});
+
+</script>

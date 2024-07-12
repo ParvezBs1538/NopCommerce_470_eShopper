@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Stripe WeChat Pay",
+  "SystemName": "NopStation.Plugin.Payments.StripeWeChatPay",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.StripeWeChatPay.dll",
+  "Description": "This plugin enables Stripe WeChatPay payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

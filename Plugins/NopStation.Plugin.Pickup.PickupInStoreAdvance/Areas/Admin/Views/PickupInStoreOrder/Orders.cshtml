@@ -1,0 +1,175 @@
+﻿@model PickupInStoreDeliveryManageSearchModel
+@inject IWebHelper webhelper
+@inject IGenericAttributeService genericAttributeService
+@inject IWorkContext workContext
+@{
+    Layout = "_AdminLayout";
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.PickupInStoreAdvance.Orders.Title").Text;
+    //active menu item (system name)
+    Html.SetActiveMenuItemSystemName("Plugin.PickupInStoreAdvance.Orders");
+    var storeUrl = webhelper.GetStoreLocation();
+    var initiatedId = (int)PickUpStatusType.OrderInitied;
+    var readyForPickId = (int)PickUpStatusType.ReadyForPick;
+    var pickedUpByCustomerId = (int)PickUpStatusType.PickedUpByCustomer;
+    var orderCancelledId = (int)PickUpStatusType.OrderCanceled;
+
+    const string hideSearchBlockAttributeName = "PickupInStoreOrders.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>
+    (await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.PickupInStoreAdvance.Orders.List")
+    </h1>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fas fa-search" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                        </div>
+
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchOrderId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchOrderId" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchStatusId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchStatusId" asp-items="Model.AvailableSearchStatus" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="text-center col-12">
+                                    <button type="button" id="search-orders" class="btn btn-primary btn-search"><i class="fa fa-search"></i>@T("Admin.Common.Search")</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                        Name = "orders-class-grid",
+                        UrlRead = new DataUrl("OrderList", "PickupInStoreOrder", null),
+                        SearchButtonId = "search-orders",
+                        Length = Model.PageSize,
+                        LengthMenu = Model.AvailablePageSizes,
+                        Filters = new List<FilterParameter>
+                            {
+                            new FilterParameter(nameof(Model.SearchOrderId)),
+                            new FilterParameter(nameof(Model.SearchStatusId))
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                                {
+
+                                new ColumnProperty(nameof(PickupInStoreDeliveryManageModel.OrderId))
+                                {
+                                Title = T("Admin.NopStation.PickupInStoreAdvance.Field.OrderId").Text,
+                                Width = "120",
+                                Render = new RenderCustom("GetEditUrl")
+                                },
+                                new ColumnProperty(nameof(PickupInStoreDeliveryManageModel.OrderDate))
+                                {
+                                Title = T("Admin.NopStation.PickupInStoreAdvance.Field.OrderDate").Text,
+                                Width = "120"
+                                },
+                                new ColumnProperty(nameof(PickupInStoreDeliveryManageModel.NopOrderStatus))
+                                {
+                                Title = T("Admin.NopStation.PickupInStoreAdvance.Field.NopOrderStatus").Text,
+                                Width = "120"
+                                },
+                                new ColumnProperty(nameof(PickupInStoreDeliveryManageModel.PickUpStatus))
+                                {
+                                Title = T("Admin.NopStation.PickupInStoreAdvance.Field.OrderStatus").Text,
+                                Width = "180",
+                                ClassName = NopColumnClassDefaults.CenterAll,
+                                //Render = new RenderBoolean()
+                                },
+                                new ColumnProperty(nameof(PickupInStoreDeliveryManageModel.ReadyForPickupMarkedAtUtc))
+                                {
+                                Title = T("Admin.NopStation.PickupInStoreAdvance.Field.ReadyForPickupMarkedAtUtc").Text,
+                                Width = "120",
+                                ClassName = NopColumnClassDefaults.CenterAll,
+                                //Render = new RenderBoolean()
+                                },
+                                new ColumnProperty(nameof(PickupInStoreDeliveryManageModel.PickupUpAtUtc))
+                                {
+                                Title = T("Admin.NopStation.PickupInStoreAdvance.Field.PickupUpAtUtc").Text,
+                                Width = "120",
+                                ClassName = NopColumnClassDefaults.CenterAll,
+                                //Render = new RenderBoolean()
+                                },
+                                new ColumnProperty(nameof(PickupInStoreDeliveryManageModel.OrderId))
+                                {
+                                Title = T("Admin.NopStation.PickupInStoreAdvance.Field.MarkAsReady").Text,
+                                Width = "100",
+                                ClassName =  NopColumnClassDefaults.Button,
+                                Render = new RenderCustom("MarkReady")
+                                },
+                                new ColumnProperty(nameof(PickupInStoreDeliveryManageModel.OrderId))
+                                {
+                                Title = T("Admin.NopStation.PickupInStoreAdvance.Field.MarkAsPickedUp").Text,
+                                Width = "100",
+                                ClassName =  NopColumnClassDefaults.Button,
+                                Render = new RenderCustom("MarkPicked")
+                                }
+                                }
+                                })
+                        <script>
+                        function GetEditUrl(data, type, row, meta) {
+                            return "<a href=" + '@storeUrl' + "Admin/Order/Edit/" + row.OrderId + ">" + row.OrderNumber + "</a>";
+                        };
+                        function MarkReady(data, type, row, meta) {
+                            if (row.PickUpStatusTypeId == '@initiatedId')
+                                return '<a class="btn btn-default" href="MarkReady/' + row.OrderId + '"><i class="fa fa-pencil"></i>'+'@T("Admin.NopStation.PickupInStoreAdvance.Field.MarkAsReady")'+'</a>';
+                            else if (row.PickUpStatusTypeId == '@readyForPickId' || row.PickUpStatusTypeId == '@pickedUpByCustomerId')
+                                return "<i class='fa fa-check' aria-hidden='true'></i>";
+                            else if (row.PickUpStatusTypeId == '@orderCancelledId')
+                                return "<i class='fa fa-times'></i>";
+                            else
+                                return "";
+                        };
+
+                        function MarkPicked(data, type, row, meta) {
+                            if (row.PickUpStatusTypeId == '@readyForPickId')
+                                return '<a class="btn btn-default" href="MarkPicked/' + row.OrderId + '"><i class="fa fa-pencil"></i>'+'@T("Admin.NopStation.PickupInStoreAdvance.Field.MarkAsPickedUp")'+'</a>';
+                            else if (row.PickUpStatusTypeId == '@pickedUpByCustomerId')
+                                return "<i class='fa fa-check' aria-hidden='true'></i>";
+                            else if (row.PickUpStatusTypeId == '@orderCancelledId')
+                                return "<i class='fa fa-times'></i>";
+                            else
+                                return "";
+                        };
+                        </script>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+

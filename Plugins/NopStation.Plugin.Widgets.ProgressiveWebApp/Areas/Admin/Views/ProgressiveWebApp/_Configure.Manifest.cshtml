@@ -1,0 +1,98 @@
+﻿@model ConfigurationModel
+
+<div class="card-body">
+    <p>@T("Admin.NopStation.PWA.Configuration.Manifest.Tooltip")</p>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="ManifestName_OverrideForStore" asp-input="ManifestName" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="ManifestName" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ManifestName" />
+            <span asp-validation-for="ManifestName"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="ManifestShortName_OverrideForStore" asp-input="ManifestShortName" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="ManifestShortName" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ManifestShortName" />
+            <span asp-validation-for="ManifestShortName"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="ManifestThemeColor_OverrideForStore" asp-input="ManifestThemeColor" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="ManifestThemeColor" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ManifestThemeColor" />
+            <div id="theme-color-picker"></div>
+            <script>
+                $(document).ready(function(){
+                    $('#theme-color-picker').farbtastic('#@Html.IdFor(model => model.ManifestThemeColor)');
+                });
+            </script>
+            <span asp-validation-for="ManifestThemeColor"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="ManifestBackgroundColor_OverrideForStore" asp-input="ManifestBackgroundColor" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="ManifestBackgroundColor" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ManifestBackgroundColor" />
+            <div id="bg-color-picker"></div>
+            <script>
+                $(document).ready(function(){
+                    $('#bg-color-picker').farbtastic('#@Html.IdFor(model => model.ManifestBackgroundColor)');
+                });
+            </script>
+            <span asp-validation-for="ManifestBackgroundColor"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="ManifestDisplay_OverrideForStore" asp-input="ManifestDisplay" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="ManifestDisplay" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="ManifestDisplay" asp-items="Model.AvailableDisplayTypes" />
+            <span asp-validation-for="ManifestDisplay"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="ManifestStartUrl_OverrideForStore" asp-input="ManifestStartUrl" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="ManifestStartUrl" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ManifestStartUrl" />
+            <span asp-validation-for="ManifestStartUrl"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="ManifestAppScope_OverrideForStore" asp-input="ManifestAppScope" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="ManifestAppScope" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ManifestAppScope" />
+            <span asp-validation-for="ManifestAppScope"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="ManifestPictureId_OverrideForStore" asp-input="ManifestPictureId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="ManifestPictureId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ManifestPictureId" />
+            <em>@T("Admin.NopStation.PWA.Configuration.Manifest.PictureId.Hint")</em>
+            <span asp-validation-for="ManifestPictureId"></span>
+        </div>
+    </div>
+</div>

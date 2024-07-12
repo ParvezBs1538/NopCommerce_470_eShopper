@@ -1,0 +1,248 @@
+﻿@model AffiliateInfoModel
+
+@using Nop.Core
+@using NopStation.Plugin.Widgets.AffiliateStation.Domains
+
+@inject Nop.Core.IWebHelper webHelper
+@{
+    Layout = "_ColumnsTwo";
+
+    //title
+    if (Model.AlreadyApplied)
+    {
+        NopHtml.AddTitleParts(T("NopStation.AffiliateStation.Account.AffiliateInfo").Text);
+    }
+    else
+    {
+        NopHtml.AddTitleParts(T("NopStation.AffiliateStation.Account.ApplyForAffiliate").Text);
+    }
+    //page class
+    NopHtml.AppendPageCssClassParts("html-account-page");
+    NopHtml.AppendPageCssClassParts("html-affiliate-info-page");
+}
+
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = -1 })
+}
+
+<div class="page account-page customer-info-page">
+    <div class="page-title">
+        <h1>
+            @T("Account.MyAccount") -
+            @if (Model.AlreadyApplied)
+            {
+                @T("NopStation.AffiliateStation.Account.AffiliateInfo")
+            }
+            else
+            {
+                @T("NopStation.AffiliateStation.Account.ApplyForAffiliate")
+            }
+        </h1>
+    </div>
+    <div class="page-body">
+        <form asp-route="AffiliateStation.AffiliateInfo" method="post">
+            <div asp-validation-summary="ModelOnly" class="message-error"></div>
+            <div class="fieldset">
+                <div class="title">
+                    <strong>@T("NopStation.AffiliateStation.Account.AffiliateDetails")</strong>
+                </div>
+                <div class="form-fields">
+                    <div class="inputs">
+                        @if (!string.IsNullOrWhiteSpace(Model.WarningText))
+                        {
+                            <div class="affiliate-account-warning">@Model.WarningText</div>
+                        }
+                    </div>
+                    @if (!string.IsNullOrWhiteSpace(Model.Url))
+                    {
+                        <div class="inputs">
+                            <label asp-for="Url" asp-postfix=":"></label>
+                            <input asp-for="Url" readonly="readonly" />
+                            <button type="button" onclick="copyUrl()" class="copy-btn">@T("NopStation.AffiliateStation.Account.CopyButton")</button>
+                            <span class="field-validation-valid" id="copied-msg" style="display: none">@T("NopStation.AffiliateStation.Account.UrlCopied")</span>
+                        </div>
+                        <script>
+                            function copyUrl() {
+                                var copyText = document.getElementById("@Html.IdFor(x=> x.Url)");
+                                copyText.select();
+                                document.execCommand("copy");
+                                $('#copied-msg').show('slow');
+                                setTimeout(function () {
+                                    $('#copied-msg').hide('slow');
+                                }, 5000);
+                            }
+                        </script>
+                    }
+                    <input asp-for="Address.Id" type="hidden" />
+                    <div class="inputs">
+                        <label asp-for="Address.FirstName" asp-postfix=":"></label>
+                        <input asp-for="Address.FirstName" />
+                        <nop-required />
+                        <span asp-validation-for="Address.FirstName"></span>
+                    </div>
+                    <div class="inputs">
+                        <label asp-for="Address.LastName" asp-postfix=":"></label>
+                        <input asp-for="Address.LastName" />
+                        <nop-required />
+                        <span asp-validation-for="Address.LastName"></span>
+                    </div>
+                    <div class="inputs">
+                        <label asp-for="Address.Email" asp-postfix=":"></label>
+                        <input asp-for="Address.Email" />
+                        <nop-required />
+                        <span asp-validation-for="Address.Email"></span>
+                    </div>
+                    <div class="inputs">
+                        <label asp-for="FriendlyUrlName" asp-postfix=":"></label>
+                        <input asp-for="FriendlyUrlName" />
+                        <span asp-validation-for="FriendlyUrlName"></span>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.Address.StreetAddressEnabled ||
+            Model.Address.StreetAddress2Enabled ||
+            Model.Address.ZipPostalCodeEnabled ||
+            Model.Address.CityEnabled ||
+            Model.Address.CountyEnabled ||
+            Model.Address.CountryEnabled)
+            {
+                <div class="fieldset">
+                    <div class="title">
+                        <strong>@T("NopStation.AffiliateStation.Account.AffiliateAddress")</strong>
+                    </div>
+                    <div class="form-fields">
+                        @if (Model.Address.StreetAddressEnabled)
+                        {
+                            <div class="inputs">
+                                <label asp-for="Address.Address1" asp-postfix=":"></label>
+                                <input asp-for="Address.Address1" />
+                                @if (Model.Address.StreetAddressRequired)
+                                {
+                                    <nop-required />
+                                }
+                                <span asp-validation-for="Address.Address1"></span>
+                            </div>
+                        }
+                        @if (Model.Address.StreetAddress2Enabled)
+                        {
+                            <div class="inputs">
+                                <label asp-for="Address.Address2" asp-postfix=":"></label>
+                                <input asp-for="Address.Address2" />
+                                @if (Model.Address.StreetAddress2Required)
+                                {
+                                    <nop-required />
+                                }
+                                <span asp-validation-for="Address.Address2"></span>
+                            </div>
+                        }
+                        @if (Model.Address.ZipPostalCodeEnabled)
+                        {
+                            <div class="inputs">
+                                <label asp-for="Address.ZipPostalCode" asp-postfix=":"></label>
+                                <input asp-for="Address.ZipPostalCode" />
+                                @if (Model.Address.ZipPostalCodeRequired)
+                                {
+                                    <nop-required />
+                                }
+                                <span asp-validation-for="Address.ZipPostalCode"></span>
+                            </div>
+                        }
+                        @if (Model.Address.CityEnabled)
+                        {
+                            <div class="inputs">
+                                <label asp-for="Address.City" asp-postfix=":"></label>
+                                <input asp-for="Address.City" />
+                                @if (Model.Address.CityRequired)
+                                {
+                                    <nop-required />
+                                }
+                                <span asp-validation-for="Address.City"></span>
+                            </div>
+                        }
+                        @if (Model.Address.CountyEnabled)
+                        {
+                            <div class="inputs">
+                                <label asp-for="Address.County" asp-postfix=":"></label>
+                                <input asp-for="Address.County" />
+                                @if (Model.Address.CountyRequired)
+                                {
+                                    <nop-required />
+                                }
+                                <span asp-validation-for="Address.County"></span>
+                            </div>
+                        }
+                        @if (Model.Address.CountryEnabled)
+                        {
+                            <div class="inputs">
+                                <label asp-for="Address.CountryId" asp-postfix=":"></label>
+                                <select asp-for="Address.CountryId" asp-items="Model.Address.AvailableCountries"
+                                        data-trigger="country-select"
+                                        data-url="@(Url.RouteUrl("GetStatesByCountryId"))"
+                                        data-stateprovince="#@Html.IdFor(model => model.Address.StateProvinceId)"
+                                        data-loading="#states-loading-progress"></select>
+                                <nop-required />
+                                <span asp-validation-for="Address.CountryId"></span>
+                            </div>
+                        }
+                        @if (Model.Address.CountryEnabled && Model.Address.StateProvinceEnabled)
+                        {
+                            <div class="inputs">
+                                <label asp-for="Address.StateProvinceId" asp-postfix=":"></label>
+                                <select asp-for="Address.StateProvinceId" asp-items="Model.Address.AvailableStates"></select>
+                                <nop-required />
+                                <span id="states-loading-progress" style="display: none;" class="please-wait">@T("Common.Wait")</span>
+                                <span asp-validation-for="Address.StateProvinceId"></span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (Model.Address.PhoneEnabled || Model.Address.FaxEnabled)
+            {
+                <div class="fieldset">
+                    <div class="title">
+                        <strong>@T("NopStation.AffiliateStation.Account.AffiliateContactInformation")</strong>
+                    </div>
+                    <div class="form-fields">
+                        @if (Model.Address.PhoneEnabled)
+                        {
+                            <div class="inputs">
+                                <label asp-for="Address.PhoneNumber" asp-postfix=":"></label>
+                                <input asp-for="Address.PhoneNumber" />
+                                @if (Model.Address.PhoneRequired)
+                                {
+                                    <nop-required />
+                                }
+                                <span asp-validation-for="Address.PhoneNumber"></span>
+                            </div>
+                        }
+                        @if (Model.Address.FaxEnabled)
+                        {
+                            <div class="inputs">
+                                <label asp-for="Address.FaxNumber" asp-postfix=":"></label>
+                                <input asp-for="Address.FaxNumber" />
+                                @if (Model.Address.FaxRequired)
+                                {
+                                    <nop-required />
+                                }
+                                <span asp-validation-for="Address.FaxNumber"></span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (!Model.AlreadyApplied || Model.CanUpdateInfo)
+            {
+                var btnText = Model.AlreadyApplied ? T("NopStation.AffiliateStation.Account.UpdateButton").Text : T("NopStation.AffiliateStation.Account.ApplyButton").Text;
+
+                <div class="buttons">
+                    <input type="submit" id="save-info-button" value="@btnText" name="save-info-button" class="button-1 save-affiliate-info-button" />
+                </div>
+            }
+        </form>
+    </div>
+</div>

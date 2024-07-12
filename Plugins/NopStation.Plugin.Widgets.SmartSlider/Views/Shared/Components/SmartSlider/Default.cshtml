@@ -1,0 +1,29 @@
+﻿@model IEnumerable<SliderModel>
+
+@foreach (var slider in Model)
+{
+    var bg = "";
+    var bgClass = "";
+
+    if (slider.ShowBackground)
+    {
+        if (slider.BackgroundType == BackgroundType.Picture)
+        {
+            bg = $"background:url('{slider.BackgroundPictureUrl}') no-repeat center; background-size: cover;";
+           bgClass = $"bg-class";
+        }
+        else
+        {
+            bg = $"background-color:{slider.BackgroundColor};";
+           bgClass = $"bg-class;";
+        }
+    }
+
+    <div class="slider-grid @slider.CustomCssClass @bgClass" style="@bg">
+        <div class="slider-container">
+            @{
+                await Html.RenderPartialAsync("SmartSlider", slider);
+            }
+        </div>
+    </div>
+}

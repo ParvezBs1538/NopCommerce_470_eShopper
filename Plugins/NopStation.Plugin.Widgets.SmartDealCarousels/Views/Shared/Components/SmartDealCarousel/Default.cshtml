@@ -1,0 +1,50 @@
+﻿@model IEnumerable<CarouselModel>
+@using System.Globalization
+
+@foreach (var carousel in Model)
+{
+    var bg = "";
+    var bgClass = "";
+
+    if (carousel.ShowBackground)
+    {
+        if (carousel.BackgroundType == BackgroundType.Picture)
+        {
+            bg = $"background:url('{carousel.BackgroundPictureUrl}') no-repeat center; background-size: cover;";
+            bgClass = $"bg-class";
+        }
+        else
+        {
+            bg = $"background-color:{carousel.BackgroundColor};";
+            bgClass = $"bg-class;";
+        }
+    }
+
+    <div class="deal-carousel-grid @carousel.CustomCssClass @bgClass" style="@bg">
+        @if (carousel.DisplayTitle)
+        {
+            <div class="title">
+                <strong>@carousel.Title</strong>
+            </div>
+        }
+        @if (carousel.ShowCountdown && carousel.CountdownUntill.HasValue)
+        {
+            <div class="carousel-countdown">
+                <div data-countdown="@carousel.CountdownUntill.Value.ToString("yyyy-MM-ddTHH:mm:ss", new CultureInfo("en-US"))"></div>
+            </div>
+        }
+
+        <div class="deal-carousel-container">
+            @{
+                await Html.RenderPartialAsync("SmartDealCarousel", carousel);
+            }
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(carousel.CustomUrl))
+        {
+            <div class="see-more">
+                <a class="see-more-button" href="@carousel.CustomUrl">@T("NopStation.SmartDealCarousels.SeeMore")</a>
+            </div>
+        }
+    </div>
+}

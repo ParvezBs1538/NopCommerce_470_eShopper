@@ -1,0 +1,87 @@
+﻿@model QuoteRequestDetailsModel
+@inject AdminAreaSettings adminAreaSettings
+
+<div class="card-body">
+    <div class="messages" id="messages">
+        @foreach (var message in Model.RequestMessages)
+        {
+            var current = message.IsWriter ? "right" : "left";
+            <div class="quote-message quote-message-@current">
+                @if (message.IsWriter)
+                {
+                    <span class="text-muted text-sm">@T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.Messages.You")</span>
+                }
+                <div class="text-sm">@message.CreatedOnUtc.ToString("d") - @message.CreatedOnUtc.ToString("t")</div>
+                <div class="message-text">@Html.Raw(message.Content)</div>
+            </div>
+        }
+    </div>
+    <div class="search-body response-block customer-response">
+        @if (adminAreaSettings.UseRichEditorForCustomerEmails)
+        {
+            <nop-editor asp-for="ResponseMessage" asp-template="RichEditor" />
+        }
+        else
+        {
+            <nop-textarea asp-for="ResponseMessage" placeholder="@T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.SendResponse")" />
+        }
+        <button type="button" class="btn btn-primary float-right mt-3 sendResponse message-send-button" id="submitResponse">@T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.Send")</button>
+    </div>
+</div>
+
+<script asp-location="Footer">
+    function addMessage(message) {
+        const msgElement = $(`
+                            <div class="quote-message quote-message-right">
+                                <span class="text-muted text-sm">@T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.Messages.You")</span>
+                                <div class="text-sm">${new Date(message.CreatedOnUtc).toLocaleString()}</div>
+                                <div class="message-text">${message.Content}</div>
+                            </div>
+                        `);
+        $('#messages').append(msgElement);
+        $('#messages').animate({ scrollTop: msgElement.offset().top }, 1000);
+    }
+    $("#submitResponse").click(function (e) {
+        e.preventDefault()
+        @if (adminAreaSettings.UseRichEditorForCustomerEmails)
+        {
+            <text>var message = tinyMCE.activeEditor.getContent();</text>
+        }
+        else
+        {
+            <text>var message = $('#@Html.IdFor(x => x.ResponseMessage)').val();</text>
+        }
+        var data = {
+            requestId: @Model.Id, message: message
+        };
+        addAntiForgeryToken(data);
+        if (message.length > 0) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SendResponse","QCQuoteRequest")',
+                data: data,
+                success: function (response) {
+                    @if (adminAreaSettings.UseRichEditorForCustomerEmails)
+                    {
+                        <text>tinyMCE.activeEditor.setContent('');</text>
+                    }
+                    else
+                    {
+                        <text>$('#@Html.IdFor(x => x.ResponseMessage)').val('');</text>
+                    }
+                    if (response.Data) {
+                        addMessage(response.Data);
+                    }
+                    else location.reload();
+                },
+                error: function (response) {
+                    showAlert('message-alert', response?.responseJSON?.Error || 'Error submitting quote request!');
+                }
+            });
+
+        } else {
+            showAlert('message-alert', '@T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.WriteResponseMessage")');
+        }
+    });
+</script>
+<nop-alert asp-alert-id="message-alert" />

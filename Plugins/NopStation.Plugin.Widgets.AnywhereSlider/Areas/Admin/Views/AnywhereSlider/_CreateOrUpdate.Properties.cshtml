@@ -1,0 +1,114 @@
+﻿@model SliderModel
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Nav" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Nav" />
+            <span asp-validation-for="Nav"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="AutoPlay" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="AutoPlay" />
+            <span asp-validation-for="AutoPlay"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="AutoPlay">
+        <div id="pnlAutoPlay">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="AutoPlayTimeout" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="AutoPlayTimeout" />
+                    <span asp-validation-for="AutoPlayTimeout"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="AutoPlayHoverPause" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="AutoPlayHoverPause" />
+                    <span asp-validation-for="AutoPlayHoverPause"></span>
+                </div>
+            </div>
+        </div>
+    </nop-nested-setting>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="LazyLoad" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="LazyLoad" />
+            <span asp-validation-for="LazyLoad"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="LazyLoad">
+        <div class="form-group row" id="pnlLazyLoad">
+            <div class="col-md-3">
+                <nop-label asp-for="LazyLoadEager" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="LazyLoadEager" />
+                <span asp-validation-for="LazyLoadEager"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="StartPosition" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="StartPosition" />
+            <span asp-validation-for="StartPosition"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Margin" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Margin" />
+            <span asp-validation-for="Margin"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Loop" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Loop" />
+            <span asp-validation-for="Loop"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="AnimateOut" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="AnimateOut" asp-items="@Model.AvailableAnimationTypes" />
+            <span asp-validation-for="AnimateOut"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="AnimateIn" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="AnimateIn" asp-items="@Model.AvailableAnimationTypes" />
+            <span asp-validation-for="AnimateIn"></span>
+        </div>
+    </div>
+</div>

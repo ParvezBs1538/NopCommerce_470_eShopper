@@ -1,0 +1,132 @@
+﻿@model CategorySEOTemplateModel
+<style>
+    .seo-templat-section {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .row.token-block {
+        margin-bottom: 10px;
+        background-color: #dcf2ff;
+        padding: 10px;
+    }
+</style>
+<div class="seo-templat-section card-body">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="seo-templat-body">
+                @(await Html.LocalizedEditorAsync<CategorySEOTemplateModel, SEOTemplateLocalizedModel>("category-seo-name-localized",
+                    @<div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="@Model.Locales[item].SEOTitleTemplate" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="@Model.Locales[item].SEOTitleTemplate" />
+                                <span asp-validation-for="@Model.Locales[item].SEOTitleTemplate"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="@Model.Locales[item].SEODescriptionTemplate" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="@Model.Locales[item].SEODescriptionTemplate" />
+                                <span asp-validation-for="@Model.Locales[item].SEODescriptionTemplate"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="@Model.Locales[item].SEOKeywordsTemplate" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="@Model.Locales[item].SEOKeywordsTemplate" />
+                                <span asp-validation-for="@Model.Locales[item].SEOKeywordsTemplate"></span>
+                            </div>
+                        </div>
+                        <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+                    </div>
+                    ,
+                    @<div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="SEOTitleTemplate" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="SEOTitleTemplate" />
+                                <span asp-validation-for="SEOTitleTemplate"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="SEODescriptionTemplate" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="SEODescriptionTemplate" />
+                                <span asp-validation-for="SEODescriptionTemplate"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="SEOKeywordsTemplate" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="SEOKeywordsTemplate" />
+                                <span asp-validation-for="SEOKeywordsTemplate"></span>
+                            </div>
+                        </div>
+                    </div>))
+            </div>
+        </div>
+        <div class="col-md-6 all-available-token-section">
+            @if (Model.AvailableCategoryMetaTitleTokens.Any())
+            {
+                <div class="row token-block">
+                    <div class="token-type-header col-md-4">
+                        <div> @T("Admin.NopStation.Plugin.Misc.AdvancedSEO.CategorySEOTemplate.AvailableCategoryMetaTitleTokens") </div>
+                    </div>
+                    <div class="tokens col-md-8">
+                        <ul>
+                            @foreach (var item in Model.AvailableCategoryMetaTitleTokens)
+                            {
+                                <li>@item</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+            @if (Model.AvailableCategoryMetaDescriptionTokens.Any())
+            {
+                <div class="row token-block">
+                    <div class="token-type-header col-md-4">
+                        <div> @T("Admin.NopStation.Plugin.Misc.AdvancedSEO.CategorySEOTemplate.AvailableCategoryMetaDescriptionTokens") </div>
+                    </div>
+                    <div class="tokens col-md-8">
+                        <ul>
+                            @foreach (var item in Model.AvailableCategoryMetaDescriptionTokens)
+                            {
+                                <li>@item</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+            @if (Model.AvailableCategoryMetaKeywordsTokens.Any())
+            {
+                <div class="row token-block">
+                    <div class="token-type-header col-md-4">
+                        <div> @T("Admin.NopStation.Plugin.Misc.AdvancedSEO.CategorySEOTemplate.AvailableCategoryMetaKeywordsTokens") </div>
+                    </div>
+                    <div class="tokens col-md-8">
+                        <ul>
+                            @foreach (var item in Model.AvailableCategoryMetaKeywordsTokens)
+                            {
+                                <li>@item</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

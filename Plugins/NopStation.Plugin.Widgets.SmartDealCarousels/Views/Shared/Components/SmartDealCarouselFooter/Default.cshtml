@@ -1,0 +1,51 @@
+﻿@using Nop.Core
+@inject IWorkContext workContext
+@inject SmartDealCarouselSettings smartCarouselSettings
+
+@{
+    var supportRtl = (await workContext.GetWorkingLanguageAsync()).Rtl;
+
+    if (supportRtl)
+    {
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.SmartDealCarousels/Contents/css/styles.rtl.css", string.Empty);
+    }
+    else
+    {
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.SmartDealCarousels/Contents/css/styles.css", string.Empty);
+        
+    }
+    NopHtml.AppendCssFileParts($"/Plugins/NopStation.Plugin.Widgets.SmartDealCarousels/Contents/css/swiper-bundle.min.css", string.Empty);
+}
+
+<script asp-location="Footer" src="~/Plugins/NopStation.Plugin.Widgets.SmartDealCarousels/Contents/script/swiper-bundle.min.js"></script>
+<script asp-location="Footer" src="~/Plugins/NopStation.Plugin.Widgets.SmartDealCarousels/Contents/script/jquery.countdown.min.js"></script>
+
+<script asp-location="Footer">
+    $('[data-countdown]').each(function () {
+        var $this = $(this), finalDate = $(this).data('countdown');
+        var date = new Date(finalDate)
+        $this.countdown(date.getTime(), function (event) {
+            $this.html(event.strftime(''
+                + '<span class="count day"><span>%D</span> @T("NopStation.SmartDealCarousels.Countdown.Days")</span> '
+                + '<span class="count hours"><span>%H</span> @T("NopStation.SmartDealCarousels.Countdown.Hours") </span>'
+                + '<span class="count min"><span>%M</span> @T("NopStation.SmartDealCarousels.Countdown.Minutes") </span>'
+                + '<span class="count sec"><span>%S</span> @T("NopStation.SmartDealCarousels.Countdown.Seconds")</span>'));
+        });
+    });
+</script>
+
+@if (!smartCarouselSettings.EnableAjaxLoad)
+{
+    return;
+}
+
+<script asp-location="Footer" src="~/Plugins/NopStation.Plugin.Widgets.SmartDealCarousels/Contents/script/nopstation.carousel.js"></script>
+
+<script asp-location="Footer">
+    var carouseldata = {};
+    carouseldata.CarouselFailure = '@T("NopStation.SmartDealCarousels.LoadingFailed")';
+
+    $(document).ready(function () {
+        SmartDealCarousel.init('@Url.RouteUrl("SmartDealCarousel")', '.deal-carousel-container', '.deal-carousel-container .loader', carouseldata);
+    });
+</script>

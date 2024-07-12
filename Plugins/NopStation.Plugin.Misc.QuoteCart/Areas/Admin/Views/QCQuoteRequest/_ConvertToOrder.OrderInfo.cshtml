@@ -1,0 +1,87 @@
+﻿@model ConvertToOrderModel
+
+<div class="card-body">
+    <div class="search-body">
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="PaymentMethodSystemName" />
+            </div>
+            <div class="col-md-9">
+                <nop-select asp-items="Model.AvailablePaymentMethods" asp-for="PaymentMethodSystemName" asp-required="true" />
+                <span asp-validation-for="PaymentMethodSystemName"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="PaymentMethodAdditionalFee" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="PaymentMethodAdditionalFee" asp-postfix="@Model.CustomerCurrencyCode" />
+                <span asp-validation-for="PaymentMethodAdditionalFee"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="MarkAsPaid" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="MarkAsPaid" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="ShippingRateComputationMethodSystemName" />
+            </div>
+            <div class="col-md-9">
+                <nop-select asp-items="Model.AvailableShippingProviders" asp-for="ShippingRateComputationMethodSystemName" asp-required="true" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="ShippingMethodId" />
+            </div>
+            <div class="col-md-9">
+                <nop-select asp-items="Model.AvailableShippingMethods" asp-for="ShippingMethodId" asp-required="true" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="OrderShippingFee" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="OrderShippingFee" asp-postfix="@Model.CustomerCurrencyCode" />
+                <span asp-validation-for="OrderShippingFee"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<nop-alert asp-alert-id="shipping-error" />
+<script asp-location="Footer">
+    $(function() {
+        $('#@Html.IdFor(x => x.ShippingRateComputationMethodSystemName)').change(function() {
+            var data = {
+                shippingAddressId: $('#@Html.IdFor(x => x.ShippingAddressId)').val(),
+                shippingRateComputationMethodSystemName: $(this).val(),
+                quoteRequestId: $('#@Html.IdFor(x => x.QuoteRequestId)').val()
+            }
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("ShippingOptions","QCQuoteRequest")',
+                data: data,
+                success: function (response) {
+                    if (Array.isArray(response.data)) {
+                        $('#@Html.IdFor(x => x.ShippingMethodId)').empty();
+                        for (const option of response.data) {
+                            $('#@Html.IdFor(x => x.ShippingMethodId)').append(`<option value="${option.Value}">${option.Text}</option>`)
+                        }
+                    }
+                    else
+                        showAlert('shipping-error', response?.message || 'Error fetching shipping options.');
+                },
+                error: function (response) {
+                    showAlert('shipping-error', response?.message || 'Error fetching shipping options.');
+                }
+            });
+        });
+    });
+</script>

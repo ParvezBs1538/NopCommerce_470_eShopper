@@ -1,0 +1,41 @@
+﻿@model RateableOrderListModel
+
+<form action="@Url.RouteUrl("SaveOrderRatings")" method="post" id="order-ratings-form">
+    @foreach (var order in Model.Orders)
+    {
+        <div class="fieldset order-rating-item">
+            <div class="form-fields">
+                <div class="inputs">
+                    <input type="hidden" name="OrderRating_Id_@(order.Id)" value="@order.Id" />
+                    <label for="OrderRating_Id_@(order.Id)">@T("NopStation.OrderRatings.Fields.OrderId") @order.CustomOrderNumber</label>
+                    <div class="order-created-date">
+                        <label>@T("NopStation.OrderRatings.OrderDetails.CreatedOn", order.CreatedOn.ToString("dd/MM/yyyy"))</label>
+                    </div>
+                </div>
+                <div class="review-rating">
+                    <div class="name-description">
+                        <label for="OrderRating_@(order.Id)">@T("NopStation.OrderRatings.Fields.Rating"):</label>
+                    </div>
+                    <div class="rating-wrapper">
+                        <div class="label first">@T("NopStation.OrderRatings.Fields.Rating.Bad")</div>
+                        <div class="rating-options">
+                            <input name="OrderRating_Rate_@(order.Id)" value="1" type="radio" id="addorderrating_1_@(order.Id)" aria-label="@T("NopStation.OrderRatings.Rating.Bad")" />
+                            <input name="OrderRating_Rate_@(order.Id)" value="2" type="radio" id="addorderrating_2_@(order.Id)" aria-label="@T("NopStation.OrderRatings.Rating.NotGood")" />
+                            <input name="OrderRating_Rate_@(order.Id)" value="3" type="radio" id="addorderrating_3_@(order.Id)" aria-label="@T("NopStation.OrderRatings.Rating.Average")" />
+                            <input name="OrderRating_Rate_@(order.Id)" value="4" type="radio" id="addorderrating_4_@(order.Id)" aria-label="@T("NopStation.OrderRatings.Rating.Good")" />
+                            <input name="OrderRating_Rate_@(order.Id)" value="5" type="radio" checked="checked" id="addorderrating_5_@(order.Id)" aria-label="@T("NopStation.OrderRatings.Rating.Excellent")" />
+                        </div>
+                        <div class="label last">@T("NopStation.OrderRatings.Fields.Rating.Excellent")</div>
+                    </div>
+                </div>
+                <div class="inputs">
+                    <label for="OrderRating_Note_@(order.Id)">@T("NopStation.OrderRatings.Fields.Note"):</label>
+                    <textarea name="OrderRating_Note_@(order.Id)" class="review-text"></textarea>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="buttons">
+        <button type="submit" name="add-ratings" class="button-1 save-order-rating-button">@T("NopStation.OrderRatings.Rating.SubmitButton")</button>
+    </div>
+</form>

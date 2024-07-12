@@ -1,0 +1,24 @@
+﻿@model CheckoutPaymentMethodModel
+
+<div class="step-title">
+    <h2 class="title">@T("Checkout.PaymentMethod")</h2>
+</div>
+<div id="checkout-step-payment-method" class="step a-item">
+    <form action="" id="opc-payment-method-form" method="post">
+
+         @await Html.PartialAsync("_PaymentMethods", Model)
+
+    </form>
+
+</div>
+
+
+<script asp-location="Footer">
+
+    $("input[type=radio][name=paymentmethod]").on("change", function () {
+        var paymentMethodSystemName = $(this).val();
+
+        PaymentMethod.updatePaymentMethod(paymentMethodSystemName);
+    });
+</script>
+

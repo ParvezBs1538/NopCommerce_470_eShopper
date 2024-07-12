@@ -1,0 +1,96 @@
+﻿@model LoginModel
+@using Nop.Core
+@using NopStation.Plugin.Widgets.PopupLogin
+@using Nop.Web.Models.Customer
+@using Microsoft.AspNetCore.Http;
+
+@inject IWebHelper webHelper
+@inject IHttpContextAccessor httpContextAccessor
+@inject PopupLoginSettings popupLoginSettings
+
+@{ 
+    var path = httpContextAccessor.HttpContext.Request.Path;
+
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "/Plugins/NopStation.Plugin.Widgets.PopupLogin/Contents/js/jquery.fullscreen-popup.min.js");
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "/Plugins/NopStation.Plugin.Widgets.PopupLogin/Contents/js/jquery.magnific-popup.min.js");
+
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.PopupLogin/Contents/css/magnific-popup.css",string.Empty);
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.PopupLogin/Contents/css/styles.css",string.Empty); 
+}
+
+<div style="display: none" id="login-modal">
+    <div class="page-title">
+        <h1>@T("Account.Login.Welcome")</h1>
+    </div>
+    @await Html.PartialAsync("_ExternalAuthentication.Errors")
+    <div class="customer-blocks">
+        <div class="returning-wrapper fieldset">
+            <form asp-route="Login" asp-route-returnurl="@path" method="post" autocomplete="off">
+                <div asp-validation-summary="ModelOnly" class="message-error">@T("Account.Login.Unsuccessful")</div>
+                <div class="title">
+                    <strong>@T("Account.Login.ReturningCustomer")</strong>
+                </div>
+                <div class="form-fields">
+                    @if (Model.UsernamesEnabled)
+                    {
+                        <div class="inputs">
+                            <label asp-for="Username" asp-postfix=":"></label>
+                            <input asp-for="Username" class="username" autofocus="autofocus" />
+                            <span asp-validation-for="Username"></span>
+                        </div> 
+                    } 
+                    else
+                    {
+                        <div class="inputs">
+                            <label asp-for="Email" asp-postfix=":"></label>
+                            <input asp-for="Email" class="email" autofocus="autofocus" />
+                            <span asp-validation-for="Email"></span>
+                        </div>
+                    }
+                    <div class="inputs">
+                        <label asp-for="Password" asp-postfix=":"></label>
+                        <input asp-for="Password" class="password" />
+                        <span asp-validation-for="Password"></span>
+                    </div>
+                    <div class="inputs reversed">
+                        <input asp-for="RememberMe" />
+                        <label asp-for="RememberMe"></label>
+                        <span class="forgot-password">
+                            <a asp-route="PasswordRecovery">@T("Account.Login.ForgotPassword")</a>
+                        </span>
+                    </div>
+                    @if (Model.DisplayCaptcha)
+                    {
+                        <nop-captcha />
+                    }
+                </div>
+                <div class="buttons">
+                    <button type="submit" class="button-1 login-button">@T("Account.Login.LoginButton")</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="external-authentication">
+        @await Component.InvokeAsync("ExternalMethods", "ExternalAuthentication")
+    </div>
+    @await Component.InvokeAsync("TopicBlock", new { systemName = "LoginRegistrationInfo" })
+</div>
+<button type="button" style="display: none" id="login-button"></button>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $("#login-button").magnificPopup({
+            items: {
+                src: '#login-modal',
+                type: 'inline'
+            },
+            preloader: true
+        });
+
+        $('@(popupLoginSettings.LoginUrlElementSelector)').click(function (e) {
+            e.preventDefault();
+            $("#login-button").click();
+            $("#login-modal").show();
+        });
+    })
+</script>

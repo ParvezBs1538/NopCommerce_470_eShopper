@@ -1,0 +1,193 @@
+@model AbandonmentDetailsViewModel
+
+@{
+    Layout = "_AdminLayout";
+    //page title
+    ViewBag.PageTitle = "View Abandonment Details";
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("Abandoned Carts plugin");
+}
+
+@{
+    const string hideInfoBlockAttributeName = "AbandonmentDetailsPage.HideInfoBlock";
+    var customer = await workContext.GetCurrentCustomerAsync();
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideInfoBlockAttributeName);
+
+    const string hideCustomerBlockAttributeName = "AbandonmentDetailsPage.HideCustomerBlock";
+    var hideCustomerBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideCustomerBlockAttributeName);
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        View Abandonment Details - @Model.AbandonmentInfo.Id
+        <small>
+            <i class="fas fa-arrow-circle-left"></i>
+            <a asp-controller="WidgetsAbandonedCarts" asp-action="List">"Back To List"</a>
+        </small>
+    </h1>
+        
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+
+            <nop-cards id="order-cards">
+                @if (Model.AbandonmentInfo != null)
+                {
+                    <nop-card asp-name="abandonment-info" asp-icon="fas fa-info" asp-title="Abandoned Carts Info" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">
+                        <div class="card-body">
+                            <div class="card-deck">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="2">
+                                                        <strong>Abandoned Carts</strong>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tr>
+                                                <td>
+                                                    @T("Plugins.Widgets.AbandonedCarts.Fields.Product").Text
+                                                </td>
+                                                <td>
+                                                    @Model.AbandonmentInfo.ProductName
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @T("Plugins.Widgets.AbandonedCarts.Fields.ProductSku").Text
+                                                </td>
+                                                <td>
+                                                    @Model.AbandonmentInfo.ProductSku
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @T("Plugins.Widgets.AbandonedCarts.Fields.Status").Text
+                                                </td>
+                                                <td>
+                                                    @Model.AbandonmentInfo.StatusName
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @T("Plugins.Widgets.AbandonedCarts.Fields.StatusChangedOn").Text
+                                                </td>
+                                                <td>
+                                                    @Model.AbandonmentInfo.StatusChangedOn
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @T("Plugins.Widgets.AbandonedCarts.Fields.FirstNotificationSentOn").Text
+                                                </td>
+                                                <td>
+                                                    @if (Model.AbandonmentInfo.FirstNotificationSentOn != DateTime.MinValue)
+                                                    {
+                                                        @Model.AbandonmentInfo.FirstNotificationSentOn
+                                                    }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @T("Plugins.Widgets.AbandonedCarts.Fields.SecondNotificationSentOn").Text
+                                                </td>
+                                                <td>
+                                                    @if (Model.AbandonmentInfo.SecondNotificationSentOn != DateTime.MinValue)
+                                                    {
+                                                        @Model.AbandonmentInfo.SecondNotificationSentOn
+                                                    }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @T("Plugins.Widgets.AbandonedCarts.Fields.Customer").Text
+                                                </td>
+                                                <td>
+                                                    @Model.AbandonmentInfo.CustomerName
+                                                </td>
+                                            </tr>
+
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </nop-card>
+                }
+                @if (Model.CustomerAbandonmentInfo != null)
+                {
+                    <nop-card asp-name="customer-abandonment-info" asp-icon="fas fa-user" asp-title="Customer Abandonment Info" asp-hide-block-attribute-name="@hideCustomerBlockAttributeName" asp-hide="@hideCustomerBlock" asp-advanced="false">
+                        <div class="card-body">
+                            <div class="card-deck">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="2">
+                                                        <strong>Customer Abandonment</strong>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tr>
+                                                <td>
+                                                    @T("Plugins.Widgets.AbandonedCarts.Fields.Customer").Text
+                                                </td>
+                                                <td>
+                                                    @Model.AbandonmentInfo.CustomerName
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @T("Plugins.Widgets.AbandonedCarts.Fields.Status").Text
+                                                </td>
+                                                <td>
+                                                    @Model.CustomerAbandonmentInfo.StatusName
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @T("Plugins.Widgets.AbandonedCarts.Fields.NotificationSentFrequency").Text
+                                                </td>
+                                                <td>
+                                                    @Model.CustomerAbandonmentInfo.NotificationSentFrequency
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @T("Plugins.Widgets.AbandonedCarts.Fields.LastNotificationSentOn").Text
+                                                </td>
+                                                <td>
+                                                    @Model.CustomerAbandonmentInfo.LastNotificationSentOn
+                                                </td>
+                                            </tr>
+                                            @if (Model.CustomerAbandonmentInfo.UnsubscribedOnUtc != DateTime.MinValue)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @T("Plugins.Widgets.AbandonedCarts.Fields.UnsubscribedOnUtc").Text
+                                                    </td>
+                                                    <td>
+                                                        @Model.CustomerAbandonmentInfo.UnsubscribedOnUtc
+
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </nop-card>
+                }
+
+            </nop-cards>
+        </div>
+    </div>
+</section>

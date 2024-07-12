@@ -1,0 +1,12 @@
+﻿﻿.recommendation-container.recommendation-product {
+  min-height: 520px;
+  position: relative;
+  overflow: hidden;
+}
+
+.recommendation-container .loader img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

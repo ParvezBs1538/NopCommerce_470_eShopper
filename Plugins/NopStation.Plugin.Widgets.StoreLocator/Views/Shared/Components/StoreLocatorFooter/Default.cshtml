@@ -1,0 +1,36 @@
+﻿@model FooterModel
+
+@if (Model.AskCustomerLocation)
+{
+<script asp-location="Footer">
+    navigator.geolocation.getCurrentPosition(
+        function (position) {
+            var data = position.coords;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.RouteUrl("SaveGeoLocation")',
+                data: data,
+                dataType: 'json',
+                success: function (resultData) {
+                }
+            });
+        },
+        function (error) {
+            console.log(error.message);
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 5000
+        });
+</script>
+}
+
+@if (Model.IncludeInFooterColumn)
+{
+<script asp-location="Footer">
+    $(document).ready(function () {
+        var footerMenu = '<li><a href="@Url.RouteUrl("StoreLocations")">@T("NopStation.StoreLocator.FindStores")</a></li>';
+        $('@Model.FooterColumnSelector').append(footerMenu);
+    });
+</script>
+}

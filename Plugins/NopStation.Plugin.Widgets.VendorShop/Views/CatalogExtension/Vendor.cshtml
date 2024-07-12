@@ -1,0 +1,123 @@
+﻿@model Nop.Web.Models.Catalog.VendorModel
+
+@using Nop.Core
+@using Nop.Core.Domain.Seo
+@using Nop.Core.Domain.Vendors
+@using Nop.Web.Components;
+@using Nop.Web.Framework.Infrastructure;
+@using Nop.Web.Framework.Mvc.Routing;
+
+@inject IWebHelper webHelper
+@inject SeoSettings seoSettings
+
+@{
+    Layout = "_VendorShop";
+
+    //title
+    NopHtml.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    //meta
+    NopHtml.AddMetaDescriptionParts(Model.MetaDescription);
+    NopHtml.AddMetaKeywordParts(Model.MetaKeywords);
+    //page class
+    NopHtml.AppendPageCssClassParts("html-vendor-page");
+    NopHtml.AppendCssFileParts("~/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/css/styles.css", string.Empty);
+    @if (Model.AllowCustomersToContactVendors)
+    {
+        NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/lib/arcontactus.js");
+        NopHtml.AddCssFileParts("~/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/lib/arcontactus.css");
+    }
+    var contactUsUrl = @Url.RouteUrl("ContactVendor", new { vendorId = Model.Id });
+
+    if (seoSettings.CanonicalUrlsEnabled)
+    {
+        var vendorUrl = Url.RouteUrl<Vendor>(new { SeName = Model.SeName }, webHelper.GetCurrentRequestProtocol()).ToLowerInvariant();
+        NopHtml.AddCanonicalUrlParts(vendorUrl, seoSettings.QueryStringInCanonicalUrlsEnabled);
+    }
+}
+
+
+@*contact vendor*@
+
+@section VendorContactUs {
+    @if (Model.AllowCustomersToContactVendors)
+    {
+        <div id="arcontactus"></div>
+        <script asp-location="Footer">
+            var arCuMessages = ['@T("NopStation.VendorShop.ButtonText.ContactUs").Text'];
+            var arCuLoop = false;
+            var arCuCloseLastMessage = false;
+            var arCuPromptClosed = false;
+            var _arCuTimeOut = null;
+            var arCuDelayFirst = 2000;
+            var arCuTypingTime = 2000;
+            var arCuMessageTime = 4000;
+            var arCuClosedCookie = 0;
+            var arcItems = [];
+            window.addEventListener('load', function () {
+                arCuClosedCookie = arCuGetCookie('arcu-closed');
+                jQuery('#arcontactus').on('arcontactus.init', function () {
+                    if (arCuClosedCookie) {
+                        return false;
+                    }
+                    arCuShowMessages();
+                });
+                jQuery('#arcontactus').on('arcontactus.openMenu', function () {
+                    clearTimeout(_arCuTimeOut);
+                    arCuPromptClosed = true;
+                    jQuery('#contact').contactUs('hidePrompt');
+                    arCuCreateCookie('arcu-closed', 1, 30);
+                });
+                jQuery('#arcontactus').on('arcontactus.hidePrompt', function () {
+                    clearTimeout(_arCuTimeOut);
+                    arCuPromptClosed = true;
+                    arCuCreateCookie('arcu-closed', 1, 30);
+                });
+
+                var arcItem = {};
+                arcItem.id = 'msg-item-11';
+                arcItem.class = 'messanger msg-item-comments';
+                arcItem.title = '@Model.Name';
+                arcItem.icon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 192c0-88.4-93.1-160-208-160S0 103.6 0 192c0 34.3 14.1 65.9 38 92-13.4 30.2-35.5 54.2-35.8 54.5-2.2 2.3-2.8 5.7-1.5 8.7S4.8 352 8 352c36.6 0 66.9-12.3 88.7-25 32.2 15.7 70.3 25 111.3 25 114.9 0 208-71.6 208-160zm122 220c23.9-26 38-57.7 38-92 0-66.9-53.5-124.2-129.3-148.1.9 6.6 1.3 13.3 1.3 20.1 0 105.9-107.7 192-240 192-10.8 0-21.3-.8-31.7-1.9C207.8 439.6 281.8 480 368 480c41 0 79.1-9.2 111.3-25 21.8 12.7 52.1 25 88.7 25 3.2 0 6.1-1.9 7.3-4.8 1.3-2.9.7-6.3-1.5-8.7-.3-.3-22.4-24.2-35.8-54.5z"></path></svg>';
+                arcItem.href = '@contactUsUrl';
+                arcItems.push(arcItem);
+
+                jQuery('#arcontactus').contactUs({
+                    items: arcItems
+                });
+            });
+        </script>
+
+    }
+}
+
+@section VendorProfilePage {
+    @await Html.PartialAsync("_VendorProfilePage", Model)
+}
+@section VendorPageCatalogFilters {
+    @await Html.PartialAsync("_CatalogFilters", Model.CatalogProductsModel)
+}
+@section VendorPageVendorInfo {
+    @await Component.InvokeAsync(typeof(VendorShopHeaderViewComponent), new {additionalData = Model })
+}
+@section VendorHomePage {
+    @await Html.PartialAsync("_VendorHomePage", Model)
+}
+
+
+<div class="page vendor-page">
+
+    <div class="page-body">
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.VendorDetailsTop, additionalData = Model })
+
+        @*<input type="text" class="search-box-text ui-autocomplete-input" id="small-vendor-shop-searchterms" autocomplete="off" name="q" placeholder="Search store" aria-label="Search store">*@
+        @await Html.PartialAsync("_CatalogSelectors", Model.CatalogProductsModel)
+        @{
+            var catalogProductsViewData = new ViewDataDictionary(ViewData);
+            catalogProductsViewData["fetchUrl"] = Html.Raw(Url.Action("GetCustomVendorProducts", "CatalogExtension", new { vendorId = Model.Id }));
+        }
+        @await Html.PartialAsync("_CatalogProducts", Model.CatalogProductsModel, catalogProductsViewData)
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.VendorDetailsBottom, additionalData = Model })
+
+    </div>
+</div>
+

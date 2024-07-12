@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Smart Carousel",
+  "SystemName": "NopStation.Plugin.Widgets.SmartCarousels",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.SmartCarousels.dll",
+  "Description": "This plugin allows to display carousels on public store.",
+  "DependsOnSystemNames": [ "NopStation.Core", "NopStation.Plugin.Misc.WidgetManager" ]
+}

@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "bKash",
+  "SystemName": "NopStation.Plugin.Payments.bKash",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Jaber Kibria",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.bKash.dll",
+  "Description": "This plugin enables bKash gateway payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

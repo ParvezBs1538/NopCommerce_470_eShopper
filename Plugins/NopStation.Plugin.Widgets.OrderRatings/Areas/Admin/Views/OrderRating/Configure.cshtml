@@ -1,0 +1,65 @@
+﻿@model ConfigurationModel
+@using NopStation.Plugin.Widgets.OrderRatings.Areas.Admin.Models
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("OrderRating.Configuration");
+
+    ViewBag.PageTitle = T("Admin.NopStation.OrderRatings.Configuration").Text;
+}
+
+<form asp-controller="OrderRating" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.OrderRatings.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="OpenOrderRatingPopupInHomepage_OverrideForStore" asp-input="OpenOrderRatingPopupInHomepage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="OpenOrderRatingPopupInHomepage" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="OpenOrderRatingPopupInHomepage" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="ShowOrderRatedDateInDetailsPage_OverrideForStore" asp-input="ShowOrderRatedDateInDetailsPage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowOrderRatedDateInDetailsPage" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="ShowOrderRatedDateInDetailsPage" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="OrderDetailsPageWidgetZone_OverrideForStore" asp-input="OrderDetailsPageWidgetZone" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="OrderDetailsPageWidgetZone" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="OrderDetailsPageWidgetZone" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

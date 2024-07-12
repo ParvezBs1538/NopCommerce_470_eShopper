@@ -1,0 +1,18 @@
+﻿@inherits Nop.Web.Framework.Mvc.Razor.NopRazorPage<TModel>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Nop.Web.Framework
+@inject INopHtmlHelper NopHtml
+@inject IGenericAttributeService genericAttributeService
+@inject IWorkContext workContext
+@addTagHelper *, NopStation.Plugin.Misc.Actions
+
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@using Nop.Web.Framework.UI
+@using Nop.Core
+@using Nop.Web.Framework.Extensions
+@using System.Text.Encodings.Web
+@using NopStation.Plugin.Misc.UrlShortener.Areas.Admin.Models.Generate
+@using NopStation.Plugin.Misc.UrlShortener.Areas.Admin.Models.Shortenurls
+@using NopStation.Plugin.Misc.UrlShortener.Areas.Admin.Models
+@using Nop.Web.Framework.Models.DataTables
+@using Nop.Services.Common

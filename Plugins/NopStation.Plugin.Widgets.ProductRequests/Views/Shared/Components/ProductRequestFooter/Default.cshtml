@@ -1,0 +1,8 @@
+﻿@model FooterModel
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $('@Model.FooterElementSelector')
+            .append('<li class="customer-requests"><a href="@Url.RouteUrl("AddProductRequest")">@T("NopStation.ProductRequests.ProductRequest")</a></li>');
+    });
+</script>

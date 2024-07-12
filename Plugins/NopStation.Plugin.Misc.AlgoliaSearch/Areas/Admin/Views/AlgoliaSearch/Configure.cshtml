@@ -1,0 +1,215 @@
+﻿@model ConfigurationModel
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.AlgoliaSearch.Configuration.Title").Text;
+
+    NopHtml.SetActiveMenuItemSystemName("AlgoliaSearch.Configuration");
+}
+
+@{
+    const string hideCredentialBlockAttributeName = "AlgoliaSettingsPage.HideCredentialBlock";
+    var hideCredentialBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideCredentialBlockAttributeName);
+
+    const string hideSearchBlockAttributeName = "AlgoliaSettingsPage.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+
+    const string hideFilterBlockAttributeName = "AlgoliaSettingsPage.HideFilterBlock";
+    var hideFilterBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideFilterBlockAttributeName);
+}
+
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.AllowCustomersToSelectPageSize)").click(togglePageSizeOptions);
+        $("#@Html.IdFor(model => model.AllowCategoryFilter)").click(toggleMaximumCategoriesShowInFilter);
+        $("#@Html.IdFor(model => model.AllowVendorFilter)").click(toggleMaximumVendorsShowInFilter);
+        $("#@Html.IdFor(model => model.AllowManufacturerFilter)").click(toggleMaximumManufacturersShowInFilter);
+        $("#@Html.IdFor(model => model.AllowSpecificationFilter)").click(toggleMaximumSpecificationsShowInFilter);
+        $("#@Html.IdFor(model => model.AllowAttributeFilter)").click(toggleMaximumAttributesShowInFilter);
+        $("#@Html.IdFor(model => model.AllowProductSorting)").click(toggleAllowedSortingOptions);
+        $("#@Html.IdFor(model => model.EnableAutoComplete)").click(toggleAutoCompleteListSize);
+
+        togglePageSizeOptions();
+        toggleMaximumCategoriesShowInFilter();
+        toggleMaximumVendorsShowInFilter();
+        toggleMaximumManufacturersShowInFilter();
+        toggleMaximumSpecificationsShowInFilter();
+        toggleMaximumAttributesShowInFilter();
+        toggleAllowedSortingOptions();
+        toggleAutoCompleteListSize();
+    });
+
+    function togglePageSizeOptions() {
+        if ($('#@Html.IdFor(model => model.AllowCustomersToSelectPageSize)').is(':checked')) {
+            $('#pnlSearchPagePageSizeOptions').show();
+            $('#pnlSearchPageProductsPerPage').hide();
+        } else {
+            $('#pnlSearchPagePageSizeOptions').hide();
+            $('#pnlSearchPageProductsPerPage').show();
+        }
+    }
+
+    function toggleMaximumCategoriesShowInFilter() {
+        if ($('#@Html.IdFor(model => model.AllowCategoryFilter)').is(':checked')) {
+            $('#pnlMaximumCategoriesShowInFilter').show();
+        } else {
+            $('#pnlMaximumCategoriesShowInFilter').hide();
+        }
+    }
+
+    function toggleMaximumVendorsShowInFilter() {
+        if ($('#@Html.IdFor(model => model.AllowVendorFilter)').is(':checked')) {
+            $('#pnlMaximumVendorsShowInFilter').show();
+        } else {
+            $('#pnlMaximumVendorsShowInFilter').hide();
+        }
+    }
+
+    function toggleMaximumManufacturersShowInFilter() {
+        if ($('#@Html.IdFor(model => model.AllowManufacturerFilter)').is(':checked')) {
+            $('#pnlMaximumManufacturersShowInFilter').show();
+        } else {
+            $('#pnlMaximumManufacturersShowInFilter').hide();
+        }
+    }
+
+    function toggleMaximumSpecificationsShowInFilter() {
+        if ($('#@Html.IdFor(model => model.AllowSpecificationFilter)').is(':checked')) {
+            $('#pnlMaximumSpecificationsShowInFilter').show();
+        } else {
+            $('#pnlMaximumSpecificationsShowInFilter').hide();
+        }
+    }
+
+    function toggleMaximumAttributesShowInFilter() {
+        if ($('#@Html.IdFor(model => model.AllowAttributeFilter)').is(':checked')) {
+            $('#pnlMaximumAttributesShowInFilter').show();
+        } else {
+            $('#pnlMaximumAttributesShowInFilter').hide();
+        }
+    }
+
+    function toggleAllowedSortingOptions() {
+        if ($('#@Html.IdFor(model => model.AllowProductSorting)').is(':checked')) {
+            $('#pnlAllowedSortingOptions').show();
+        } else {
+            $('#pnlAllowedSortingOptions').hide();
+        }
+    }
+
+    function toggleAutoCompleteListSize() {
+        if ($('#@Html.IdFor(model => model.EnableAutoComplete)').is(':checked')) {
+            $('#pnlAutoCompleteListSize').show();
+        } else {
+            $('#pnlAutoCompleteListSize').hide();
+        }
+    }
+</script>
+
+<form asp-controller="AlgoliaSearch" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.AlgoliaSearch.Configuration.Title")
+        </h1>
+        <div class="float-right">
+            @if (Model.CanClearOrUpdateIndex)
+            {
+                <span id="index-clear" class="btn bg-red">
+                    <i class="far fa-trash-alt"></i>
+                    @T("Admin.NopStation.AlgoliaSearch.Configuration.ClearIndex")
+                </span>
+                <span id="index-update" class="btn bg-green">
+                    <i class="fa fa-pencil"></i>
+                    @T("Admin.NopStation.AlgoliaSearch.Configuration.UpdateIndex")
+                </span>
+            }
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+
+                <nop-cards id="algoliasettings-panels">
+                    <nop-card asp-name="algoliasettings-credential" asp-icon="fa fa-lock" asp-title="@T("Admin.NopStation.AlgoliaSearch.Configuration.BlockTitle.Credential")" asp-hide-block-attribute-name="@hideCredentialBlockAttributeName" asp-hide="@hideCredentialBlock" asp-advanced="false">@await Html.PartialAsync("_Configure.Credential", Model)</nop-card>
+                    <nop-card asp-name="algoliasettings-product-search" asp-icon="fa fa-search" asp-title="@T("Admin.NopStation.AlgoliaSearch.Configuration.BlockTitle.Search")" asp-hide-block-attribute-name="@hideSearchBlockAttributeName" asp-hide="@hideSearchBlock" asp-advanced="false">@await Html.PartialAsync("_Configure.Search", Model)</nop-card>
+                    <nop-card asp-name="algoliasettings-product-filter" asp-icon="fa fa-filter" asp-title="@T("Admin.NopStation.AlgoliaSearch.Configuration.BlockTitle.Filter")" asp-hide-block-attribute-name="@hideFilterBlockAttributeName" asp-hide="@hideFilterBlock" asp-advanced="true">@await Html.PartialAsync("_Configure.Filter", Model)</nop-card>
+                </nop-cards>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div id="configurationmodel-ClearIndex-delete-confirmation" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="configurationmodel-ClearIndex-delete-confirmation-title" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    @T("Admin.Common.AreYouSure")
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-controller="AlgoliaSearch" asp-action="ClearIndex" method="post" novalidate="novalidate">
+                <div class="form-horizontal">
+                    <div class="modal-body">
+                        @T("Admin.NopStation.AlgoliaSearch.Configuration.ClearIndexWarning")
+                    </div>
+                    <div class="modal-footer">
+                        <span class="btn btn-default" data-dismiss="modal">@T("Admin.Common.NoCancel")</span>
+                        <button type="submit" class="btn bg-red float-right">
+                            @T("Admin.Common.Delete")
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>$(document).ready(function () { $('#index-clear').attr("data-toggle", "modal").attr("data-target", "#configurationmodel-ClearIndex-delete-confirmation") });</script>
+</div>
+
+
+<div id="configurationmodel-UpdateIndex-delete-confirmation" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="configurationmodel-UpdateIndex-delete-confirmation-title" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="configurationmodel-UpdateIndex-delete-confirmation-title">@T("Admin.NopStation.AlgoliaSearch.Configuration.UpdateIndexTitle")</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form asp-controller="AlgoliaSearch" asp-action="UpdateIndex" method="post" novalidate="novalidate">
+                <div class="form-horizontal">
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-md-5">
+                                <nop-label asp-for="UpdateIndicesModel.ResetSearchableAttributeSettings" />
+                            </div>
+                            <div class="col-md-7">
+                                <nop-editor asp-for="UpdateIndicesModel.ResetSearchableAttributeSettings" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-5">
+                                <nop-label asp-for="UpdateIndicesModel.ResetFacetedAttributeSettings" />
+                            </div>
+                            <div class="col-md-7">
+                                <nop-editor asp-for="UpdateIndicesModel.ResetFacetedAttributeSettings" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <span class="btn btn-default" data-dismiss="modal">@T("Admin.Common.NoCancel")</span>
+                        <button type="submit" class="btn btn-primary float-right">
+                            @T("Admin.NopStation.AlgoliaSearch.Configuration.Update")
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>$(document).ready(function () { $('#index-update').attr("data-toggle", "modal").attr("data-target", "#configurationmodel-UpdateIndex-delete-confirmation") });</script>
+</div>

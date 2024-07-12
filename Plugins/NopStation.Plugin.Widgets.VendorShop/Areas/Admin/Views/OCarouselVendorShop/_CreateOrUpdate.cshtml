@@ -1,0 +1,27 @@
+﻿@model OCarouselModel
+
+@{
+    const string hideInfoBlockAttributeName = "OCarouselPage.HideInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideInfoBlockAttributeName);
+
+    const string hidePropertiesBlockAttributeName = "OCarouselPage.HidePropertiesBlock";
+    var hidePropertiesBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hidePropertiesBlockAttributeName);
+
+    const string hideItemsBlockAttributeName = "OCarouselPage.HideItemsBlock";
+    var hideItemsBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideItemsBlockAttributeName, defaultValue: true);
+}
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <nop-cards id="ocarousel-cards">
+                <nop-card asp-name="ocarousel-info" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.VendorShop.OCarousels.Tab.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</nop-card>
+                <nop-card asp-name="ocarousel-properties" asp-icon="fas fa-bars" asp-title="@T("Admin.NopStation.VendorShop.OCarousels.Tab.Properties")" asp-hide-block-attribute-name="@hidePropertiesBlockAttributeName" asp-hide="@hidePropertiesBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Properties", Model)</nop-card>
+                <nop-card asp-name="ocarousel-items" asp-icon="fas fa-th-list" asp-title="@T("Admin.NopStation.VendorShop.OCarousels.Tab.OCarouselItems")" asp-hide-block-attribute-name="@hideItemsBlockAttributeName" asp-hide="@hideItemsBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.OCarouselItems", Model)</nop-card>
+            </nop-cards>
+        </div>
+    </div>
+</section>

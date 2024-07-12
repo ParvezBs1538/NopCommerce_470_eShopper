@@ -1,0 +1,53 @@
+﻿@model SmartDealCarouselModel
+
+@{
+    var customer = await workContext.GetCurrentCustomerAsync();
+    const string hideInfoBlockAttributeName = "SmartDealCarouselPage.HideInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideInfoBlockAttributeName);
+
+    const string hidePropertiesBlockAttributeName = "SmartDealCarouselPage.HidePropertiesBlock";
+    var hidePropertiesBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hidePropertiesBlockAttributeName);
+
+    const string hideProductsBlockAttributeName = "SmartDealCarouselPage.HideProductsBlock";
+    var hideProductsBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideProductsBlockAttributeName);
+    
+    const string hideWidgetZonesBlockAttributeName = "SmartDealCarouselPage.HideWidgetZonesBlock";
+    var hideWidgetZonesBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideWidgetZonesBlockAttributeName);
+
+    const string hideSchedulesBlockAttributeName = "SmartDealCarouselPage.HideSchedulesBlock";
+    var hideSchedulesBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideSchedulesBlockAttributeName);
+
+    const string hideCustomerConditionsBlockAttributeName = "SmartDealCarouselPage.HideCustomerConditionsBlock";
+    var hideCustomerConditionsBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideCustomerConditionsBlockAttributeName);
+
+    const string hideProductConditionsBlockAttributeName = "SmartDealCarouselPage.HideProductConditionsBlock";
+    var hideProductConditionsBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideProductConditionsBlockAttributeName);
+}
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-md-12 clearfix">
+                    <div class="float-left">
+                        @await Component.InvokeAsync("SettingMode", new { modeName = "smartdealcarousel-advanced-mode" })
+                    </div>
+                </div>
+            </div>
+
+            <nop-cards id="ocarousel-cards">
+                <nop-card asp-name="carousel-info" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.SmartDealCarousels.Carousels.Tab.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</nop-card>
+                <nop-card asp-name="carousel-properties" asp-icon="fas fa-bars" asp-title="@T("Admin.NopStation.SmartDealCarousels.Carousels.Tab.Properties")" asp-hide-block-attribute-name="@hidePropertiesBlockAttributeName" asp-hide="@hidePropertiesBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Properties", Model)</nop-card>
+                <nop-card asp-name="carousel-products" asp-icon="fas fa-th-list" asp-title="@T("Admin.NopStation.SmartDealCarousels.Carousels.Tab.Products")" asp-hide-block-attribute-name="@hideProductsBlockAttributeName" asp-hide="@hideProductsBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Products", Model)</nop-card>
+                
+                <nop-card asp-name="carousel-wm-widgetzones" asp-icon="far fa-window-maximize" asp-title="@T("Admin.NopStation.WidgetManager.Common.WidgetZones")" asp-hide-block-attribute-name="@hideWidgetZonesBlockAttributeName" asp-hide="@hideWidgetZonesBlock" asp-advanced="false">@await Html.PartialAsync("WidgetZoneMappings", Model)</nop-card>
+                <nop-card asp-name="carousel-wm-schedules" asp-icon="far fa-clock" asp-title="@T("Admin.NopStation.WidgetManager.Common.Schedules")" asp-hide-block-attribute-name="@hideSchedulesBlockAttributeName" asp-hide="@hideSchedulesBlock" asp-advanced="false">@await Html.PartialAsync("ScheduleMappings", Model)</nop-card>
+                <nop-card asp-name="carousel-wm-customers" asp-icon="fa fa-check" asp-title="@T("Admin.NopStation.WidgetManager.Common.CustomerConditions")" asp-hide-block-attribute-name="@hideCustomerConditionsBlockAttributeName" asp-hide="@hideCustomerConditionsBlock" asp-advanced="true">@await Html.PartialAsync("CustomerConditionMappings", Model)</nop-card>
+                <nop-card asp-name="carousel-wm-products" asp-icon="fa fa-check" asp-title="@T("Admin.NopStation.WidgetManager.Common.ProductConditions")" asp-hide-block-attribute-name="@hideProductConditionsBlockAttributeName" asp-hide="@hideProductConditionsBlock" asp-advanced="true">@await Html.PartialAsync("ProductConditionMappings", Model)</nop-card>
+            </nop-cards>
+        </div>
+    </div>
+</section>

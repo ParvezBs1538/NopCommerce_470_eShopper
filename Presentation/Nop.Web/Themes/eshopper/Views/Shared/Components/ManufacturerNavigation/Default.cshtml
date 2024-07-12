@@ -1,0 +1,25 @@
+﻿@model ManufacturerNavigationModel
+@using Nop.Web.Models.Catalog;
+@if (Model.Manufacturers.Count > 0)
+{
+<div class="collaps-filter">
+    <h2>@T("Manufacturers")</h2>
+    <div class="brands-name filter-content">
+        <ul class="nav nav-pills nav-stacked">
+            @foreach (var manufacturer in Model.Manufacturers)
+            {
+                <li class="@(manufacturer.IsActive ? "active" : "inactive")">
+                    <a href="@Url.RouteUrl("Manufacturer", new { SeName = manufacturer.SeName })">@manufacturer.Name</a>
+                </li>
+            }
+        </ul>
+        @if (Model.TotalManufacturers > Model.Manufacturers.Count)
+        {
+            <div class="view-all">
+                <a class="btn btn-primary" href="@Url.RouteUrl("ManufacturerList")">@T("Manufacturers.ViewAll")</a>
+            </div>
+        }
+    </div>
+</div>
+    
+}

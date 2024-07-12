@@ -1,0 +1,96 @@
+﻿@model MegaMenuModel
+
+<div class="card">
+    <div class="card-header" id="headingCustomLink">
+        <h3 class="card-title">@T("Admin.NopStation.SmartMegaMenu.MegaMenus.MenuOptions.CustomLinks")</h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool"  data-toggle="collapse" data-target="#collapseCustomLink" aria-expanded="true" aria-controls="collapseCustomLink"><i class="fas fa-plus"></i></button>
+        </div>
+    </div>
+    <div id="collapseCustomLink" class="collapse" aria-labelledby="headingCustomLink" data-parent="#accordion">
+        <div class="card-body">
+            <script>
+                $(document).ready(function() {
+                    $('#addCustomLink').click(function() {
+                        var url = $("#@Html.IdFor(model => model.AddCustomLinkItemModel.Url)").val();
+                        var title = $("#@Html.IdFor(model => model.AddCustomLinkItemModel.Title)").val();
+
+                        if (title == null || title.length === 0) {
+                            $("#addCustomLinktitleAlert").click();
+                            return;
+                        }
+                        if (url == null || url.length === 0) {
+                            $("#addCustomLinkUrlAlert").click();
+                            return;
+                        }
+
+                        $('#addCustomLink').attr('disabled', true);
+
+                        var postData = {
+                            Url: url,
+                            Title: title,
+                            MegaMenuId: '@Model.Id'
+                        };
+                        addAntiForgeryToken(postData);
+
+                        $.ajax({
+                            cache: false,
+                            type: "POST",
+                            url: "@(Url.Action("CreateCustomLinkMenuItem", "SmartMegaMenu"))",
+                            data: postData,
+                            success: function (response) {
+                                $('#tree').tree('appendNode', response.data);
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                $("#customLinkAddAlert").click();
+                            },
+                            complete: function (jqXHR, textStatus) {
+                                $('#addCustomLink').attr('disabled', false);
+                                $("#@Html.IdFor(model => model.AddCustomLinkItemModel.Title)").val('');
+                                $("#@Html.IdFor(model => model.AddCustomLinkItemModel.Url)").val('');
+                            }
+                        });
+                    });
+                });
+            </script>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="AddCustomLinkItemModel.Title" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="AddCustomLinkItemModel.Title" asp-required="true" />
+                    <span asp-validation-for="AddCustomLinkItemModel.Title"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="AddCustomLinkItemModel.Url" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="AddCustomLinkItemModel.Url" asp-required="true" />
+                    <span asp-validation-for="AddCustomLinkItemModel.Url"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-9 offset-md-3">
+                    <button type="button" id="addCustomLink" class="btn btn-primary">@T("Admin.NopStation.SmartMegaMenu.MegaMenus.MenuOptions.CustomLinks.AddButton")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<nop-alert asp-alert-id="addCustomLinktitleAlert" asp-alert-message="@T("Admin.NopStation.SmartMegaMenu.MegaMenus.MenuOptions.CustomLinks.Title.Alert.AddNew")" />
+<nop-alert asp-alert-id="addCustomLinkUrlAlert" asp-alert-message="@T("Admin.NopStation.SmartMegaMenu.MegaMenus.MenuOptions.CustomLinks.Url.Alert.AddNew")" />
+<nop-alert asp-alert-id="customLinkAddAlert" asp-alert-message="@T("Admin.NopStation.SmartMegaMenu.MegaMenus.MenuOptions.CustomLinks.Alert.CustomLinkAdd")" />
+
+
+
+
+
+
+
+
+
+

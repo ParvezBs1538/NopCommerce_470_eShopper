@@ -1,0 +1,6 @@
+﻿@using Nop.Web.Models.Customer
+@model CustomerNavigationModel
+
+<li class="customer-quote-requests @(Context.Request.RouteValues["controller"] as string == "QuoteRequest" ? "active" : "inactive")">
+    <a href="@Url.RouteUrl("QuoteCart.AllRequests")">@T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.CustomerQuoteRequests")</a>
+</li>

@@ -1,0 +1,109 @@
+﻿@model MegaMenuModel
+
+<div class="card-body">
+    <input type="hidden" id="MenuId" value="@Model.Id" />
+    @(await Html.LocalizedEditorAsync<MegaMenuModel, MegaMenuLocalizedModel>("megamenu-info-localized",
+        @<div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.Locales[item].Name" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="@Model.Locales[item].Name" />
+                    <span asp-validation-for="@Model.Locales[item].Name"></span>
+                </div>
+            </div>
+            <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+        </div>
+        , @<div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="Name" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="Name" asp-required="true" />
+                    <span asp-validation-for="Name"></span>
+                </div>
+            </div>
+        </div>))
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="WithoutImages" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="WithoutImages" />
+            <span asp-validation-for="WithoutImages"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ViewTypeId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="ViewTypeId" asp-items="Model.AvailableViewTypes" />
+            <span asp-validation-for="ViewTypeId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="CssClass" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="CssClass" />
+            <span asp-validation-for="CssClass"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DisplayOrder" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DisplayOrder" />
+            <span asp-validation-for="DisplayOrder"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Active" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Active" />
+            <span asp-validation-for="Active"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SelectedStoreIds" />
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-4">
+                    <nop-select asp-for="SelectedStoreIds" asp-items="Model.AvailableStores" asp-multiple="true" />
+                </div>
+                <div class="col-md-8">
+                    @await Component.InvokeAsync(typeof(MultistoreDisabledWarningViewComponent))
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (Model.Id > 0)
+    {
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="CreatedOn" />
+            </div>
+            <div class="col-md-9">
+                <div class="form-text-row">@Model.CreatedOn</div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="UpdatedOn" />
+            </div>
+            <div class="col-md-9">
+                <div class="form-text-row">@Model.UpdatedOn</div>
+            </div>
+        </div>
+    }
+</div>

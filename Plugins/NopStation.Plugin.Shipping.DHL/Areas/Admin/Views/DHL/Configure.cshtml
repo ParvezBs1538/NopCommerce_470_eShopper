@@ -1,0 +1,293 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.DHL.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("DHL.Configuration");
+}
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.CurrencyId)").change(function() {
+            var selectedItem = $(this).val();
+            var postData = {
+                currencyId: selectedItem
+            };
+            if (selectedItem > 0) {
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: "@(Url.Action("SelectedCurrencyRate", "DHL"))",
+                    data: postData,
+                    success: function (data, textStatus, jqXHR) {
+                        console.log(data);
+                        $("#@Html.IdFor(model => model.SelectedCurrencyRate)").data("kendoNumericTextBox").value(data);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        $("#currencyRateAlert").click();
+                    }
+                });
+            } else {
+                $("#@Html.IdFor(model => model.SelectedCurrencyRate)").data("kendoNumericTextBox").value(0);
+            }
+
+        });
+    });
+</script>
+
+<form asp-controller="DHL" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.DHL.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="Url" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="Url" />
+                                    <span asp-validation-for="Url"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="SiteId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="SiteId" />
+                                    <span asp-validation-for="SiteId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="Password" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="Password" />
+                                    <span asp-validation-for="Password"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="AccountNumber" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="AccountNumber" />
+                                    <span asp-validation-for="AccountNumber"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="Name" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="Name" />
+                                    <span asp-validation-for="Name"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="PhoneNumber" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="PhoneNumber" />
+                                    <span asp-validation-for="PhoneNumber"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="Email" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="Email" />
+                                    <span asp-validation-for="Email"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="CompanyName" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="CompanyName" />
+                                    <span asp-validation-for="CompanyName"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="CompanyAddress" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="CompanyAddress" />
+                                    <span asp-validation-for="CompanyAddress"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="Country" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="Country" />
+                                    <span asp-validation-for="Country"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="CountryCode" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="CountryCode" />
+                                    <span asp-validation-for="CountryCode"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="PostalCode" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="PostalCode" />
+                                    <span asp-validation-for="PostalCode"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="City" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="City" />
+                                    <span asp-validation-for="City"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="DefaultHeight" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="DefaultHeight" />
+                                    <span asp-validation-for="DefaultHeight"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="DefaultDepth" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="DefaultDepth" />
+                                    <span asp-validation-for="DefaultDepth"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="DefaultWidth" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="DefaultWidth" />
+                                    <span asp-validation-for="DefaultWidth"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="DefaultWeight" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="DefaultWeight" />
+                                    <span asp-validation-for="DefaultWeight"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="PickupReadyByTime" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="PickupReadyByTime" placeholder="11:00" />
+                                    <span asp-validation-for="PickupReadyByTime"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="PickupCloseTime" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="PickupCloseTime" placeholder="16:00" />
+                                    <span asp-validation-for="PickupCloseTime"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="PickupPackageLocation" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="PickupPackageLocation" />
+                                    <span asp-validation-for="PickupPackageLocation"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="TrackingUrl" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="TrackingUrl" />
+                                    <span asp-validation-for="TrackingUrl"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="Tracing" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="Tracing" />
+                                    <span asp-validation-for="Tracing"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="CurrencyId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="CurrencyId" asp-items="Model.AvailableCurrencies" />
+                                    <span asp-validation-for="CurrencyId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="SelectedCurrencyRate" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="SelectedCurrencyRate" />
+                                    <span asp-validation-for="SelectedCurrencyRate"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+<nop-alert asp-alert-id="currencyRateAlert" asp-alert-message="@T("Admin.NopStation.DHL.Alert.SelectedCurrencyRate.Failed")" />

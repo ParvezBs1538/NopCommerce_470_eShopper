@@ -1,0 +1,39 @@
+﻿@model SurveyAttributeModel
+
+@if (Model.Id > 0)
+{
+    <div class="card-body">
+        <p>
+            @T("Admin.NopStation.DynamicSurvey.SurveyAttributes.UsedBySurveys.Hint")
+        </p>
+        @await Html.PartialAsync("Table", new DataTablesModel
+        {
+            Name = "used-by-surveys-grid",
+            UrlRead = new DataUrl("UsedBySurveys", "SurveyAttribute", new RouteValueDictionary { [nameof(Model.SurveyAttributeSurveySearchModel.SurveyAttributeId)] = Model.SurveyAttributeSurveySearchModel.SurveyAttributeId }),
+            Length = Model.SurveyAttributeSurveySearchModel.PageSize,
+            LengthMenu = Model.SurveyAttributeSurveySearchModel.AvailablePageSizes,
+            ColumnCollection = new List<ColumnProperty>
+            {
+                new ColumnProperty(nameof(SurveyAttributeSurveyModel.SurveyName))
+                {
+                    Title = T("Admin.NopStation.DynamicSurvey.SurveyAttributes.UsedBySurveys.Survey").Text,
+                    Width = "400"
+                },
+                new ColumnProperty(nameof(SurveyAttributeSurveyModel.Published))
+                {
+                    Title = T("Admin.NopStation.DynamicSurvey.SurveyAttributes.UsedBySurveys.Published").Text,
+                    Width = "100",
+                    ClassName =  NopColumnClassDefaults.CenterAll,
+                    Render = new RenderBoolean()
+                },
+                new ColumnProperty(nameof(SurveyAttributeSurveyModel.Id))
+                {
+                    Title = T("Admin.Common.View").Text,
+                    Width = "100",
+                    ClassName =  NopColumnClassDefaults.Button,
+                    Render = new RenderButtonView(new DataUrl("~/Admin/Survey/Edit/"))
+                }
+            }
+        })
+    </div>
+}

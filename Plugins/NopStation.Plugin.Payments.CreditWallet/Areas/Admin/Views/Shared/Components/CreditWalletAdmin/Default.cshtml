@@ -1,0 +1,31 @@
+﻿@model CreditWalletModel
+
+@{
+    var customer = await workContext.GetCurrentCustomerAsync();
+    
+	const string hideDetailsBlockAttributeName = "CreditWalletPage.HideDetailsBlock";
+	var hideDetailsBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideDetailsBlockAttributeName, defaultValue: true);
+}
+
+@if (Model.WalletModel is null)
+{
+    <nop-card asp-name="customer-wallet" asp-icon="fas fa-money-check-alt" asp-title="@T("Admin.NopStation.CreditWallet.WalletDetails")" asp-hide-block-attribute-name="@hideDetailsBlockAttributeName" asp-hide="@hideDetailsBlock" asp-advanced="false">
+        <div class="card-body">@T("Admin.NopStation.CreditWallet.Wallets.SaveBeforeEdit")</div>
+    </nop-card>
+}
+else
+{
+    <nop-card asp-name="customer-wallet" asp-icon="fas fa-money-check-alt" asp-title="@T("Admin.NopStation.CreditWallet.WalletDetails")" asp-hide-block-attribute-name="@hideDetailsBlockAttributeName" asp-hide="@hideDetailsBlock" asp-advanced="false">@await Html.PartialAsync("_Wallet.cshtml", Model.WalletModel)</nop-card>
+}
+
+@if (!Model.NewWallet)
+{
+	const string hideInvoiceBlockAttributeName = "CreditWalletPage.HideInvoiceBlock";
+	var hideInvoiceBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideInvoiceBlockAttributeName, defaultValue: true);
+
+	const string hideActivityBlockAttributeName = "CreditWalletPage.HideActivityBlock";
+	var hideActivityBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideActivityBlockAttributeName, defaultValue: true);
+
+    <nop-card asp-name="customer-wallet-invoice" asp-icon="fas fa-file-invoice" asp-title="@T("Admin.NopStation.CreditWallet.InvoicePayments")" asp-hide-block-attribute-name="@hideInvoiceBlockAttributeName" asp-hide="@hideInvoiceBlock" asp-advanced="false">@await Html.PartialAsync("_InvoiceList.cshtml", Model.InvoicePaymentSearchModel)</nop-card>
+    <nop-card asp-name="customer-wallet-activity" asp-icon="fas fa-history" asp-title="@T("Admin.NopStation.CreditWallet.Activities")" asp-hide-block-attribute-name="@hideActivityBlockAttributeName" asp-hide="@hideActivityBlock" asp-advanced="false">@await Html.PartialAsync("_ActivityList.cshtml", Model.ActivityHistorySearchModel)</nop-card>
+}

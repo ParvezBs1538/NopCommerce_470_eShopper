@@ -1,0 +1,157 @@
+﻿@model ConfigurationModel
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.StripeAlipay.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("StripeAlipay.Configuration");
+}
+
+<form asp-controller="PaymentStripeAlipay" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.StripeAlipay.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <p>
+                                To configure <b>Stripe</b>, please follow these steps:
+                                <ol>
+                                    <li>Navigate to the <a href="https://dashboard.stripe.com/login" target="_blank" >login</a> page. If you don't already have a Stripe account, use the <a href="https://dashboard.stripe.com/register">Sign up</a> link on the login page to create one.</li>
+                                    <li>Tap the <b>Developer</b> in the upper right corner and then tap on <b><a href="https://dashboard.stripe.com/apikeys">API keys</a></b>.</li>
+                                    <li>Copy <b>Publishable key</b> and <b>Secret key</b> below.</li>
+                                    <li>To configure webhook, click on <b><a href="https://dashboard.stripe.com/webhooks">Webhooks</a></b> in the left navigation.</li>
+                                    <li>Click on <b><a href="https://dashboard.stripe.com/webhooks/create">Add an endpoint</a></b> button.</li>
+                                    <li>Enter <i>'{yourdomain.com}/stripealipay/webhook'</i> into the <b>Endpoint URL</b> field.</li>
+                                    <li>Click on <b>+ Select events</b>.</li>
+                                    <li>Expand <b>Charge</b> and check <i>'charge.refunded'</i> and <i>'charge.succeeded'</i> and click the <b>Add events</b> button.</li>
+                                    <li>Click the <b>Add endpoint</b> button. You will be redirected to Webhook details page.</li>
+                                    <li>Click on <b>Reveal</b> right below <b>Signing secret</b>.</li>
+                                    <li>Copy Webhook secret below.</li>
+                                </ol>
+                                <br/><br/>
+                            </p>
+
+                            @(await Html.LocalizedEditorAsync<ConfigurationModel, ConfigurationModel.ConfigurationLocalizedModel>("plugin-settings-localized",
+                                @<div>
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-override-store-checkbox asp-for="DescriptionText_OverrideForStore" asp-input="@Model.Locales[item].DescriptionText" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="@Model.Locales[item].DescriptionText" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="@Model.Locales[item].DescriptionText" asp-template="RichEditor" />
+                                            <span asp-validation-for="@Model.Locales[item].DescriptionText"></span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+                                </div>
+                                ,
+                                @<div>
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-override-store-checkbox asp-for="DescriptionText_OverrideForStore" asp-input="DescriptionText" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="DescriptionText" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="DescriptionText" asp-template="RichEditor" />
+                                            <span asp-validation-for="DescriptionText"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                ,
+                                //localizable settings per store (overridden store settings) are not supported yet
+                                true
+                                ))
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AdditionalFee_OverrideForStore" asp-input="AdditionalFee" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AdditionalFee" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AdditionalFee" />
+                                    <span asp-validation-for="AdditionalFee"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AdditionalFeePercentage_OverrideForStore" asp-input="AdditionalFeePercentage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AdditionalFeePercentage" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AdditionalFeePercentage" />
+                                    <span asp-validation-for="AdditionalFeePercentage"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ApiKey_OverrideForStore" asp-input="ApiKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ApiKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="ApiKey" />
+                                    <span asp-validation-for="ApiKey"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="PublishableKey_OverrideForStore" asp-input="PublishableKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="PublishableKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="PublishableKey" />
+                                    <span asp-validation-for="PublishableKey"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableWebhook_OverrideForStore" asp-input="EnableWebhook" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableWebhook" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableWebhook" />
+                                    <span asp-validation-for="EnableWebhook"></span>
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="EnableWebhook">
+                                <div class="form-group row" id="pnlWebhookSecret">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="WebhookSecret_OverrideForStore" asp-input="WebhookSecret" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="WebhookSecret" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor-check asp-for="WebhookSecret" />
+                                        <span asp-validation-for="WebhookSecret"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="SupportedCurrencyCodes_OverrideForStore" asp-input="SupportedCurrencyCodes" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="SupportedCurrencyCodes" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="SupportedCurrencyCodes" asp-items="@Model.AvailableCurrencyCodes" asp-multiple="true"/>
+                                    <span asp-validation-for="SupportedCurrencyCodes"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

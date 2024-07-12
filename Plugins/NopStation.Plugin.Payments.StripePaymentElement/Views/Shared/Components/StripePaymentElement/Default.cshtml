@@ -1,0 +1,107 @@
+﻿@model PaymentInfoModel
+@inject Nop.Core.Domain.Orders.OrderSettings orderSettings
+
+<style>
+    .stripe_payment_item {
+        width: 20%;
+        display: inline-block;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    #payment-message {
+        color: rgb(105, 115, 134);
+        font-size: 16px;
+        line-height: 20px;
+        padding-top: 12px;
+        text-align: center;
+    }
+
+    #payment-element {
+        width: 100%;
+        padding: 10px 5px;
+        margin: auto;
+        max-width: 430px;
+        position: relative;
+    }
+    .spe-loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        min-height: 100px;
+        background-color: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+    .spe-loader::after {
+        content: '';
+        width: 48px;
+        height: 48px;
+        border: 6px solid #0e3b82;
+        border-right-color: transparent;
+        border-radius: 50%;
+        animation: spe-loader 3s linear infinite;
+    }
+
+    @@keyframes spe-loader {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        var billingAddress = {
+            name: '@Model.BillingAddress.FirstName @Model.BillingAddress.LastName',
+            email: '@Model.BillingAddress.Email',
+            phone: '@Model.BillingAddress.PhoneNumber',
+            address: {
+                line1: '@Model.BillingAddress.Address1',
+                line2: '@Model.BillingAddress.Address2',
+                city: '@Model.BillingAddress.City',
+                state: '@Model.BillingAddress.StateProvinceName',
+                postal_code: '@Model.BillingAddress.ZipPostalCode',
+                country: '@Model.BillingAddress.CountryName'
+            }
+        }
+        var shippingAddress = {
+            name: '@Model.ShippingAddress?.FirstName @Model.ShippingAddress?.LastName',
+            address: {
+                line1: '@Model.ShippingAddress?.Address1',
+                line2: '@Model.ShippingAddress?.Address2',
+                city: '@Model.ShippingAddress?.City',
+                state: '@Model.ShippingAddress?.StateProvinceName',
+                postal_code: '@Model.ShippingAddress?.ZipPostalCode',
+                country: '@Model.ShippingAddress?.CountryName'
+            }
+        }
+        StripePaymentElement.init(@Model.OrderTotal, '@Model.Currency', '@Model.PublishableKey',"@Url.Action("CreatePaymentIntent", "StripePaymentElement")", '@Url.Action("ConfirmPayment", "StripePaymentElement")', '@Model.Theme', '@Model.Layout', billingAddress, shippingAddress);
+    });
+</script>
+
+<div style="width: 100%; text-align:center">
+    <div id="link-authentication-element">
+        <!--Stripe.js injects the Link Authentication Element-->
+    </div>
+    <div id="payment-element">
+        <div class="spe-loader"></div>
+        <!--Stripe.js injects the Payment Element-->
+    </div>
+    <input id="payment-element-intent" type="hidden" />
+    <div id="payment-message" class="hidden"></div>
+</div>
+
+@if (orderSettings.OnePageCheckoutEnabled)
+{
+    @NopHtml.GenerateInlineScripts(ResourceLocation.Footer)
+}

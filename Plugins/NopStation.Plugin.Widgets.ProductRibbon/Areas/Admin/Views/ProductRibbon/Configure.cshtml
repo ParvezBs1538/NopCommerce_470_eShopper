@@ -1,0 +1,167 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("ProductRibbon.Configuration");
+
+    ViewBag.PageTitle = T("Admin.NopStation.ProductRibbon.Configuration").Text;
+}
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.EnableBestSellerRibbon)").change(toggleEnableBestSellerRibbon);
+
+        toggleEnableBestSellerRibbon();
+    });
+
+    function toggleEnableBestSellerRibbon() {
+        if ($('#@Html.IdFor(model => model.EnableBestSellerRibbon)').is(':checked')) {
+            $('#pnlEnableBestSellerRibbon').show();
+        } else {
+            $('#pnlEnableBestSellerRibbon').hide();
+        }
+    }
+</script>
+
+<form asp-controller="ProductRibbon" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.ProductRibbon.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ProductDetailsPageWidgetZone_OverrideForStore" asp-input="ProductDetailsPageWidgetZone" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ProductDetailsPageWidgetZone" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ProductDetailsPageWidgetZone" />
+                                    <span asp-validation-for="ProductDetailsPageWidgetZone"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ProductOverviewBoxWidgetZone_OverrideForStore" asp-input="ProductOverviewBoxWidgetZone" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ProductOverviewBoxWidgetZone" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ProductOverviewBoxWidgetZone" />
+                                    <span asp-validation-for="ProductOverviewBoxWidgetZone"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableNewRibbon_OverrideForStore" asp-input="EnableNewRibbon" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableNewRibbon" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableNewRibbon" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableDiscountRibbon_OverrideForStore" asp-input="EnableDiscountRibbon" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableDiscountRibbon" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableDiscountRibbon" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableBestSellerRibbon_OverrideForStore" asp-input="EnableBestSellerRibbon" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableBestSellerRibbon" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableBestSellerRibbon" />
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="EnableBestSellerRibbon">
+                                <div id="pnlEnableBestSellerRibbon">
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-label asp-for="SoldInDays" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="SoldInDays" />
+                                            <span asp-validation-for="SoldInDays"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-label asp-for="BestSellStoreWise" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="BestSellStoreWise" />
+                                            <span asp-validation-for="BestSellStoreWise"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-label asp-for="MinimumAmountSold" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="MinimumAmountSold" asp-postfix="@Model.CurrencyCode" />
+                                            <span asp-validation-for="MinimumAmountSold"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-label asp-for="MinimumQuantitySold" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="MinimumQuantitySold" />
+                                            <span asp-validation-for="MinimumQuantitySold"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-label asp-for="BestSellPaymentStatusIds" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-select asp-for="BestSellPaymentStatusIds" asp-items="Model.AvailablePaymentStatuses" asp-multiple="true" />
+                                            <span asp-validation-for="BestSellPaymentStatusIds"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-label asp-for="BestSellShippingStatusIds" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-select asp-for="BestSellShippingStatusIds" asp-items="Model.AvailableShippingStatuses" asp-multiple="true" />
+                                            <span asp-validation-for="BestSellShippingStatusIds"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-label asp-for="BestSellOrderStatusIds" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-select asp-for="BestSellOrderStatusIds" asp-items="Model.AvailableOrderStatuses" asp-multiple="true" />
+                                            <span asp-validation-for="BestSellOrderStatusIds"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

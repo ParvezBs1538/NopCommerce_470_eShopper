@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Topic Export-Import",
+  "SystemName": "NopStation.Plugin.Widgets.ExportImportTopic",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.ExportImportTopic.dll",
+  "Description": "This plugin allows admin to export/import topic pages.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

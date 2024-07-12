@@ -1,0 +1,261 @@
+﻿@model SliderModel
+@using Nop.Web.Extensions
+@using NopStation.Plugin.Widgets.SmartSliders
+@using System.Globalization
+@inject SmartSliderSettings smartSliderSettings
+
+@{
+    CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
+    var guid = Guid.NewGuid().ToString().Replace('-', '_');
+}
+
+<div class="swiper slider" id="slider-@(guid)">
+    <div class="swiper-wrapper" dir="@Html.GetUIDirection(!await Html.ShouldUseRtlThemeAsync())">
+        @foreach (var item in Model.SliderItems)
+        {
+            <div class="swiper-slide">
+                @{
+                    switch (item.ContentType)
+                    {
+                        case ContentType.EmbeddedLink:
+                            {
+                                <div class="slider-embeddedb-video">
+                                    <iframe class="thumb-item" src="@item.EmbeddedLink" width="100%" height="400" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                            }
+                            break;
+                        case ContentType.Video:
+                            {
+                                <div class="slider-video" id="vid-@(guid)">
+                                    <video width="100%" height="400" poster="https://png.pngtree.com/background/20210710/original/pngtree-nordic-minimalist-furniture-banner-design-picture-image_1039338.jpg" loop controls>
+                                        <source src="https://localhost:44315/images/thumbs/sample.mp4" type="video/mp4">
+                                    </video>
+                                    <div class="play-button"></div>
+                                </div>
+                            }
+                            break;
+                        case ContentType.Text:
+                            {
+                                <div class="slider-content">
+                                    <div class="content">
+                                        @Html.Raw(item.Text)
+                                    </div>
+                                </div>
+                            }
+                            break;
+                        case ContentType.Picture:
+                            {
+                                <div class="slider-image swiper-zoom-container">
+                                    <img src="@item.Picture.FullSizeImageUrl" title="@item.Picture.Title" alt="@item.Picture.AlternateText">
+                                </div>
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                @if (item.ShowCaption)
+                {
+                    <div class="slider-caption left">
+                        <h2 class="title">@item.Title</h2>
+                        <h3 class="description">@item.Description</h3>
+                        <a class="slider-button" href="@item.RedirectUrl">@item.ButtonText</a>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+    @if (Model.Pagination)
+    {
+        <div class="swiper-pagination"></div>
+    }
+    @if (Model.Navigation)
+    {
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    }
+</div>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        var carousel@(guid) = new Swiper("#slider-@(guid)", {
+            spaceBetween: 0,
+            observer: true,
+            observeParents: true,
+            lazy: @Model.LazyLoad.ToString().ToLower(),
+            loop: @Model.Loop.ToString().ToLower(),
+            autoHeight: @Model.AutoHeight.ToString().ToLower(),
+            allowTouchMove: @Model.AllowTouchMove.ToString().ToLower(),
+            initialSlide: @Model.StartPosition.ToString("N2", new CultureInfo("en-US")),
+            direction: "@(Model.VerticalDirection ? "vertical" : "horizontal")",
+            on: {
+                init: function (swiper) {
+                    $(document).trigger({ type: "swiper_initialized", swiper: swiper });
+                },
+            },
+    @if (Model.AutoPlay)
+    {
+        <text>
+                autoplay: {
+                delay: @Model.AutoPlayTimeout,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: @Model.AutoPlayHoverPause.ToString().ToLower(),
+            },
+        </text>
+    }
+    @if (Model.KeyboardControl)
+    {
+        <text>
+                keyboard: {
+                enabled: true,
+                onlyInViewport: @Model.KeyboardControlOnlyInViewport.ToString().ToLower(),
+                pageUpDown: false
+            },
+        </text>
+    }
+    @if (Model.Pagination)
+    {
+        <text>
+                pagination: {
+                el: "#slider-@(guid) .swiper-pagination",
+                type: "@(Model.PaginationType.ToString().ToLower())",
+                dynamicBullets: @Model.PaginationDynamicBullets.ToString().ToLower(),
+                dynamicMainBullets: @Model.PaginationDynamicMainBullets,
+                clickable: @Model.PaginationClickable.ToString().ToLower()
+                            },
+        </text>
+    }
+    @if (Model.Navigation)
+    {
+        <text>
+                navigation: {
+                nextEl: "#slider-@(guid) .swiper-button-next",
+                prevEl: "#slider-@(guid) .swiper-button-prev",
+            },
+        </text>
+    }
+    @if (Model.MousewheelControl)
+    {
+        <text>
+                mousewheel: {
+                invert: true,
+                forceToAxis: @Model.MousewheelControlForceToAxis.ToString().ToLower()
+                            },
+        </text>
+    }
+    @if (Model.Zoom)
+    {
+        <text>
+            zoom: {
+                maxRatio: @Model.ZoomMaximumRatio.ToString("N2", new CultureInfo("en-US")),
+                minRatio: @Model.ZoomMinimumRatio.ToString("N2", new CultureInfo("en-US")),
+                toggle: @Model.ToggleZoom.ToString().ToLower()
+            },
+        </text>
+    }
+    @if (Model.Effect)
+    {
+        switch (Model.EffectType)
+        {
+            case EffectType.Fade:
+                <text>
+                        effect: 'fade',
+                        fadeEffect: {
+                        crossFade: true
+                    },
+                </text>
+                break;
+            case EffectType.Coverflow:
+                <text>
+                        effect: 'coverflow',
+                        coverflowEffect: {
+                        rotate: 30,
+                        slideShadows: false,
+                    },
+                </text>
+                break;
+            case EffectType.Flip:
+                <text>
+                        effect: 'flip',
+                        flipEffect: {
+                        slideShadows: false,
+                    },
+                </text>
+                break;
+            case EffectType.Cube:
+                <text>
+                        effect: 'cube',
+                        cubeEffect: {
+                        slideShadows: false,
+                    },
+                </text>
+                break;
+            case EffectType.Cards:
+                <text>
+                        effect: 'cards',
+                        cardsEffect: {
+
+                    },
+                </text>
+                break;
+            case EffectType.Creative:
+                <text>
+                        effect: 'creative',
+                        creativeEffect: {
+                        prev: {
+                            // will set `translateZ(-400px)` on previous slides
+                            translate: [0, 0, -400],
+                        },
+                        next: {
+                            // will set `translateX(100%)` on next slides
+                            translate: ['100%', 0, 0],
+                        },
+                    },
+                </text>
+                break;
+            default:
+                break;
+        }
+    }
+                });
+            });
+</script>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $("#vid-@(guid) .play-button").click(function (e) {
+            $(this).siblings("video").get(0).play();
+            $(this).fadeOut();
+            $(this).parent("#vid-@(guid)").siblings(".slider-caption").fadeOut();
+            e.stopPropagation();
+        });
+        $("#vid-@(guid)").click(function () {
+            if ($(this).children("video").get(0).paused) {
+                $(this).children(".play-button").fadeOut();
+                $(this).siblings(".slider-caption").fadeOut();
+            }
+            else {
+                $(this).children(".play-button").fadeIn();
+                $(this).siblings(".slider-caption").fadeIn();
+            }
+        });
+        $("#vid-@(guid)").bind('keypress', function (e) {
+            if (e.which == 32) {
+                if ($(this).children("video").get(0).paused) {
+                    $(this).children(".play-button").fadeOut();
+                    $(this).siblings(".slider-caption").fadeOut();
+                }
+                else {
+                    $(this).children(".play-button").fadeIn();
+                    $(this).siblings(".slider-caption").fadeIn();
+                }
+            }
+        });
+    });
+</script>
+
+@if (smartSliderSettings.EnableAjaxLoad)
+{
+    @NopHtml.GenerateInlineScripts(ResourceLocation.Footer)
+}

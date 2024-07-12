@@ -1,0 +1,44 @@
+﻿@model FileInformationModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.GoogleTagManager.ExportFile").Text;
+    NopHtml.SetActiveMenuItemSystemName("GoogleTagManager.ExportFile");
+    Layout = "_AdminLayout";
+}
+
+<form asp-controller="GoogleTagManager" asp-action="ExportFile" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.GoogleTagManager.ExportFile")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Export")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="GAContainerId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="GAContainerId" asp-required="true"/>
+                                    <span asp-validation-for="GAContainerId"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+

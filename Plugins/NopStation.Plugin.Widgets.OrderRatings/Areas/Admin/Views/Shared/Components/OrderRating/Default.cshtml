@@ -1,0 +1,38 @@
+﻿@model OrderRatingModel
+@{
+    const string hideInfoBlockAttributeName = "OrderRating.HideInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideInfoBlockAttributeName);
+}
+
+<nop-card asp-name="orderrating-override" asp-icon="fas fa-chart-bar" asp-title="@T("Admin.NopStation.OrderRatings.OrderRating.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">
+    <div class="card-body">
+        <div class="card card-default sub-panel">
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="Rating" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-text-row">@Model.Rating</div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="Note" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-text-row">@Model.Note</div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="RatedOn" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-text-row">@Model.RatedOn</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nop-card>

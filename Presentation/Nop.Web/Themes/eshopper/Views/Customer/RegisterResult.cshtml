@@ -1,0 +1,28 @@
+﻿@model RegisterResultModel
+@using Nop.Web.Models.Customer;
+@{
+    Layout = "_ColumnsTwo";
+
+    //title
+    NopHtml.AddTitleParts(T("PageTitle.Register").Text);
+
+    
+    
+}
+<div class="features_items my-account-page">
+    <!--features_items-->
+    <h2 class="title text-center">@T("Account.Register")</h2>
+    <div class="custom-page-box-div">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="result">
+                    @Model.Result
+                </div>
+                <div class="buttons">
+                    <a href="@Model.ReturnUrl" class="button-1 register-continue-button">@T("Common.Continue")</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

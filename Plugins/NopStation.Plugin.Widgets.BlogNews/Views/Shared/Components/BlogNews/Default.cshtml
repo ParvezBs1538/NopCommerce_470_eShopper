@@ -1,0 +1,69 @@
+﻿@model PublicModel
+@inject Nop.Core.IWebHelper webHelper
+
+@if (Model.BlogPosts.Any() || Model.NewsItems.Any())
+{
+    <div class="blog-news-area">
+        @if (Model.BlogPosts.Any())
+        {
+            <div class="latest-blog-container py-4 mb-5">
+                <div class="custom-container-fluid">
+                    <h2 class="title-container">@T("NopStation.BlogNews.Home.LatestBlog")</h2>
+                    <div class="row pb-3">
+                        @foreach (var item in Model.BlogPosts)
+                        {
+                            <div class="col-sm-3">
+                                <div class="single-blog  bg-white">
+                                    <div>
+                                        <img src="@item.PictureUrl" alt="@item.AltAttribute" />
+                                    </div>
+                                    <h4 class="text-ellipsis"><a class="post-title" href="@Url.RouteUrl("BlogPost", new { SeName = item.SeName })">@item.Title</a></h4>
+                                    <div class="date-time"><span class="pr-2">@item.CreatedOnUtcStr</span><span>(@item.TotalComments)</span></div>
+                                    <div class="post-body">
+                                        <p>@Html.Raw(@item.BodyOverview)</p>
+                                    </div>
+                                    <a class="blog-link" href="@Url.RouteUrl("BlogPost", new { SeName = item.SeName })">@T("NopStation.BlogNews.Home.LatestBlog.ReadMore")</a>
+                                    <ul class="blog-news-social pl-0">
+                                        <li> <a href="https://www.facebook.com/sharer/sharer.php?u=@webHelper.GetThisPageUrl(true)&t=@item.Title"> <i class="fa fa-facebook" aria-hidden="true"></i> </a> </li>
+                                        <li> <a href="https://twitter.com/share?url=@webHelper.GetThisPageUrl(true)&via=TWITTER_HANDLE&text=@item.Title"> <i class="fa fa-twitter" aria-hidden="true"></i> </a> </li>
+                                        <li> <a href="https://plus.google.com/share?url=@webHelper.GetThisPageUrl(true)"> <i class="fa fa-google-plus" aria-hidden="true"></i> </a> </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (Model.NewsItems.Any())
+        {
+            <div class="container">
+                <h2 class="title-container">@T("NopStation.BlogNews.Home.LatestNews")</h2>
+                <div class="single-news mb-5">
+                    <div class="row">
+                        @foreach (var item in Model.NewsItems)
+                        {
+                            <div class="col-sm-6">
+                                <div class="news-box-inner">
+                                    <img src="@item.PictureUrl" alt="@item.AltAttribute" />
+                                    <h4 class="text-ellipsis"><a class="post-title" href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })">@item.Title</a></h4>
+                                    <div class="date-time"><span class="pr-2">@item.CreatedOnUtcStr</span><span>(@item.TotalComments)</span></div>
+                                    <div class="post-body">
+                                        <p> @Html.Raw(@item.ShortDescription)</p>
+                                    </div>
+                                    <a class="blog-link" href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })">@T("NopStation.BlogNews.Home.LatestNews.ReadMore")</a>
+                                    <ul class="blog-news-social pl-0">
+                                        <li> <a href="https://www.facebook.com/sharer/sharer.php?u=@webHelper.GetThisPageUrl(true)&t=@item.Title"> <i class="fa fa-facebook" aria-hidden="true"></i> </a> </li>
+                                        <li> <a href="https://twitter.com/share?url=@webHelper.GetThisPageUrl(true)&via=TWITTER_HANDLE&text=@item.Title"> <i class="fa fa-twitter" aria-hidden="true"></i> </a> </li>
+                                        <li> <a href="https://plus.google.com/share?url=@webHelper.GetThisPageUrl(true)"> <i class="fa fa-google-plus" aria-hidden="true"></i> </a> </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

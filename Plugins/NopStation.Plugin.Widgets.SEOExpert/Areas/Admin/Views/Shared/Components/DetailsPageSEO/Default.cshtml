@@ -1,0 +1,157 @@
+﻿@model SEOModel
+<button type="button" class="btn btn-primary" id="generate-seo-btn">
+    <i class="fas fa-cogs"></i>
+    @T("Admin.NopStation.SEOExpert.Generate")
+</button>
+<input type="number" id="entity-type-id" value="@Model.EntityTypeId" hidden disabled />
+<button type="button" id="show-modal-btn" data-toggle="modal" data-target="#generate-seo-window" hidden></button>
+
+<div id="generate-seo-window" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="generate-seo-window-title" data->
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="generate-seo-window-title">@T("Admin.NopStation.SEOExpert.Generate.Title")</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <div class="label-wrapper">
+                                <label class="col-form-label" for="SEO_MetaTitle">@T("Admin.Catalog.Products.Fields.MetaTitle")</label>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" name="SEO_MetaTitle" id="SEO_MetaTitle" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <div class="label-wrapper">
+                                <label class="col-form-label" for="SEO_MetaKeywords">@T("Admin.Catalog.Products.Fields.MetaKeywords")</label>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" name="SEO_MetaKeywords" id="SEO_MetaKeywords" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <div class="label-wrapper">
+                                <label class="col-form-label" for="SEO_MetaDescription">@T("Admin.Catalog.Products.Fields.MetaDescription")</label>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <textarea class="form-control" rows="4" name="SEO_MetaDescription" id="SEO_MetaDescription"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="SEO_Apply" class="btn btn-primary">
+                    <i class="far fa-save"></i>
+                    @T("Admin.NopStation.SEOExpert.Generate.Apply")
+                </button>
+                <button type="button" id="SEO_Regenerate" class="btn btn-primary">
+                    <i class="fas fa-redo-alt"></i>
+                    @T("Admin.NopStation.SEOExpert.Generate.Regenerate")
+                </button>
+                <button type="button" id="ModalCloseBtn" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-window-close"></i>
+                    @T("Admin.Common.Cancel")
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function GenerateSEO(showModal = false) {
+        var id = $("#Id").val();
+        var entityTypeId = $("#entity-type-id").val();
+
+        var postData ={
+            EntityId: id,
+            EntityTypeId: entityTypeId
+                };
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "@(Url.Action("GetSEOContentOfProduct", "SEOExpert"))",
+            data: postData,
+            success: function (data, textStatus, jqXHR) {
+                if (data && data.Result) {
+
+                    $("#SEO_MetaTitle").val(data.Data.MetaTitle);
+                    $("#SEO_MetaKeywords").val(data.Data.MetaKeywords);
+                    $("#SEO_MetaDescription").val(data.Data.MetaDescription);
+
+                    if (showModal)
+                        $('#show-modal-btn').click();
+
+                } else {
+                    //display errors if returned
+                    alert(data.Message);
+                }
+            },
+            complete: function (jqXHR, textStatus) {
+
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $("#generate-seo-btn").click(function () {
+            GenerateSEO(true);
+        });
+
+        $("#SEO_Regenerate").click(function () {
+            GenerateSEO(false);
+        });
+
+        $("#SEO_Apply").click(function () {
+            var id = $("#Id").val();
+            var entityTypeId = $("#entity-type-id").val();
+            var seoMetaTitle = $("#SEO_MetaTitle").val();
+            var seoMetaDescription = $("#SEO_MetaDescription").val();
+            var seoMetaKeywords = $("#SEO_MetaKeywords").val();
+
+            var postData = {
+                EntityId: id,
+                MetaTitle: seoMetaTitle,
+                MetaDescription: seoMetaDescription,
+                MetaKeywords: seoMetaKeywords,
+                EntityTypeId: entityTypeId
+            };
+
+            addAntiForgeryToken(postData);
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@(Url.Action("ApplySEOContentOnProduct", "SEOExpert"))",
+                data: postData,
+                success: function (data, textStatus, jqXHR) {
+                    if (data.Result) {
+                        $("#MetaTitle").val($("#SEO_MetaTitle").val());
+                        $("#MetaDescription").val($("#SEO_MetaDescription").val());
+                        $("#MetaKeywords").val($("#SEO_MetaKeywords").val());
+
+                        alert(data.Message);
+                        $('#ModalCloseBtn').click();
+                    }
+                    else {
+                        alert(data.Message);
+                        $('#ModalCloseBtn').click();
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                },
+                complete: function (jqXHR, textStatus) {
+
+                }
+            });
+
+        });
+    });
+</script>

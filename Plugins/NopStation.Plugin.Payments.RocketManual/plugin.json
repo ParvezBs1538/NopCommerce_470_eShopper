@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Rocket",
+  "SystemName": "NopStation.Plugin.Payments.RocketManual",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.RocketManual.dll",
+  "Description": "This plugin enables Rocket (BD) manual payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

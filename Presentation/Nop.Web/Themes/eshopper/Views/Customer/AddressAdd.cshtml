@@ -1,0 +1,37 @@
+﻿@model CustomerAddressEditModel
+@using Nop.Web.Models.Customer;
+@{
+    Layout = "_ColumnsTwo";
+
+    //title
+    NopHtml.AddTitleParts(T("PageTitle.Account").Text);
+}
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.Addresses })
+}
+@using (Html.BeginForm())
+{
+     @Html.AntiForgeryToken()
+
+<div class="features_items my-account-page"><!--features_items-->
+        <h2 class="title text-center">@T("Account.MyAccount") - @T("Account.CustomerAddresses.AddNew")</h2>
+        <div class="custom-page-box-div">
+            <div asp-validation-summary="ModelOnly" class="message-error"></div>
+            @{
+                var dataDictAddress = new ViewDataDictionary(ViewData);
+                dataDictAddress.TemplateInfo.HtmlFieldPrefix = "Address";
+                @await Html.PartialAsync("_CreateOrUpdateAddress", Model.Address, dataDictAddress)
+            }
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="buttons pull-right">
+                    <input type="submit" class="button-1 save-address-button btn btn-primary pull-right " value="@T("Common.Save")" />                    
+                </div>    
+                </div>
+            </div>
+                
+        </div>
+    </div>
+
+}

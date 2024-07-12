@@ -1,0 +1,32 @@
+﻿@model ConfigurationModel
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="PreselectPreviousShippingAddress_OverrideForStore" asp-input="PreselectPreviousShippingAddress" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="PreselectPreviousShippingAddress" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="PreselectPreviousShippingAddress" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="DefaultShippingAddressCountryId_OverrideForStore" asp-input="DefaultShippingAddressCountryId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="DefaultShippingAddressCountryId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="DefaultShippingAddressCountryId" asp-items="Model.AvailableCountries" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="SaveShippingAddressOnChangeFields_OverrideForStore" asp-input="SaveShippingAddressOnChangeFields" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="SaveShippingAddressOnChangeFields" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="SaveShippingAddressOnChangeFields" asp-items="Model.AvailableAddressFields" asp-multiple="true" />
+        </div>
+    </div>
+</div>

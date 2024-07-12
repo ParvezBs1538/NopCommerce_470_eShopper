@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station PushNop",
+  "SystemName": "NopStation.Plugin.Widgets.PushNop",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.PushNop.dll",
+  "Description": "This plugin allows to enable Progressive Web App and push notifications on multiple events and customer group wise notification.",
+  "DependsOnSystemNames": [ "NopStation.Core", "NopStation.Plugin.Widgets.ProgressiveWebApp" ]
+}

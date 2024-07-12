@@ -1,0 +1,57 @@
+﻿@model CategoryBannerModel
+@inject Nop.Core.IWorkContext workContext
+
+@if (Model.Banners.Any())
+{
+    NopHtml.AppendCssFileParts( "/Plugins/NopStation.Plugin.Widgets.CategoryBanners/Contents/css/styles.css", string.Empty);
+    var supportRtl =  workContext.GetWorkingLanguageAsync().Result.Rtl;
+    if (Model.Banners.Count > 1)
+    {
+        <script  asp-exclude-from-bundle="true" asp-location="Footer" src= "~/Plugins/NopStation.Plugin.Widgets.CategoryBanners/Contents/script/owl.carousel.min.js" ></script>
+
+        if (supportRtl)
+        {
+            NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.CategoryBanners/Contents/css/rtl/owl.theme.green.min.css", string.Empty);
+            NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.CategoryBanners/Contents/css/rtl/owl.carousel.css", string.Empty);
+        }
+        else
+        {
+            NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.CategoryBanners/Contents/css/owl.theme.green.min.css", string.Empty);
+            NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.CategoryBanners/Contents/css/owl.carousel.css", string.Empty);
+        }
+
+        <div class="category-banner owl-carousel owl-theme" id="category-banner-@Model.Id">
+            @foreach (var banner in Model.Banners)
+            {
+                <div class="banner-slider-item">
+                    <img alt="@banner.AlternateText" src="@banner.ImageUrl" title="@banner.Title" />
+                </div>
+            }
+        </div>
+
+        <script asp-exclude-from-bundle="true" asp-location="Footer">
+            $(document).ready(function () {
+                $('#category-banner-@Model.Id').owlCarousel({
+                    nav: @Model.Nav.ToString().ToLower(),
+                    loop: @Model.Loop.ToString().ToLower(),
+                    dots: true,
+                    autoplay: @Model.AutoPlay.ToString().ToLower(),
+                    rtl: @supportRtl.ToString().ToLower(),
+                    autoplayTimeout: @Model.AutoPlayTimeout,
+                    autoplayHoverPause: @Model.AutoPlayHoverPause.ToString().ToLower(),
+                    responsive: {
+                        0: {
+                            items: 1
+                        }
+                    }
+                });
+            });
+        </script>
+    }
+    else
+    {
+        <div class="category-banner" id="category-banner-@Model.Id">
+            <img src="@Model.Banners[0].ImageUrl" alt="@Model.Banners[0].AlternateText" title="@Model.Banners[0].Title" />
+        </div>
+    }
+}

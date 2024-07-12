@@ -1,0 +1,133 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("DMS.Configuration");
+    ViewBag.PageTitle = T("Admin.NopStation.DMS.Configuration").Text;
+    var proofOfDeliveryOtpTypeId = (int)ProofOfDeliveryTypes.Otp;
+}
+
+<script>
+    $(document).ready(function() {
+        
+        $("#@Html.IdFor(model => model.CheckIat)").click(toggleTokenSecondsValid);
+        $("#@Html.IdFor(model => model.EnableJwtSecurity)").click(toggleEnableJwtSecurity);
+        $("#@Html.IdFor(model => model.AllowShippersToSelectPageSize)").click(toggleAllowShippersToSelectPageSize);
+        $("#@Html.IdFor(model => model.EnabledProofOfDelivery)").change(toggleEnabledProofOfDelivery);
+        $("#@Html.IdFor(model => model.ProofOfDeliveryTypeId)").change(toggleProofOfDeliveryType);
+
+        toggleTokenSecondsValid();
+        toggleEnableJwtSecurity();
+        //toggleEnableSignatureUpload();
+        toggleAllowShippersToSelectPageSize();
+        toggleEnabledProofOfDelivery();
+    });
+
+    function toggleEnabledProofOfDelivery() {
+        if ($('#@Html.IdFor(model => model.EnabledProofOfDelivery)').is(':checked')) {
+            $('#pnlProofOfDeliveryTypeId').show();
+            toggleProofOfDeliveryType();
+        } else {
+            $('#pnlProofOfDeliveryTypeId').hide();
+            $('#pnl-pod-Otp').hide();
+            $('#pnlOtherProofOfDeliveryType').hide();
+            $('#pnlPhoneNumberRegex').hide();
+        }
+    }
+
+    function toggleProofOfDeliveryType() {
+        try {
+            if ($('#@Html.IdFor(model => model.EnabledProofOfDelivery)').is(':checked')) {
+                var selectedProofOfDeliveryTypeId = parseInt($('#@Html.IdFor(model => model.ProofOfDeliveryTypeId)').val())
+                if (selectedProofOfDeliveryTypeId == @proofOfDeliveryOtpTypeId) {
+                    $('#pnl-pod-Otp').show();
+                    $('#pnlOtherProofOfDeliveryType').hide();
+                    $('#pnl-pod-image-max-size').hide();
+
+                } else {
+                    $('#pnl-pod-Otp').hide();
+                    $('#pnlOtherProofOfDeliveryType').show();
+                    $('#pnl-pod-image-max-size').show();
+                }
+            }
+            else {
+                $('#pnlOtherProofOfDeliveryType').hide();
+                $('#pnl-pod-Otp').hide();
+                $('#pnlPhoneNumberRegex').hide();
+            }
+        }
+        catch (ex) {
+            display_nop_error(ex.message)
+        }
+    }
+
+    function toggleTokenSecondsValid() {
+        if ($('#@Html.IdFor(model => model.CheckIat)').is(':checked')) {
+            $('#pnlTokenSecondsValid').show();
+        } else {
+            $('#pnlTokenSecondsValid').hide();
+        }
+    }
+
+    function toggleEnableJwtSecurity() {
+        if ($('#@Html.IdFor(model => model.EnableJwtSecurity)').is(':checked')) {
+            $('#pnlEnableJwtSecurity').show();
+        } else {
+            $('#pnlEnableJwtSecurity').hide();
+        }
+    }
+
+    function toggleAllowShippersToSelectPageSize() {
+        if ($('#@Html.IdFor(model => model.AllowShippersToSelectPageSize)').is(':checked')) {
+            $('#pnlPageSizeOptions').show();
+            $('#pnlShipmentPageSize').hide();
+        } else {
+            $('#pnlPageSizeOptions').hide();
+            $('#pnlShipmentPageSize').show();
+        }
+    }
+
+</script>
+
+@{
+    const string hideCommonBlockAttributeName = "DMSSettingsPage.HideCommonBlock";
+    var hideCommonBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideCommonBlockAttributeName);
+
+    const string hideSecurityBlockAttributeName = "DMSSettingsPage.HideSecurityBlock";
+    var hideSecurityBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSecurityBlockAttributeName);
+
+    const string hidePackagingSlipBlockAttributeName = "DMSSettingsPage.HidePackagingSlipBlock";
+    var hidePackagingSlipBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hidePackagingSlipBlockAttributeName);
+
+    const string hideProofOfDeliveryBlockAttributeName = "DMSSettingsPage.HideProofOfDeliveryBlock";
+    var hideProofOfDeliveryBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideProofOfDeliveryBlockAttributeName);
+}
+
+<form asp-controller="DMS" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.DMS.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <nop-cards id="webapisettings-panels">
+                    <nop-card asp-name="dms-common" asp-icon="fa fa-info" asp-title="@T("Admin.NopStation.DMS.Configuration.BlockTitle.Common")" asp-hide-block-attribute-name="@hideCommonBlockAttributeName" asp-hide="@hideCommonBlock" asp-advanced="false">@await Html.PartialAsync("_Configure.Common", Model)</nop-card>
+                    <nop-card asp-name="dms-security" asp-icon="fa fa-lock" asp-title="@T("Admin.NopStation.DMS.Configuration.BlockTitle.Security")" asp-hide-block-attribute-name="@hideSecurityBlockAttributeName" asp-hide="@hideSecurityBlock" asp-advanced="true">@await Html.PartialAsync("_Configure.Security", Model)</nop-card>
+                    <nop-card asp-name="dms-packagingslip" asp-icon="fa fa-sticky-note" asp-title="@T("Admin.NopStation.DMS.Configuration.BlockTitle.PackagingSlip")" asp-hide-block-attribute-name="@hidePackagingSlipBlockAttributeName" asp-hide="@hidePackagingSlipBlock" asp-advanced="true">@await Html.PartialAsync("_Configure.PackagingSlip", Model)</nop-card>
+                    <nop-card asp-name="dms-proofofdelivery" asp-icon="fa fa-truck" asp-title="@T("Admin.NopStation.DMS.Configuration.BlockTitle.ProofOfDelivery")" asp-hide-block-attribute-name="@hideProofOfDeliveryBlockAttributeName" asp-hide="@hideCommonBlock" asp-advanced="true">@await Html.PartialAsync("_Configure.ProofOfDelivery", Model)</nop-card>
+                </nop-cards>
+            </div>
+        </div>
+    </section>
+</form>

@@ -1,0 +1,68 @@
+﻿@model ProductTabSearchModel
+@{
+    Layout = "_AdminLayout";
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.VendorShop.ProductTabs.ProductTabList").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("VendorShop.ProductTabs");
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.VendorShop.ProductTabs.ProductTabList")
+    </h1>
+    <div class="float-right">
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fa fa-plus-square"></i>
+            @T("Admin.Common.AddNew")
+        </a>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "producttab-grid",
+                            UrlRead = new DataUrl("List", "ProductTabVendorShop", null),
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            ColumnCollection = new List<ColumnProperty>
+                                            {
+                            new ColumnProperty(nameof(ProductTabModel.Name))
+                            {
+                                Title = T("Admin.NopStation.VendorShop.ProductTabs.ProductTabs.Fields.Name").Text,
+                                Width = "180"
+                            },
+                            new ColumnProperty(nameof(ProductTabModel.WidgetZoneStr))
+                            {
+                                Title = T("Admin.NopStation.VendorShop.ProductTabs.ProductTabs.Fields.WidgetZone").Text,
+                                Width = "180"
+                            },
+                            new ColumnProperty(nameof(ProductTabModel.Active))
+                            {
+                                Title = T("Admin.NopStation.VendorShop.ProductTabs.ProductTabs.Fields.Active").Text,
+                                Width = "80",
+                                Render = new RenderBoolean(),
+                                ClassName = NopColumnClassDefaults.CenterAll
+                            },
+                            new ColumnProperty(nameof(ProductTabModel.Id))
+                            {
+                                Title = T("Admin.Common.Edit").Text,
+                                Width = "100",
+                                ClassName = NopColumnClassDefaults.Button,
+                                Render = new RenderButtonEdit(new DataUrl("~/Admin/ProductTabVendorShop/Edit/"))
+                            }
+                        }
+                        })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

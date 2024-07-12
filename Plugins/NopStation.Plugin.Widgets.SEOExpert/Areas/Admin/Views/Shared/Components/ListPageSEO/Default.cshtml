@@ -1,0 +1,174 @@
+﻿@model SEOModel
+<input type="number" id="entity-type-id" value="@Model.EntityTypeId" hidden disabled />
+
+<div class="btn-group">
+    <button type="button" class="btn btn-success">
+        <i class="fas fa-cogs"></i>
+        @T("Admin.NopStation.SEOExpert.Generate")
+    </button>
+    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        <span class="caret"></span>
+        <span class="sr-only">&nbsp;</span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+        @if (Model.EnableListGeneration)
+        {
+            <li class="dropdown-item">
+                <button type="button" id="seo-generate-all">
+                    <i class="fas fa-cog"></i>
+                    @T("Admin.NopStation.SEOExpert.Generate.All")
+                </button>
+            </li>
+        }
+        <li class="dropdown-item">
+
+            <button type="button" id="seo-generate-selected">
+                <i class="fas fa-cog"></i>
+                @T("Admin.NopStation.SEOExpert.Generate.Selected")
+            </button>
+        </li>
+    </ul>
+</div>
+@{
+    var urlForSelected = Url.Action("SEOGenerate_Selected_Products", "SEOExpert");
+    if (Model.EntityTypeId == (int)SEOEntityType.Category)
+    {
+        urlForSelected = Url.Action("SEOGenerate_Selected_Categories", "SEOExpert");
+    }
+    else if (Model.EntityTypeId == (int)SEOEntityType.Manufacturer)
+    {
+        urlForSelected = Url.Action("SEOGenerate_Selected_Manufacturers", "SEOExpert");
+    }
+}
+<script>
+    $(document).ready(function () {
+        $('#seo-generate-selected').click(function (e) {
+            e.preventDefault();
+            var ids = selectedIds.join(",");
+            var entityTypeId = $("#entity-type-id").val();
+            if (!ids) {
+                $('#seoGenerateSelected-info').text("@T("Admin.Products.NoProducts")");
+                $("#seoGenerateSelected").click();
+            }
+            else {
+                var entityId = $('#entity-type-id').val();
+                var data = {
+                    selectedIds: ids,
+                    entityTypeId: entityTypeId
+                };
+                addAntiForgeryToken(data);
+
+                $.ajax({
+                    url: "@urlForSelected",
+                    type: "POST",
+                    dataType: 'json',
+                    data: data,
+                    success: function (result) {
+                        //if (result.Message != '') {
+                        //    alert(result.Message);
+                        //}
+                    }
+                });
+
+                updateTable('#products-grid');
+            }
+            return false;
+        });
+    });
+
+</script>
+@{
+    if (Model.EnableListGeneration)
+    {
+        if (Model.EntityTypeId == (int)SEOEntityType.Product)
+        {
+            <script>
+                $("#seo-generate-all").click(function (e) {
+                    e.preventDefault();
+
+                    var data = {};
+                    data.SearchProductName = $('#SearchProductName').val();
+                    data.SearchCategoryId = $('#SearchCategoryId').val();
+                    data.SearchIncludeSubCategories = $('#SearchIncludeSubCategories').is(':checked');
+                    data.SearchManufacturerId = $('#SearchManufacturerId').val();
+                    data.SearchVendorId = $('#SearchVendorId').val();
+                    data.SearchStoreId = $('#SearchStoreId').val();
+                    data.SearchWarehouseId = $('#SearchWarehouseId').val();
+                    data.SearchProductTypeId = $('#SearchProductTypeId').val();
+                    data.SearchPublishedId = $('#SearchPublishedId').val();
+                    addAntiForgeryToken(data);
+
+                    $.ajax({
+                        url: "@Url.Action("SEOGenerate_All_Products", "SEOExpert")",
+                        type: "POST",
+                        dataType: 'json',
+                        data: data,
+                        success: function (result) {
+                            if (result.Message != '') {
+                                alert(result.Message);
+                            }
+                        }
+                    });
+                    return false;
+                });
+            </script>
+        }
+        else if (Model.EntityTypeId == (int)SEOEntityType.Category)
+        {
+            <script>
+                $("#seo-generate-all").click(function (e) {
+                    e.preventDefault();
+
+                    var data = {};
+                    data.SearchCategoryName = $('#SearchCategoryName').val();
+                    data.SearchPublishedId = $('#SearchPublishedId').val();
+                    data.SearchStoreId = $('#SearchStoreId').val();
+                    addAntiForgeryToken(data);
+
+                    $.ajax({
+                        url: "@Url.Action("SEOGenerate_All_Categories", "SEOExpert")",
+                        type: "POST",
+                        dataType: 'json',
+                        data: data,
+                        success: function (result) {
+                            if (result.Message != '') {
+                                alert(result.Message);
+                            }
+                        }
+                    });
+                    return false;
+                });
+
+            </script>
+        }
+        else if (Model.EntityTypeId == (int)SEOEntityType.Manufacturer)
+        {
+            <script>
+                $("#seo-generate-all").click(function (e) {
+                    e.preventDefault();
+
+                    var data = {};
+                    data.SearchManufacturerName = $('#SearchManufacturerName').val();
+                    data.SearchPublishedId = $('#SearchPublishedId').val();
+                    data.SearchStoreId = $('#SearchStoreId').val();
+                    addAntiForgeryToken(data);
+
+                    $.ajax({
+                        url: "@Url.Action("SEOGenerate_All_Manufacturers", "SEOExpert")",
+                        type: "POST",
+                        dataType: 'json',
+                        data: data,
+                        success: function (result) {
+                            if (result.Message != '') {
+                                alert(result.Message);
+                            }
+                        }
+                    });
+                    return false;
+                });
+            </script>
+        }
+    }
+
+}
+<nop-alert asp-alert-id="seoGenerateSelected" />

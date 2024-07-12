@@ -1,0 +1,19 @@
+@model QuoteFormModel
+
+<div class="card-body">
+    <p>
+        @T("Admin.NopStation.Plugin.Misc.QuoteCart.Forms.FormAttributes.Hint")
+    </p>
+    @if (Model.Id > 0)
+    {
+        @await Html.PartialAsync("_CreateOrUpdate.FormAttributes.Info", Model)
+    }
+    else
+    {
+        <div class="card card-default">
+            <div class="card-body">
+                @T("Admin.NopStation.Plugin.Misc.QuoteCart.Forms.FormAttributes.SaveBeforeEdit")
+            </div>
+        </div>
+    }    
+</div>

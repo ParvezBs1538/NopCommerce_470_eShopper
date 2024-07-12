@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Ultimate FAQ",
+  "SystemName": "NopStation.Plugin.Widgets.FAQ",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team, Jaber Kibria",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.FAQ.dll",
+  "Description": "This plugin allows to show FAQ on web site.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

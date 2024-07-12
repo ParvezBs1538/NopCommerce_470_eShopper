@@ -1,0 +1,8 @@
+﻿@model NewsPictureModel
+
+@{
+    const string hidePictureBlockAttributeName = "NewsItemPage.HidePictureBlock";
+    var hidePictureBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hidePictureBlockAttributeName);
+}
+
+<nop-card asp-name="news-item-picture" asp-icon="fa fa-picture-o" asp-title="@T("NopStation.BlogNews.Tab.NewsItem.Picture")" asp-hide-block-attribute-name="@hidePictureBlockAttributeName" asp-hide="@hidePictureBlock" asp-advanced="true">@await Html.PartialAsync("_NewsItemPicture.cshtml", Model)</nop-card>

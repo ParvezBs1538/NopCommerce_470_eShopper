@@ -1,0 +1,38 @@
+@model int
+@inject Nop.Services.Catalog.ICategoryService categoryService 
+
+<select class="form-control" data-placeholder="Search for a category" style="width: 100%" id="@Html.IdForModel()" name="@Html.NameForModel()">
+    @if (Model > 0) 
+    {
+        var category = await categoryService.GetCategoryByIdAsync(Model);
+        if (category != null && !category.Deleted)
+        {
+            <option value="@Model" selected="selected">@(await categoryService.GetFormattedBreadCrumbAsync(category))</option>
+        }
+    }
+</select>
+
+<script>
+    $(document).ready(function () {
+        $('#@Html.IdForModel()').select2({
+            ajax: {
+                url: '@(Url.Action("Categories", "Select2"))',
+                dataType: 'json',
+                data: function (params) {
+                    var query = {
+                        q: params.term,
+                        page: params.page || 1
+                    }
+                    return query;
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+
+                    return data;
+                },
+                placeholder: 'Search for a category',
+                minimumInputLength: 1
+            }
+        });
+    });
+</script>

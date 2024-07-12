@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Helpdesk",
+  "SystemName": "NopStation.Plugin.Widgets.Helpdesk",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.Helpdesk.dll",
+  "Description": "This plugin allows store owner or customer to create support tickets.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

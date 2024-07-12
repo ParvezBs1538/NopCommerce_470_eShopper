@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "POLi Payment",
+  "SystemName": "NopStation.Plugin.Payments.POLiPay",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.POLiPay.dll",
+  "Description": "This plugin allows paying with POLi Pay",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

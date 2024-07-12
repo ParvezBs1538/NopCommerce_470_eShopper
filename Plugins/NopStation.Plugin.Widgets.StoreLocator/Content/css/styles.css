@@ -1,0 +1,223 @@
+﻿.all-stores div#map {
+  width: 100%;
+  height: 373px;
+  float: left;
+  margin-left: 0px;
+}
+
+.total-stores {
+  padding: 20px;
+  text-align: center;
+}
+
+.all-stores .storelist {
+  font-size: 15px;
+  line-height: 18px;
+}
+
+  .all-stores .storelist .store {
+    display: inline-block;
+    width: 100%;
+    margin: 0 1% 30px;
+    vertical-align: top;
+  }
+
+.store .image {
+  display: inline-block;
+  width: 40%;
+  position: relative;
+  margin: 2%;
+}
+
+  .store .image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+  }
+
+.store .store-details {
+  margin: 2%;
+  display: inline-block;
+  width: 52%;
+  vertical-align: top;
+  min-height: 170px;
+  position: relative;
+}
+
+.store .store-name {
+  font-size: 18px;
+  line-height: 20px;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+  .store .store-name a {
+    color: #000;
+  }
+
+    .store .store-name a:hover,
+    .store .store-name a:focus {
+      color: #000;
+    }
+
+.store .full-address,
+.store .opening-hours,
+.store .contact-number,
+.store .email-address {
+  padding: 0 0 10px 30px;
+  line-height: 20px;
+}
+
+.store .full-address {
+  background: url(../Images/address.png) left top no-repeat;
+}
+
+.store .opening-hours {
+  background: url(../Images/opening.png) left top no-repeat;
+}
+
+.store .contact-number {
+  background: url(../Images/phone-call.png) left top no-repeat;
+}
+
+.store .email-address {
+  background: url(../Images/message.png) left top no-repeat;
+}
+
+.storelist .store .full-description {
+  overflow: hidden;
+  max-height: 80px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  display: none;
+}
+
+.store .store-btn-container {
+  text-align: left;
+  margin-top: 20px;
+}
+
+.store .btn-store-map {
+  display: inline-block;
+  min-width: 160px;
+  height: 40px;
+  border: none;
+  padding: 12px 12px 12px 27px;
+  text-align: center;
+  color: #fff;
+  text-transform: uppercase;
+  background: #4ab2f1 url(../Images/map.png) left center no-repeat;
+  background-position: 15px;
+}
+
+  .store .btn-store-map:hover,
+  .store .btn-store-map:focus {
+    background-color: #248ece;
+    color: #FFF;
+    text-decoration: none;
+  }
+
+.store .back-to-all-shops {
+  font-size: 16px;
+  color: #4ab2f1;
+  margin-bottom: 10px;
+}
+
+.all-stores .gm-style-iw {
+  width: 300px !important;
+  top: 8px !important;
+  left: 5px !important;
+  max-height: 130px;
+}
+
+.all-stores label {
+  font-weight: 600;
+}
+
+#iw-container {
+  margin-bottom: 10px;
+}
+
+  #iw-container .iw-title {
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    background-color: #48b5e9;
+    color: white;
+    margin: 0;
+    border-radius: 2px 2px 0 0;
+  }
+
+  #iw-container .iw-content {
+    font-size: 13px;
+    line-height: 15px;
+    font-weight: 400;
+    margin-right: 1px;
+    padding: 3px 5px 9px 15px;
+    max-height: 110px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+.iw-subTitle {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 2px 0;
+}
+
+.all-stores a {
+  color: #4285F4;
+}
+
+  .all-stores a:hover {
+    color: #4285F4;
+    text-decoration: underline;
+  }
+
+  .all-stores a.morelink {
+    text-decoration: none;
+    outline: none;
+    color: blue;
+  }
+
+.all-stores .morecontent span {
+  display: none;
+}
+
+.search-page h1 {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #205aa7;
+}
+
+.store-service {
+  padding: 0 15px !important;
+}
+
+.store .image:before {
+  content: "";
+  padding-top: 100%;
+  display: block;
+}
+
+@media (min-width:1001px) {
+  .all-stores .storelist .store {
+    width: 48%;
+  }
+
+  .store-div {
+    display: flex;
+  }
+
+  .gallery .picture {
+    height: 400px;
+  }
+}

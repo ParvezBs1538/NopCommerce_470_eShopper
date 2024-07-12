@@ -1,0 +1,64 @@
+﻿@model ConfigurationModel
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("TinyPNG.Configuration");
+    ViewBag.PageTitle = T("Admin.NopStation.TinyPNG.Configuration").Text;
+}
+
+<form asp-controller="TinyPNG" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.TinyPNG.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="fa fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="form-horizontal">
+            <div asp-validation-summary="All"></div>
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        @T("Admin.NopStation.TinyPNG.Configuration.Instructions")
+                        <br />
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="TinyPNGEnable_OverrideForStore" asp-input="TinyPNGEnable" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="TinyPNGEnable" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="TinyPNGEnable" />
+                                <span asp-validation-for="TinyPNGEnable"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="ApiUrl_OverrideForStore" asp-input="ApiUrl" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="ApiUrl" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="ApiUrl" />
+                                <span asp-validation-for="ApiUrl"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="Keys_OverrideForStore" asp-input="Keys" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="Keys" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor-check asp-for="Keys" />
+                                <span asp-validation-for="Keys"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

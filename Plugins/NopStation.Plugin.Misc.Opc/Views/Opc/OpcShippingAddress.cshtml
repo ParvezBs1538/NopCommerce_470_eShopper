@@ -1,0 +1,86 @@
+﻿@model CheckoutShippingAddressModel
+@using System.Text
+
+<div class="checkout-data">
+    @if (Model.DisplayPickupInStore && Model.PickupPointsModel.AllowPickupInStore)
+    {
+        @await Html.PartialAsync("_PickupPoints", Model.PickupPointsModel)
+       
+    }
+    <div class="shipping-addresses" id="shipping-addresses-form">
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OpCheckoutShippingAddressTop })
+        @if (Model.ExistingAddresses.Count >= 0)
+        {
+            <div class="section select-shipping-address">
+                <label for="shipping-address-select">@T("Checkout.SelectShippingAddressOrEnterNewOne")</label>
+                <div>
+                    <select name="shipping_address_id" id="shipping-address-select" class="address-select"
+                            title="" onchange="Shipping.newAddress(this)">
+                             @{
+                                 //var shippingAddressId = Model.CustomProperties.ContainsKey("CustomerShippingAddress") ? (int)Model.CustomProperties["CustomerShippingAddress"] : 0;
+
+                                 var shippingAddressId = 0;
+                                 if (Model.CustomProperties.ContainsKey("CustomerShippingAddress"))
+                                 {
+                                int.TryParse(Model.CustomProperties["CustomerShippingAddress"], out shippingAddressId);
+                                 }
+                            }
+                        @foreach (var address in Model.ExistingAddresses)
+                        {
+                            var addressLine = "";
+                            addressLine += address.FirstName;
+                            addressLine += " " + address.LastName;
+                            if (address.StreetAddressEnabled && !string.IsNullOrEmpty(address.Address1))
+                            {
+                                addressLine += ", " + address.Address1;
+                            }
+                            if (address.CityEnabled && !string.IsNullOrEmpty(address.City))
+                            {
+                                addressLine += ", " + address.City;
+                            }
+                            if (address.CountyEnabled && !string.IsNullOrEmpty(address.County))
+                            {
+                                addressLine += ", " + address.County;
+                            }
+                            if (address.StateProvinceEnabled && !string.IsNullOrEmpty(address.StateProvinceName))
+                            {
+                                addressLine += ", " + address.StateProvinceName;
+                            }
+                            if (address.ZipPostalCodeEnabled && !string.IsNullOrEmpty(address.ZipPostalCode))
+                            {
+                                addressLine += " " + address.ZipPostalCode;
+                            }
+                            if (address.CountryEnabled && !string.IsNullOrWhiteSpace(address.CountryName))
+                            {
+                                addressLine += ", " + address.CountryName;
+                            }
+                            //how should we render "FormattedCustomAddressAttributes" here?
+                            if(shippingAddressId > 0 && shippingAddressId  == address.Id)
+                            {
+                                <option value="@(address.Id)" selected data-country="@address.CountryId">@(addressLine)</option>
+                            } else
+                            {
+                                <option value="@(address.Id)" data-country="@address.CountryId">@(addressLine)</option>
+                            }
+                        }
+                        <option value="" selected="@Model.NewAddressPreselected">@T("Checkout.NewAddress")</option>
+                    </select>
+                </div>
+            </div>
+        }
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OpCheckoutShippingAddressMiddle })
+        <div class="section new-shipping-address" id="shipping-new-address-form">
+            <div class="enter-address">
+                <div asp-validation-summary="ModelOnly" class="message-error"></div>
+                @{
+                    var dataDictAddress = new ViewDataDictionary(ViewData);
+                    dataDictAddress.TemplateInfo.HtmlFieldPrefix = "ShippingNewAddress";
+                    @await Html.PartialAsync("_CreateOrUpdateShippingAddress", Model.ShippingNewAddress, dataDictAddress)
+                }
+            </div>
+        </div>
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OpCheckoutShippingAddressBottom })
+    </div>
+   
+</div>
+

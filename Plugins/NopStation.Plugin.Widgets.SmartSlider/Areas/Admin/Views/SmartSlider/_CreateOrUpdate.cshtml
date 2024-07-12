@@ -1,0 +1,56 @@
+﻿@model SmartSliderModel
+@inject IWorkContext workContext
+@inject IGenericAttributeService genericAttributeService
+
+@{
+    var customer = await workContext.GetCurrentCustomerAsync();
+
+    const string hideInfoBlockAttributeName = "SmartSliderPage.HideInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideInfoBlockAttributeName);
+
+    const string hidePropertiesBlockAttributeName = "SmartSliderPage.HidePropertiesBlock";
+    var hidePropertiesBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hidePropertiesBlockAttributeName);
+
+    const string hideItemsBlockAttributeName = "SmartSliderPage.HideItemsBlock";
+    var hideItemsBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideItemsBlockAttributeName);
+    
+    const string hideWidgetZonesBlockAttributeName = "SmartSliderPage.HideWidgetZonesBlock";
+    var hideWidgetZonesBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideWidgetZonesBlockAttributeName);
+
+    const string hideSchedulesBlockAttributeName = "SmartSliderPage.HideSchedulesBlock";
+    var hideSchedulesBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideSchedulesBlockAttributeName);
+
+    const string hideCustomerConditionsBlockAttributeName = "SmartSliderPage.HideCustomerConditionsBlock";
+    var hideCustomerConditionsBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideCustomerConditionsBlockAttributeName);
+
+    const string hideProductConditionsBlockAttributeName = "SmartSliderPage.HideProductConditionsBlock";
+    var hideProductConditionsBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideProductConditionsBlockAttributeName);
+}
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-md-12 clearfix">
+                    <div class="float-left">
+                        @await Component.InvokeAsync(typeof(SettingModeViewComponent), new { modeName = "smartslider-advanced-mode" })
+                    </div>
+                </div>
+            </div>
+
+            <nop-cards id="slider-panels">
+                <nop-card asp-name="slider-info" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.SmartSliders.Sliders.Tab.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</nop-card>
+                <nop-card asp-name="slider-properties" asp-icon="fa fa-bars" asp-title="@T("Admin.NopStation.SmartSliders.Sliders.Tab.Properties")" asp-hide-block-attribute-name="@hidePropertiesBlockAttributeName" asp-hide="@hidePropertiesBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Properties", Model)</nop-card>
+                <nop-card asp-name="slider-items" asp-icon="fa fa-th-list" asp-title="@T("Admin.NopStation.SmartSliders.Sliders.Tab.SliderItems")" asp-hide-block-attribute-name="@hideItemsBlockAttributeName" asp-hide="@hideItemsBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.SliderItems", Model)</nop-card>
+                
+                <nop-card asp-name="slider-wm-widgetzones" asp-icon="far fa-window-maximize" asp-title="@T("Admin.NopStation.WidgetManager.Common.WidgetZones")" asp-hide-block-attribute-name="@hideWidgetZonesBlockAttributeName" asp-hide="@hideWidgetZonesBlock" asp-advanced="false">@await Html.PartialAsync("WidgetZoneMappings", Model)</nop-card>
+                <nop-card asp-name="slider-wm-schedules" asp-icon="far fa-clock" asp-title="@T("Admin.NopStation.WidgetManager.Common.Schedules")" asp-hide-block-attribute-name="@hideSchedulesBlockAttributeName" asp-hide="@hideSchedulesBlock" asp-advanced="true">@await Html.PartialAsync("ScheduleMappings", Model)</nop-card>
+                <nop-card asp-name="slider-wm-customers" asp-icon="fa fa-check" asp-title="@T("Admin.NopStation.WidgetManager.Common.CustomerConditions")" asp-hide-block-attribute-name="@hideCustomerConditionsBlockAttributeName" asp-hide="@hideCustomerConditionsBlock" asp-advanced="true">@await Html.PartialAsync("CustomerConditionMappings", Model)</nop-card>
+                <nop-card asp-name="slider-wm-products" asp-icon="fa fa-check" asp-title="@T("Admin.NopStation.WidgetManager.Common.ProductConditions")" asp-hide-block-attribute-name="@hideProductConditionsBlockAttributeName" asp-hide="@hideProductConditionsBlock" asp-advanced="true">@await Html.PartialAsync("ProductConditionMappings", Model)</nop-card>
+            </nop-cards>
+        </div>
+    </div>
+</section>

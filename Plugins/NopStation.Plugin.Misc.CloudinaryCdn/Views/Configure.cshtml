@@ -1,0 +1,192 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.CloudinaryCdn.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("CloudinaryCdn.Configuration");
+}
+
+<form asp-controller="CloudinaryCdn" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.CloudinaryCdn.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="Enabled" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="Enabled" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="ApiKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ApiKey" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="ApiSecret" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ApiSecret" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="CloudName" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="CloudName" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="PrependCdnFolderName" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="PrependCdnFolderName" />
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="PrependCdnFolderName">
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="CdnFolderName" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="CdnFolderName" />
+                                    </div>
+                                </div>
+                            </nop-nested-setting >
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="EnableJsCdn" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableJsCdn" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="EnableCssCdn" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableCssCdn" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="AutoGenerateRequiredPictures" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AutoGenerateRequiredPictures" />
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="AutoGenerateRequiredPictures">
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="AutoGenerateProductThumbPicture" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="AutoGenerateProductThumbPicture" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="AutoGenerateProductDetailsPicture" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="AutoGenerateProductDetailsPicture" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="AutoGenerateProductThumbPictureOnProductDetailsPage" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="AutoGenerateProductThumbPictureOnProductDetailsPage" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="AutoGenerateAssociatedProductPicture" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="AutoGenerateAssociatedProductPicture" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="AutoGenerateCategoryThumbPicture" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="AutoGenerateCategoryThumbPicture" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="AutoGenerateManufacturerThumbPicture" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="AutoGenerateManufacturerThumbPicture" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="AutoGenerateVendorThumbPicture" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="AutoGenerateVendorThumbPicture" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="AutoGenerateCartThumbPicture" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="AutoGenerateCartThumbPicture" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="AutoGenerateMiniCartThumbPicture" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="AutoGenerateMiniCartThumbPicture" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="AutoGenerateAutoCompleteSearchThumbPicture" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="AutoGenerateAutoCompleteSearchThumbPicture" />
+                                    </div>
+                                </div>
+                            </nop-nested-setting >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+

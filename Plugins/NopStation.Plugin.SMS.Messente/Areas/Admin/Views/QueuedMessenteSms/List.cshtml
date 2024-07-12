@@ -1,0 +1,66 @@
+﻿@model QueuedSmsSearchModel
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.Messente.QueuedSmss.List").Text;
+
+    NopHtml.SetActiveMenuItemSystemName("MessenteSms.QueuedSmss");
+}
+
+@{
+    const string hideSearchBlockAttributeName = "QueuedSmss.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<form asp-controller="QueuedMessenteSms" asp-action="List" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Messente.QueuedSmss.List")
+        </h1>
+    </div>
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "device-grid",
+                            UrlRead = new DataUrl("GetList", "QueuedMessenteSms", null),
+                            SearchButtonId = "search-device",
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(QueuedSmsModel.CustomerName))
+                                {
+                                    Title = T("Admin.NopStation.Messente.QueuedSmss.Fields.Customer").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(QueuedSmsModel.StoreName))
+                                {
+                                    Title = T("Admin.NopStation.Messente.QueuedSmss.Fields.Store").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(QueuedSmsModel.CreatedOn))
+                                {
+                                    Title = T("Admin.NopStation.Messente.QueuedSmss.Fields.CreatedOn").Text,
+                                    Width = "50",
+                                    Render = new RenderDate()
+                                },
+                                new ColumnProperty(nameof(QueuedSmsModel.Id))
+                                {
+                                    Title = T("Admin.Common.View").Text,
+                                    Width = "80",
+                                    ClassName =  NopColumnClassDefaults.Button,
+                                    Render = new RenderButtonView(new DataUrl("View"))
+                                }
+                            }
+                        })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

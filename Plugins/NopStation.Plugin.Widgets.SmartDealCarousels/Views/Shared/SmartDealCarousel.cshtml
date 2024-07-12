@@ -1,0 +1,97 @@
+﻿@model CarouselModel
+@inject SmartDealCarouselSettings smartCarouselSettings
+
+@if (Model.Products.Count > 0)
+{
+    <div class="swiper carousel" id="deal-carousel-@(Model.Id)">
+        <div class="swiper-wrapper item-grid" dir="@Html.GetUIDirection(!await Html.ShouldUseRtlThemeAsync())">
+            @foreach (var item in Model.Products)
+            {
+                <div class="item-box swiper-slide">
+                    @await Html.PartialAsync("_ProductBox", item)
+                </div>
+            }
+        </div>
+        @if (Model.Pagination)
+        {
+            <div class="swiper-pagination"></div>
+        }
+        @if (Model.Navigation)
+        {
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        }
+    </div>
+
+    <script asp-location="Footer">
+        $(document).ready(function () {
+            var carousel@(Model.Id) = new Swiper("#deal-carousel-@(Model.Id)", {
+                observer: true,
+                observeParents: true,
+                breakpoints: {
+                    0: {
+                        slidesPerView: 1
+                    },
+                    480: {
+                        slidesPerView: 2,
+                        spaceBetween: 12
+                    },
+                    1024: {
+                        slidesPerView: 4,
+                        spaceBetween: 12
+                    }
+                },
+                lazy: @Model.LazyLoad.ToString().ToLower(),
+                loop: @Model.Loop.ToString().ToLower(),
+                centeredSlides: @Model.Center.ToString().ToLower(),
+                initialSlide: @Model.StartPosition,
+        @if (Model.AutoPlay)
+        {
+            <text>
+                    autoplay: {
+                    delay: @Model.AutoPlayTimeout,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: @Model.AutoPlayHoverPause.ToString().ToLower(),
+                },
+            </text>
+        }
+        @if (Model.KeyboardControl)
+        {
+            <text>
+                    keyboard: {
+                    enabled: true,
+                    onlyInViewport: @Model.KeyboardControlOnlyInViewport.ToString().ToLower(),
+                    pageUpDown: false
+                },
+            </text>
+        }
+        @if (Model.Pagination)
+        {
+            <text>
+                    pagination: {
+                    el: "#deal-carousel-@(Model.Id) .swiper-pagination",
+                    type: "@(Model.PaginationType.ToString().ToLower())",
+                    dynamicBullets: @Model.PaginationDynamicBullets.ToString().ToLower(),
+                    dynamicMainBullets: @Model.PaginationDynamicMainBullets,
+                    clickable: @Model.PaginationClickable.ToString().ToLower()
+                                        },
+            </text>
+        }
+        @if (Model.Navigation)
+        {
+            <text>
+                    navigation: {
+                    nextEl: "#deal-carousel-@(Model.Id) .swiper-button-next",
+                    prevEl: "#deal-carousel-@(Model.Id) .swiper-button-prev",
+                },
+            </text>
+        }
+                            });
+                        });
+    </script>
+}
+
+@if (smartCarouselSettings.EnableAjaxLoad)
+{
+    @NopHtml.GenerateInlineScripts(ResourceLocation.Footer)
+}

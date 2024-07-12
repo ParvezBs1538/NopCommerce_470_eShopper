@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station must be register to customer gender",
+  "SystemName": "NopStation.Plugin.DiscountRules.CustomerGender",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.DiscountRules.CustomerGender.dll",
+  "Description": "This plugin allows you to configure discounts for specific customer Gender.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

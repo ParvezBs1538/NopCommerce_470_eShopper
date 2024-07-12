@@ -1,0 +1,76 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("PrevNextProduct.Configuration");
+    ViewBag.PageTitle = T("Admin.NopStation.PrevNextProduct.Configuration").Text;
+}
+
+<form asp-controller="PrevNextProduct" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.PrevNextProduct.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableLoop_OverrideForStore" asp-input="EnableLoop" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableLoop" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableLoop" />
+                                    <span asp-validation-for="EnableLoop"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="WidgetZone_OverrideForStore" asp-input="WidgetZone" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="WidgetZone" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="WidgetZone" />
+                                    <span asp-validation-for="WidgetZone"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="NavigateBasedOnId_OverrideForStore" asp-input="NavigateBasedOnId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="NavigateBasedOnId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="NavigateBasedOnId" asp-items="Model.AvailableNavigationTypes" />
+                                    <span asp-validation-for="NavigateBasedOnId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ProductNameMaxLength_OverrideForStore" asp-input="ProductNameMaxLength" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ProductNameMaxLength" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ProductNameMaxLength" />
+                                    <span asp-validation-for="ProductNameMaxLength"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

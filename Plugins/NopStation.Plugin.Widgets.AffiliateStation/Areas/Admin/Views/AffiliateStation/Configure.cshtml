@@ -1,0 +1,118 @@
+﻿@model ConfigurationModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.AffiliateStation.Configuration").Text;
+
+    NopHtml.SetActiveMenuItemSystemName("AffiliateStation.Configuration");
+}
+
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.UseDefaultCommissionIfNotSetOnCatalog)").change(toggleUseDefaultCommissionIfNotSetOnCatalog);
+        $("#@Html.IdFor(model => model.UsePercentage)").click(toggleUsePercentage);
+
+        toggleUseDefaultCommissionIfNotSetOnCatalog();
+        toggleUsePercentage();
+    });
+
+    function toggleUseDefaultCommissionIfNotSetOnCatalog() {
+        if ($('#@Html.IdFor(model => model.UseDefaultCommissionIfNotSetOnCatalog)').is(':checked')) {
+            $('#pnlUseDefaultCommissionIfNotSetOnCatalog').show();
+        } else {
+            $('#pnlUseDefaultCommissionIfNotSetOnCatalog').hide();
+        }
+    }
+
+    function toggleUsePercentage() {
+        if ($('#@Html.IdFor(model => model.UsePercentage)').is(':checked')) {
+            $('#pnlCommissionPercentage').show();
+            $('#pnlCommissionAmount').hide();
+        } else {
+            $('#pnlCommissionPercentage').hide();
+            $('#pnlCommissionAmount').show();
+        }
+    }
+</script>
+
+<form asp-controller="AffiliateStation" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.AffiliateStation.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+    
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="AffiliatePageOrderPageSize_OverrideForStore" asp-input="AffiliatePageOrderPageSize" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AffiliatePageOrderPageSize" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="AffiliatePageOrderPageSize" />
+                                    <span asp-validation-for="AffiliatePageOrderPageSize"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="UseDefaultCommissionIfNotSetOnCatalog_OverrideForStore" asp-input="UseDefaultCommissionIfNotSetOnCatalog" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="UseDefaultCommissionIfNotSetOnCatalog" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="UseDefaultCommissionIfNotSetOnCatalog" />
+                                    <span asp-validation-for="UseDefaultCommissionIfNotSetOnCatalog"></span>
+                                </div>
+                            </div>
+
+                            <nop-nested-setting asp-for="UseDefaultCommissionIfNotSetOnCatalog">
+                                <div id="pnlUseDefaultCommissionIfNotSetOnCatalog">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-override-store-checkbox asp-for="UsePercentage_OverrideForStore" asp-input="UsePercentage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="UsePercentage" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="UsePercentage" />
+                                            <span asp-validation-for="UsePercentage"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" id="pnlCommissionAmount">
+                                        <div class="col-md-4">
+                                            <nop-override-store-checkbox asp-for="CommissionAmount_OverrideForStore" asp-input="CommissionAmount" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="CommissionAmount" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="CommissionAmount" asp-postfix="@Model.PrimaryStoreCurrencyCode" />
+                                            <span asp-validation-for="CommissionAmount"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" id="pnlCommissionPercentage">
+                                        <div class="col-md-4">
+                                            <nop-override-store-checkbox asp-for="CommissionPercentage_OverrideForStore" asp-input="CommissionPercentage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="CommissionPercentage" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="CommissionPercentage" />
+                                            <span asp-validation-for="CommissionPercentage"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

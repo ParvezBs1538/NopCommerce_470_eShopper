@@ -1,0 +1,67 @@
+﻿@model PushNotificationTemplateSearchModel
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.PWA.PushNotificationTemplates.List").Text;
+
+    NopHtml.SetActiveMenuItemSystemName("PWA.PushNotificationTemplates");
+}
+
+@{
+    const string hideSearchBlockAttributeName = "PushNotificationTemplates.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<form asp-controller="PushNotificationTemplate" asp-action="List" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.PWA.PushNotificationTemplates.List")
+        </h1>
+    </div>
+    
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            @await Html.PartialAsync("Table", new DataTablesModel
+                            {
+                                Name = "pushnotificationtemplate-grid",
+                                UrlRead = new DataUrl("GetList", "PushNotificationTemplate", null),
+                                SearchButtonId = "search-pushnotificationtemplate",
+                                Length = Model.PageSize,
+                                LengthMenu = Model.AvailablePageSizes,
+                                ColumnCollection = new List<ColumnProperty>
+                                {
+                                    new ColumnProperty(nameof(PushNotificationTemplateModel.Name))
+                                    {
+                                        Title = T("Admin.NopStation.PWA.PushNotificationTemplates.Fields.Name").Text,
+                                        Width = "100"
+                                    },
+                                    new ColumnProperty(nameof(PushNotificationTemplateModel.Title))
+                                    {
+                                        Title = T("Admin.NopStation.PWA.PushNotificationTemplates.Fields.Title").Text,
+                                        Width = "100"
+                                    },
+                                    new ColumnProperty(nameof(PushNotificationTemplateModel.Active))
+                                    {
+                                        Title = T("Admin.NopStation.PWA.PushNotificationTemplates.Fields.Active").Text,
+                                        Width = "50",
+                                        ClassName = NopColumnClassDefaults.CenterAll,
+                                        Render = new RenderBoolean()
+                                    },
+                                    new ColumnProperty(nameof(PushNotificationTemplateModel.Id))
+                                    {
+                                        Title = T("Admin.Common.Edit").Text,
+                                        Width = "80",
+                                        ClassName =  NopColumnClassDefaults.Button,
+                                        Render = new RenderButtonEdit(new DataUrl("Edit"))
+                                    }
+                                }
+                            })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

@@ -1,0 +1,123 @@
+@model ShoppingCartModel
+@using Nop.Core
+@using Nop.Core.Domain.Orders
+@using Nop.Core.Domain.Tax
+@inject IWebHelper webHelper
+@inject IWorkContext workContext
+@inject OrderSettings orderSettings
+@inject OpcSettings opcSettings
+
+
+<div class="order-summary-content">
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OrderSummaryContentBefore })
+    <div class="order-review-wrapper">
+        <div class="order-review">
+            @await Html.PartialAsync("_OrderReviewData", Model.OrderReviewData)
+        </div>
+    </div>
+
+    @if (Model.Items.Count > 0)
+    {
+        if (Model.Warnings.Count > 0)
+        {
+            <div class="message-error">
+                <ul>
+                    @foreach (var warning in Model.Warnings)
+                    {
+                        <li>@warning</li>
+                    }
+                </ul>
+            </div>
+        }
+        <div class="shopping-cart-items-wrapper">
+            <div id="shopping-cart-items">
+                @await Html.PartialAsync("ShoppingCartItems", Model)
+            </div>
+        </div>
+
+
+        <div class="cart-footer row">
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OrderSummaryCartFooter })
+            <div class="col-12 col-lg-6 mb-5">
+                <div class="cart-options">
+
+                    @if (Model.CheckoutAttributes.Count > 0 && opcSettings.ShowCheckoutAttributesInCheckout)
+                    {
+                        <div class="cart-options" id="checkout-attributes">
+
+                            <div class="step-title">
+                                <h3 class="title checkout-options-heading">@T("NopStation.Opc.Checkout.Attribute")</h3>
+                            </div>
+
+                            <div class="checkout-attributes" id="checkout-attribute-load">
+                                @await Html.PartialAsync("_CustomCheckoutAttributes", Model)
+                            </div>
+
+                            <div id="selected-checkout-attribute-load">
+                                @await Component.InvokeAsync(typeof(SelectedCheckoutAttributesViewComponent))
+                            </div>
+
+                        </div>
+                    }
+
+                    <div class="cart-collaterals">
+                        <div class="deals">
+                            <div id="discount-box">
+                                @await Html.PartialAsync("_DiscountBox", Model.DiscountBox)
+                            </div>
+                            <div id="gift-card">
+                                @await Html.PartialAsync("_GiftCardBox", Model.GiftCardBox)
+                            </div>
+                            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OrderSummaryContentDeals })
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="checkout-totals col-12   col-lg-6 mb-5">
+                
+                <div class="totals">
+                    <div class="opc-order-total-wrapper">
+                        <div class="order-total-custom" id="order-total-custom">
+                            @await Component.InvokeAsync(typeof(OpcOrderTotalsViewComponent), new { isEditable = false })
+                        </div>
+                    </div>
+
+
+                    @if (Model.IsEditable)
+                    {
+                        if (!string.IsNullOrEmpty(Model.MinOrderSubtotalWarning))
+                        {
+                            <div class="min-amount-warning">
+                                @Model.MinOrderSubtotalWarning
+                            </div>
+                        }
+                    }
+                    @if (Model.IsEditable && Model.ButtonPaymentMethodViewComponents.Count > 0)
+                    {
+                        <div class="addon-buttons">
+
+                            @foreach (var pm in Model.ButtonPaymentMethodViewComponents)
+                            {
+                                @await Component.InvokeAsync(pm)
+                            }
+                        </div>
+                    }
+
+                    @*Confirm Order step ends*@
+                    <button type="submit" id="confirm-order-button" class="button-1" onclick="ConfirmOrder.save()">@T("Checkout.ConfirmButton")</button>
+                </div>
+            </div>
+        </div>
+        @*</form>*@
+    }
+    else
+    {
+        <div class="no-data">
+            @T("ShoppingCart.CartIsEmpty")
+        </div>
+    }
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OrderSummaryContentAfter })
+</div>

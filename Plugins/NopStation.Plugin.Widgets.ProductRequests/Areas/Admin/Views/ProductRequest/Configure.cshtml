@@ -1,0 +1,117 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("ProductRequests.Configuration");
+    ViewBag.PageTitle = T("Admin.NopStation.ProductRequests.Configuration").Text;
+}
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.IncludeInFooter)").change(toggleIncludeInFooter);
+
+        toggleIncludeInFooter();
+    });
+
+    function toggleIncludeInFooter() {
+        if ($('#@Html.IdFor(model => model.IncludeInFooter)').is(':checked')) {
+            $('#pnlFooterElementSelector').show();
+        } else {
+            $('#pnlFooterElementSelector').hide();
+        }
+    }
+</script>
+
+<form asp-controller="ProductRequest" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.ProductRequests.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="AllowedCustomerRolesIds_OverrideForStore" asp-input="AllowedCustomerRolesIds" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AllowedCustomerRolesIds" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-select asp-for="AllowedCustomerRolesIds" asp-items="@Model.AvailableCustomerRoles" asp-multiple="true" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="IncludeInTopMenu_OverrideForStore" asp-input="IncludeInTopMenu" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="IncludeInTopMenu" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="IncludeInTopMenu" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="IncludeInFooter_OverrideForStore" asp-input="IncludeInFooter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="IncludeInFooter" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="IncludeInFooter" />
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="IncludeInFooter">
+                                <div class="form-group row" id="pnlFooterElementSelector">
+                                    <div class="col-md-4">
+                                        <nop-override-store-checkbox asp-for="FooterElementSelector_OverrideForStore" asp-input="FooterElementSelector" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="FooterElementSelector" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="FooterElementSelector" />
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="DescriptionRequired_OverrideForStore" asp-input="DescriptionRequired" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="DescriptionRequired" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="DescriptionRequired" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="LinkRequired_OverrideForStore" asp-input="LinkRequired" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="LinkRequired" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="LinkRequired" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="MinimumProductRequestCreateInterval_OverrideForStore" asp-input="MinimumProductRequestCreateInterval" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="MinimumProductRequestCreateInterval" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="MinimumProductRequestCreateInterval" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

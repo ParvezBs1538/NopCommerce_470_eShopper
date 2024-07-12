@@ -1,0 +1,85 @@
+@using Nop.Web.Areas.Admin.Models.Messages
+@using static Nop.Services.Common.NopLinksDefaults
+@model MessageTemplateSearchModel
+
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.ContentManagement.MessageTemplates").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("QuoteCart.MessageTemplates");
+    Layout = "_AdminLayout";
+}
+
+@{
+    const string hideSearchBlockAttributeName = "MessageTemplatesPage.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.ContentManagement.MessageTemplates")
+    </h1>
+    <div class="float-right">
+        &nbsp;
+        @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.MessageTemplateListButtons, additionalData = Model })
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+    <div class="form-horizontal">
+        <div class="cards-group">
+            <div class="card card-default">
+                <div class="card-body">
+                    <nop-doc-reference asp-string-resource="@T("Admin.Documentation.Reference.MessageTemplates", Docs.MessageTemplates + Utm.OnAdmin)" />
+
+                    @await Html.PartialAsync("Table", new DataTablesModel
+                    {
+                        Name = "templates-grid",
+                        UrlRead = new DataUrl("List", "QuoteMessageTemplate", null),
+                        UrlUpdate = new DataUrl("Edit", "MessaageTemplate", null),
+                        SearchButtonId = "search-templates",
+                        Length = Model.PageSize,
+                        LengthMenu = Model.AvailablePageSizes,
+                        Filters = 
+                        [
+                            new FilterParameter(nameof(Model.SearchKeywords)),
+                            new FilterParameter(nameof(Model.SearchStoreId))
+                        ],
+                        ColumnCollection = 
+                        [
+                            new ColumnProperty(nameof(MessageTemplateModel.Name))
+                            {
+                                Title = T("Admin.ContentManagement.MessageTemplates.Fields.Name").Text
+                            },
+                            new ColumnProperty(nameof(MessageTemplateModel.Subject))
+                            {
+                                Title = T("Admin.ContentManagement.MessageTemplates.Fields.Subject").Text
+                            },
+                            new ColumnProperty(nameof(MessageTemplateModel.IsActive))
+                            {
+                                Title = T("Admin.ContentManagement.MessageTemplates.Fields.IsActive").Text,
+                                Width = "100",
+                                ClassName =  NopColumnClassDefaults.CenterAll,
+                                Render = new RenderBoolean()
+                            },
+                            new ColumnProperty(nameof(MessageTemplateModel.ListOfStores))
+                            {
+                                Title = T("Admin.ContentManagement.MessageTemplates.Fields.LimitedToStores").Text,
+                                Width = "300"
+                            },
+                            new ColumnProperty(nameof(MessageTemplateModel.Id))
+                            {
+                                Title = T("Admin.Common.Edit").Text,
+                                Width = "100",
+                                ClassName =  NopColumnClassDefaults.Button,
+                                Render = new RenderButtonEdit(new DataUrl("~/Admin/MessageTemplate/Edit"))
+                            }
+                        ]
+                    })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>

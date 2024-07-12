@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Smart Mega Menu",
+  "SystemName": "NopStation.Plugin.Widgets.SmartMegaMenu",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.SmartMegaMenu.dll",
+  "Description": "This plugin allows to enable mega menu.",
+  "DependsOnSystemNames": [ "NopStation.Core", "NopStation.Plugin.Misc.WidgetManager" ]
+}

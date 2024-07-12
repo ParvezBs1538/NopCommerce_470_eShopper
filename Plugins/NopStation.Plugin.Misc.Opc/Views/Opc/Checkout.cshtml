@@ -1,0 +1,226 @@
+﻿@model OpcModel
+@using Nop.Core
+@using Nop.Services.Helpers
+@using Nop.Web.Framework.UI
+@inject IWorkContext workContext
+@inject IUserAgentHelper userAgentHelper
+@inject IWebHelper webHelper
+@inject OpcSettings opcSettings
+
+@{
+    var supportRtl = (await workContext.GetWorkingLanguageAsync()).Rtl;
+    //add main CSS file
+    if (supportRtl)
+    {
+        NopHtml.AppendCssFileParts("~/Plugins/NopStation.Plugin.Misc.Opc/Contents/css/styles.rtl.css", string.Empty, true);
+    }
+    else
+    {
+        NopHtml.AppendCssFileParts("~/Plugins/NopStation.Plugin.Misc.Opc/Contents/css/styles.css", string.Empty, true);
+    }
+
+    Layout = "_ColumnsOne";
+    var storeLocation = webHelper.GetStoreLocation();
+
+    //title
+    NopHtml.AddTitleParts(T("PageTitle.Checkout").Text);
+}
+
+<script src="~/Plugins/NopStation.Plugin.Misc.Opc/Contents/js/public.opc.js" asp-location="Footer"></script>
+<style>
+    #loading-overlay {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        display: none;
+        align-items: center;
+        background-color: #000;
+        z-index: 999;
+        opacity: 0.5;
+    }
+
+    .loading-icon {
+        position: absolute;
+        border-top: 2px solid #fff;
+        border-right: 2px solid #fff;
+        border-bottom: 2px solid #fff;
+        border-left: 2px solid #767676;
+        border-radius: 25px;
+        width: 25px;
+        height: 25px;
+        margin: 0 auto;
+        position: absolute;
+        left: 50%;
+        margin-left: -20px;
+        top: 50%;
+        margin-top: -20px;
+        z-index: 4;
+        -webkit-animation: spin 1s linear infinite;
+        -moz-animation: spin 1s linear infinite;
+        animation: spin 1s linear infinite;
+    }
+
+</style>
+
+<div class="page checkout-page spc">
+    <div class="page-title">
+        <h1>@T("Checkout")</h1>
+    </div>
+    <div class="page-body checkout-data" id="opc">
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OpcContentBefore })
+
+        <div class="opc" id="checkout-steps">
+            <div class="spc-row">
+                <div class="spc-collumn left">
+                   
+                    <div class="spc-billing" style="@(Model.DisableBillingAddressCheckoutStep ? "display:none" : "display:block")">
+                        <div class="step-title">
+                            <h2 class="title">@T("Checkout.BillingAddress")</h2>
+                        </div>
+                        <div id="checkout-step-billing" class="step a-item">
+                            <form action="" id="opc-billing-form" method="post">
+                                <input asp-for="DisableBillingAddressCheckoutStep" type="hidden" />
+                                <div id="checkout-billing-load">
+                                    @await Html.PartialAsync("OpcBillingAddress", Model.BillingAddressModel)
+                                    @*billing address content will be loaded here*@
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    
+                    @if (Model.ShippingRequired)
+                    {
+                        <div id="checkout-step-shipping" class="spc-shipping-address" style="@(Model.BillingAddressModel.ShipToSameAddress ? "display:none" : "display:block")">
+                            <div class="step-title">
+                                <h2 class="title">@T("Checkout.ShippingAddress")</h2>
+                            </div>
+                            <div class="step a-item">
+                                <form action="" id="opc-shipping-form" method="post">
+                                    <div id="checkout-shipping-load">
+                                        @*shipping address content will be loaded here*@
+                                        @await Html.PartialAsync("OpcShippingAddress", Model.ShippingAddressModel)
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                    <div class="spc-estimate-shipping">
+                        @await Component.InvokeAsync(typeof(OpcEstimateShippingViewComponent))
+                    </div>
+                </div>
+
+                <div class="spc-collumn right">
+                    <div class="checkout-method-wrapper">
+                       
+                        <div class="spc-shipping-method" id="checkout-step-shipping-method">
+                            <div id="checkout-shipping-method-load">
+                                @if (Model.ShippingRequired && !Model.BypassShippingMethodSelection)
+                                {
+                                    @await Html.PartialAsync("OpcShippingMethods", Model.ShippingMethodModel)
+                                }
+                            </div>
+                        </div>
+                        
+                        <div class="spc-payment-method">
+                            @*paymentMethod and info starts*@
+                            <div id="checkout-payment-method-load">
+                                @if (Model.PaymentWorkflowRequired && !Model.BypassPaymentMethodSelection)
+                                {
+                                    @await Html.PartialAsync("OpcPaymentMethods", Model.PaymentMethodModel)
+
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    @*Confirm Order step starts*@
+                    <div class="step-title">
+                        <h2 class="title">@T("Checkout.ConfirmOrder")</h2>
+                    </div>
+                    <div id="checkout-step-confirm-order" class="step a-item">
+                        <div id="checkout-confirm-order-load">
+                            @*confirm order content will be loaded here*@
+                            @await Html.PartialAsync("OpcShoppingCart", Model.ShoppingCartModel)
+                            <div class="opc-order-total-wrapper">
+                                <div class="order-total-custom" id="order-total-custom">
+                                    @await Component.InvokeAsync(typeof(OpcOrderTotalsViewComponent), new { isEditable = false })
+                                </div>
+
+                            </div>
+                            @await Html.PartialAsync("OpcConfirmOrder", Model.ConfirmOrder)
+                        </div>
+                    </div>
+                    <div id="error-message-list" class="step a-item">
+                    </div>
+                    @*Confirm Order step ends*@
+
+                    <button type="submit" id="confirm-order-button" class="button-1" onclick="ConfirmOrder.save()">@T("Checkout.ConfirmButton")</button>
+                </div>
+                @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OpcContentAfter })
+            </div>
+        </div>
+
+    </div>
+
+    <script asp-location="Footer">
+        var localized_data = {
+            EmptyShoppingCart: "@T("NopStation.Opc.ShoppingCart.Empty")",
+            CommonError: "@T("NopStation.Opc.Common.Error")"
+        };
+
+        var billingSeletors = {
+            billingAddressSelector: '#checkout-billing-load',
+            billingFormSelector: '#opc-billing-form',
+            billingAddressSelectSelector: '#billing-address-select',
+            bililngNewAddressCountrySelector: '#BillingNewAddress_CountryId',
+            shipToSameAddressSelector: '#ShipToSameAddress'
+        };
+
+        var shippingSelectors = {
+            shippingAddressSelector: '#checkout-shipping-load',
+            shippingFormSelector: '#opc-shipping-form',
+            shippingAddressSelectSelector: '#shipping-address-select'
+        };
+
+        var shippingMethodSelectors = {
+            shippingMethodSelector: '#checkout-shipping-method-load'
+        };
+
+        var paymentMethodSelectors = {
+            paymentMethodSelector: '#checkout-payment-method-load',
+            paymentMethodInfoSelector: '#paymentMethodInfo_load'
+        };
+
+        var shoppingCartSelectors = {
+            shoppingCartItemsSelector: '#shopping-cart-items',
+            flyoutCartSelector: '#flyout-cart'
+        };
+
+        var confirmOrderSelectors = {
+            orderTotalSelector: '#order-total-custom',
+            orderReviewSelector: '.order-review'
+        }
+
+        var settings = @Html.Raw(Json.Serialize(opcSettings));
+
+        Checkout.init('@(storeLocation)cart/', localized_data, settings);
+        Billing.init('@Url.RouteUrl("OpcUpdateBillingAddress")', '@Url.RouteUrl("OpcSetBillingAddress")', '@Url.RouteUrl("OpcEditBillingAddress")', billingSeletors);
+        Shipping.init('@Url.RouteUrl("OpcUpdateShippingAddress")', '@Url.RouteUrl("OpcSetShippingAddress")', '@Url.RouteUrl("OpcEditShippingAddress")', shippingSelectors);
+        ShippingMethod.init('@Url.RouteUrl("OpcLoadShippingMethod")', '@Url.RouteUrl("OpcLoadShippingMethodByAddress")', '@Url.RouteUrl("OpcUpdateShippingMethod")', '@Url.RouteUrl("OpcSetPickUpInStore")', shippingMethodSelectors);
+        PaymentMethod.init('@Url.RouteUrl("OpcLoadPaymentMethod")', '@Url.RouteUrl("OpcLoadPaymentMethodsByAddress")', '@Url.RouteUrl("OpcUseRewardPoints")', '@Url.RouteUrl("OpcUpdatePayment")', '@Url.RouteUrl("OpcLoadPaymentInfo")', paymentMethodSelectors)
+        ConfirmOrder.init('@Url.RouteUrl("OpcLoadOrderTotals")', '@Url.RouteUrl("OpcOrderReview")', '@Url.RouteUrl("OpcConfirmOrder")', confirmOrderSelectors);
+        DiscountCoupon.init('@Url.RouteUrl("OpcApplyDiscount")', '@Url.RouteUrl("OpcRemoveDiscount")');
+        GiftCard.init('@Url.RouteUrl("OpcApplyGiftCard")', '@Url.RouteUrl("OpcRemoveGiftCard")');
+        ShoppingCart.init('@Url.RouteUrl("OpcGetShoppingCartItems")', '@Url.RouteUrl("OpcUpdateShoppingCartItem")', '@Url.RouteUrl("OpcDeleteShoppingCartItem")', '@Url.RouteUrl("OpcGetFlyOutCart")', localized_data, '@Url.RouteUrl("OpcGetCheckoutAttributes")', shoppingCartSelectors);
+    </script>
+</div>
+
+<div id="loading-overlay">
+    <div class="loading-icon"></div>
+</div>
+

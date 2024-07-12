@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Google Analytics 4",
+  "SystemName": "NopStation.Plugin.Widgets.GoogleAnalytics",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.GoogleAnalytics.dll",
+  "Description": "This plugin enables to send data to google analytics and view data into nopCommerce store.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

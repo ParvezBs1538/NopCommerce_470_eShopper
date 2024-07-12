@@ -1,0 +1,65 @@
+@model BadgeModel
+
+@if (Model.Id > 0)
+{
+    <div class="card-body">
+        @await Html.PartialAsync("Table", new DataTablesModel
+        {
+            Name = "vendors-grid",
+            UrlRead = new DataUrl("VendorList", "ProductBadge", new RouteValueDictionary { [nameof(Model.BadgeVendorSearchModel.BadgeId)] = Model.BadgeVendorSearchModel.BadgeId }),
+            UrlDelete = new DataUrl("VendorDelete", "ProductBadge", new RouteValueDictionary { [nameof(Model.BadgeVendorSearchModel.BadgeId)] = Model.BadgeVendorSearchModel.BadgeId }),
+            Length = Model.BadgeVendorSearchModel.PageSize,
+            LengthMenu = Model.BadgeVendorSearchModel.AvailablePageSizes,
+            ColumnCollection = new List<ColumnProperty>
+            {
+                new ColumnProperty(nameof(BadgeVendorModel.VendorName))
+                {
+                    Title = T("Admin.NopStation.ProductBadge.Badges.Vendors.Vendor").Text
+                },
+                new ColumnProperty(nameof(BadgeVendorModel.VendorId))
+                {
+                    Title = T("Admin.Common.View").Text,
+                    Width = "150",
+                    ClassName =  NopColumnClassDefaults.Button,
+                    Render = new RenderButtonView(new DataUrl("~/Admin/Vendor/Edit/"))
+                },
+                new ColumnProperty(nameof(BadgeVendorModel.Active))
+                {
+                    Title = T("Admin.NopStation.ProductBadge.Badges.Vendors.Active").Text,
+                    Width = "100",
+                    ClassName =  NopColumnClassDefaults.CenterAll,
+                    Render = new RenderBoolean()
+                },
+                new ColumnProperty(nameof(BadgeVendorModel.VendorId))
+                {
+                    Title = T("Admin.Common.Delete").Text,
+                    Width = "150",
+                    Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                    ClassName =  NopColumnClassDefaults.Button
+                }
+            }
+        })
+    </div>
+    <div class="card-footer">
+        <button type="submit" id="btnAddNewVendor" onclick="javascript:OpenWindow('@(Url.Action("VendorAddPopup", "ProductBadge", new { badgeId = Model.Id, btnId = "btnRefreshVendors", formId = "badge-form" }))', 800, 800, true); return false;" class="btn btn-primary">
+            @T("Admin.NopStation.ProductBadge.Badges.Vendors.AddNew")
+        </button>
+        <button type="submit" id="btnRefreshVendors" style="display: none"></button>
+        <script>
+            $(document).ready(function () {
+                $('#btnRefreshVendors').click(function () {
+                    //refresh grid
+                    updateTable('#vendors-grid');
+                    //return false to don't reload a page
+                    return false;
+                });
+            });
+        </script>
+    </div>
+}
+else
+{
+    <div class="card-body">
+        @T("Admin.NopStation.ProductBadge.Badges.Vendors.SaveBeforeEdit")
+    </div>
+}

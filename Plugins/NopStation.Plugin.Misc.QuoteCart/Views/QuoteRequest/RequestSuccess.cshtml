@@ -1,0 +1,30 @@
+﻿@model QuoteRequestModel
+@{
+    Layout = "_ColumnsOne";
+    NopHtml.AppendPageCssClassParts("html-checkout-page");
+    NopHtml.AppendPageCssClassParts("html-order-completed-page");
+}
+
+<div class="page checkout-page order-completed-page">
+    <div class="page-title">
+        <h1>@T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.ThankYou")</h1>
+    </div>
+    <div class="page-body checkout-data">
+        <div class="section order-completed">
+            <div class="title">
+                <strong>@T("NopStation.Plugin.Misc.QuoteCart.QuoteRequest.RequestInformation")</strong>
+            </div>
+            <div class="details">
+                <div class="order-number">
+                    <strong>@T("NopStation.Plugin.Misc.QuoteCart.QuoteRequests.RequestNumber"): @Model.RequestId</strong>
+                </div>
+                <div class="details-link">
+                    <a href="@Url.RouteUrl("QuoteCart.RequestDetails", new { requestId = Model.RequestId })">@T("NopStation.Plugin.Misc.QuoteCart.QuoteRequest.GoToQuote")</a>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="button" class="button-1 order-completed-continue-button" onclick="setLocation('@Url.RouteUrl("Homepage")')">@T("Checkout.ThankYou.Continue")</button>
+            </div>
+        </div>
+    </div>
+</div>

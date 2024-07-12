@@ -1,0 +1,84 @@
+﻿@model ConfigurationModel
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="AndroidVersion_OverrideForStore" asp-input="AndroidVersion" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="AndroidVersion" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="AndroidVersion" />
+            <span asp-validation-for="AndroidVersion"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="AndriodForceUpdate_OverrideForStore" asp-input="AndriodForceUpdate" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="AndriodForceUpdate" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="AndriodForceUpdate" />
+            <span asp-validation-for="AndriodForceUpdate"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="PlayStoreUrl_OverrideForStore" asp-input="PlayStoreUrl" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="PlayStoreUrl" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="PlayStoreUrl" />
+            <span asp-validation-for="PlayStoreUrl"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="IOSVersion_OverrideForStore" asp-input="IOSVersion" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="IOSVersion" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="IOSVersion" />
+            <span asp-validation-for="IOSVersion"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="IOSForceUpdate_OverrideForStore" asp-input="IOSForceUpdate" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="IOSForceUpdate" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="IOSForceUpdate" />
+            <span asp-validation-for="IOSForceUpdate"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="AppStoreUrl_OverrideForStore" asp-input="AppStoreUrl" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="AppStoreUrl" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="AppStoreUrl" />
+            <span asp-validation-for="AppStoreUrl"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="LogoId_OverrideForStore" asp-input="LogoId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="LogoId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="LogoId" />
+            <span asp-validation-for="LogoId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="LogoSize_OverrideForStore" asp-input="LogoSize" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="LogoSize" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="LogoSize" />
+            <span asp-validation-for="LogoSize"></span>
+        </div>
+    </div>
+</div>

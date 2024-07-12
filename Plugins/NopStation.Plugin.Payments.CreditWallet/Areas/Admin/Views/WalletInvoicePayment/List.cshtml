@@ -1,0 +1,141 @@
+﻿@model InvoicePaymentSearchModel
+
+@{
+    Layout = "_AdminLayout";
+
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.CreditWallet.InvoicePayments.List").Text;
+    NopHtml.SetActiveMenuItemSystemName("CreditWallet.InvoicePayment");
+
+    const string hideSearchBlockAttributeName = "InvoicePaymentListPage.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.CreditWallet.InvoicePayments.List")
+    </h1>
+    <div class="float-right">
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fas fa-search" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                        </div>
+
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchCreatedFrom" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchCreatedFrom" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchCreatedTo" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchCreatedTo" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchInvoiceReference" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchInvoiceReference" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="text-center col-12">
+                                    <button type="button" id="search-invoicepayments" class="btn btn-primary btn-search">
+                                        <i class="fas fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "invoicepayments-grid",
+                            UrlRead = new DataUrl("List", "WalletInvoicePayment", null),
+                            SearchButtonId = "search-invoicepayments",
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            Filters = new List<FilterParameter>
+                            {
+                                new FilterParameter(nameof(Model.SearchCreatedFrom)),
+                                new FilterParameter(nameof(Model.SearchCreatedTo)),
+                                new FilterParameter(nameof(Model.SearchInvoiceReference))
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(InvoicePaymentModel.WalletCustomerEmail))
+                                {
+                                    Title = T("Admin.NopStation.CreditWallet.InvoicePayments.Fields.WalletCustomer").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(InvoicePaymentModel.WalletCustomerId))
+                                {
+                                    Title = T("Admin.Common.View").Text,
+                                    Render = new RenderCustom("renderWalletUrl"),
+                                    ClassName =  NopColumnClassDefaults.CenterAll,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(InvoicePaymentModel.PaymentDateStr))
+                                {
+                                    Title = T("Admin.NopStation.CreditWallet.InvoicePayments.Fields.PaymentDate").Text,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(InvoicePaymentModel.Amount))
+                                {
+                                    Title = T("Admin.NopStation.CreditWallet.InvoicePayments.Fields.Amount").Text,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(InvoicePaymentModel.InvoiceReference))
+                                {
+                                    Title = T("Admin.NopStation.CreditWallet.InvoicePayments.Fields.InvoiceReference").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(InvoicePaymentModel.Id))
+                                {
+                                    Title = T("Admin.Common.Edit").Text,
+                                    Width = "80",
+                                    ClassName =  NopColumnClassDefaults.Button,
+                                    Render = new RenderButtonEdit(new DataUrl("Edit"))
+                                }
+                            }
+                        })
+                        
+                        <script>
+                            function renderWalletUrl(data, type, row, meta) {
+                                return '<a class="btn btn-default" href="@Url.Content("~/Admin/Customer/Edit/")' + row.WalletCustomerId + '?#customer-wallet"><i class="fas fa-pencil-alt"></i>@T("Admin.Common.View")</a>';
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

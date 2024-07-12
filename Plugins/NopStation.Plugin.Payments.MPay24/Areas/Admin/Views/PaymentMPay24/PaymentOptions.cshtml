@@ -1,0 +1,145 @@
+﻿@model PaymentOptionSearchModel
+
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.MPay24.PaymentOptions.List").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("MPay24.PaymentOptions");
+}
+
+@{
+    const string hideSearchBlockAttributeName = "MPay24.HideSearchBlock";
+    var hideSearchBlock = false;
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.MPay24.PaymentOptions.List")
+    </h1>
+    <div class="float-right">
+        <a asp-action="PaymentOptionCreate" class="btn btn-primary">
+            <i class="fas fa-plus-square"></i>
+            @T("Admin.Common.AddNew")
+        </a>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fas fa-search" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                        </div>
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-label asp-for="SearchName" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="SearchName" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-label asp-for="SearchBrand" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="SearchBrand" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-label asp-for="SearchPaymentType" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="SearchPaymentType" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-label asp-for="SearchStoreId" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-select asp-for="SearchStoreId" asp-items="Model.AvailableStores" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="text-center col-12">
+                                    <button type="button" id="search-mpay24-paymentoption" class="btn btn-primary btn-search">
+                                        <i class="fas fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "mpay24-paymentoption-grid",
+                            UrlRead = new DataUrl("PaymentOptions", "PaymentMPay24", null),
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            SearchButtonId = "search-mpay24-paymentoption",
+                            Filters = new List<FilterParameter>
+                            {
+                                new FilterParameter(nameof(Model.SearchStoreId)),
+                                new FilterParameter(nameof(Model.SearchBrand)),
+                                new FilterParameter(nameof(Model.SearchName)),
+                                new FilterParameter(nameof(Model.SearchPaymentType))
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(PaymentOptionModel.Logo))
+                                {
+                                    Title = T("Admin.NopStation.MPay24.PaymentOptions.Fields.Logo").Text,
+                                    Width = "150",
+                                    ClassName = NopColumnClassDefaults.CenterAll,
+                                    Render = new RenderPicture()
+                                },
+                                new ColumnProperty(nameof(PaymentOptionModel.ShortName))
+                                {
+                                    Title = T("Admin.NopStation.MPay24.PaymentOptions.Fields.ShortName").Text,
+                                    Width = "180"
+                                },
+                                new ColumnProperty(nameof(PaymentOptionModel.DisplayName))
+                                {
+                                    Title = T("Admin.NopStation.MPay24.PaymentOptions.Fields.DisplayName").Text,
+                                    Width = "180"
+                                },
+                                new ColumnProperty(nameof(PaymentOptionModel.Active))
+                                {
+                                    Title = T("Admin.NopStation.MPay24.PaymentOptions.Fields.Active").Text,
+                                    Width = "80",
+                                    ClassName = NopColumnClassDefaults.CenterAll,
+                                    Render = new RenderBoolean()
+                                },
+                                new ColumnProperty(nameof(PaymentOptionModel.Id))
+                                {
+                                    Title = T("Admin.Common.Edit").Text,
+                                    Width = "100",
+                                    ClassName = NopColumnClassDefaults.Button,
+                                    Render = new RenderButtonEdit(new DataUrl("~/Admin/PaymentMPay24/PaymentOptionEdit/"))
+                                }
+                            }
+                        })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

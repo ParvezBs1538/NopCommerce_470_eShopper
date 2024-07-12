@@ -1,0 +1,31 @@
+﻿@model MegaMenuModel
+
+<div class="card">
+    <div class="card-header" id="headingPage">
+        <h3 class="card-title">@T("Admin.NopStation.SmartMegaMenu.MegaMenus.MenuOptions.OtherPages")</h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool"  data-toggle="collapse" data-target="#collapsePage" aria-expanded="true" aria-controls="collapsePage"><i class="fas fa-plus"></i></button>
+        </div>
+    </div>
+    <div id="collapsePage" class="collapse" aria-labelledby="headingPage" data-parent="#accordion">
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">@T("Admin.NopStation.SmartMegaMenu.MegaMenus.MenuOptions.Select")</th>
+                        <th scope="col">@T("Admin.NopStation.SmartMegaMenu.MegaMenus.OtherPages.Fields.Name")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.AvailablePageTypes)
+                    {
+                        <tr>
+                            <th><input onclick="addMenuItem(@item.Value, @((int)MenuItemType.Page));" type="button" class="checkboxGroups" value="@T("Admin.NopStation.SmartMegaMenu.MegaMenus.MenuOptions.Add")"></th>
+                            <td>@item.Text</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

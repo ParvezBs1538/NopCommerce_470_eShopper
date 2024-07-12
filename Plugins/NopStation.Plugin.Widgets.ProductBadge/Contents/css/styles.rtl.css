@@ -1,0 +1,661 @@
+﻿.gallery,
+.product-item {
+  position: relative;
+}
+
+.badge-wrapper.badge-right {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.badge-wrapper.badge-left {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.badge-wrapper img {
+  position: relative;
+  z-index: 1;
+}
+
+.badge-wrapper .badge {
+  position: relative;
+  z-index: 1;
+}
+
+.heart-container {
+  float: right;
+  position: relative;
+  z-index: 1;
+}
+
+.small-overview-badge .badge-heart {
+  width: var(--badge-small-overview-width);
+  height: var(--heart-small-overview-height);
+}
+
+.medium-overview-badge .badge-heart {
+  width: var(--badge-medium-overview-width);
+  height: var(--badge-heart-medium-overview-height);
+}
+
+.large-overview-badge .badge-heart {
+  width: var(--badge-large-overview-width);
+  height: var(--badge-heart-large-overview-height);
+}
+
+.small-details-badge .badge-heart {
+  width: var(--badge-small-details-width);
+  height: var(--badge-heart-small-details-height);
+}
+
+.medium-details-badge .badge-heart {
+  width: var(--badge-medium-details-width);
+  height: var(--badge-heart-medium-details-height);
+}
+
+.large-details-badge .badge-heart {
+  width: var(--badge-large-details-width);
+  height: var(--badge-heart-large-details-height);
+}
+
+.heart-middle {
+  position: relative;
+  width: 100px;
+  height: 90px;
+}
+
+.heart-top,
+.heart-bottom {
+  position: absolute;
+  transform: rotate(45deg);
+  transform-origin: 100% 100%;
+}
+
+.small-overview-badge .heart-top,
+.small-overview-badge .heart-bottom {
+  right: var(--heart-small-overview-left);
+  width: var(--heart-small-overview-width);
+  height: var(--heart-small-overview-height);
+  border-radius: var(--heart-small-overview-border-radius);
+}
+
+.medium-overview-badge .heart-top,
+.medium-overview-badge .heart-bottom {
+  right: var(--heart-medium-overview-left);
+  width: var(--heart-medium-overview-width);
+  height: var(--heart-medium-overview-height);
+  border-radius: var(--heart-medium-overview-border-radius);
+}
+
+.large-overview-badge .heart-top,
+.large-overview-badge .heart-bottom {
+  right: var(--heart-large-overview-left);
+  width: var(--heart-large-overview-width);
+  height: var(--heart-large-overview-height);
+  border-radius: var(--heart-large-overview-border-radius);
+}
+
+.small-details-badge .heart-top,
+.small-details-badge .heart-bottom {
+  right: var(--heart-small-details-left);
+  width: var(--heart-small-details-width);
+  height: var(--heart-small-details-height);
+  border-radius: var(--heart-small-details-border-radius);
+}
+
+.medium-details-badge .heart-top,
+.medium-details-badge .heart-bottom {
+  right: var(--heart-medium-details-left);
+  width: var(--heart-medium-details-width);
+  height: var(--heart-medium-details-height);
+  border-radius: var(--heart-medium-details-border-radius);
+}
+
+.large-details-badge .heart-top,
+.large-details-badge .heart-bottom {
+  right: var(--heart-large-details-left);
+  width: var(--heart-large-details-width);
+  height: var(--heart-large-details-height);
+  border-radius: var(--heart-large-details-border-radius);
+}
+
+.heart-bottom {
+  top: 0px;
+  transform: rotate(-45deg);
+  transform-origin: 0% 100%;
+}
+
+.small-overview-badge .heart-bottom {
+  right: var(--heart-bottom-small-overview-left);
+}
+
+.medium-overview-badge .heart-bottom {
+  right: var(--heart-bottom-medium-overview-left);
+}
+
+.large-overview-badge .heart-bottom {
+  right: var(--heart-bottom-large-overview-left);
+}
+
+.small-details-badge .heart-bottom {
+  right: var(--heart-bottom-small-details-left);
+}
+
+.medium-details-badge .heart-bottom {
+  right: var(--heart-bottom-medium-details-left);
+}
+
+.large-details-badge .heart-bottom {
+  right: var(--heart-bottom-large-details-left);
+}
+
+.talkbubble-text,
+.ribbon-text,
+.pointburst-ribbon-text,
+.octagon-ribbon-text,
+.hexagon-ribbon-text,
+.pentagon-ribbon-text,
+.square-ribbon-text,
+.circle-ribbon-text,
+.heart-ribbon-text {
+  position: absolute;
+  transform: translate(50%, -50%);
+  top: 50%;
+  right: 50%;
+  text-align: center;
+  font-size: 12px;
+  width: 80%;
+}
+
+.product-details-page .talkbubble-text,
+.product-details-page .ribbon-text,
+.product-details-page .pointburst-ribbon-text,
+.product-details-page .octagon-ribbon-text,
+.product-details-page .hexagon-ribbon-text,
+.product-details-page .pentagon-ribbon-text,
+.product-details-page .square-ribbon-text,
+.product-details-page .circle-ribbon-text,
+.product-details-page .diamondshield-ribbon-text,
+.product-details-page .heart-ribbon-text {
+  font-size: 14px;
+}
+
+.small-overview-badge .heart-ribbon-text {
+  width: var(--heart-ribbon-text-small-overview-width);
+}
+
+.medium-overview-badge .heart-ribbon-text {
+  width: var(--heart-ribbon-text-medium-overview-width);
+}
+
+.large-overview-badge .heart-ribbon-text {
+  width: var(--heart-ribbon-text-large-overview-width);
+}
+
+.small-details-badge .heart-ribbon-text {
+  width: var(--heart-ribbon-text-small-details-width);
+}
+
+.medium-details-badge .heart-ribbon-text {
+  width: var(--heart-ribbon-text-medium-details-width);
+}
+
+.large-details-badge .heart-ribbon-text {
+  width: var(--heart-ribbon-text-large-details-width);
+}
+
+/*Heart CSS ends*/
+
+/*Circle + Square CSS starts*/
+
+.badge-circle {
+  border-radius: 50%;
+}
+
+.small-overview-badge .badge-circle,
+.small-overview-badge .badge-square {
+  width: var(--badge-small-overview-width);
+  height: var(--badge-small-overview-width);
+}
+
+.medium-overview-badge .badge-circle,
+.medium-overview-badge .badge-square {
+  width: var(--badge-medium-overview-width);
+  height: var(--badge-medium-overview-width);
+}
+
+.large-overview-badge .badge-circle,
+.large-overview-badge .badge-square {
+  width: var(--badge-large-overview-width);
+  height: var(--badge-large-overview-width);
+}
+
+.small-details-badge .badge-circle,
+.small-details-badge .badge-square {
+  width: var(--badge-small-details-width);
+  height: var(--badge-small-details-width);
+}
+
+.medium-details-badge .badge-circle,
+.medium-details-badge .badge-square {
+  width: var(--badge-medium-details-width);
+  height: var(--badge-medium-details-width);
+}
+
+.large-details-badge .badge-circle,
+.large-details-badge .badge-square {
+  width: var(--badge-large-details-width);
+  height: var(--badge-large-details-width);
+}
+
+/*Circle + Square CSS ends*/
+
+/*Ribbon CSS starts*/
+
+.small-overview-badge .badge-ribbon {
+  width: var(--badge-small-overview-width);
+  height: calc(var(--badge-small-overview-width) / 3);
+}
+
+.medium-overview-badge .badge-ribbon {
+  width: var(--badge-medium-overview-width);
+  height: calc(var(--badge-medium-overview-width) / 3);
+}
+
+.large-overview-badge .badge-ribbon {
+  width: var(--badge-large-overview-width);
+  height: calc(var(--badge-large-overview-width) / 3);
+}
+
+.small-details-badge .badge-ribbon {
+  width: var(--badge-small-details-width);
+  height: calc(var(--badge-small-details-width) / 3);
+}
+
+.medium-details-badge .badge-ribbon {
+  width: var(--badge-medium-details-width);
+  height: calc(var(--badge-medium-details-width) / 3);
+}
+
+.large-details-badge .badge-ribbon {
+  width: var(--badge-large-details-width);
+  height: calc(var(--badge-large-details-width) / 3);
+}
+
+/*Ribbon CSS ends*/
+
+/*Pentagon CSS starts*/
+
+.pentagon-top {
+  position: relative;
+  clip-path: polygon( 50% 0, 100% 38%, 81% 100%, 19% 100%, 0 38%);
+}
+
+.small-overview-badge .pentagon-top {
+  width: var(--badge-small-overview-width);
+  height: var(--badge-pentagon-top-small-overview-height);
+}
+
+.medium-overview-badge .pentagon-top {
+  width: var(--badge-medium-overview-width);
+  height: var(--badge-pentagon-top-medium-overview-height);
+}
+
+.large-overview-badge .pentagon-top {
+  width: var(--badge-large-overview-width);
+  height: var(--badge-pentagon-top-large-overview-height);
+}
+
+.small-details-badge .pentagon-top {
+  width: var(--badge-small-details-width);
+  height: var(--badge-pentagon-top-small-details-height);
+}
+
+.medium-details-badge .pentagon-top {
+  width: var(--badge-medium-details-width);
+  height: var(--badge-pentagon-top-medium-details-height);
+}
+
+.large-details-badge .pentagon-top {
+  width: var(--badge-large-details-width);
+  height: var(--badge-pentagon-top-large-details-height);
+}
+
+/*Pentagon CSS ends*/
+
+/*Diamond Shield CSS starts*/
+
+.diamondshield-top {
+  width: 0;
+  position: relative;
+  border-top: 0;
+}
+
+.diamondshield-bottom {
+  position: relative;
+  width: 0;
+  height: 0;
+  border-bottom: 0;
+}
+
+.diamondshield-ribbon-text {
+  position: absolute;
+  transform: translate(50%, -45%);
+  top: 45%;
+  right: 50%;
+  text-align: center;
+  font-size: 12px;
+}
+
+.small-overview-badge .diamondshield-top {
+  border: var(--badge-diamondshield-top-small-overview-border);
+  border-bottom: var(--badge-diamondshield-top-small-overview-border-bottom);
+}
+
+.medium-overview-badge .diamondshield-top {
+  border: var(--badge-diamondshield-top-medium-overview-border);
+  border-bottom: var(--badge-diamondshield-top-medium-overview-border-bottom);
+}
+
+.large-overview-badge .diamondshield-top {
+  border: var(--badge-diamondshield-top-large-overview-border);
+  border-bottom: var(--badge-diamondshield-top-large-overview-border-bottom);
+}
+
+.small-details-badge .diamondshield-top {
+  border: var(--badge-diamondshield-top-small-details-border);
+  border-bottom: var(--badge-diamondshield-top-small-details-border-bottom);
+}
+
+.medium-details-badge .diamondshield-top {
+  border: var(--badge-diamondshield-top-medium-details-border);
+  border-bottom: var(--badge-diamondshield-top-medium-details-border-bottom);
+}
+
+.large-details-badge .diamondshield-top {
+  border: var(--badge-diamondshield-top-large-details-border);
+  border-bottom: var(--badge-diamondshield-top-large-details-border-bottom);
+}
+
+.small-overview-badge .diamondshield-bottom {
+  border: var(--badge-diamondshield-bottom-small-overview-border);
+  border-top: var(--badge-diamondshield-bottom-small-overview-border-top);
+}
+
+.medium-overview-badge .diamondshield-bottom {
+  border: var(--badge-diamondshield-bottom-medium-overview-border);
+  border-top: var(--badge-diamondshield-bottom-medium-overview-border-top);
+}
+
+.large-overview-badge .diamondshield-bottom {
+  border: var(--badge-diamondshield-bottom-large-overview-border);
+  border-top: var(--badge-diamondshield-bottom-large-overview-border-top);
+}
+
+.small-details-badge .diamondshield-bottom {
+  border: var(--badge-diamondshield-bottom-small-details-border);
+  border-top: var(--badge-diamondshield-bottom-small-details-border-top);
+}
+
+.medium-details-badge .diamondshield-bottom {
+  border: var(--badge-diamondshield-bottom-medium-details-border);
+  border-top: var(--badge-diamondshield-bottom-medium-details-border-top);
+}
+
+.large-details-badge .diamondshield-bottom {
+  border: var(--badge-diamondshield-bottom-large-details-border);
+  border-top: var(--badge-diamondshield-bottom-large-details-border-top);
+}
+
+.small-overview-badge .diamondshield-ribbon-text {
+  width: var(--badge-diamondshield-ribbon-text-small-overview-width);
+}
+
+.medium-overview-badge .diamondshield-ribbon-text {
+  width: var(--badge-diamondshield-ribbon-text-medium-overview-width);
+}
+
+.large-overview-badge .diamondshield-ribbon-text {
+  width: var(--badge-diamondshield-ribbon-text-large-overview-width);
+}
+
+.small-details-badge .diamondshield-ribbon-text {
+  width: var(--badge-diamondshield-ribbon-text-small-details-width);
+}
+
+.medium-details-badge .diamondshield-ribbon-text {
+  width: var(--badge-diamondshield-ribbon-text-medium-details-width);
+}
+
+.large-details-badge .diamondshield-ribbon-text {
+  width: var(--badge-diamondshield-ribbon-text-large-details-width);
+}
+
+/*Diamond Shield CSS ends*/
+
+/*Hexagon CSS starts*/
+
+.badge-hexagon {
+  -webkit-clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+  clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+}
+
+.small-overview-badge .badge-hexagon {
+  width: var(--badge-small-overview-width);
+  height: var(--badge-small-overview-width);
+}
+
+.medium-overview-badge .badge-hexagon {
+  width: var(--badge-medium-overview-width);
+  height: var(--badge-medium-overview-width);
+}
+
+.large-overview-badge .badge-hexagon {
+  width: var(--badge-large-overview-width);
+  height: var(--badge-large-overview-width);
+}
+
+.small-details-badge .badge-hexagon {
+  width: var(--badge-small-details-width);
+  height: var(--badge-small-details-width);
+}
+
+.medium-details-badge .badge-hexagon {
+  width: var(--badge-medium-details-width);
+  height: var(--badge-medium-details-width);
+}
+
+.large-details-badge .badge-hexagon {
+  width: var(--badge-large-details-width);
+  height: var(--badge-large-details-width);
+}
+
+/*Hexagon CSS starts*/
+
+.badge-octagon {
+  -webkit-clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+}
+
+.small-overview-badge .badge-octagon {
+  width: var(--badge-small-overview-width);
+  height: var(--badge-small-overview-width);
+}
+
+.medium-overview-badge .badge-octagon {
+  width: var(--badge-medium-overview-width);
+  height: var(--badge-medium-overview-width);
+}
+
+.large-overview-badge .badge-octagon {
+  width: var(--badge-large-overview-width);
+  height: var(--badge-large-overview-width);
+}
+
+.small-details-badge .badge-octagon {
+  width: var(--badge-small-details-width);
+  height: var(--badge-small-details-width);
+}
+
+.medium-details-badge .badge-octagon {
+  width: var(--badge-medium-details-width);
+  height: var(--badge-medium-details-width);
+}
+
+.large-details-badge .badge-octagon {
+  width: var(--badge-large-details-width);
+  height: var(--badge-large-details-width);
+}
+
+/*Hexagon CSS ends*/
+
+/*Point Burst CSS starts*/
+
+.badge-pointburst {
+  position: relative;
+}
+
+  .badge-pointburst .pointburst-bottom,
+  .badge-pointburst .pointburst-middle,
+  .badge-pointburst .pointburst-middle-2,
+  .badge-pointburst .pointburst-middle-3,
+  .badge-pointburst .pointburst-top {
+    position: absolute;
+    top: 50%;
+    right: 50%;
+  }
+
+  .badge-pointburst .pointburst-top {
+    transform: translate(50%, -50%);
+  }
+
+  .badge-pointburst .pointburst-middle {
+    transform: translate(50%, -50%) rotate(-18deg);
+  }
+
+  .badge-pointburst .pointburst-middle-2 {
+    transform: translate(50%, -50%) rotate(-36deg);
+  }
+
+  .badge-pointburst .pointburst-middle-3 {
+    transform: translate(50%, -50%) rotate(-54deg);
+  }
+
+  .badge-pointburst .pointburst-bottom {
+    transform: translate(50%, -50%) rotate(-72deg);
+  }
+
+.small-details-badge .badge-pointburst {
+  width: var(--badge-small-details-width);
+  height: var(--badge-small-details-width);
+}
+
+  .small-details-badge .badge-pointburst div[class^="pointburst-"] {
+    width: calc(var(--badge-small-details-width) * .7);
+    height: calc(var(--badge-small-details-width) * .7);
+  }
+
+.medium-details-badge .badge-pointburst {
+  width: var(--badge-medium-details-width);
+  height: var(--badge-medium-details-width);
+}
+
+  .medium-details-badge .badge-pointburst div[class^="pointburst-"] {
+    width: calc(var(--badge-medium-details-width) * .7);
+    height: calc(var(--badge-medium-details-width) * .7);
+  }
+
+.large-details-badge .badge-pointburst {
+  width: var(--badge-large-details-width);
+  height: var(--badge-large-details-width);
+}
+
+  .large-details-badge .badge-pointburst div[class^="pointburst-"] {
+    width: calc(var(--badge-large-details-width) * .7);
+    height: calc(var(--badge-large-details-width) * .7);
+  }
+
+.small-overview-badge .badge-pointburst {
+  width: var(--badge-small-overview-width);
+  height: var(--badge-small-overview-width);
+}
+
+  .small-overview-badge .badge-pointburst div[class^="pointburst-"] {
+    width: calc(var(--badge-small-overview-width) * .7);
+    height: calc(var(--badge-small-overview-width) * .7);
+  }
+
+.medium-overview-badge .badge-pointburst {
+  width: var(--badge-medium-overview-width);
+  height: var(--badge-medium-overview-width);
+}
+
+  .medium-overview-badge .badge-pointburst div[class^="pointburst-"] {
+    width: calc(var(--badge-medium-overview-width) * .7);
+    height: calc(var(--badge-medium-overview-width) * .7);
+  }
+
+.large-overview-badge .badge-pointburst {
+  width: var(--badge-large-overview-width);
+  height: var(--badge-large-overview-width);
+}
+
+  .large-overview-badge .badge-pointburst div[class^="pointburst-"] {
+    width: calc(var(--badge-large-overview-width) * .7);
+    height: calc(var(--badge-large-overview-width) * .7);
+  }
+
+/*Point Burst CSS ends*/
+
+/*Talk Bubble Css starts*/
+.badge-talkbubble {
+  border-radius: 12px;
+}
+
+.small-details-badge .badge-talkbubble {
+  width: var(--badge-talkbubble-small-details-width);
+  height: var(--badge-talkbubble-small-details-height);
+}
+
+.medium-details-badge .badge-talkbubble {
+  width: var(--badge-talkbubble-medium-details-width);
+  height: var(--badge-talkbubble-medium-details-height);
+}
+
+.large-details-badge .badge-talkbubble {
+  width: var(--badge-talkbubble-large-details-width);
+  height: var(--badge-talkbubble-large-details-height);
+}
+
+.small-overview-badge .badge-talkbubble {
+  width: var(--badge-talkbubble-small-overview-width);
+  height: var(--badge-talkbubble-small-overview-height);
+}
+
+.medium-overview-badge .badge-talkbubble {
+  width: var(--badge-talkbubble-medium-overview-width);
+  height: var(--badge-talkbubble-medium-overview-height);
+}
+
+.large-overview-badge .badge-talkbubble {
+  width: var(--badge-talkbubble-large-overview-width);
+  height: var(--badge-talkbubble-large-overview-height);
+}
+
+.talkbubble-bottom {
+  position: absolute;
+  bottom: 0;
+  right: 50%;
+  width: 0;
+  height: 0;
+  border: 35px solid transparent;
+  border-bottom: 0;
+  border-right: 0;
+  margin-right: -10px;
+  margin-bottom: -20%;
+}
+
+/*Talk Bubble Css ends*/

@@ -1,0 +1,117 @@
+﻿@model FAQItemSearchModel
+
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.FAQ.FAQItems.List").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("FAQ.Items");
+}
+
+@{
+    const string hideSearchBlockAttributeName = "FAQItemsPage.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.FAQ.FAQItems.List")
+    </h1>
+    <div class="float-right">
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus-square"></i>
+            @T("Admin.Common.AddNew")
+        </a>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fas fa-search" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                        </div>
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchKeyword" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchKeyword" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchCategoryId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchCategoryId" asp-items="Model.AvailableFAQCategories" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="text-center col-12">
+                                    <button type="button" id="search-faqitem" class="btn btn-primary btn-search">
+                                        <i class="fas fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "faqitem-grid",
+                            UrlRead = new DataUrl("List", "FAQItem", null),
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            SearchButtonId = "search-faqitem",
+                            Filters = new List<FilterParameter>
+                            {
+                                new FilterParameter(nameof(Model.SearchCategoryId)),
+                                new FilterParameter(nameof(Model.SearchKeyword))
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(FAQItemModel.Question))
+                                {
+                                    Title = T("Admin.NopStation.FAQ.FAQItems.Fields.Question").Text,
+                                    Width = "200"
+                                },
+                                new ColumnProperty(nameof(FAQItemModel.DisplayOrder))
+                                {
+                                    Title = T("Admin.NopStation.FAQ.FAQItems.Fields.DisplayOrder").Text,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(FAQItemModel.Published))
+                                {
+                                    Title = T("Admin.NopStation.FAQ.FAQItems.Fields.Published").Text,
+                                    Width = "80",
+                                    Render = new RenderBoolean()
+                                },
+                                new ColumnProperty(nameof(FAQItemModel.Id))
+                                {
+                                    Title = T("Admin.Common.Edit").Text,
+                                    Width = "100",
+                                    ClassName = NopColumnClassDefaults.Button,
+                                    Render = new RenderButtonEdit(new DataUrl("~/Admin/FAQItem/Edit/"))
+                                }
+                            }
+                        })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

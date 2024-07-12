@@ -1,0 +1,31 @@
+﻿@model PublicModel
+@using NopStation.Plugin.Widgets.AffiliateStation.Domains
+
+@{
+    var controller = httpContextAccessor.HttpContext.GetRouteValue("controller").ToString();
+    var action = httpContextAccessor.HttpContext.GetRouteValue("action").ToString();
+}
+
+<link href="~/Plugins/NopStation.Plugin.Widgets.AffiliateStation/Contents/css/styles.css" rel="stylesheet" />
+
+<li class="affiliate-info">
+    <a href="@Url.RouteUrl("AffiliateStation.AffiliateInfo")" class="@(controller == "AffiliateStation" && action == "Info" ? "active" : "inactive")">
+        @if (Model.AlreadyApplied)
+        {
+            @T("NopStation.AffiliateStation.WebSite.AffiliateInfo")
+        }
+        else
+        {
+            @T("NopStation.AffiliateStation.WebSite.ApplyForAffiliate")
+        }
+    </a>
+</li>
+
+@if (Model.AlreadyApplied && Model.ApplyStatus == ApplyStatus.Approved)
+{
+    <li class="affiliated-orders">
+        <a href="@Url.RouteUrl("AffiliateStation.AffiliatedOrders")" class="@(controller == "AffiliateStation" && action == "Orders" ? "active" : "inactive")">
+            @T("NopStation.AffiliateStation.WebSite.AffiliatedOrders")
+        </a>
+    </li>
+}

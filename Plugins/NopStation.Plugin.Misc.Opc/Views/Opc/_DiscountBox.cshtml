@@ -1,0 +1,84 @@
+﻿@model ShoppingCartModel.DiscountBoxModel
+
+@if (Model.Display)
+{
+
+    <div class="coupon-box">
+        <div class="title">
+
+            <strong>@T("ShoppingCart.DiscountCouponCode")</strong>
+        </div>
+        <div class="hint">
+            @T("ShoppingCart.DiscountCouponCode.Tooltip")
+        </div>
+        <div class="coupon-code">
+            <input name="discountcouponcode" id="discountcouponcode" type="text" class="discount-coupon-code" aria-label="@T("ShoppingCart.DiscountCouponCode.Label")" />
+            <input type="button" name="applydiscountcouponcode" id="applydiscountcouponcode"
+                   value="@T("ShoppingCart.DiscountCouponCode.Button")" class="button-2 apply-discount-coupon-code-button" />
+            
+        </div>
+        @foreach (var message in Model.Messages)
+        {
+            <div class="@(Model.IsApplied ? "message-success" : "message-failure")">
+                @message
+            </div>
+        }
+        @foreach (var discount in Model.AppliedDiscountsWithCodes)
+        {
+            <div class="current-code">
+                <span class="applied-discount-code">@string.Format(T("ShoppingCart.DiscountCouponCode.CurrentCode").Text, discount.CouponCode)</span>
+                @*empty value (little hack for FormValueExistsAttribute)*@
+                <input type="button" name="removediscount-@discount.Id" value="" title="@T("Common.Remove")" class="remove-discount-button" />
+            </div>
+        }
+    </div>
+
+}
+<script asp-location="Footer">
+    $("#applydiscountcouponcode").on("click", function () {
+        var code = $('#discountcouponcode').val();
+        var model =
+            { discountcouponcode: code };
+
+        DiscountCoupon.applyDiscount(model).then((data) => {
+            ConfirmOrder.loadOrderTotal().then((data) => {
+                if ($('#billing-address-select').val() !== "" && $('#billing-address-select').val() > 0) {
+                    var selectedBillingAddressCountry = $('#billing-address-select').attr('data-country')
+                    PaymentMethod.loadPaymentMethods(selectedBillingAddressCountry);
+                }
+                if ($('#BillingNewAddress_CountryId').val() >= 0 && $('#billing-address-select').val() === "") {
+                    PaymentMethod.loadPaymentMethods($('#BillingNewAddress_CountryId').val());
+                }
+            }).then((data) => {
+                ShoppingCart.GetShoppingCartItems().then((data) => {
+                    ConfirmOrder.loadOrderTotal();
+                });
+            });
+        }).catch((error) => {
+            alert(error.statusText);
+        });
+    });
+
+    $(".remove-discount-button").on("click", function () {
+        var code = $(this).attr('name').substring('removediscount-'.length);
+        var model =
+            { discountId: code };
+        DiscountCoupon.removeDiscount(model).then((data) => {
+            ConfirmOrder.loadOrderTotal().then((data) => {
+                if ($('#billing-address-select').val() !== "" && $('#billing-address-select').val() > 0) {
+                    var selectedBillingAddressCountry = $('#billing-address-select').attr('data-country')
+                    PaymentMethod.loadPaymentMethods(selectedBillingAddressCountry);
+                }
+                if ($('#BillingNewAddress_CountryId').val() >= 0 && $('#billing-address-select').val() === "") {
+                    PaymentMethod.loadPaymentMethods($('#BillingNewAddress_CountryId').val());
+                }
+            }).then((data) => {
+                ShoppingCart.GetShoppingCartItems().then((data) => {
+                    ConfirmOrder.loadOrderTotal();
+                });
+            });
+        }).catch((error) => {
+            alert(error.statusText);
+        });
+    });
+</script>

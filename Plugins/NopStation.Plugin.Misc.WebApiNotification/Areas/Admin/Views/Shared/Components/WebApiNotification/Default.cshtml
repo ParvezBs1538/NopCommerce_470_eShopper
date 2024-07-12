@@ -1,0 +1,51 @@
+﻿@model DeviceModel
+@using NopStation.Plugin.Misc.WebApi.Areas.Admin.Models
+
+<button type="button" name="save" class="btn btn-primary" id="sendtestnotification">
+    <i class="fa fa-paper-plane"></i>
+    @T("Admin.NopStation.WebApiNotification.SendTestNotification")
+</button>
+
+<div class="modal fade" id="modal-sendtestnotification" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@T("Admin.Common.AreYouSure")</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="form-horizontal">
+                <div class="modal-body">@T("Admin.NopStation.WebApiNotification.SendTestNotification.Confirmation")</div>
+                <div class="modal-footer">
+                    <button type="button" id="btn-sendtestnotification" class="btn btn-primary float-right" data-dismiss="modal">@T("Admin.Common.Yes")</button>
+                    <span class="btn btn-default" data-dismiss="modal">@T("Admin.Common.NoCancel")</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#sendtestnotification').click(function () {
+            $("#modal-sendtestnotification").modal();
+        });
+
+        $('#btn-sendtestnotification').click(function () {
+            var data = {};
+            data.Id = @Model.Id;
+            addAntiForgeryToken(data);
+
+            $.ajax({
+                url: "@Url.Action("SendTestNotification", "WebApiNotification")",
+                type: "POST",
+                dataType: 'json',
+                data: data,
+                success: function (response) {
+                    if (response.Result) {
+                        alert(response.Message);
+                    }
+                }
+            });
+        });
+    });
+</script>

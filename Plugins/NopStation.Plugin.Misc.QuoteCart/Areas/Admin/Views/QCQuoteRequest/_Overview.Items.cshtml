@@ -1,0 +1,107 @@
+﻿@model QuoteRequestDetailsModel
+
+<div class="card-body">
+    <div class="card-header">
+        <div class="float-right">
+            <div class="btn-group mr-1">
+                <button type="button" class="btn btn-success">
+                    <i class="fa fa-paper-plane"></i>
+                    @T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.SendQuote")
+                </button>
+                <button type="button" class="btn btn-success dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
+                    <span class="sr-only">&nbsp;</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li class="dropdown-item">
+                        <button name="store-owner" class="btn" type="submit" formaction="@Url.Action("SendQuote", new { requestId = Model.Id })">
+                            <i class="fas fa-store-alt"></i>
+                            @T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.SendQuote.SendToStore")
+                        </button>
+                    </li>
+                    <li class="dropdown-item">
+                        <button type="submit" class="btn" formaction="@Url.Action("SendQuote", new { requestId = Model.Id })">
+                            <i class="fas fa-user"></i>
+                            @T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.SendQuote.SendToCustomer")
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <a role="button" href="@Url.Action("ConvertToOrder", new { requestId = Model.Id })" class="btn btn-success">
+                <i class="fa fa-users"></i> @T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.ConvertToOrder")
+            </a>
+            <button type="submit" formaction="@Url.Action("RestoreOriginal", new { requestId = Model.Id })" class="btn btn-danger">
+                <i class="fa fa-redo"></i> @T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.RestoreOriginal")
+            </button>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+            <colgroup>
+                <col />
+                <col width="80" />
+                <col width="150" />
+                <col width="150" />
+                <col width="120" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>@T("NopStation.Plugin.Misc.QuoteCart.Cart.Product(s)")</th>
+                    <th class="text-center">@T("NopStation.Plugin.Misc.QuoteCart.Cart.Quantity")</th>
+                    <th class="text-center">@T("NopStation.Plugin.Misc.QuoteCart.Cart.DiscountedPrice")</th>
+                    <th class="text-center">@T("NopStation.Plugin.Misc.QuoteCart.Cart.ItemTotal")</th>
+                    <th class="text-center">@T("Admin.Common.Edit")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.QuoteRequestItems)
+                {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(item.ProductName, "Edit", "Product", new { id = item.ProductId }, new { })
+                            @if (!string.IsNullOrEmpty(item.FormattedAttributes))
+                            {
+                                <br />
+                                @Html.Raw(item.FormattedAttributes)
+                                
+                            }
+                            <br/>
+                            @if (!string.IsNullOrEmpty(item.RentalInfo))
+                            {
+                                @Html.Raw(item.RentalInfo)
+                            }
+                        </td>
+                        <td class="text-center">
+                            <p>@item.Quantity</p>
+                            </td>
+                        <td class="text-center">@item.DiscountedPriceStr</td>
+                        <td class="text-center">@item.TotalPriceStr</td>
+                        <td class="text-center">
+                            <a role="button" href="@Url.Action("Edit", "QuoteRequestItem", new { requestId = item.QuoteRequestId, id = item.Id })" class="btn btn-default">
+                                <i class="fa fa-pencil-alt"></i>
+                                @T("Admin.Common.Edit")
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-right">Total:</td>
+                    <td class="text-center">@Model.QuoteRequestItems.Sum(x => x.Quantity)</td>
+                    <td class="text-center">-</td>
+                    <td class="text-center">@Model.SubTotalStr</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-12">
+            <button type="button" onclick="javascript:setLocation('@Url.Action("Create", "QuoteRequestItem", new { requestId = Model.Id })')" class="btn btn-primary">
+                <i class="fa fa-plus-square"></i> @T("Admin.Common.AddNew")
+            </button>
+        </div>
+    </div>
+</div>

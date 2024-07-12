@@ -1,0 +1,26 @@
+﻿@model QuoteFormModel
+
+@{
+    const string hideInfoBlockAttributeName = "QuoteCart.QuoteForm.HideInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideInfoBlockAttributeName);
+
+    const string hideFormBlockAttributeName = "QuoteCart.QuoteForm.HideFormsBlock";
+    var hideFormBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideFormBlockAttributeName);
+}
+
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <nop-cards id="menu-panels">
+                <nop-card asp-name="quote-cart-info" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.Plugin.Misc.QuoteCart.Form.Tab.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">
+                    @await Html.PartialAsync("_CreateOrUpdate.Info", Model)
+                </nop-card>
+                <nop-card asp-name="quote-cart-form" asp-icon="fa fa-th-list" asp-title="@T("Admin.NopStation.Plugin.Misc.QuoteCart.Form.Tab.FormFields")" asp-hide-block-attribute-name="@hideFormBlockAttributeName" asp-hide="@hideFormBlock" asp-advanced="false">
+                    @await Html.PartialAsync("_CreateOrUpdate.FormAttributes", Model)
+                </nop-card>
+            </nop-cards>
+        </div>
+    </div>
+</section>

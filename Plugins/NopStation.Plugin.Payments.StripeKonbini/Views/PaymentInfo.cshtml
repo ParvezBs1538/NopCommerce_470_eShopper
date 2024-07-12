@@ -1,0 +1,12 @@
+﻿@model PaymentInfoModel
+
+<table width="100%" cellspacing="2" cellpadding="1" border="0">
+    <tr id="pnlConfirmationNumber">
+        <td>
+            <label asp-for="ConfirmationNumber">@T("NopStation.StripeKonbini.ConfirmationNumber"):</label>
+        </td>
+        <td>
+            <input asp-for="ConfirmationNumber"/>
+        </td>
+    </tr>
+</table>

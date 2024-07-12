@@ -1,0 +1,67 @@
+﻿@model CategoryIconModel
+
+<div class="card-body">
+    @if (Model.CategoryId > 0)
+    {
+        <script>
+            $(document).ready(function() {
+                $('#saveIcon').click(function () {
+                    var categoryBannerId = $("#@Html.IdFor(model => model.CategoryBannerId)").val();
+                    
+                    $('#saveIcon').attr('disabled', true);
+
+                    var postData = {
+                        Id: '@Model.Id',
+                        CategoryBannerId: categoryBannerId,
+                        CategoryId: '@Model.CategoryId'
+                    };
+                    addAntiForgeryToken(postData);
+
+                    $.ajax({
+                        cache: false,
+                        type: "POST",
+                        url: "@(Url.Action("CreateCategoryIcon", "WebApiCategoryIcon"))",
+                        data: postData,
+                        success: function (data) {
+                            if (!data.Result) {
+                                $('#categoryIconFailedAlert').click();
+                            }
+                            $("#categoryIconAddAlert").click();
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert(errorThrown);
+                        },
+                        complete: function (jqXHR, textStatus) {
+                            $('#saveIcon').attr('disabled', false);
+                        }
+                    });
+                });
+            });
+        </script>
+        
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="CategoryBannerId" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="CategoryBannerId" />
+                <span asp-validation-for="CategoryBannerId"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-9 offset-md-3">
+                <button type="button" id="saveIcon" class="btn btn-primary">@T("Admin.Common.Save")</button>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card card-default">
+            <div class="card-body" id="product-pictures-area">
+                @T("Admin.NopStation.WebApi.CategoryIcons.SaveBeforeEdit")
+            </div>
+        </div>
+    }
+</div>
+<nop-alert asp-alert-id="categoryIconAddAlert" asp-alert-message="@T("Admin.NopStation.WebApi.CategoryIcons.Alert.IconAddSuccess")" />
+<nop-alert asp-alert-id="categoryIconFailedAlert" asp-alert-message="@T("Admin.NopStation.WebApi.CategoryIcons.Alert.IconAddFailed")" />

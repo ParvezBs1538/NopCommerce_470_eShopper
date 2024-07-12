@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop Station",
+  "FriendlyName": "Nop-Station Ajax Filter",
+  "SystemName": "NopStation.Plugin.Misc.AjaxFilter",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Misc.AjaxFilter.dll",
+  "Description": "This plugin allows filter products with attributes, specification attributes, price and many more.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

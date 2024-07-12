@@ -1,0 +1,26 @@
+﻿@model FlipbookContentModel
+@using NopStation.Plugin.Widgets.Flipbooks.Extensions
+
+@{
+    if (Model.ProductOverviewModelList.Count() > 0)
+    {
+        <div class="product-grid">
+            <div class="item-grid">
+                @foreach (var product in Model.ProductOverviewModelList)
+                {
+                    <div class="item-box">
+                        @await Html.PartialAsync("_ProductBox", product)
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    var pager = Html.PagerForCatalog(Model.PagingFilteringContext, Model.Id, 2).QueryParam("pagenumber");
+    if (!await pager.IsEmptyAsync())
+    {
+        <div class="pager">
+            @pager
+        </div>
+    }
+}

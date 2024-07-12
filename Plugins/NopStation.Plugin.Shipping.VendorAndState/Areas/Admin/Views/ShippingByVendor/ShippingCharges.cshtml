@@ -1,0 +1,125 @@
+﻿@model VendorShippingSearchModel
+@inject Nop.Core.IWebHelper webHelper
+
+@{
+    Layout = "_AdminLayout";
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.ShippingByVendor.VendorShippings.List").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("ShippingByVendor.ShippingCharges");
+}
+
+@{
+    const string hideSearchBlockAttributeName = "ShippingByVendor.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.ShippingByVendor.VendorShippings.List")
+    </h1>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fas fa-search" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                        </div>
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchShippingMethodId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchShippingMethodId" asp-items="@Model.AvailableShippingMethods" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchVendorId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchVendorId" asp-items="@Model.AvailableVendors" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="text-center col-12">
+                                    <button type="button" id="search-shippingcharges" class="btn btn-primary btn-search">
+                                        <i class="fas fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "shippingcharges-grid",
+                            UrlRead = new DataUrl("ShippingCharges", "ShippingByVendor", null),
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            SearchButtonId = "search-shippingcharges",
+                            Filters = new List<FilterParameter>
+                            {
+                                new FilterParameter(nameof(Model.SearchShippingMethodId)),
+                                new FilterParameter(nameof(Model.SearchVendorId))
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(VendorShippingModel.VendorName))
+                                {
+                                    Title = T("Admin.NopStation.ShippingByVendor.VendorShippings.Fields.Vendor").Text,
+                                    Width = "180"
+                                },
+                                new ColumnProperty(nameof(VendorShippingModel.ShippingMethod))
+                                {
+                                    Title = T("Admin.NopStation.ShippingByVendor.VendorShippings.Fields.Vendor").Text,
+                                    Width = "180"
+                                },
+                                new ColumnProperty(nameof(VendorShippingModel.DefaultShippingCharge))
+                                {
+                                    Title = T("Admin.NopStation.ShippingByVendor.VendorShippings.Fields.DefaultShippingCharge").Text,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(VendorShippingModel.HideShippingMethod))
+                                {
+                                    Title = T("Admin.NopStation.ShippingByVendor.VendorShippings.Fields.HideShippingMethod").Text,
+                                    Width = "80",
+                                    Render = new RenderBoolean()
+                                },
+                                new ColumnProperty(nameof(VendorShippingModel.VendorId))
+                                {
+                                    Title = T("Admin.Common.Edit").Text,
+                                    Width = "100",
+                                    ClassName = NopColumnClassDefaults.Button,
+                                    Render = new RenderCustom("renderEditButton")
+                                }
+                            }
+                        })
+                    </div>
+                </div>
+                <script>
+                    function renderEditButton(data, type, row, meta) {
+                        return '<a class="btn btn-default" href="@(webHelper.GetStoreLocation())Admin/Vendor/Edit/' + row.VendorId + '#vendor-info"><i class="fas fa-pencil-alt"></i>@T("Admin.Common.Edit")</a>';
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+</section>

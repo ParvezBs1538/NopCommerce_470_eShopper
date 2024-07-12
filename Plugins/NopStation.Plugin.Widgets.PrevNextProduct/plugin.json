@@ -1,0 +1,13 @@
+{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Prev/Next Product",
+  "SystemName": "NopStation.Plugin.Widgets.PrevNextProduct",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.PrevNextProduct.dll",
+  "Description": "This plugin allows to show previous and next products in product details page.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}
+  

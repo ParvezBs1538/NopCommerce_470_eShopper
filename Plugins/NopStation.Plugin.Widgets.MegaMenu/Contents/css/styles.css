@@ -1,0 +1,7 @@
+﻿.top-menu.mobile.mobile-menu, .mm-nav-item {
+  text-transform: capitalize;
+}
+
+.header-menu > ul.mm-navbar-nav > li {
+  padding: 0px 15px;
+}

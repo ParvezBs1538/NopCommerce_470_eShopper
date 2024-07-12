@@ -1,0 +1,17 @@
+﻿@inherits Nop.Web.Framework.Mvc.Razor.NopRazorPage<TModel>
+@inject INopHtmlHelper NopHtml
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Nop.Web.Framework
+@addTagHelper *, NopStation.Plugin.Misc.Actions
+
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@using Nop.Core
+@using Nop.Web.Framework.UI
+@using Nop.Web.Framework.Extensions
+@using System.Text.Encodings.Web
+@using Nop.Services.Events
+@using Nop.Web.Framework.Events
+@using NopStation.Plugin.Widgets.DynamicSurvey.Models
+@using NopStation.Plugin.Widgets.DynamicSurvey.Domain
+@using Microsoft.AspNetCore.Routing
+@using NopStation.Plugin.Widgets.DynamicSurvey

@@ -1,0 +1,44 @@
+﻿@model RedirectModel
+
+@{
+    Layout = "_Root.Head";
+}
+
+<style>
+    .btn-wrapper {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+
+<div class="btn-wrapper">
+    <div id="AmazonPayButton"></div>
+    <script src="@Model.PaymentScript"></script>
+    <script type="text/javascript" charset="utf-8">
+        amazon.Pay.renderButton('#AmazonPayButton', {
+            // set checkout environment
+            merchantId: '@Model.MerchantId',
+            ledgerCurrency: '@Model.Currency',
+            sandbox: @Model.Sandbox.ToString().ToLower(),
+            // customize the buyer experience
+            productType: 'PayAndShip',
+            placement: 'Cart',
+            buttonColor: '@Model.ButtonColor',
+            buttonType: '@Model.ButtonType',
+            // configure Create Checkout Session request
+            createCheckoutSessionConfig: {
+                payloadJSON: '@Html.Raw(Model.Payload)',
+                signature: '@Html.Raw(Model.Signature)',
+                publicKeyId: '@Model.PublicKeyId',
+                algorithm: '@Model.AmazonSignatureAlgorithm'
+            }
+        });
+    </script>
+</div>

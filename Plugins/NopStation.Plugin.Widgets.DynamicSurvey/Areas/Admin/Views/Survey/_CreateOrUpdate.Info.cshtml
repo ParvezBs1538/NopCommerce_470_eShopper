@@ -1,0 +1,211 @@
+﻿@model SurveyModel
+@using Nop.Core.Domain.Catalog;
+@using Nop.Services
+@using Nop.Services.Stores
+@using Nop.Core.Domain.Messages
+
+<div class="card-body">
+    @(await Html.LocalizedEditorAsync<SurveyModel, SurveyLocalizedModel>("survey-info-localized",
+    @<div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="@Model.Locales[item].Name" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="@Model.Locales[item].Name" />
+                <span asp-validation-for="@Model.Locales[item].Name"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="@Model.Locales[item].Description" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="@Model.Locales[item].Description" asp-template="RichEditor" />
+                <span asp-validation-for="@Model.Locales[item].Description"></span>
+            </div>
+        </div>
+        <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+    </div>
+    ,
+    @<div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="Name" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="Name" asp-required="true" />
+                <span asp-validation-for="Name"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="Description" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="Description" asp-template="RichEditor" />
+                <span asp-validation-for="Description"></span>
+            </div>
+        </div>
+    </div>))
+    
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SystemName" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="SystemName" />
+            <span asp-validation-for="SystemName"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Published" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Published" />
+            <span asp-validation-for="Published"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnableEmailing" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableEmailing" />
+            <span asp-validation-for="EnableEmailing"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="AllowMultipleSubmissions" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="AllowMultipleSubmissions" />
+            <span asp-validation-for="AllowMultipleSubmissions"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="IncludeInTopMenu" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="IncludeInTopMenu" />
+            <span asp-validation-for="IncludeInTopMenu"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DisplayOrder" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DisplayOrder" />
+            <span asp-validation-for="DisplayOrder"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="StartDateUtc" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="StartDateUtc" />
+            <span asp-validation-for="StartDateUtc"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EndDateUtc" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EndDateUtc" />
+            <span asp-validation-for="EndDateUtc"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SelectedCustomerRoleIds" />
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-4">
+                    <nop-select asp-for="SelectedCustomerRoleIds" asp-items="Model.AvailableCustomerRoles" asp-multiple="true"/>
+                    <script>
+                    $(document).ready(function() {
+                        var rolesIdsInput = $('#@Html.IdFor(model => model.SelectedCustomerRoleIds)')
+                            .data("kendoMultiSelect");
+                        rolesIdsInput.setOptions({
+                            autoClose: false,
+                            filter: "contains"
+                        });
+
+                        @if (Model.AvailableCustomerRoles.Count == 0)
+                        {
+                            <text>
+                                rolesIdsInput.setOptions({
+                                    enable: false,
+                                    placeholder: 'No customer roles available'
+                                });
+                                rolesIdsInput._placeholder();
+                                rolesIdsInput._enable();
+                            </text>
+                        }
+                    });
+                    </script>
+                </div>
+                <div class="col-md-8">
+                    @await Component.InvokeAsync("AclDisabledWarning")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SelectedStoreIds" />
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-4">
+                    <nop-select asp-for="SelectedStoreIds" asp-items="Model.AvailableStores" asp-multiple="true" />
+                    <script>
+                    $(document).ready(function() {
+                        var storesIdsInput = $('#@Html.IdFor(model => model.SelectedStoreIds)').data("kendoMultiSelect");
+                        storesIdsInput.setOptions({
+                            autoClose: false,
+                            filter: "contains"
+                        });
+
+                        @if (Model.AvailableStores.Count == 0)
+                        {
+                            <text>
+                                storesIdsInput.setOptions({
+                                    enable: false,
+                                    placeholder: 'No stores available'
+                                });
+                                storesIdsInput._placeholder();
+                                storesIdsInput._enable();
+                            </text>
+                        }
+                    });
+                    </script>
+                </div>
+                <div class="col-md-8">
+                    @await Component.InvokeAsync("MultistoreDisabledWarning")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.EnableEmailing)").click(enableEmailing);
+        enableEmailing();
+    });
+
+    function enableEmailing() {
+        if ($('#@Html.IdFor(model => model.EnableEmailing)').is(':checked'))
+            $('[data-card-name=survey-survey-email]').showElement();
+        else
+            $('[data-card-name=survey-survey-email]').hideElement();
+    }
+</script>

@@ -1,0 +1,48 @@
+﻿@model AddVendorToMegaMenuSearchModel
+
+<div class="card">
+    <div class="card-header" id="headingVendor">
+        <h3 class="card-title">@T("Admin.NopStation.SmartMegaMenu.MegaMenus.MenuOptions.Vendors")</h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool"  data-toggle="collapse" data-target="#collapseVendor" aria-expanded="true" aria-controls="collapseVendor"><i class="fas fa-plus"></i></button>
+        </div>
+    </div>
+    <div id="collapseVendor" class="collapse" aria-labelledby="headingVendor" data-parent="#accordion">
+        <div class="card-body">
+            @await Html.PartialAsync("Table", new DataTablesModel
+            {
+                Name = "menu-vendor-grid",
+                UrlRead = new DataUrl("GetVendors", "SmartMegaMenu",  new RouteValueDictionary { [nameof(Model.MegaMenuId)] = Model.MegaMenuId}),
+                Length = Model.PageSize,
+                LengthMenu = Model.AvailablePageSizes,
+                Filters = new List<FilterParameter>
+                {
+                    new FilterParameter(nameof(Model.SearchEmail)),
+                    new FilterParameter(nameof(Model.SearchName)),
+                },
+                ColumnCollection = new List<ColumnProperty>
+                {
+                    new ColumnProperty(nameof(VendorModel.Id))
+                    {
+                        Title = T("Admin.NopStation.SmartMegaMenu.MegaMenus.MenuOptions.Select").Text,
+                        ClassName =  NopColumnClassDefaults.CenterAll,
+                        Width = "50",
+                        Render = new RenderCustom("renderVendorMenuSelector"),
+                    },
+                    new ColumnProperty(nameof(VendorModel.Name))
+                    {
+                        Title = T("Admin.Vendors.Fields.Name").Text,
+                        Width = "180"
+                    }
+                }
+            })
+
+            <script asp-location="Footer">
+                function renderVendorMenuSelector(data, type, row, meta) {
+                    return `<input onclick="addMenuItem(` + data + `, ` + @((int)MenuItemType.Vendor) + `);" type="button" class="checkboxGroups" value="@T("Admin.NopStation.SmartMegaMenu.MegaMenus.MenuOptions.Add")" >`;
+                }
+
+            </script>
+        </div>
+    </div>
+</div>

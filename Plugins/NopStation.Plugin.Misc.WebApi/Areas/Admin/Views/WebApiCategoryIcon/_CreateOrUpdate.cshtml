@@ -1,0 +1,35 @@
+@model CategoryIconModel
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+<input asp-for="CategoryId" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="CategoryId" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row"><a href="/Admin/Category/Edit/@Model.CategoryId">@Model.CategoryName</a></div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="CategoryBannerId" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="CategoryBannerId" />
+                                <span asp-validation-for="CategoryBannerId"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,116 @@
+﻿@model NopStation.Plugin.Payments.bKash.Models.PaymentViewModel
+
+@{
+    Layout = "_ColumnsOne";
+
+    //title
+    NopHtml.AddTitleParts(T("NopStation.bKash.Checkout.PaymentTitle").Text);
+    //page class
+    NopHtml.AppendPageCssClassParts("html-checkout-page");
+    NopHtml.AppendPageCssClassParts("html-order-completed-page");
+}
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+
+@if (Model.IsSandBox)
+{
+    //<script src="https://scripts.sandbox.bka.sh/bKash-checkout-sandbox.js"></script>
+    <script src="https://scripts.sandbox.bka.sh/versions/1.0.0-beta/checkout/bKash-checkout-sandbox.js"></script>
+}
+else
+{
+    <script src="https://scripts.pay.bka.sh/versions/1.0.000-beta/checkout/bKash-checkout.js"></script>
+}
+
+<style>
+    .header-menu, .header {
+        z-index: 0 !important;
+    }
+</style>
+
+<div class="page checkout-page order-completed-page">
+    <div class="page-title">
+        <h1>@T("NopStation.bKash.Checkout.PaymentTitle")</h1>
+    </div>
+    <div class="page-body checkout-data">
+        <div class="section order-completed">
+            <div class="title">
+                <strong>@T("NopStation.bKash.Checkout.OrderSuccessfullyPlaced")</strong>
+            </div>
+            <div class="details">
+                <div class="order-number">
+                    <strong>@T("Checkout.OrderNumber"): @Model.CustomOrderNumber</strong>
+                </div>
+
+                <div class="details-link">
+                    <a href="@Url.RouteUrl("OrderDetails", new { orderID = Model.OrderId })">@T("Checkout.PlacedOrderDetails")</a>
+                </div>
+                <div class="shopping-cart-page">
+                    <button id="bKash_button" class="button-1 checkout-button">@T("NopStation.bKash.Checkout.PayWithBbKash")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        bKash.init({
+            paymentMode: 'checkout',
+            paymentRequest: { amount: '@(decimal.Round(Model.OrderTotal, 2, MidpointRounding.AwayFromZero).ToString())', intent: '@Model.Intent' },
+            createRequest: function (request) {
+                $.ajax({
+                    url: '@Url.RouteUrl("BkashCreatePayment")',
+                    type: "POST",
+                    data: { orderId: '@Model.OrderId' },
+                    dataType: "json",
+                    success: function (response) {
+                        $('.ajax-loading-block-window').hide();
+                        if (response.status) {
+                            var responseData = JSON.parse(response.data);
+                            bKash.create().onSuccess(responseData);
+                        }
+                        else if (response.message) {
+                            alert(response.message)
+                        }
+                        else if (response.redirect) {
+                            window.location.href = response.redirect;
+                        }
+                        else {
+                            bKash.create().onError();
+                        }
+                    }
+                });
+            },
+            executeRequestOnAuthorization: function () {
+                $.ajax({
+                    url: '@Url.RouteUrl("BkashExecutePayment")',
+                    type: "POST",
+                    data: { orderId: '@Model.OrderId' },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.status) {
+                            window.location.href = "@Url.RouteUrl("CheckoutCompleted", new { orderId = Model.OrderId })";
+                        }
+                        else if (response.message) {
+                            alert(response.message)
+                        }
+                        else if (response.redirect) {
+                            window.location.href = response.redirect;
+                        }
+                        else {
+                            bKash.create().onError();
+                        }
+                    }
+                });
+            }
+        });
+
+        setTimeout(function () {
+            $('.ajax-loading-block-window').show();
+            $('#bKash_button').click();
+        }, 2000);
+    });
+
+</script>

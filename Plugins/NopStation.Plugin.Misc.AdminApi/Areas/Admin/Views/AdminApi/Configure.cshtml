@@ -1,0 +1,46 @@
+﻿@model ConfigurationModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.AdminApi.Configuration.Title").Text;
+
+    NopHtml.SetActiveMenuItemSystemName("AdminApi.Configuration");
+}
+
+@{
+    var customer = await workContext.GetCurrentCustomerAsync();
+    const string hideSecurityBlockAttributeName = "AdminApiSettingsPage.HideSecurityBlock";
+    var hideSecurityBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideSecurityBlockAttributeName);
+
+    const string hideAppSettingsBlockAttributeName = "AdminApiSettingsPage.HideAppSettingsBlock";
+    var hideAppSettingsBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideAppSettingsBlockAttributeName);
+}
+
+<form asp-controller="AdminApi" asp-action="Configure" method="post" id="adminapi-config-form">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.AdminApi.Configuration.Title")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="form-horizontal">
+                    @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                    <div asp-validation-summary="All"></div>
+
+                    <nop-cards id="adminapisettings-panels">
+                        <nop-card asp-name="adminapisettings-security" asp-icon="fa fa-lock" asp-title="@T("Admin.NopStation.AdminApi.Configuration.BlockTitle.Security")" asp-hide-block-attribute-name="@hideSecurityBlockAttributeName" asp-hide="@hideSecurityBlock" asp-advanced="true">@await Html.PartialAsync("_Configure.Security.cshtml", Model)</nop-card>
+                        <nop-card asp-name="adminapisettings-appsettings" asp-icon="fa fa-mobile" asp-title="@T("Admin.NopStation.AdminApi.Configuration.BlockTitle.AppSettings")" asp-hide-block-attribute-name="@hideAppSettingsBlockAttributeName" asp-hide="@hideAppSettingsBlock" asp-advanced="true">@await Html.PartialAsync("_Configure.AppSettings.cshtml", Model)</nop-card>
+                    </nop-cards>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

@@ -1,0 +1,125 @@
+@using Newtonsoft.Json
+@model Product360Model
+
+<link rel="stylesheet" href="~/Plugins/NopStation.Plugin.Widgets.Product360View/Content/product-360-view.css" />
+<script asp-exclude-from-bundle="true" asp-location="Footer" src="~/Plugins/NopStation.Plugin.Widgets.Product360View/Content/spritespin_4.1.0.js" type="text/javascript"></script>
+
+@if (Model.PictureUrls.Count > 0 || Model.PanoramaPictureUrls.Count > 0)
+{
+    var frames = JsonConvert.SerializeObject(Model.PictureUrls);
+    var frames2 = JsonConvert.SerializeObject(Model.PanoramaPictureUrls);
+
+    string behavior = ((BehaviorType)Model.ImageSetting360Model.BehaviorTypeId).ToString().ToLower();
+    string isAnimate = Model.ImageSetting360Model.BehaviorTypeId != (int)BehaviorType.Wheel ? "true" : "false";
+    <div id="buttonCode" style="display:none">
+        @if (!Model.ImageSetting360Model.IsPanoramaEnabled && Model.PictureUrls.Count > 0)
+        {
+            <div class="btn-image-view" style="background-image:url(@Model.PictureUrls[0])">
+                <button type="button" data-open-modal class="button-logo">
+                    <img style="margin-top: 35px;" src="~/Plugins/NopStation.Plugin.Widgets.Product360View/Content/icon-360.png" alt="Product 360 degree view image">
+                </button>
+            </div>
+        }
+        @if (Model.ImageSetting360Model.IsPanoramaEnabled && Model.PanoramaPictureUrls.Count > 0)
+        {
+            <div class="btn-image-view" style="background-image:url(@Model.PanoramaPictureUrls[0])">
+                <button type="button" data-open-modal class="button-logo">
+                    <img style="margin-top:25px; height: 50px; width: 100%;" src="~/Plugins/NopStation.Plugin.Widgets.Product360View/Content/icon-panorama.png" alt="Panorama view image">
+                </button>
+            </div>
+        }
+    </div>
+
+    <script asp-location="Footer">
+        var jsonFrames = @Html.Raw(frames);
+        var jsonFrames2 = @Html.Raw(frames2);
+        var panoramaCount = @Model.PanoramaPictureUrls.Count> 0;
+        var element = document.querySelector('.product-essential .gallery .picture-gallery .picture');
+        var elementStyle = window.getComputedStyle(element, null);
+
+        var fixWidth = parseInt(elementStyle.width, 10);
+        var newImg = new Image();
+        newImg.src = jsonFrames[0];
+        var fixHeight = fixWidth;
+
+        var buttonHTML = document.getElementById('buttonCode').innerHTML;
+
+        if (document.querySelector('.product-essential .gallery .picture-gallery .picture-thumbs') == null) {
+            document.getElementById('buttonCode').style = 'width: 100px; height: 100px;';
+            if (@Model.ImageSetting360Model.IsPanoramaEnabled.ToString().ToLower() && @Model.PanoramaPictureUrls.Count > 0) {
+                document.querySelector(".btn-image-view img").style = 'margin-top: 10px; height: 50px; width: 100%;';
+            }
+            else document.querySelector(".btn-image-view img").style = 'margin-top: 35px;width: 100%;';
+        }
+        else {
+            var tempHTML = document.querySelector('.product-essential .gallery .picture-gallery .picture-thumbs').innerHTML;
+            document.querySelector('.product-essential .gallery .picture-gallery .picture-thumbs').innerHTML = buttonHTML;
+            document.querySelector('.product-essential .gallery .picture-gallery .picture-thumbs').innerHTML += tempHTML;
+        }
+        var pictureHtml = document.querySelector('.product-essential .gallery .picture-gallery .picture').innerHTML;
+
+        const openButton = document.querySelector("[data-open-modal]");
+        openButton.addEventListener("click", () => {
+            if (document.querySelector('.product-essential .gallery .picture-gallery .picture') != null) {
+                document.querySelector('.product-essential .gallery .picture-gallery .picture').className = 'picture2';
+                document.querySelector('.product-essential .gallery .picture-gallery .picture2').innerHTML = '<div style="padding-bottom: 10px;"><div class="spritespin"></div></div>';
+
+                startSpriteSpin();
+            }
+        });
+
+        const changeButtons = document.querySelectorAll('.product-essential .gallery .picture-gallery .picture-thumbs .thumb-item');
+        changeButtons.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                if (document.querySelector('.product-essential .gallery .picture-gallery .picture2') != null) {
+                    document.querySelector('.product-essential .gallery .picture-gallery .picture2').className = 'picture';
+                    document.querySelector('.product-essential .gallery .picture-gallery .picture').innerHTML = pictureHtml;
+                    document.querySelector('.product-essential .gallery .picture-gallery .picture img').src = btn.querySelector('img').dataset.defaultsize;
+                }
+            })
+        });
+
+        function startSpriteSpin() {
+            if ('@Model.ImageSetting360Model.IsPanoramaEnabled.ToString().ToLower()' == 'true' && panoramaCount) {
+                $('.spritespin').spritespin({
+                    source: jsonFrames2[0],
+                    width: fixWidth,
+                    height: fixHeight,
+                    loop: @Model.ImageSetting360Model.IsLoopEnabled.ToString().ToLower(),
+                    animate: @isAnimate,
+                    plugins: [
+                        // module that changes frame on drag, mode or wheel
+                        '@behavior',
+                        // module that eases out an animation after mouse is released
+                        'ease',
+                        // module to display array or sprite of images
+                        'panorama'
+                    ],
+                });
+            }
+            else {
+                $('.spritespin').spritespin({
+                    source: jsonFrames,
+                    zoomUseClick: @Model.ImageSetting360Model.IsZoomEnabled.ToString().ToLower(),
+                    zoomPinFrame: true,
+                    width: fixWidth,
+                    height: fixHeight,
+                    sense: -1,
+                    loop: @Model.ImageSetting360Model.IsLoopEnabled.ToString().ToLower(),
+                    animate: @isAnimate,
+                    sizeMode: 'fit',
+                    plugins: [
+                        // module that changes frame on drag, mode or wheel
+                        '@behavior',
+                        // module that eases out an animation after mouse is released
+                        'ease',
+                        // module to display array or sprite of images
+                        '360',
+                        // Plugin for zoom view
+                        'zoom'
+                    ]
+                });
+            }
+        };
+    </script>
+}

@@ -1,0 +1,158 @@
+﻿@model PaymentInfoModel
+
+<link href="~/Plugins/NopStation.Plugin.Payments.BlueSnapHosted/Content/styles.css" rel="stylesheet" />
+
+<div style="margin: auto; width: 50%;">
+    <p id="bluesnap-loader"> Loading ... </p>
+</div>
+
+<input id="token" type="hidden" asp-for="Token" />
+<input id="firstName" type="hidden" asp-for="FirstName" />
+<input id="lastName" type="hidden" asp-for="LastName" />
+<input id="zip" type="hidden" asp-for="Zip" />
+
+<div id="bluesnaps-getway" class="bluesnaps-getway">
+    <table width="100%" cellspacing="2" cellpadding="1" border="0">
+        <tr>
+            <td class="label-text">
+                <label>@T("NopStation.BlueSnapHosted.Fields.FullName"):</label>
+            </td>
+            <td>
+                <input type="text" id="cardholder-name" value="@Model.FullName" autocomplete="off" />
+                <span class="helper-text"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="label-text">
+                <label>@T("NopStation.BlueSnapHosted.Fields.CardNumber"):</label>
+            </td>
+            <td>
+                <div class="card-number-holder">
+                    <div id="card-number" data-bluesnap="ccn" class="card-number-box"></div>
+                    <div id="card-logo" class="input-group-addon">
+                        <img src="https://files.readme.io/d1a25b4-generic-card.png" style="height:20px">
+                    </div>
+                </div>
+                <span class="helper-text" id="ccn-help"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="label-text">
+                <label>@T("NopStation.BlueSnapHosted.Fields.ExpirationDate"):</label>
+            </td>
+            <td>
+                <div id="exp-date" data-bluesnap="exp" class="exp-date-box"></div>
+                <span class="helper-text" id="exp-help"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="label-text">
+                <label>@T("NopStation.BlueSnapHosted.Fields.CardCode"):</label>
+            </td>
+            <td>
+                <div id="cvv" data-bluesnap="cvv" class="cvv-box"></div>
+                <span class="helper-text" id='cvv-help'></span>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:center">
+                <button class="button-1" type="button" id="submit-button" onclick="do_when_clicking_submit_button()">@T("NopStation.BlueSnapHosted.PayNow")</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script asp-location="Footer">
+    function changeImpactedElement(tagId, removeClass, addClass) {
+        removeClass = removeClass || "";
+        addClass = addClass || "";
+        $("[data-bluesnap=" + tagId + "]")
+            .removeClass(removeClass)
+            .addClass(addClass);
+    }
+    var cardUrl = {
+        "AMEX": "https://files.readme.io/97e7acc-Amex.png",
+        "DINERS": "https://files.readme.io/8c73810-Diners_Club.png",
+        "DISCOVER": "https://files.readme.io/caea86d-Discover.png",
+        "JCB": "https://files.readme.io/e076aed-JCB.png",
+        "MASTERCARD": "https://files.readme.io/5b7b3de-Mastercard.png",
+        "VISA": "https://files.readme.io/9018c4f-Visa.png"
+    };
+
+    var bsObj = {
+        token: '@Html.Raw(Model.Token)',
+        onFieldEventHandler: {
+            onFocus: function (tagId) {
+                changeImpactedElement(tagId, "", "hosted-field-focus");
+            },
+            onBlur: function (tagId) {
+                changeImpactedElement(tagId, "hosted-field-focus");
+            },
+            onError: function (tagId, errorCode, errorDescription) {
+                $("#" + tagId + "-help").removeClass('helper-text-green').text(errorCode + " - " + errorDescription);
+            },
+            onType: function (tagId, cardType, cardData) {
+                $("#card-logo > img").attr("src", cardUrl[cardType]);
+            },
+            onValid: function (tagId) {
+                $("#" + tagId + "-help").text("");
+            },
+        },
+        style: {
+            "input": {
+                "font-size": "14px",
+                "font-family":
+                    "RobotoDraft,Roboto,Helvetica Neue,Helvetica,Arial,sans-serif",
+                "line-height": "1.42857143",
+                "color": "#555"
+            },
+            ":focus": {
+                "color": "#555"
+            }
+        },
+        ccnPlaceHolder: "1234 5678 9012 3456",
+        cvvPlaceHolder: "123",
+        expPlaceHolder: "MM / YY"
+    }
+
+    $(document).ready(function () {
+        $('.payment-info-next-step-button').hide();
+        function bluesnapLoader() {
+            if (typeof (bluesnap) != "undefined") {
+                $('#bluesnap-loader').hide();
+                clearInterval(myVar);
+                $('#bluesnaps-getway').show();
+
+            }
+            if (typeof (bluesnap) != "undefined") {
+                bluesnap.hostedPaymentFieldsCreate(bsObj);
+            }
+        }
+        var myVar = setInterval(bluesnapLoader, 500);
+    });
+
+    function do_when_clicking_submit_button() {
+
+        bluesnap.hostedPaymentFieldsSubmitData(
+            function (callback) {
+                debugger
+                if (null != callback.cardData) {
+                    if (callback.statusCode === "1") {
+                        $('button.button-1.payment-info-next-step-button').trigger("click");
+                    }
+                } else {
+                    var errorArray = callback.error;
+                    for (i in errorArray) {
+                        $("#" + errorArray[i].tagId + "-help").text(errorArray[i].errorCode + " - " + errorArray[i].errorDescription);
+                    }
+                }
+            }
+        );
+    }
+</script>
+
+@if (orderSettings.OnePageCheckoutEnabled)
+{
+    @NopHtml.GenerateInlineScripts(ResourceLocation.Footer)
+    @NopHtml.GenerateCssFiles()
+}

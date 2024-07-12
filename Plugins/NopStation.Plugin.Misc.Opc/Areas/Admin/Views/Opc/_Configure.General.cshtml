@@ -1,0 +1,97 @@
+﻿@model ConfigurationModel
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="EnableOnePageCheckout_OverrideForStore" asp-input="EnableOnePageCheckout" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="EnableOnePageCheckout" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableOnePageCheckout" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="BypassShoppingCartPage_OverrideForStore" asp-input="BypassShoppingCartPage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="BypassShoppingCartPage" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="BypassShoppingCartPage" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="EnableBuyNowButton_OverrideForStore" asp-input="EnableBuyNowButton" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="EnableBuyNowButton" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableBuyNowButton" />
+            <span asp-validation-for="EnableBuyNowButton"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="ShowShoppingCartInCheckout_OverrideForStore" asp-input="ShowShoppingCartInCheckout" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="ShowShoppingCartInCheckout" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ShowShoppingCartInCheckout" />
+        </div>
+    </div>
+    <nop-nested-setting asp-for="ShowShoppingCartInCheckout">
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="IsShoppingCartEditable_OverrideForStore" asp-input="IsShoppingCartEditable" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="IsShoppingCartEditable" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="IsShoppingCartEditable" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="ShowDiscountBoxInCheckout_OverrideForStore" asp-input="ShowDiscountBoxInCheckout" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="ShowDiscountBoxInCheckout" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="ShowDiscountBoxInCheckout" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="ShowGiftCardBoxInCheckout_OverrideForStore" asp-input="ShowGiftCardBoxInCheckout" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="ShowGiftCardBoxInCheckout" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="ShowGiftCardBoxInCheckout" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="ShowCheckoutAttributesInCheckout_OverrideForStore" asp-input="ShowCheckoutAttributesInCheckout" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="ShowCheckoutAttributesInCheckout" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="ShowCheckoutAttributesInCheckout" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="ShowOrderReviewDataInCheckout_OverrideForStore" asp-input="ShowOrderReviewDataInCheckout" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="ShowOrderReviewDataInCheckout" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="ShowOrderReviewDataInCheckout" />
+            </div>
+        </div>
+    </nop-nested-setting>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="ShowEstimateShippingInCheckout_OverrideForStore" asp-input="ShowEstimateShippingInCheckout" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="ShowEstimateShippingInCheckout" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ShowEstimateShippingInCheckout" />
+        </div>
+    </div>
+</div>

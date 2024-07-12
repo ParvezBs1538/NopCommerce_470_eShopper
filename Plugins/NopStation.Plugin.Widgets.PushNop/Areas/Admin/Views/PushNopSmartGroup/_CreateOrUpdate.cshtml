@@ -1,0 +1,25 @@
+@model SmartGroupModel
+@inject AdminAreaSettings adminAreaSettings
+@using Nop.Core.Domain.Common
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+@{
+    const string hideInfoBlockAttributeName = "SmartGroupPage.HideInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideInfoBlockAttributeName);
+
+    const string hideConditionsBlockAttributeName = "SmartGroupPage.HideConditionsBlock";
+    var hidePricesBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideConditionsBlockAttributeName, defaultValue: true);
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <nop-cards id="product-panels">
+                <nop-card asp-name="smartgroup-info" asp-icon="fa fa-info" asp-title="@T("Admin.NopStation.PushNop.SmartGroups.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</nop-card>
+                <nop-card asp-name="smartgroup-condition" asp-icon="fa fa-bars" asp-title="@T("Admin.NopStation.PushNop.SmartGroups.Conditions")" asp-hide-block-attribute-name="@hideConditionsBlockAttributeName" asp-hide="@hidePricesBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Conditions", Model)</nop-card>
+            </nop-cards>
+        </div>
+    </div>
+</section>

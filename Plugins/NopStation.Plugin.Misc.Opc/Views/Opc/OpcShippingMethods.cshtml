@@ -1,0 +1,27 @@
+﻿@model CheckoutShippingMethodModel
+
+<div class="step-title">
+    <h2 class="title">@T("Checkout.ShippingMethod")</h2>
+</div>
+<div class="step a-item">
+    
+    <form action="" id="opc-shipping-method-form" method="post">
+
+        @await Html.PartialAsync("_ShippingMethods", Model)
+           
+    </form>
+</div>
+
+<script asp-location="Footer">
+        $("input[type=radio][name=shippingoption]").on("change", function () {
+            var shippingMethodName = $('input[type=radio][name=shippingoption]:checked').attr('data-shippingmethod-name');
+            var shippingMethodSystemName = $('input[type=radio][name=shippingoption]:checked').attr('data-shippingmethod-system-name');
+
+            ShippingMethod.updateShippingMethod(shippingMethodName, shippingMethodSystemName).then((data) => {
+                ConfirmOrder.loadOrderTotal();
+            })
+            .catch((error) => {
+                alert(error.statusText);
+            });
+        });
+</script>

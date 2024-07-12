@@ -1,0 +1,135 @@
+﻿@model ActivityHistorySearchModel
+
+@{
+    Layout = "_AdminLayout";
+
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.CreditWallet.ActivityHistory.List").Text;
+    NopHtml.SetActiveMenuItemSystemName("CreditWallet.ActivityHistory");
+
+    const string hideSearchBlockAttributeName = "ActivityHistorytListPage.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.CreditWallet.ActivityHistory.List")
+    </h1>
+    <div class="float-right">
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fas fa-search" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                        </div>
+
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchEmail" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchEmail" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SelectedActivityTypeIds" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SelectedActivityTypeIds" asp-items="Model.AvailableActivityTypes" asp-multiple="true" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="text-center col-12">
+                                    <button type="button" id="search-activities" class="btn btn-primary btn-search">
+                                        <i class="fas fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "activities-grid",
+                            UrlRead = new DataUrl("List", "WalletActivityHistory", null),
+                            SearchButtonId = "search-activities",
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            Filters = new List<FilterParameter>
+                            {
+                                new FilterParameter(nameof(Model.SearchEmail)),
+                                new FilterParameter(nameof(Model.SelectedActivityTypeIds))
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(ActivityHistoryModel.WalletCustomerEmail))
+                                {
+                                    Title = T("Admin.NopStation.CreditWallet.ActivityHistory.Fields.WalletCustomer").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(ActivityHistoryModel.WalletCustomerId))
+                                {
+                                    Title = T("Admin.Common.View").Text,
+                                    Render = new RenderCustom("renderWalletUrl"),
+                                    ClassName =  NopColumnClassDefaults.CenterAll,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(ActivityHistoryModel.ActivityTypeStr))
+                                {
+                                    Title = T("Admin.NopStation.CreditWallet.ActivityHistory.Fields.ActivityType").Text,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(ActivityHistoryModel.PreviousTotalCreditUsed))
+                                {
+                                    Title = T("Admin.NopStation.CreditWallet.ActivityHistory.Fields.PreviousTotalCreditUsed").Text,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(ActivityHistoryModel.CurrentTotalCreditUsed))
+                                {
+                                    Title = T("Admin.NopStation.CreditWallet.ActivityHistory.Fields.CurrentTotalCreditUsed").Text,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(ActivityHistoryModel.CreditUsed))
+                                {
+                                    Title = T("Admin.NopStation.CreditWallet.ActivityHistory.Fields.CreditUsed").Text,
+                                    Width = "50"
+                                },
+                                new ColumnProperty(nameof(ActivityHistoryModel.Note))
+                                {
+                                    Title = T("Admin.NopStation.CreditWallet.ActivityHistory.Fields.Note").Text,
+                                    Width = "150"
+                                }
+                            }
+                        })
+                        
+                        <script>
+                            function renderWalletUrl(data, type, row, meta) {
+                                return '<a class="btn btn-default" href="@Url.Content("~/Admin/Customer/Edit/")' + row.WalletCustomerId + '?#customer-wallet"><i class="fas fa-pencil-alt"></i>@T("Admin.Common.View")</a>';
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

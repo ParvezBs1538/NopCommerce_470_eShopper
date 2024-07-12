@@ -1,0 +1,2 @@
+﻿4.50.1.0: Initial release
+4.50.1.1: Store image issue fixed

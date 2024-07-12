@@ -1,0 +1,84 @@
+﻿@model IEnumerable<ProductTabModel>
+@using NopStation.Plugin.Widgets.ProductTabs.Models
+
+@if (Model.Any())
+{
+    foreach (var productTab in Model)
+    {
+        var items = productTab.Items.Where(p => p.Products.Any());
+        <div class="product-tab-container">
+            @if (productTab.DisplayTitle)
+            {
+                <div class="title">
+                    <strong>@productTab.Title</strong>
+                </div>
+            }
+            <div class="product-tab-body ns-product-tab">
+                <div class="product-tab-picture">
+                    <img src="@productTab.Picture.ImageUrl" />
+                </div>
+                <div class="product-tab-item-wrapper">
+                    <div class="product-tab-item-header">
+                        <ul class="nav nav-tabs">
+                            @foreach (var item in items)
+                            {
+                                <li><a href="#product-tab-@item.Id">@item.Name</a></li>
+                            }
+                        </ul>
+                    </div>
+                    @foreach (var item in items)
+                    {
+                        <div class="product-tab-items" id="product-tab-@item.Id">
+                            <div class="owl-carousel owl-theme">
+                                @for (int productCounter = 0; productCounter < item.Products.Count;)
+                                {
+                                    <div class="product-tab-item item-box">
+                                        @for (int i = 0; i < 2 && productCounter < item.Products.Count; i++)
+                                        {
+                                            @await Html.PartialAsync("_ProductBox", item.Products[productCounter])
+                                            productCounter++;
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <script asp-location="Footer">
+                            $(document).ready(function () {
+                                $('#product-tab-@item.Id .owl-carousel').owlCarousel({
+                                    items: 1,
+                                    responsiveBaseElement: 'body',
+                                    nav: @productTab.Nav.ToString().ToLower(),
+                                    loop: @productTab.Loop.ToString().ToLower(),
+                                    dots: true,
+                                    margin: @productTab.Margin,
+                                    autoplay: @productTab.AutoPlay.ToString().ToLower(),
+                                    rtl: @productTab.RTL.ToString().ToLower(),
+                                    autoplayTimeout: @productTab.AutoPlayTimeout,
+                                    autoplayHoverPause: @productTab.AutoPlayHoverPause.ToString().ToLower(),
+                                    center: @productTab.Center.ToString().ToLower(),
+                                    startPosition: @productTab.StartPosition,
+                                    responsive: {
+                                        0: {
+                                            items: 1
+                                        },
+                                        576: {
+                                            items: 2
+                                        },
+                                        768: {
+                                            items: 2
+                                        },
+                                        1001: {
+                                            items: 3
+                                        }
+                                    }
+                                });
+
+                            });
+                        </script>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+}

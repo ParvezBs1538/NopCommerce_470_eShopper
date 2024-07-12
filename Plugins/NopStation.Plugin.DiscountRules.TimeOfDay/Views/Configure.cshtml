@@ -1,0 +1,96 @@
+﻿@{
+    Layout = "";
+}
+
+@using NopStation.Plugin.DiscountRules.TimeOfDay.Models
+@model RequirementModel
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#saveTimeOfDayrequirement@(Model.RequirementId)').click(function () {
+            var timeOfDayFrom = $("#@Html.IdFor(model => model.TimeOfDayFrom)").val();
+            var timeOfDayTo = $("#@Html.IdFor(model => model.TimeOfDayTo)").val();
+            var discountId = @Model.DiscountId;
+            var requirementId = @Model.RequirementId;
+
+            var postData = {
+                DiscountId: discountId,
+                RequirementId: requirementId,
+                TimeOfDayFrom: timeOfDayFrom,
+                TimeOfDayTo: timeOfDayTo
+            };
+            addAntiForgeryToken(postData);
+
+            $.ajax({
+                cache:false,
+                type: "POST",
+                url: "@(Url.Action("Configure", "DiscountRulesTimeOfDay"))",
+                data: postData,
+                success: function (data, textStatus, jqXHR) {
+                    $('#pnl-save-requirement-result@(Model.RequirementId)').fadeIn("slow").delay(1000).fadeOut("slow");
+                    //notify parent if it's a new requirement
+                    @if (Model.RequirementId == 0)
+                    {
+                        <text>$("#discountRequirementContainer").trigger('nopnewdiscountruleadded', [data.NewRequirementId]);</text>
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    var $alertInfoEl = $("#saveTimeOfDayrequirementAlert-info");
+                    let response = jqXHR.responseJSON;
+                    if (response instanceof Object && response.hasOwnProperty('Errors')) {
+                        var errorMessages = '';
+                        $.each(response.Errors, function (i, error) {
+                            errorMessages += error;
+                            if (response.Errors.length - 1 != i)
+                                errorMessages += '</br>';
+                        });
+                        $alertInfoEl.html(errorMessages);
+                    } else {
+                        // display default error
+                        $alertInfoEl.html('@T("Admin.Promotions.Discounts.Requirements.FailedToSave")');
+                    }
+
+                    $("#saveTimeOfDayrequirementAlert").click();
+                }
+            });
+        });
+    });
+</script>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group row">
+            <div class="col-md-3 requirement-label-col">
+                <nop-label asp-for="TimeOfDayFrom" />
+            </div>
+            <div class="col-md-9 requirement-data-col">
+                <div class="requirement-data-input">
+                    <nop-editor asp-for="TimeOfDayFrom"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group row">
+            <div class="col-md-3 requirement-label-col">
+                <nop-label asp-for="TimeOfDayTo" />
+            </div>
+            <div class="col-md-9 requirement-data-col">
+                <div class="requirement-data-input">
+                    <nop-editor asp-for="TimeOfDayTo"/>
+                </div>
+            </div>
+            <div class="requirement-data-buttons">
+                <input type="button" id="saveTimeOfDayrequirement@(Model.RequirementId)" class="btn btn-primary" value="@T("Admin.Common.Save")" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-md-offset-3 col-md-9 requirement-messages-col">
+        <div id="pnl-save-requirement-result@(Model.RequirementId)" style="display: none; margin-top: 10px;" class="text-green margin-t-5">
+            @T("Admin.Promotions.Discounts.Requirements.Saved")
+        </div>
+    </div>
+</div>
+<nop-alert asp-alert-id="saveTimeOfDayrequirementAlert" />

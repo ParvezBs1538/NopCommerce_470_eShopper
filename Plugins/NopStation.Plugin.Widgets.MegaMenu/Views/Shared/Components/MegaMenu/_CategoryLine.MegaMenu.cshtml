@@ -1,0 +1,41 @@
+﻿@model MegaMenuModel.CategoryLineModel
+
+<li class="mm-nav-item">
+    <a class="mm-nav-link" href="@Url.RouteUrl("Category", new { SeName = Model.Category.SeName })">
+        @if (Model.Category.PictureModel != null)
+        {
+            <img class="img-fluid d-none d-lg-block" src="@Model.Category.PictureModel.ImageUrl" alt="@Model.Category.PictureModel.AlternateText" />
+        }
+        <span>@Model.Category.Name</span>
+        @if (Model.Category.NumberOfProducts.HasValue)
+        {
+            <span>
+                @T("Categories.TotalProducts", Model.Category.NumberOfProducts.Value)
+            </span>
+        }
+    </a>
+
+    @{
+        var levelClass = "";
+        if (Model.Level == 0)
+        {
+            levelClass = "first-level";
+        }
+        if (Model.Category.SubCategories.Count > 0 && Model.Level <= Model.MaxLevel)
+        {
+            <div class="sublist-toggle"></div>
+            <ul class="sublist @levelClass">
+                @foreach (var subCategory in Model.Category.SubCategories)
+                {
+                    var categoryLineModel = new MegaMenuModel.CategoryLineModel
+                    {
+                        Category = subCategory,
+                        Level = Model.Level + 1,
+                        MaxLevel = Model.MaxLevel
+                    };
+                    @await Html.PartialAsync("_CategoryLine.MegaMenu.cshtml", categoryLineModel)
+                }
+            </ul>
+        }
+    }
+</li>

@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Stripe Klarna",
+  "SystemName": "NopStation.Plugin.Payments.StripeKlarna",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.StripeKlarna.dll",
+  "Description": "This plugin enables Stripe Klarna payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

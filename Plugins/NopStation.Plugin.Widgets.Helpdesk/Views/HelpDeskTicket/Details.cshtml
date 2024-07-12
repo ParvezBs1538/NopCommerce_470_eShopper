@@ -1,0 +1,316 @@
+﻿@using Nop.Web.Framework.UI
+@model TicketDetailsModel
+
+@{
+    Layout = "_ColumnsTwo";
+    NopHtml.AddTitleParts(T("NopStation.Helpdesk.Account.TicketDetails").Text);
+    NopHtml.AddCssFileParts("/Plugins/NopStation.Plugin.Widgets.Helpdesk/Content/styles.css", string.Empty);
+    var slNo = 1;
+}
+
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = -1 })
+}
+
+<div class="page account-page customer-info-page">
+    <div class="page-title">
+        <h1>@T("Account.MyAccount") - @T("NopStation.Helpdesk.Account.TicketDetails")</h1>
+    </div>
+    <div class="page-body">
+        <div class="table-wrapper">
+            <table id="ticketdetails-table" cellspacing="0" class="cart">
+                <tr>
+                    <td>
+                        @T("NopStation.Helpdesk.Tickets.CreatedOn").Text
+                    </td>
+                    <td>
+                        @Model.CreatedOn
+                    </td>
+                    <td>
+                        @T("NopStation.Helpdesk.Tickets.UpdatedOn").Text
+                    </td>
+                    <td>
+                        @Model.UpdatedOn
+                    </td>
+                </tr>
+                <tr>
+                    @{ var colspan = "colspan=3";}
+                    @if (Model.EnableTicketCategory)
+                    {
+                        colspan = "";
+                        <td>
+                            @T("NopStation.Helpdesk.Tickets.Category").Text
+                        </td>
+                        <td>
+                            @Model.Category
+                        </td>
+                    }
+                    <td>
+                        @T("NopStation.Helpdesk.Tickets.Status").Text
+                    </td>
+                    <td @colspan>
+                        @Model.Status
+                    </td>
+                </tr>
+                @if (Model.EnableTicketDepartment)
+                {
+                    <tr>
+                        <td>
+                            @T("NopStation.Helpdesk.Tickets.Deparment").Text
+                        </td>
+                        <td colspan="3">
+                            @Model.Department
+                        </td>
+                    </tr>
+                }
+                @if (Model.OrderId > 0 || Model.ProductId > 0)
+                {
+                    colspan = Model.OrderId == 0 || Model.ProductId == 0 ? "colspan=3" : "";
+
+                    <tr>
+                        @if (Model.OrderId > 0)
+                        {
+                            <td>
+                                @T("NopStation.Helpdesk.Tickets.Order").Text
+                            </td>
+                            <td @colspan>
+                                @Html.RouteLink(Model.OrderId.ToString(), "OrderDetails", new { orderId = Model.OrderId })
+                            </td>
+                        }
+                        @if (Model.ProductId > 0)
+                        {
+                            <td>
+                                @T("NopStation.Helpdesk.Tickets.Product").Text
+                            </td>
+                            <td @colspan>
+                                @Html.RouteLink(Model.ProductId.ToString(), "ProductDetails", new { productId = Model.ProductId })
+                            </td>
+                        }
+                    </tr>
+                }
+                <tr>
+                    <td>
+                        @T("NopStation.Helpdesk.Tickets.Priority").Text
+                    </td>
+                    <td colspan="3">
+                        @Model.Priority
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @T("NopStation.Helpdesk.Tickets.Subject").Text
+                    </td>
+                    <td colspan="3">
+                        @Model.Subject
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @T("NopStation.Helpdesk.Tickets.Body").Text
+                    </td>
+                    <td colspan="3">
+                        @Html.Raw(Model.Body)
+                    </td>
+                </tr>
+                @if (Model.AllowCustomerToUploadAttachmentInTicket && Model.DownloadGuid != Guid.Empty)
+                {
+                    <tr>
+                        <td>
+                            @T("NopStation.Helpdesk.Tickets.Download").Text
+                        </td>
+                        <td colspan="3">
+                            @Html.RouteLink(T("NopStation.Helpdesk.Tickets.DownloadAttachment").Text, "HelpdeskAttachment", new { downloadGuid = Model.DownloadGuid })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+        <br />
+        @if (Model.TicketResponses.Count > 0)
+        {
+            <h3>Responses</h3>
+            <br />
+            <div class="table-wrapper">
+                <table id="ticketresponse-table" class="cart">
+                    <thead>
+                        <tr>
+                            <th>Sl No</th>
+                            <th>@T("NopStation.Helpdesk.Tickets.Body").Text</th>
+                            <th>@T("NopStation.Helpdesk.Tickets.CreatedOn").Text</th>
+                            <th>@T("NopStation.Helpdesk.Tickets.CreatedByCustomer").Text</th>
+                            @if (Model.AllowCustomerToUploadAttachmentInResponse)
+                            {
+                                <th>@T("NopStation.Helpdesk.Tickets.Download").Text</th>
+                            }
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model.TicketResponses)
+                    {
+                        <tr>
+                            <td>@slNo</td>
+                            <td>@item.Body</td>
+                            <td>@item.CreatedOn</td>
+                            <td>@item.CreatedByCustomer</td>
+                            @if (Model.AllowCustomerToUploadAttachmentInResponse)
+                            {
+                                @if (item.DownloadId > 0)
+                                {
+                                    <td>
+                                        @Html.RouteLink(@T("NopStation.Helpdesk.Tickets.DownloadAttachment").Text, "HelpdeskAttachment", new { downloadGuid = item.DownloadGuid })
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                            }
+                        </tr>
+                        slNo++;
+                    }
+                </table>
+            </div>
+        }
+
+        @{
+            if (Model.Status == "Open" || Model.Status == "Processing")
+            {
+                <h3>Create a Reply</h3>
+                <br />
+                <form asp-route="HelpdeskAddTicketResponse" method="post">
+                    <div asp-validation-summary="ModelOnly" class="message-error"></div>
+                    <input asp-for="@Model.TicketResponseAddModel.TicketId" value="@Model.Id" type="hidden" />
+                    <div class="fieldset">
+                        <div class="form-fields">
+                            <div class="inputs">
+                                <label asp-for="@Model.TicketResponseAddModel.Body" asp-postfix=":"></label>
+                                <textarea asp-for="@Model.TicketResponseAddModel.Body" class="review-text"></textarea>
+                                <nop-required />
+                                <span asp-validation-for="@Model.TicketResponseAddModel.Body"></span>
+                            </div>
+
+                            @if (Model.AllowCustomerToUploadAttachmentInResponse)
+                            {
+                                //register CSS and JS
+                                <link rel="stylesheet" href="~/lib_npm/fine-uploader/fine-uploader/fine-uploader.min.css" />
+                                <script asp-exclude-from-bundle="true" src="~/lib_npm/fine-uploader/jquery.fine-uploader/jquery.fine-uploader.min.js" asp-location="Footer"></script>
+                                var allowedFileExtensionsList = new List<string>();
+                                //allowedFileExtensionsList.Add("jpg");
+                                //allowedFileExtensionsList.Add("jpeg");
+                                //allowedFileExtensionsList.Add("jpeg");
+                                //ex. ['jpg', 'jpeg', 'jpeg', 'gif'] or []
+                                var allowedFileExtensions = string.Join(", ", allowedFileExtensionsList.Select(x => "'" + x.Trim() + "'").ToList());
+                                var controlId = Html.IdFor(model => model.TicketResponseAddModel.DownloadGuid);
+                                <div class="inputs">
+                                    <label asp-for="TicketResponseAddModel.DownloadId" asp-postfix=":"></label>
+                                    <input id="@(controlId)" name="@(controlId)" type="hidden" />
+
+                                    @*fine uploader container*@
+                                    <div id="@(controlId)uploader" class="uploadedfileinput" style="display:inline-block"></div>
+                                    @*fine uploader template (keep it synchronized to \Content\fineuploader\templates\default.html)*@
+                                    <script type="text/template" asp-location="Footer" id="@(controlId)-qq-template">
+                                        <div class="qq-uploader-selector qq-uploader" style="font-size: 14px;">
+                                            <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
+                                                <span>@T("Common.FileUploader.DropFiles")</span>
+                                            </div>
+                                            <div class="qq-upload-button-selector qq-upload-button">
+                                                <div>@T("Common.FileUploader.Upload")</div>
+                                            </div>
+                                            <span class="qq-drop-processing-selector qq-drop-processing">
+                                                <span>@T("Common.FileUploader.Processing")</span>
+                                                <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
+                                            </span>
+                                            <ul class="qq-upload-list-selector qq-upload-list">
+                                                <li>
+                                                    <div class="qq-progress-bar-container-selector">
+                                                        <div class="qq-progress-bar-selector qq-progress-bar"></div>
+                                                    </div>
+                                                    <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
+                                                    <span class="qq-edit-filename-icon-selector qq-edit-filename-icon"></span>
+                                                    <span class="qq-upload-file-selector qq-upload-file"></span>
+                                                    <input class="qq-edit-filename-selector qq-edit-filename" tabindex="0" type="text">
+                                                    <span class="qq-upload-size-selector qq-upload-size"></span>
+                                                    <a class="qq-upload-cancel-selector qq-upload-cancel" href="#">@T("Common.FileUploader.Cancel")</a>
+                                                    <a class="qq-upload-retry-selector qq-upload-retry" href="#">@T("Common.FileUploader.Retry")</a>
+                                                    <a class="qq-upload-delete-selector qq-upload-delete" href="#">@T("Common.FileUploader.Delete")</a>
+                                                    <span class="qq-upload-status-text-selector qq-upload-status-text"></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </script>
+                                    <script asp-location="Footer">
+                                    $(document).ready(function() {
+                                        $("#@(controlId)uploader").fineUploader({
+                                                request: {
+                                                    endpoint: '@(Url.Content("~/HelpdeskTicket/UploadFile"))'
+                                                },
+                                                template: "@(controlId)-qq-template",
+                                                multiple: false,
+                                                validation: {
+                                                    allowedExtensions: [@Html.Raw(allowedFileExtensions)]
+                                                }
+                                            }).on("complete",
+                                                function(event, id, name, responseJSON, xhr) {
+                                                    $("#@(controlId)").val(responseJSON.downloadGuid);
+
+                                                    if (responseJSON.message) {
+                                                        alert(responseJSON.message.Result);
+                                                    }
+                                                });
+                                    });
+                                    </script>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <input id="responseSubmit" type="button" name="add-response" class="button-1" value="@T("NopStation.Helpdesk.TicketResponse.SubmitButton")" />
+                    </div>
+                </form>
+                <script asp-location="Footer">
+                $(document).ready(function() {
+                    $("#responseSubmit").click(function () {
+                        $('#responseSubmit').attr('disabled', true);
+                        var postData = {};
+                        postData.Body = $("#@Html.IdFor(model => model.TicketResponseAddModel.Body)").val();
+                        postData.TicketId = @Model.Id;
+
+                        @if (Model.AllowCustomerToUploadAttachmentInResponse)
+                        {
+                            <text>
+                        postData.DownloadGuid = $("#@Html.IdFor(model => model.TicketResponseAddModel.DownloadGuid)").val();
+                            </text>
+                        }
+                        addAntiForgeryToken(postData);
+
+                        $.ajax({
+                            cache: false,
+                            type: "POST",
+                            url: "@(Url.Action("AddResponse", "HelpdeskTicket"))",
+                            data: postData,
+                            success: function (data, textStatus, jqXHR) {
+                                if (data.Result) {
+                                    $("#@Html.IdFor(model => model.TicketResponseAddModel.Body)").val('');
+                                    @if (Model.AllowCustomerToUploadAttachmentInResponse)
+                                    {
+                                        <text>
+                                        $("#@Html.IdFor(model => model.TicketResponseAddModel.DownloadGuid)").val('@(Guid.Empty)');
+                                        </text>
+                                    }
+                                    location.reload();
+                                } else {
+                                    //display errors if returned
+                                    console.log(data);
+                                }
+                            },
+                            complete: function (jqXHR, textStatus) {
+                                $('#responseSubmit').attr('disabled', false);
+                            }
+                        });
+                    });
+                });
+                </script>
+            }
+        }
+    </div>
+</div>

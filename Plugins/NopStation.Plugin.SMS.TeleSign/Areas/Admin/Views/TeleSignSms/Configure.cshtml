@@ -1,0 +1,192 @@
+﻿@model ConfigurationModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.TeleSignSms.Configuration.Title").Text;
+    NopHtml.SetActiveMenuItemSystemName("TeleSign.Configuration");
+}
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.CheckPhoneNumberRegex)").change(toggleIsPhoneNumberRegex);
+        $("#@Html.IdFor(model => model.CheckIntlDialCode)").change(toggleIsIntlDialCode);
+
+        toggleIsPhoneNumberRegex();
+        toggleIsIntlDialCode();
+    });
+
+    function toggleIsPhoneNumberRegex() {
+        if ($('#@Html.IdFor(model => model.CheckPhoneNumberRegex)').is(':checked')) {
+            $('#pnlPhoneNumberRegex').show();
+        } else {
+            $('#pnlPhoneNumberRegex').hide();
+        }
+    }
+
+    function toggleIsIntlDialCode() {
+        if ($('#@Html.IdFor(model => model.CheckIntlDialCode)').is(':checked')) {
+            $('#pnlIntlDialCode').show();
+            $('#pnlRemoveFirstNDigits').show();
+        } else {
+            $('#pnlIntlDialCode').hide();
+            $('#pnlRemoveFirstNDigits').hide();
+        }
+    }
+</script>
+
+<form asp-controller="TeleSignSms" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.TeleSignSms.Configuration.Title")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnablePlugin_OverrideForStore" asp-input="EnablePlugin" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnablePlugin" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnablePlugin" />
+                                    <span asp-validation-for="EnablePlugin"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ApiKey_OverrideForStore" asp-input="ApiKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ApiKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="ApiKey" />
+                                    <span asp-validation-for="ApiKey"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ApiSecret_OverrideForStore" asp-input="ApiSecret" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ApiSecret" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="ApiSecret" />
+                                    <span asp-validation-for="ApiSecret"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="From_OverrideForStore" asp-input="From" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="From" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="From" />
+                                    <span asp-validation-for="From"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="CheckPhoneNumberRegex" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="CheckPhoneNumberRegex" />
+                                    <span asp-validation-for="CheckPhoneNumberRegex"></span>
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="CheckPhoneNumberRegex">
+                                <div class="form-group row" id="pnlPhoneNumberRegex">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="PhoneNumberRegex_OverrideForStore" asp-input="PhoneNumberRegex" asp-store-scope="@Model.ActiveStoreScopeConfiguration"></nop-override-store-checkbox>
+                                        <nop-label asp-for="PhoneNumberRegex"></nop-label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="PhoneNumberRegex"></nop-editor>
+                                        <span asp-validation-for="PhoneNumberRegex"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="CheckIntlDialCode" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="CheckIntlDialCode" />
+                                    <span asp-validation-for="CheckIntlDialCode"></span>
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="CheckIntlDialCode">
+                                <div class="form-group row" id="pnlIntlDialCode">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="IntlDialCode_OverrideForStore" asp-input="IntlDialCode" asp-store-scope="@Model.ActiveStoreScopeConfiguration"></nop-override-store-checkbox>
+                                        <nop-label asp-for="IntlDialCode"></nop-label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="IntlDialCode"></nop-editor>
+                                        <span asp-validation-for="IntlDialCode"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="pnlRemoveFirstNDigits">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="RemoveFirstNDigitsWhenLocalNumber_OverrideForStore" asp-input="RemoveFirstNDigitsWhenLocalNumber" asp-store-scope="@Model.ActiveStoreScopeConfiguration"></nop-override-store-checkbox>
+                                        <nop-label asp-for="RemoveFirstNDigitsWhenLocalNumber"></nop-label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="RemoveFirstNDigitsWhenLocalNumber"></nop-editor>
+                                        <span asp-validation-for="RemoveFirstNDigitsWhenLocalNumber"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableLog_OverrideForStore" asp-input="EnableLog" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableLog" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableLog" />
+                                    <span asp-validation-for="EnableLog"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-default">
+                        <div class="card-header">
+                            @T("Admin.NopStation.TeleSignSms.Configuration.SendTestSms")
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="SendTestSmsTo" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <nop-editor asp-for="SendTestSmsTo" />
+                                        <div class="input-group-btn">
+                                            <button type="submit" name="sendtestsms" class="btn btn-info">
+                                                @T("Admin.NopStation.TeleSignSms.Configuration.SendTestSms.Button")
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="SendTestSmsTo"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

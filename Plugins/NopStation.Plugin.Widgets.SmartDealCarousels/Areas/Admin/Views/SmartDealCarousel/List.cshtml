@@ -1,0 +1,161 @@
+﻿@model SmartDealCarouselSearchModel
+
+@inject AdminAreaSettings adminAreaSettings
+
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.SmartDealCarousels.Carousels.List").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("SmartDealCarousels");
+}
+
+@{
+    const string hideSearchBlockAttributeName = "CarouselsPage.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.SmartDealCarousels.Carousels.List")
+    </h1>
+    <div class="float-right">
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus-square"></i>
+            @T("Admin.Common.AddNew")
+        </a>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fas fa-search" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                        </div>
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchKeyword" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchKeyword" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchWidgetZone" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchWidgetZone" asp-items="@Model.AvailableWidgetZones"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchProductSourceId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchProductSourceId" asp-items="@Model.AvailableProductSources" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchActiveId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchActiveId" asp-items="@Model.AvailableActiveOptions" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchStoreId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchStoreId" asp-items="@Model.AvailableStores" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="text-center col-12">
+                                    <button type="button" id="search-carousel" class="btn btn-primary btn-search">
+                                        <i class="fas fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "carousel-grid",
+                            UrlRead = new DataUrl("List", "SmartDealCarousel", null),
+                            Length = adminAreaSettings.DefaultGridPageSize,
+                            LengthMenu = adminAreaSettings.GridPageSizes,
+                            SearchButtonId = "search-carousel",
+                            Filters = new List<FilterParameter>
+                            {
+                                new FilterParameter(nameof(Model.SearchStoreId)),
+                                new FilterParameter(nameof(Model.SearchCarouselTypeId)),
+                                new FilterParameter(nameof(Model.SearchKeyword)),
+                                new FilterParameter(nameof(Model.SearchProductSourceId)),
+                                new FilterParameter(nameof(Model.SearchWidgetZone)),
+                                new FilterParameter(nameof(Model.SearchActiveId))
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(SmartDealCarouselModel.Name))
+                                {
+                                    Title = T("Admin.NopStation.SmartDealCarousels.Carousels.Fields.Name").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(SmartDealCarouselModel.Title))
+                                {
+                                    Title = T("Admin.NopStation.SmartDealCarousels.Carousels.Fields.Title").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(SmartDealCarouselModel.ProductSourceTypeStr))
+                                {
+                                    Title = T("Admin.NopStation.SmartDealCarousels.Carousels.Fields.ProductSourceType").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(SmartDealCarouselModel.DisplayOrder))
+                                {
+                                    Title = T("Admin.NopStation.SmartDealCarousels.Carousels.Fields.DisplayOrder").Text,
+                                    Width = "80",
+                                    ClassName = NopColumnClassDefaults.CenterAll
+                                },
+                                new ColumnProperty(nameof(SmartDealCarouselModel.Active))
+                                {
+                                    Title = T("Admin.NopStation.SmartDealCarousels.Carousels.Fields.Active").Text,
+                                    Width = "80",
+                                    ClassName = NopColumnClassDefaults.CenterAll,
+                                    Render = new RenderBoolean()
+                                },
+                                new ColumnProperty(nameof(SmartDealCarouselModel.Id))
+                                {
+                                    Title = T("Admin.Common.Edit").Text,
+                                    Width = "80",
+                                    ClassName = NopColumnClassDefaults.Button,
+                                    Render = new RenderButtonEdit(new DataUrl("~/Admin/SmartDealCarousel/Edit/"))
+                                }
+                            }
+                        })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,95 @@
+﻿@model FilterRatingModel
+@inject AjaxFilterSettings ajaxFilterSettings
+@{
+    var ratings = string.IsNullOrEmpty(Model.ProductRatingIds) ? Model.ProductRatingIds : "";
+}
+<script>
+
+    $(".collaspe-rating").accordion({
+        collapsible: (((`@(ajaxFilterSettings.CloseProductRatingsFilterByDefualt)`).toLowerCase()) == "true" ? true : false),
+        active: ((`@(ajaxFilterSettings.CloseProductRatingsFilterByDefualt)`).toLowerCase()) == "true" ? true : false
+    });
+</script>
+
+<style>
+    .product-review-box {
+        margin-bottom: 0;
+    }
+</style>
+
+<div id="ProductRating-filter-section">
+    <div class="ProductRating-section">
+        <div class="filter-section collaspe-rating" data-id="productRating">
+            <div class="title">
+                <h5 class="mb-0 collapsed ajaxfilter-title"
+                    data-toggle="collapse"
+                    data-parent="#accordionEx"
+                    data-target="#ProductRatingNavigation"
+                    aria-expanded="true"
+                    aria-controls="collapseOne">
+                    @T("NopStation.Plugin.Misc.AjaxFilter.Filters.ProductRating")
+                </h5>
+            </div>
+
+            <div class="listbox collapse show" id="ProductRatingNavigation" aria-labelledby="ProductRatingNavigation">
+                <div class="">
+                    <div onclick="clearRatingFilters()" class="clear-filter-rating d-none">Clear filters</div>
+                </div>
+                <div class="ajaxfilter-section">
+                    @{
+                        var prevRatingData = (Model.ProductRatingIds ?? "").Split(new[] { ',' });
+                    }
+                    <ul class="itemsThree">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <li class="itemThree">
+                                <input class="Name-@i d-none"
+                                   id="ratings_@(i)_Id"
+                                   data-option-id="@i"
+                                   data-option-name="@i ☆"
+                                   type="radio"
+                                   value="@i"
+                                   name="productRating"
+                                   onclick="AjaxFilter.setFilter(this, 'productRating')"
+                                   @(prevRatingData.Contains(i.ToString()) ? "Checked" : "") />
+                                <label for="ratings_@(i)_Id">
+                                    @{
+                                        var starCount = 20 * i;
+                                    }
+                                    <div class="product-review-box">
+                                        <div class="rating">
+                                            <div style="width: @(starCount)%">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @if (i == 5)
+                                    {
+                                        <span>
+                                            @i
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            @i @T("NopStation.Plugin.Misc.AjaxFilter.Filters.ProductRating.Up")
+                                        </span>
+                                    }
+                                    <span> (@(Model.Ratings.FirstOrDefault(x => x.Id == i)?.Count ?? 0))</span>
+                                </label>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*<script>
+
+    function clearRatingFilters() {
+        var newUrl = new URL(window.location.href);
+        newUrl.searchParams.delete('productReview');
+        console.log(newUrl);
+        window.location.href = newUrl;
+    }
+</script>*@

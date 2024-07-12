@@ -1,0 +1,82 @@
+﻿@model ICustomerConditionSupportedModel
+
+@{
+    var controller = (string)ViewData["Controller"] ?? Url.ActionContext.RouteData.Values["controller"].ToString();
+    var list = (string)ViewData["CustomerConditionListAction"] ?? "CustomerConditionList";
+    var delete = (string)ViewData["CustomerConditionDeleteAction"] ?? "CustomerConditionDelete";
+    var addPopup = (string)ViewData["CustomerConditionAddPopupAction"] ?? "CustomerConditionAddPopup";
+}
+
+@if (Model.CustomerConditionSearchModel.EntityId > 0)
+{
+    <div class="card-body">
+        @await Html.PartialAsync("Table", new DataTablesModel
+        {
+            Name = "customerconditions-grid",
+            UrlRead = new DataUrl(list, controller, new RouteValueDictionary 
+                { 
+                    [nameof(Model.CustomerConditionSearchModel.EntityName)] = Model.CustomerConditionSearchModel.EntityName,
+                    [nameof(Model.CustomerConditionSearchModel.EntityId)] = Model.CustomerConditionSearchModel.EntityId
+                }),
+            UrlDelete = new DataUrl(delete, controller, new RouteValueDictionary 
+                { 
+                    [nameof(Model.CustomerConditionSearchModel.EntityName)] = Model.CustomerConditionSearchModel.EntityName,
+                    [nameof(Model.CustomerConditionSearchModel.EntityId)] = Model.CustomerConditionSearchModel.EntityId
+                }),
+            Length = Model.CustomerConditionSearchModel.PageSize,
+            LengthMenu = Model.CustomerConditionSearchModel.AvailablePageSizes,
+            RefreshButton= true,
+            ColumnCollection = new List<ColumnProperty>
+            {
+                new ColumnProperty(nameof(CustomerConditionModel.CustomerEmail))
+                {
+                    Title = T("Admin.NopStation.WidgetManager.CustomerConditions.Fields.Customer").Text,
+                    Width = "200"
+                },
+                new ColumnProperty(nameof(CustomerConditionModel.CustomerId))
+                {
+                    Title = T("Admin.Common.View").Text,
+                    Width = "100",
+                    ClassName =  NopColumnClassDefaults.Button,
+                    Render = new RenderButtonView(new DataUrl("~/Admin/Customer/Edit"))
+                },
+                new ColumnProperty(nameof(CustomerConditionModel.Active))
+                {
+                    Title = T("Admin.NopStation.WidgetManager.CustomerConditions.Fields.Active").Text,
+                    Width = "80",
+                    ClassName =  NopColumnClassDefaults.CenterAll,
+                    Render = new RenderBoolean()
+                },
+                new ColumnProperty(nameof(CustomerConditionModel.Id))
+                {
+                    Title = T("Admin.Common.Delete").Text,
+                    ClassName = NopColumnClassDefaults.Button,
+                    Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                    Width = "100"
+                }
+            }
+        })
+    </div>
+    <div class="card-footer">
+        <button type="submit" id="btnAddNewCustomerCondition" onclick="javascript:OpenWindow('@(Url.Action(addPopup, controller, new { entityId = Model.CustomerConditionSearchModel.EntityId, entityName = Model.CustomerConditionSearchModel.EntityName, btnId = "btnRefreshCustomerConditions" }))', 800, 800, true); return false;" class="btn btn-primary">
+            @T("Admin.NopStation.WidgetManager.CustomerConditions.AddNew")
+        </button>
+        <button type="submit" id="btnRefreshCustomerConditions" style="display: none"></button>
+        <script>
+            $(document).ready(function () {
+                $('#btnRefreshCustomerConditions').click(function () {
+                    //refresh grid
+                    updateTable('#customerconditions-grid');
+                    //return false to don't reload a page
+                    return false;
+                });
+            });
+        </script>
+    </div>
+}
+else
+{
+    <div class="card-body">
+        @T("Admin.NopStation.WidgetManager.CustomerConditions.SaveBeforeEdit")
+    </div>
+}

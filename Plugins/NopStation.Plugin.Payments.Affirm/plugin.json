@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Affirm",
+  "SystemName": "NopStation.Plugin.Payments.Affirm",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.Affirm.dll",
+  "Description": "This plugin enables affirm gateway payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

@@ -1,0 +1,66 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("SmartMegaMenu.Configuration");
+    ViewBag.PageTitle = T("Admin.NopStation.SmartMegaMenu.Configuration").Text;
+}
+
+<form asp-controller="SmartMegaMenu" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.SmartMegaMenu.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="EnableMegaMenu_OverrideForStore" asp-input="EnableMegaMenu" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableMegaMenu" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="EnableMegaMenu" />
+                                    <span asp-validation-for="EnableMegaMenu"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="HideDefaultMenu_OverrideForStore" asp-input="HideDefaultMenu" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="HideDefaultMenu" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="HideDefaultMenu" />
+                                    <span asp-validation-for="HideDefaultMenu"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="MenuItemPictureSize_OverrideForStore" asp-input="MenuItemPictureSize" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="MenuItemPictureSize" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="MenuItemPictureSize" asp-postfix="px" />
+                                    <span asp-validation-for="MenuItemPictureSize"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

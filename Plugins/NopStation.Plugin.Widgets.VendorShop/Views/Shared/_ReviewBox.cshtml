@@ -1,0 +1,39 @@
+﻿@using Nop.Core.Domain.Catalog;
+@using Nop.Web.Framework.Mvc.Routing;
+@using NopStation.Plugin.Widgets.VendorShop.Models.ProfileTabs;
+@inject Nop.Services.Html.IHtmlFormatter htmlFormatter
+@model VendorProductReviewModel
+@{
+    var ratingPercent = Model.Rating * 20;
+}
+
+<div class="product-review-item">
+    <div class="review-item-head">
+        <div class="review-title">
+            <strong>@Model.Title</strong>@(!string.IsNullOrEmpty(Model.ApprovalStatus) ? $" - {Model.ApprovalStatus}" : null)
+        </div>
+        <div class="product-review-box">
+            <div class="rating">
+                <div style="width: @(ratingPercent)%">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="review-content">
+        <div class="review-text">
+            @Html.Raw(htmlFormatter.FormatText(Model.ReviewText, false, true, false, false, false, false))
+        </div>
+        <div class="review-info">
+            <span class="user">
+                <label>@T("Account.CustomerProductReviews.ProductReviewFor"):</label>
+                <a href="@(Url.RouteUrl<Product>(new { SeName = Model.ProductSeName }))">@Model.ProductName</a>
+
+            </span>
+            <span class="separator">|</span>
+            <span class="date">
+                <label>@T("Reviews.Date"):</label>
+                <span>@Model.WrittenOnStr</span>
+            </span>
+        </div>
+    </div>
+</div>

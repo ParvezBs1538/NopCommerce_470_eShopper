@@ -1,0 +1,32 @@
+﻿@model IEnumerable<PaymentInfoModel>
+@using NopStation.Plugin.Payments.MPay24
+
+<div class="payment-method">
+    <ul class="method-list" id="mpay24-payment-option-block">
+        @for (var i = 0; i < Model.Count(); i++)
+        {
+            var paymentOption = Model.ToList()[i];
+
+            <li>
+                <div class="method-name">
+                    @if (!string.IsNullOrEmpty(paymentOption.LogoUrl))
+                    {
+                        <div class="payment-logo">
+                            <label for="mpay24_option_@(i)">
+                                <img src="@paymentOption.LogoUrl" alt="@paymentOption.Name" />
+                            </label>
+                        </div>
+                    }
+                    <div class="payment-details">
+                        <input id="mpay24_option_@(i)" type="radio" name="@(MPay24PaymentDefaults.ShortName)" value="@(paymentOption.ShortName)" checked="@paymentOption.Selected" />
+                        <label for="mpay24_option_@(i)">@paymentOption.Name</label>
+                        @if (!string.IsNullOrEmpty(paymentOption.Description))
+                        {
+                            <div class="payment-description">@paymentOption.Description</div>
+                        }
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+</div>

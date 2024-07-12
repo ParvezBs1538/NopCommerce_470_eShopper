@@ -1,0 +1,179 @@
+﻿body[class^="stop-scrolling"] {
+  overflow: hidden;
+  height: 100%;
+}
+
+.close-button {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 20px;
+  font-size: 20px;
+  line-height: 20px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 50px;
+  border: 1px solid white;
+  background-color: #4ab2f1;
+  color: white;
+  z-index: 10;
+}
+
+  .close-button:hover {
+    background-color: #248ece;
+  }
+
+.popup-modal-content .do-not-show-popup {
+  padding: 7px;
+}
+
+  .popup-modal-content .do-not-show-popup label {
+    margin-left: 5px;
+  }
+
+.popup-modal-content,
+.news-letter-popup-modal .news-letter-popup {
+  position: relative;
+  padding: 0px !important;
+}
+
+.popup-modal .text,
+.news-letter-popup-modal .modal-content {
+  padding: 20px !important;
+}
+
+.news-letter-popup-modal h1 {
+  font-size: 22px;
+  line-height: 26px;
+  margin-bottom: 15px;
+}
+
+.popup-modal-content p,
+.news-letter-popup-modal p {
+  font-size: 16px;
+  line-height: 22px;
+  margin-bottom: 10px;
+}
+
+.news-letter-popup-modal .newsletter-subscribe-box {
+  width: 250px;
+}
+
+.news-letter-popup-modal .newsletter-subscribe-button {
+  float: none;
+}
+
+.news-letter-popup-modal .newsletter-email-info {
+  margin-bottom: 10px;
+}
+
+.news-letter-popup-modal .newsletter-email-info {
+  display: flex;
+}
+
+.single-column .column-1 .image {
+  display: flex;
+}
+
+.double-column .column-1 .image,
+.double-column .column-2 .image {
+  display: flex;
+  height: 100%;
+}
+
+.single-column .column-1 img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.double-column .column-1 img,
+.double-column .column-2 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.double-column {
+  display: flex;
+  flex-direction: row;
+}
+
+  .double-column .column-1,
+  .double-column .column-2 {
+    flex-basis: 50%;
+  }
+
+.sticky-container-left {
+  display: flex;
+  position: fixed;
+  top: 50%;
+  left: 30px;
+  text-align: center;
+  transform-origin: center top;
+  transform: translateX(-50%) rotate(90deg);
+  visibility: visible;
+  opacity: 1;
+  z-index: 100;
+  transition: visibility 0.3s linear, opacity 0.3s linear;
+}
+
+.sticky-container-right {
+  display: flex;
+  position: fixed;
+  top: 50%;
+  right: 30px;
+  text-align: center;
+  transform-origin: center top;
+  transform: translateX(50%) rotate(270deg);
+  visibility: visible;
+  opacity: 1;
+  z-index: 100;
+  transition: visibility 0.3s linear, opacity 0.3s linear;
+}
+
+  .sticky-container-right:hover,
+  .sticky-container-left:hover {
+    opacity: .8;
+  }
+
+  .sticky-container-right button,
+  .sticky-container-left button {
+    display: block;
+    border: none;
+    height: 30px;
+    border-bottom: 40px solid #03a6ff;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    width: max-content;
+    background-color: transparent;
+  }
+
+    .sticky-container-right button span,
+    .sticky-container-left button span {
+      display: block;
+      color: white;
+      line-height: 30px;
+      font-size: 17px;
+      font-weight: 700;
+      padding: 0px 20px;
+      transform: rotate(180deg);
+    }
+
+@media (max-width: 567px) {
+  .news-letter-popup-modal .newsletter-email-info {
+    flex-direction: column;
+  }
+
+  .news-letter-popup-modal .newsletter-subscribe-box {
+    width: 100%;
+  }
+
+  .double-column {
+    flex-direction: column;
+  }
+
+  .popup-modal {
+    margin-top: 30px;
+  }
+}

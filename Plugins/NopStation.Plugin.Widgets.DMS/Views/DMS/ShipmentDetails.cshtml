@@ -1,0 +1,188 @@
+﻿@model CourierShipmentDetailsModel
+
+@{ 
+    Layout = "_ColumnsTwo";
+
+    //title
+    NopHtml.AddTitleParts(T("PageTitle.Account").Text);
+    //page class
+    NopHtml.AppendPageCssClassParts("NopHtml-account-page");
+    NopHtml.AppendPageCssClassParts("NopHtml-shipment-list-page");
+    NopHtml.AddCssFileParts("/Plugins/NopStation.Plugin.Widgets.DMS/Contents/css/styles.css", string.Empty);
+}
+
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = (CustomerNavigationEnum)(-1000) })
+}
+
+<form asp-controller="DMS" asp-action="ShipmentDetails" method="post" id="myForm">
+    <input type="hidden" value="@Model.ShipmentId" name="shipmentId" />
+    <div class="page shipment-details-page">
+        <div class="page-title">
+            <h1>@string.Format(T("Order.Shipments.Information").Text, Model.ShipmentId)</h1>
+        </div>
+        <div class="page-body">
+            <div class="shipment-details-area fuad-shipment">
+                <div class="order-info-wrap">
+                    <div class="order-info">
+                        <div class="page-body">
+                            <section class="content">
+                                <div class="container-fluid">
+                                    <div asp-validation-summary="All"></div>
+                                    <div class="form-horizontal">
+                                        <div class="cards-group">
+                                            <div class="card card-default">
+                                                <div class="card-body">
+                                                    <div class="form-group row">
+                                                        <div class="title">
+                                                            <strong>@T("Order.Shipments.Order#")@Model.OrderId</strong>
+                                                        </div>
+                                                        <div class="title">
+                                                            <strong> @T("Order.Shipments.TrackingNumber"):  @Model.TrackingNumber</strong>
+                                                        </div>
+                                                        <div class="title">
+                                                            <strong> @T("NopStation.DMS.CourierShipment.Status"):  @Model.CourierShipmentStatus</strong>
+                                                        </div>
+                                                    </div
+                                                    @if (Model.ShippedDate.HasValue){
+                                                        <div class="form-group row">
+                                                            <div class="col-md-3">
+                                                                <nop-label asp-for="ShippedDate" />
+                                                            </div>
+                                                            <div class="col-md-9">
+                                                                <div class="input-group input-group-short">
+                                                                    <div id="lblShippedDate" class="input-group-text">
+                                                                        @Model.ShippedDate
+                                                                    </div>
+                                                                    <div id="divShippedDate" style="display: inline-block;" class="col-md-9">
+                                                                        <nop-editor asp-for="ShippedDate" />
+                                                                        @T("Admin.Orders.Shipments.ShippedDate.EnterUtc")&nbsp;&nbsp;
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    @if (Model.DeliveryDate.HasValue){
+                                                        <div class="form-group row">
+                                                            <div class="col-md-3">
+                                                                <nop-label asp-for="DeliveryDate" />
+                                                            </div>
+                                                            <div class="col-md-9">
+                                                                <div class="input-group input-group-short">
+                                                                    <div id="lblDeliveryDate" class="input-group-text">
+                                                                        @Model.DeliveryDate
+                                                                    </div>
+                                                                    <div id="divDeliveryDate" style="display: inline-block;" class="col-md-9">
+                                                                        <nop-editor asp-for="DeliveryDate" />
+                                                                        @T("Admin.Orders.Shipments.DeliveryDate.EnterUtc")&nbsp;&nbsp;
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+                <div class="shipping-info-wrap">
+                    <div class="shipping-info">
+                        <div class="title">
+                            <strong>@T("Order.Shipments.ShippingAddress")</strong>
+                        </div>
+                        <ul class="info-list">
+                            <li class="name">
+                                @Model.ShippingAddress.FirstName @Model.ShippingAddress.LastName
+                            </li>
+                            <li class="email">
+                                @T("Order.Shipments.Email"): @Model.ShippingAddress.Email
+                            </li>
+                            <li class="phone">
+                                @T("Order.Shipments.Phone"): @Model.ShippingAddress.PhoneNumber
+                            </li>
+                            <li class="fax">
+                                @T("Order.Shipments.Fax"): @Model.ShippingAddress.FaxNumber
+                            </li>
+                            @if (!string.IsNullOrEmpty(Model.ShippingAddress.Company))
+                            {
+                                <li class="company">
+                                    @Model.ShippingAddress.Company
+                                </li>
+                            }
+                            <li class="address1">
+                                @Model.ShippingAddress.Address1
+                            </li>
+                            @if (!string.IsNullOrEmpty(Model.ShippingAddress.Address2))
+                            {
+                                <li class="address2">
+                                    @Model.ShippingAddress.Address2
+                                </li>
+                            }
+                            <li class="city-state-zip">
+                                @Model.ShippingAddress.City, @Model.ShippingAddress.County, @Model.ShippingAddress.StateProvinceName
+                                @Model.ShippingAddress.ZipPostalCode
+                            </li>
+                            @if (!string.IsNullOrEmpty(Model.ShippingAddress.CountryName))
+                            {
+                                <li class="country">
+                                    @Model.ShippingAddress.CountryName
+                                </li>
+                            }
+                        </ul>
+                        <div>
+                            <img alt="google maps" src="@Url.Content("~/css/admin/images/google-maps.gif")" />
+                            <a href="@Html.Raw(Model.ShippingAddressGoogleMapsUrl)" style="margin-bottom: 10px;" target="_blank">@T("Admin.Orders.Fields.ShippingAddress.ViewOnGoogleMaps")</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        toggleShippedDate(false);
+        toggleDeliveryDate(false);
+    });
+
+    function toggleShippedDate(editmode) {
+        if (editmode) {
+            $('#lblShippedDate').hide();
+            $('#divShippedDate').show();
+            $('#btnEditShippedDate').hide();
+            $('#btnSaveShippedDate').show();
+            $('#btnCancelShippedDate').show();
+        } else {
+            $('#lblShippedDate').show();
+            $('#divShippedDate').hide();
+            $('#btnEditShippedDate').show();
+            $('#btnSaveShippedDate').hide();
+            $('#btnCancelShippedDate').hide();
+        }
+    }
+
+    function toggleDeliveryDate(editmode) {
+        if (editmode) {
+            $('#lblDeliveryDate').hide();
+            $('#divDeliveryDate').show();
+            $('#btnEditDeliveryDate').hide();
+            $('#btnSaveDeliveryDate').show();
+            $('#btnCancelDeliveryDate').show();
+        } else {
+            $('#lblDeliveryDate').show();
+            $('#divDeliveryDate').hide();
+            $('#btnEditDeliveryDate').show();
+            $('#btnSaveDeliveryDate').hide();
+            $('#btnCancelDeliveryDate').hide();
+        }
+    }
+</script>
+
+@NopHtml.GenerateInlineScripts(ResourceLocation.Footer)

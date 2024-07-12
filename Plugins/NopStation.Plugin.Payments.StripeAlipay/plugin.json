@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Stripe Alipay",
+  "SystemName": "NopStation.Plugin.Payments.StripeAlipay",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.StripeAlipay.dll",
+  "Description": "This plugin enables Stripe Alipay payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

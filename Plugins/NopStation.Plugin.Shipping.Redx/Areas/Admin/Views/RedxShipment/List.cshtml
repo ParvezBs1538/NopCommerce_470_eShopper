@@ -1,0 +1,113 @@
+﻿@model RedxShipmentSearchModel
+
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.Redx.RedxShipments.List").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("Redx.ShipmentList");
+}
+
+@{
+    const string hideSearchBlockAttributeName = "RedxShipmentListPage.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.Redx.RedxShipments.List")
+    </h1>
+</div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fas fa-search" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                        </div>
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchOrderId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchOrderId" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchTrackingId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchTrackingId" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="text-center col-12">
+                                    <button type="button" id="search-shipment" class="btn btn-primary btn-search">
+                                        <i class="fas fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "shipment-grid",
+                            UrlRead = new DataUrl("List", "RedxShipment", null),
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            SearchButtonId = "search-shipment",
+                            Filters = new List<FilterParameter>
+                            {
+                                new FilterParameter(nameof(Model.SearchOrderId)),
+                                new FilterParameter(nameof(Model.SearchTrackingId))
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(RedxShipmentModel.OrderId))
+                                {
+                                    Title = T("Admin.NopStation.Redx.RedxShipments.Fields.Order").Text,
+                                    Width = "80",
+                                    Render = new RenderButtonView(new DataUrl("~/Admin/Order/Edit/"))
+                                },
+                                new ColumnProperty(nameof(RedxShipmentModel.ShipmentId))
+                                {
+                                    Title = T("Admin.NopStation.Redx.RedxShipments.Fields.Shipment").Text,
+                                    Width = "80",
+                                    Render = new RenderButtonView(new DataUrl("~/Admin/Order/ShipmentDetails/"))
+                                },
+                                new ColumnProperty(nameof(RedxShipmentModel.OrderStatus))
+                                {
+                                    Title = T("Admin.NopStation.Redx.RedxShipments.Fields.OrderStatus").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(RedxShipmentModel.RedxAreaName))
+                                {
+                                    Title = T("Admin.NopStation.Redx.RedxShipments.Fields.RedxArea").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(RedxShipmentModel.TrackingId))
+                                {
+                                    Title = T("Admin.NopStation.Redx.RedxShipments.Fields.TrackingId").Text,
+                                    Width = "100"
+                                }
+                            }
+                        })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,6 @@
+﻿@model IEnumerable<SurveyOverviewModel>
+
+@foreach (var survey in Model)
+{
+    @await Component.InvokeAsync("DynamicSurveyBlock", new { systemName = survey.SystemName })
+}

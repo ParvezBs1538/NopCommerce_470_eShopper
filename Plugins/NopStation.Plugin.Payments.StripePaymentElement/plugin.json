@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Stripe Payment Element",
+  "SystemName": "NopStation.Plugin.Payments.StripePaymentElement",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.StripePaymentElement.dll",
+  "Description": "This plugin enables stripe payment element for payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

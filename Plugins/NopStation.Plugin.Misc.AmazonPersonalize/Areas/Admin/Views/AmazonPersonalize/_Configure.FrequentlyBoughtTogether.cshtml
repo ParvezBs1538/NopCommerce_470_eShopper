@@ -1,0 +1,63 @@
+﻿@model ConfigurationModel
+
+ <div class="card-body">
+                            
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="EnableFrequentlyBoughtTogether_OverrideForStore" asp-input="EnableFrequentlyBoughtTogether" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="EnableFrequentlyBoughtTogether" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableFrequentlyBoughtTogether" />
+            <span asp-validation-for="EnableFrequentlyBoughtTogether"></span>
+        </div>
+    </div>
+
+    <nop-nested-setting asp-for="EnableFrequentlyBoughtTogether">
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="FrequentlyBoughtTogetherARN_OverrideForStore" asp-input="FrequentlyBoughtTogetherARN" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="FrequentlyBoughtTogetherARN" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="FrequentlyBoughtTogetherARN" />
+                <span asp-validation-for="FrequentlyBoughtTogetherARN"></span>
+            </div>
+        </div>
+
+        @*<div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="FrequentlyBoughtTogetherWidgetZoneId_OverrideForStore" asp-input="FrequentlyBoughtTogetherWidgetZoneId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="FrequentlyBoughtTogetherWidgetZoneId" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="FrequentlyBoughtTogetherWidgetZoneId" />
+                <span asp-validation-for="FrequentlyBoughtTogetherWidgetZoneId"></span>
+            </div>
+        </div> *@
+
+         <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="FrequentlyBoughtTogetherNumberOfItems_OverrideForStore" asp-input="FrequentlyBoughtTogetherNumberOfItems" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="FrequentlyBoughtTogetherNumberOfItems" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="FrequentlyBoughtTogetherNumberOfItems" />
+                <span asp-validation-for="FrequentlyBoughtTogetherNumberOfItems"></span>
+            </div>
+        </div> 
+
+         <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="FrequentlyBoughtTogetherAllowForGuestCustomer_OverrideForStore" asp-input="FrequentlyBoughtTogetherAllowForGuestCustomer" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="FrequentlyBoughtTogetherAllowForGuestCustomer" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="FrequentlyBoughtTogetherAllowForGuestCustomer" />
+                <span asp-validation-for="FrequentlyBoughtTogetherAllowForGuestCustomer"></span>
+            </div>
+        </div> 
+        
+    </nop-nested-setting>
+</div> 

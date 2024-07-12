@@ -1,0 +1,8 @@
+﻿@{
+    var controller = Url.ActionContext.RouteData.Values["controller"].ToString();
+    var action = Url.ActionContext.RouteData.Values["action"].ToString();
+}
+
+<li class="shipper-shipments @(controller == "DMS" && action == "Shipments" ? "active" : "inactive")">
+    <a href="@Url.RouteUrl("DMSShipments")">@T("NopStation.DMS.Account.Shipments")</a>
+</li>

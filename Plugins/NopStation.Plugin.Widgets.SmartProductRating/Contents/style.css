@@ -1,0 +1,138 @@
+﻿.product-collateral {
+  margin-bottom: 50px;
+}
+
+.product-review-summary {
+  display: flex;
+  align-items: center;
+}
+
+  .product-review-summary .avg-review {
+    flex: 20%;
+  }
+
+    .product-review-summary .avg-review .review-number p {
+      display: inline-block;
+      font-size: 48px;
+      color: #000;
+    }
+
+      .product-review-summary .avg-review .review-number p + p {
+        font-size: 32px;
+        color: #9e9e9e;
+      }
+
+  .product-review-summary .total-reviews {
+    font-size: 12px;
+    color: #9e9e9e;
+  }
+
+.review-show-all {
+  text-decoration: underline
+}
+
+.heading {
+  font-size: 25px;
+  margin-right: 25px;
+}
+
+.fa {
+  font-size: 25px;
+}
+
+.checked {
+  color: orange;
+}
+
+/* Three column layout */
+.side {
+  float: left;
+  width: 120px;
+  margin-top: 10px;
+}
+
+  .side.right {
+    width: 5%;
+  }
+
+.middle {
+  margin-top: 10px;
+  float: left;
+  width: 50%;
+}
+
+/* Place text to the right */
+.right {
+  text-align: right;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* The bar container */
+.bar-container {
+  width: 100%;
+  background-color: #f1f1f1;
+  text-align: center;
+  color: white;
+}
+
+.star {
+  display: block;
+}
+
+  .star .product-review-box + div {
+    font-size: 0;
+  }
+
+.row {
+  display: inline-grid;
+  width: 100%;
+  margin-bottom: 30px;
+  flex: 80%;
+}
+/* Individual bars */
+.bar-5 {
+  height: 18px;
+  background-color: #4CAF50;
+}
+
+.bar-4 {
+  height: 18px;
+  background-color: #2196F3;
+}
+
+.bar-3 {
+  height: 18px;
+  background-color: #00bcd4;
+}
+
+.bar-2 {
+  height: 18px;
+  background-color: #ff9800;
+}
+
+.bar-1 {
+  height: 18px;
+  background-color: #f44336;
+}
+
+/* Responsive layout - make the columns stack on top of each other instead of next to each other */
+@media (max-width: 400px) {
+  .side, .middle {
+    width: 100%;
+  }
+
+  .right {
+    display: none;
+  }
+}
+
+.no-reviews {
+  text-align: center;
+  margin: 20px 0;
+}

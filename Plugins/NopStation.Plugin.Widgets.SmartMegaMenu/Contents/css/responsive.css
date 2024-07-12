@@ -1,0 +1,215 @@
+@media (max-width: 1000px) {
+  .master-wrapper-content,
+  .master-column-wrapper {
+    position: static;
+  }
+  .mobile-mm-navbar .image-container {
+    display: none;
+  }
+  /**Opening Button**/
+  .mobile-menu-trigger {
+    display: flex;
+    height: 30px;
+    width: 30px;
+    margin-left: auto;
+    margin-right: 15px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+  }
+
+    .mobile-menu-trigger span {
+      display: block;
+      height: 2px;
+      background-color: #333333;
+      width: 24px;
+      position: relative;
+    }
+
+      .mobile-menu-trigger span:before,
+      .mobile-menu-trigger span:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #333333;
+      }
+
+      .mobile-menu-trigger span:before {
+        top: -6px;
+      }
+
+      .mobile-menu-trigger span:after {
+        top: 6px;
+      }
+/**Mobile Menu Head**/
+  .mobile-mm-navbar .mobile-menu-head {
+    display: flex;
+    height: 50px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 501;
+    position: sticky;
+    background-color: #ffffff;
+    top: 0;
+  }
+
+    .mobile-mm-navbar .mobile-menu-head .go-back {
+      height: 50px;
+      width: 50px;
+      border-right: 1px solid rgba(0,0,0,0.1);
+      cursor: pointer;
+      line-height: 50px;
+      text-align: center;
+      font-size: 16px;
+      display: none;
+    }
+
+    .mobile-mm-navbar .mobile-menu-head.active .go-back {
+      display: block;
+    }
+
+    .mobile-mm-navbar .mobile-menu-head .current-menu-title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .mobile-mm-navbar .mobile-menu-head .mobile-menu-close {
+      height: 50px;
+      width: 50px;
+      border-left: 1px solid rgba(0,0,0,0.1);
+      cursor: pointer;
+      line-height: 50px;
+      text-align: center;
+      font-size: 25px;
+    }
+
+/**Inside layer**/
+
+  .mobile-mm-navbar {
+    position: fixed;
+    width: 320px;
+    background: #ffffff;
+    left: 0;
+    top: 0;
+    height: 100%;
+    overflow: hidden;
+    transform: translate(-100%);
+    transition: all 0.5s ease;
+    /*
+    */
+    z-index: 1099;
+    box-shadow: 2px 0 7px -2px #888;
+  }
+  .mobile-mm-navbar.active {
+    transform: translate(0%);
+  }
+    .mobile-mm-navbar .right-arrow {
+      display: inline-block;
+      float: right;
+      padding-right: 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .mobile-mm-navbar .nav-menu {
+      display: block;
+      text-align: left;
+      border-bottom: none;
+    }
+    .mobile-mm-navbar .nav-navbar {
+      height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    .mobile-mm-navbar .nav-menu li {
+      padding: 10px 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .mobile-mm-navbar .nav-menu li a {
+        display: inline-block;
+        width: 80%;
+    }
+    .mobile-mm-navbar .nav-menu > li:hover > a {
+      color: inherit;
+    }
+    .mobile-mm-navbar .nav-menu > li:hover {
+      background: inherit;
+    }
+
+  .mobile-mm-navbar .nav-menu .sublist {
+    visibility: visible;
+    opacity: 1;
+    position: absolute;
+    background-color: white;
+    box-shadow: none;
+      top: 0;
+      left: 0;
+
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      padding-top: 50px;
+      max-width: none;
+      min-width: auto;
+      display: none;
+      transform: translateX(0%);
+      overflow-y: auto;
+  }
+    .mobile-mm-navbar .nav-menu .sublist.active {
+      display: block;
+    }
+    .mobile-mm-navbar .nav-menu .sublist li {
+        background-color: white;
+    }
+  .menu-overlay {
+    position: fixed;
+    background-color: rgba(0,0,0,0.5);
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1098;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.5s ease;
+  }
+
+    .menu-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+  @keyframes slideLeft {
+    0% {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateX(0%);
+    }
+  }
+
+  /**Ribbon Text**/
+  .mm-navbar .no-ribbon .ribbon-container,
+  .mm-navbar .ribbon-container {
+    display: none;
+  }
+
+  @keyframes slideRight {
+    0% {
+      opacity: 1;
+      transform: translateX(0%);
+    }
+
+    100% {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+  }
+
+}

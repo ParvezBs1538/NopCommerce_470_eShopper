@@ -1,0 +1,16 @@
+﻿@model EditForumPostModel
+@using Nop.Web.Models.Boards;
+@{   
+    Layout = "_ColumnsOne";
+
+    NopHtml.AddTitleParts(T("Forum.PageTitle.PostNew").Text);
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            @await Html.PartialAsync("_CreateUpdatePost", Model)
+        </div>
+    </div>
+    
+</div>
+

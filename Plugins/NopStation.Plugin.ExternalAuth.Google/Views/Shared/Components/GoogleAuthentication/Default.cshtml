@@ -1,0 +1,9 @@
+﻿@{
+    Layout = ""; 
+}
+<link rel="stylesheet" href="~/Plugins/NopStation.Plugin.ExternalAuth.Google/Content/googlestyles.css" />
+<div class="">
+    <div class="buttons">
+        <a asp-controller="GoogleAuthentication" asp-action="Login" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" class="google-singin-btn"></a>
+    </div>
+</div>

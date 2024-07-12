@@ -1,0 +1,188 @@
+﻿@model ProductTabModel
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.AutoPlay)").change(toggleAutoPlay);
+        $("#@Html.IdFor(model => model.LazyLoad)").click(toggleLazyLoad);
+        $("#@Html.IdFor(model => model.Nav)").click(toggleNav);
+
+        toggleAutoPlay();
+        toggleLazyLoad();
+        toggleNav();
+    });
+
+    function toggleAutoPlay() {
+        if ($('#@Html.IdFor(model => model.AutoPlay)').is(':checked')) {
+            $('#pnlAutoPlay').show();
+        } else {
+            $('#pnlAutoPlay').hide();
+        }
+    }
+
+    function toggleLazyLoad() {
+        if ($('#@Html.IdFor(model => model.LazyLoad)').is(':checked')) {
+            $('#pnlLazyLoad').show();
+        } else {
+            $('#pnlLazyLoad').hide();
+        }
+    }
+
+    function toggleNav() {
+        if ($('#@Html.IdFor(model => model.Nav)').is(':checked')) {
+            $('#pnlNav').show();
+        } else {
+            $('#pnlNav').hide();
+        }
+    }
+</script>
+
+<div class="card-body">
+    @(await Html.LocalizedEditorAsync<ProductTabModel, ProductTabLocalizedModel>("producttab-info-localized",
+                    @<div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="@Model.Locales[item].Name" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="@Model.Locales[item].Name" />
+                                <span asp-validation-for="@Model.Locales[item].Name"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="@Model.Locales[item].TabTitle" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="@Model.Locales[item].TabTitle" />
+                                <span asp-validation-for="@Model.Locales[item].TabTitle"></span>
+                            </div>
+                        </div>
+                        <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+                    </div>
+                                    ,@<div>
+                                        <div class="form-group row">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="Name" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="Name" asp-required="true" />
+                                                <span asp-validation-for="Name"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="TabTitle" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="TabTitle" asp-required="true" />
+                                                <span asp-validation-for="TabTitle"></span>
+                                            </div>
+                                        </div>
+                                    </div>))
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DisplayTitle" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DisplayTitle" />
+            <span asp-validation-for="DisplayTitle"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="PictureId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="PictureId" />
+            <span asp-validation-for="PictureId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="CustomUrl" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="CustomUrl" />
+            <span asp-validation-for="CustomUrl"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="WidgetZoneId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="WidgetZoneId" asp-items="@Model.AvailableWidgetZones" />
+            <span asp-validation-for="WidgetZoneId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DisplayOrder" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DisplayOrder" asp-required="true" />
+            <span asp-validation-for="DisplayOrder"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SelectedStoreIds" />
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-4">
+                    <nop-select asp-for="SelectedStoreIds" asp-items="Model.AvailableStores" asp-multiple="true" />
+                    <script>
+                        $(function () {
+                            var storesIdsInput = $('#@Html.IdFor(model => model.SelectedStoreIds)').select2({
+                                closeOnSelect: false,
+                        @if (!Model.AvailableStores.Any())
+                        {
+                            <text>
+                                    disabled: true,
+                                    placeholder: 'No stores available',
+                            </text>
+                        }
+                                            });
+                                        });
+                    </script>
+                </div>
+                <div class="col-md-8">
+                    @await Component.InvokeAsync(typeof(MultistoreDisabledWarningViewComponent))
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Active" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Active" />
+            <span asp-validation-for="Active"></span>
+        </div>
+    </div>
+    @if (Model.Id > 0)
+    {
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="CreatedOn" />
+            </div>
+            <div class="col-md-9">
+                <div class="form-text-row">@Model.CreatedOn</div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="UpdatedOn" />
+            </div>
+            <div class="col-md-9">
+                <div class="form-text-row">@Model.UpdatedOn</div>
+            </div>
+        </div>
+    }
+</div>

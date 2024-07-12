@@ -1,0 +1,82 @@
+﻿@model IProductConditionSupportedModel
+
+@{
+    var controller = (string)ViewData["Controller"] ?? Url.ActionContext.RouteData.Values["controller"].ToString();
+    var list = (string)ViewData["ProductConditionListAction"] ?? "ProductConditionList";
+    var delete = (string)ViewData["ProductConditionDeleteAction"] ?? "ProductConditionDelete";
+    var addPopup = (string)ViewData["ProductConditionAddPopupAction"] ?? "ProductConditionAddPopup";
+}
+
+@if (Model.ProductConditionSearchModel.EntityId > 0)
+{
+    <div class="card-body">
+        @await Html.PartialAsync("Table", new DataTablesModel
+        {
+            Name = "productconditions-grid",
+            UrlRead = new DataUrl(list, controller, new RouteValueDictionary 
+                { 
+                    [nameof(Model.ProductConditionSearchModel.EntityName)] = Model.ProductConditionSearchModel.EntityName,
+                    [nameof(Model.ProductConditionSearchModel.EntityId)] = Model.ProductConditionSearchModel.EntityId
+                }),
+            UrlDelete = new DataUrl(delete, controller, new RouteValueDictionary 
+                { 
+                    [nameof(Model.ProductConditionSearchModel.EntityName)] = Model.ProductConditionSearchModel.EntityName,
+                    [nameof(Model.ProductConditionSearchModel.EntityId)] = Model.ProductConditionSearchModel.EntityId
+                }),
+            Length = Model.ProductConditionSearchModel.PageSize,
+            LengthMenu = Model.ProductConditionSearchModel.AvailablePageSizes,
+            RefreshButton= true,
+            ColumnCollection = new List<ColumnProperty>
+            {
+                new ColumnProperty(nameof(ProductConditionModel.ProductName))
+                {
+                    Title = T("Admin.NopStation.WidgetManager.ProductConditions.Fields.Product").Text,
+                    Width = "200"
+                },
+                new ColumnProperty(nameof(ProductConditionModel.ProductId))
+                {
+                    Title = T("Admin.Common.View").Text,
+                    Width = "100",
+                    ClassName =  NopColumnClassDefaults.Button,
+                    Render = new RenderButtonView(new DataUrl("~/Admin/Product/Edit"))
+                },
+                new ColumnProperty(nameof(ProductConditionModel.Published))
+                {
+                    Title = T("Admin.NopStation.WidgetManager.ProductConditions.Fields.Published").Text,
+                    Width = "80",
+                    ClassName =  NopColumnClassDefaults.CenterAll,
+                    Render = new RenderBoolean()
+                },
+                new ColumnProperty(nameof(ProductConditionModel.Id))
+                {
+                    Title = T("Admin.Common.Delete").Text,
+                    ClassName = NopColumnClassDefaults.Button,
+                    Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                    Width = "100"
+                }
+            }
+        })
+    </div>
+    <div class="card-footer">
+        <button type="submit" id="btnAddNewProductCondition" onclick="javascript:OpenWindow('@(Url.Action(addPopup, controller, new { entityId = Model.ProductConditionSearchModel.EntityId, entityName = Model.ProductConditionSearchModel.EntityName, btnId = "btnRefreshProductConditions" }))', 800, 800, true); return false;" class="btn btn-primary">
+            @T("Admin.NopStation.WidgetManager.ProductConditions.AddNew")
+        </button>
+        <button type="submit" id="btnRefreshProductConditions" style="display: none"></button>
+        <script>
+            $(document).ready(function () {
+                $('#btnRefreshProductConditions').click(function () {
+                    //refresh grid
+                    updateTable('#productconditions-grid');
+                    //return false to don't reload a page
+                    return false;
+                });
+            });
+        </script>
+    </div>
+}
+else
+{
+    <div class="card-body">
+        @T("Admin.NopStation.WidgetManager.ProductConditions.SaveBeforeEdit")
+    </div>
+}

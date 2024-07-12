@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Amazon Pay",
+  "SystemName": "NopStation.Plugin.Payments.AmazonPay",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.AmazonPay.dll",
+  "Description": "This plugin enables Amazon Pay.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

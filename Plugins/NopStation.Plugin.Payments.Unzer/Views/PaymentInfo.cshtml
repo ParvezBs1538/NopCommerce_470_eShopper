@@ -1,0 +1,403 @@
+﻿@model PaymentInfoModel
+
+@using NopStation.Plugin.Payments.Unzer.Models
+@inject Nop.Core.Domain.Orders.OrderSettings orderSettings
+
+<link rel="stylesheet" href="https://static.heidelpay.com/v1/heidelpay.css" />
+
+<style>
+    .box {
+        position: relative;
+        display: block;
+        max-width: 400px;
+        padding: 20px;
+        margin: 0 20px;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
+        text-align: left;
+    }
+
+    .panel-body{
+        margin: auto;
+        text-align: center;
+        justify-content: center;
+        display: block;
+        max-width: 500px;
+    }
+</style>
+
+<input type="hidden" asp-for="ResourceID">
+<input type="hidden" asp-for="SelectedPaymentType">
+<input type="hidden" asp-for="Errors">
+<input type="hidden" asp-for="EPSBIC">
+
+<div class="panel-group">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            @if (Model.IsCardActive)
+            {
+                <h4 id="card-show" class="box">Card</h4>
+                <div id="HandleForPaymentForm" class="box">
+                    <div class="field">
+                        <div id="card-element-id-number" class="heidelpayInput"></div>
+                    </div>
+                    <div class="two fields">
+                        <div class="field eight wide">
+                            <div id="card-element-id-expiry" class="heidelpayInput"></div>
+                        </div>
+                        <div class="field eight wide">
+                            <div id="card-element-id-cvc" class="heidelpayInput"></div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <button id="payment-button-card" disabled class="heidelpayUI primary button fluid" type="submit">Pay</button>
+                    </div>
+                </div>
+            }
+            @if (Model.IsPaypalActive)
+            {
+                <h4 id="paypal-show" class="box">PayPal</h4>
+                <div id="payment-form-paypal" class="box">
+                    <div id="container-example-paypal"></div>
+                    <button id="payment-button-paypal" class="heidelpayUI primary button fluid" type="submit">Pay</button>
+                </div>
+            }
+            @if (Model.IsSofortActive)
+            {
+                <h4 id="sofort-show" class="box">SOFORT</h4>
+                <div id="payment-form-sofort" class="box">
+                    <button id="payment-button-sofort" class="heidelpayUI primary button fluid" type="submit">Pay</button>
+                </div>
+            }
+            @if (Model.IsEpsActive)
+            {
+                <h4 id="eps-show" class="box">EPS</h4>
+                <div id="payment-form-eps" class="box">
+                    <div id="example-eps" class="field"></div>
+                    <button id="payment-button-eps" class="heidelpayUI primary button fluid" type="submit">Pay</button>
+                </div>
+            }
+            <div id="nopaymentmethod" style="display:none">
+                <p>@T("NopStation.Unzer.Info.NoPaymentTypeActive")</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script asp-location="Footer">
+    var submitForm = false;
+    var onePageCheckout = @orderSettings.OnePageCheckoutEnabled.ToString().ToLower();
+
+    $('.payment-info-next-step-button').attr('onclick', null);
+    $('.payment-info-next-step-button').prop('disabled', true);
+    $('.payment-info-next-step-button').css("opacity", .3);
+
+    var paymentForm = $('#co-payment-info-form');
+    paymentForm.addClass("heidelpayUI form");
+    paymentForm.attr('novalidate', 'novalidate');
+    var paymentFields = {};
+
+    var heidelpay = new heidelpay('@Model.ApiPublicKey');
+    // Common Code End
+
+    // Paypal Payment Method Start
+    var Paypal = heidelpay.Paypal()
+
+    Paypal.create('email', {
+        containerId: 'container-example-paypal'
+    })
+
+    Paypal.addEventListener('change', function (e) {
+        paymentFields[e.type] = e.success;
+        //paymentButton.disabled = !(paymentFields.number && paymentFields.expiry && paymentFields.cvc);
+    });
+    // Handle the form submission.
+
+    $("#payment-button-paypal").click(function (e) {
+        e.preventDefault();
+        // TODO: Prevent further payment form submissions
+        // create payment resource using the entered data
+        Paypal.createResource()
+            .then(function (data) {
+                // TODO: Successful resource creation: submit the id to the server
+                console.log('ResourceID: ' + data.id);
+                $('#@Html.IdFor(model => model.ResourceID)').val(data.id);
+                $('#@Html.IdFor(model => model.SelectedPaymentType)').val('Paypal');
+                $('.payment-info-next-step-button').prop('disabled', false);
+                $('.payment-info-next-step-button').css("opacity", 1);
+
+                submitForm = true;
+                if (onePageCheckout) {
+                    PaymentInfo.save();
+                } else {
+                    $('input.payment-info-next-step-button').trigger("click");
+                }
+            })
+            .catch(function (error) {
+                // TODO: Handle error processing
+                //console.log(error);
+                submitForm = false;
+                $('#@Html.IdFor(model => model.Errors)').val(error);
+                alert(error.message);
+            });
+    });
+    // Paypal Payment Method End
+
+    // SOFORT Payment Method Start
+    var Sofort = heidelpay.Sofort()
+    // Handle the form submission.
+
+    $("#payment-button-sofort").click(function (e) {
+        e.preventDefault();
+        // create payment resource using the entered data
+        Sofort.createResource()
+            .then(function (data) {
+                console.log('ResourceID: ' + data.id);
+                $('#@Html.IdFor(model => model.ResourceID)').val(data.id);
+                $('#@Html.IdFor(model => model.SelectedPaymentType)').val('Sofort');
+                $('.payment-info-next-step-button').prop('disabled', false);
+                $('.payment-info-next-step-button').css("opacity", 1);
+
+                submitForm = true;
+                if (onePageCheckout) {
+                    PaymentInfo.save();
+                } else {
+                    $('input.payment-info-next-step-button').trigger("click");
+                }
+            })
+            .catch(function (error) {
+                //console.log(error);
+                submitForm = false;
+                $('#@Html.IdFor(model => model.Errors)').val(error);
+                alert(error.message);
+            });
+    });
+    // SOFORT Payment Method End
+
+    // Card Payment Part Start
+
+    var paymentButtonCard = document.getElementById('payment-button-card');
+    // Use Card payment type
+    var Card = heidelpay.Card();
+    // Render the card number input field on #card-element-id-number
+    Card.create('number', {
+        containerId: 'card-element-id-number',
+        onlyIframe: false
+    });
+    // Render the card expiry input field on #card-element-id-expiry
+    Card.create('expiry', {
+        containerId: 'card-element-id-expiry',
+        onlyIframe: false
+    });
+    // Render the card cvc input field on #card-element-id-cvc
+    Card.create('cvc', {
+        containerId: 'card-element-id-cvc',
+        onlyIframe: false
+    });
+
+    Card.addEventListener('change', function (e) {
+        paymentFields[e.type] = e.success;
+        paymentButtonCard.disabled = !(paymentFields.number && paymentFields.expiry && paymentFields.cvc);
+    });
+
+    $("#payment-button-card").click(function (e) {
+        e.preventDefault();
+        // TODO: Prevent further payment form submissions
+        // create payment resource using the entered data
+        Card.createResource()
+            .then(function (data) {
+                // TODO: Successful resource creation: submit the id to the server
+                console.log('ResourceID: ' + data.id);
+                $('#@Html.IdFor(model => model.ResourceID)').val(data.id);
+                $('#@Html.IdFor(model => model.SelectedPaymentType)').val('Card');
+                $('.payment-info-next-step-button').prop('disabled', false);
+                $('.payment-info-next-step-button').css("opacity", 1);
+
+                submitForm = true;
+                if (onePageCheckout) {
+                    PaymentInfo.save();
+                } else {
+                    $('input.payment-info-next-step-button').trigger("click");
+                }
+            })
+            .catch(function (error) {
+                // TODO: Handle error processing
+                console.log(error);
+                submitForm = false;
+                $('#@Html.IdFor(model => model.Errors)').val(error);
+                alert(error.message);
+            });
+    });
+
+    // Card Payment Part End
+
+    // Eps Payment Part Start
+
+    var Eps = heidelpay.EPS()
+    // Rendering the input field
+    Eps.create('eps', {
+        containerId: 'example-eps'
+    });
+
+    //card events handling
+    Eps.addEventListener('change', function (e) {
+        paymentFields[e.type] = e.success;
+        //paymentButton.disabled = !(paymentFields.number && paymentFields.expiry && paymentFields.cvc);
+    });
+
+    // Handle the form submission.
+
+    $("#payment-button-eps").click(function (e) {
+        e.preventDefault();
+        // TODO: Prevent further payment form submissions
+        // create payment resource using the entered data
+        Eps.createResource()
+            .then(function (data) {
+                // TODO: Successful resource creation: submit the id to the server
+                console.log('ResourceID: ' + data.id);
+                $('#@Html.IdFor(model => model.ResourceID)').val(data.id);
+                $('#@Html.IdFor(model => model.EPSBIC)').val(data.bic);
+                $('#@Html.IdFor(model => model.SelectedPaymentType)').val('Eps');
+                $('.payment-info-next-step-button').prop('disabled', false);
+                $('.payment-info-next-step-button').css("opacity", 1);
+
+                submitForm = true;
+                if (onePageCheckout) {
+                    PaymentInfo.save();
+                } else {
+                    $('input.payment-info-next-step-button').trigger("click");
+                }
+            })
+            .catch(function (error) {
+                // TODO: Handle error processing
+                //console.log(error);
+                submitForm = false;
+                $('#@Html.IdFor(model => model.Errors)').val(error);
+                alert(error.message);
+            });
+    });
+
+    // Eps Payment Part END
+
+    $(document).ready(function () {
+
+        displaySpeed = 400;
+
+        cardShow = true;
+        paypalShow = true;
+        sofortShow = true;
+        epsShow = true;
+        reInitial(1);
+        selectedPaymentType();
+        $("#card-show").click(function () {
+            if (!cardShow) reInitial(displaySpeed);
+            $("#HandleForPaymentForm").slideToggle(displaySpeed);
+            cardShow = !cardShow;
+            selectedPaymentType();
+        });
+        $("#paypal-show").click(function () {
+            if (!paypalShow) reInitial(displaySpeed);
+            $("#payment-form-paypal").slideToggle(displaySpeed);
+            paypalShow = !paypalShow;
+            selectedPaymentType();
+        });
+        $("#sofort-show").click(function () {
+            if (!sofortShow) reInitial(displaySpeed);
+            $("#payment-form-sofort").slideToggle(displaySpeed);
+            sofortShow = !sofortShow;
+            selectedPaymentType();
+        });
+        $("#eps-show").click(function () {
+            if (!epsShow) reInitial(displaySpeed);
+            $("#payment-form-eps").slideToggle(displaySpeed);
+            epsShow = !epsShow;
+            selectedPaymentType();
+        });
+
+        function reInitial(speed) {
+            if (cardShow) {
+                $("#HandleForPaymentForm").slideToggle(speed);
+                cardShow = false;
+            }
+            if (paypalShow) {
+                $("#payment-form-paypal").slideToggle(speed);
+                paypalShow = false;
+            }
+            if (sofortShow) {
+                $("#payment-form-sofort").slideToggle(speed);
+                sofortShow = false;
+            }
+            if (epsShow) {
+                $("#payment-form-eps").slideToggle(speed);
+                epsShow = false;
+            }
+        }
+
+        function selectedPaymentType() {
+            if (cardShow) {
+                $("#card-show").css("background-color", "#4ab2f1");
+            }
+            else {
+                $("#card-show").css("background-color", "white");
+            }
+            if (paypalShow) {
+                $("#paypal-show").css("background-color", "#4ab2f1");
+            }
+            else {
+                $("#paypal-show").css("background-color", "white");
+            }
+            if (sofortShow) {
+                $("#sofort-show").css("background-color", "#4ab2f1");
+            }
+            else {
+                $("#sofort-show").css("background-color", "white");
+            }
+            if (epsShow) {
+                $("#eps-show").css("background-color", "#4ab2f1");
+            }
+            else {
+                $("#eps-show").css("background-color", "white");
+            }
+        }
+
+        @if(Model.IsCardActive)
+        {
+            <text>
+            // trigger card first
+            $("#card-show").trigger("click");
+            </text>
+        }
+        else if(Model.IsPaypalActive)
+        {
+            <text>
+            // trigger paypal first
+            $("#paypal-show").trigger("click");
+            </text>
+        }
+        else if(Model.IsSofortActive)
+        {
+            <text>
+            // trigger sofort first
+            $("#sofort-show").trigger("click");
+            </text>
+        }
+        else if(Model.IsEpsActive)
+        {
+            <text>
+            // trigger eps first
+            $("#eps-show").trigger("click");
+            </text>
+        }else
+        {
+            <text>
+            $("#nopaymentmethod").show();
+            </text>
+        }
+    });
+</script>
+
+@if (orderSettings.OnePageCheckoutEnabled)
+{
+    @NopHtml.GenerateInlineScripts(ResourceLocation.Footer)
+}

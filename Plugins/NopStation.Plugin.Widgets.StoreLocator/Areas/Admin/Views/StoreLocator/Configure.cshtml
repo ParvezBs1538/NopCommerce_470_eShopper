@@ -1,0 +1,42 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.StoreLocator.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("StoreLocator.Configuration");
+
+    const string hideMapBlockAttributeName = "StoreLocatorSettingsPage.HideMapBlock";
+    var hideMapBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideMapBlockAttributeName);
+
+    const string hideMenuBlockAttributeName = "StoreLocatorSettingsPage.HideMenuBlock";
+    var hideMenuBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideMenuBlockAttributeName);
+}
+
+<form asp-controller="StoreLocator" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.StoreLocator.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="form-horizontal">
+                    @await Component.InvokeAsync("StoreScopeConfiguration")
+                    <div asp-validation-summary="All"></div>
+                    <nop-cards id="storeLocator-panels">
+                        <nop-card asp-name="storeLocator-menu" asp-icon="fas fa-bars" asp-title="@T("Admin.NopStation.StoreLocator.Configuration.BlockTitle.Menu")" asp-hide-block-attribute-name="@hideMenuBlockAttributeName" asp-hide="@hideMenuBlock" asp-advanced="false">@await Html.PartialAsync("_Configure.Menu", Model)</nop-card>
+                        <nop-card asp-name="storeLocator-map" asp-icon="fas fa-map" asp-title="@T("Admin.NopStation.StoreLocator.Configuration.BlockTitle.Map")" asp-hide-block-attribute-name="@hideMapBlockAttributeName" asp-hide="@hideMapBlock" asp-advanced="false">@await Html.PartialAsync("_Configure.Map", Model)</nop-card>
+                    </nop-cards>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

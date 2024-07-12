@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Flipbook",
+  "SystemName": "NopStation.Plugin.Widgets.Flipbooks",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.Flipbooks.dll",
+  "Description": "This plugin helps to show online catalog or magazine to the customers.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

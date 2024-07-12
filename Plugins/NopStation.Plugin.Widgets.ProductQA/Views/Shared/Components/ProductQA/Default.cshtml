@@ -1,0 +1,139 @@
+﻿@model ProductQAPublicInfoModel
+
+@{
+    Layout = "";
+}
+
+<link rel="stylesheet" href="~/Plugins/NopStation.Plugin.Widgets.ProductQuestionAnswer/Contents/css/styles.css" />
+
+@if (@Model != null)
+{
+    <div class="headerDiv question-answer-title">
+        <strong>@T("NopStation.ProductQuestionAnswer.List").Text</strong>
+    </div>
+    <div class="QuestionAnswerList">
+        @if (Model.ProductQAConfigurationModel.IsEnable)
+        {
+            <div class="qa-list" id="qa-list"></div>
+        }
+    </div>
+    @if (Model.IsAccessToAskQuestion)
+    {
+        <div class="container-background">
+            <div class="containerDiv">
+                <div class="headerDiv">
+                    <strong>@T("NopStation.ProductQuestionAnswer.Fields.HaveQuestion").Text</strong>
+                </div>
+                <div class="questionArea">
+                    <div class="inputArea">
+                        <textarea id="new-question" class="textarea-vertical" name="new-question" rows="4" cols="50" placeholder="@T("NopStation.ProductQuestionAnswer.ProductQnA.Fields.AskQuestions.Placeholder")"></textarea>
+                        <span style="display: none; color: red" id="requiredSpan">@T("NopStation.ProductQuestionAnswer.ProductQnA.Fields.Warning.QuestionBodyNotEmpty").Text</span>
+                        <span style="display: none; color: green; margin-top: 10px" id="successSpan">@T("NopStation.ProductQuestionAnswer.ProductQnA.Fields.Success.Question").Text</span>
+                    </div>
+                    <div class="checkboxarea">
+                        @if (Model.IsQuestionAsAAnonymous)
+                        {
+                            <span class="leftarea">
+                                <input type="checkbox" id="anonymous" name="anonymous" value="true">
+                                <label for="anonymous"> @T("NopStation.ProductQuestionAnswer.ProductQnA.Fields.QuestionAsAnAnonymous").Text</label>
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                <label>&nbsp;</label>
+                            </span>
+                        }
+
+                        <span class="rightarea contact-vendor">
+                            <button class="button-2" type="button" id="btn-qustion-submit" onclick="btnClick()">
+                                <i class="fa fa-paper-plane"></i> Ask Question
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    
+    
+    <script asp-location="Footer">
+
+                $(document).ready(function () {
+                    loadQAList(1);
+                });
+
+                function btnClick() {
+                  if ($('#new-question').val() != '') {
+                            saveQuestion();
+                            $("#requiredSpan").hide();
+                  } else {
+                            $("#requiredSpan").show();
+                            $("#successSpan").hide();
+                  }
+                }
+
+
+        function saveQuestion() {
+            AjaxCart.setLoadWaiting(true);
+            var model = {};
+            $("#successSpan").hide();
+            model.ProductId = @Model.ProductQAModel.ProductId;
+            model.QuestionText = $('#new-question').val();
+            model.IsAnonymous = "False";
+            if("@Model.IsQuestionAsAAnonymous" == "True"){
+               if (document.getElementById("anonymous").checked == true) {
+                  model.IsAnonymous = "True";
+                }
+            }
+            $("#requiredSpan").hide();
+            $.ajax({
+                type: 'POST',
+                url: "/ProductQAPublicInfo/SaveQuestion",
+                data: model,
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        if (response.reloadHtml) {
+                            $('#qa-list').html(response.html)
+                        }
+                        $('#new-question').val('');
+                        if("@Model.IsQuestionAsAAnonymous" == "True"){
+                            document.getElementById("anonymous").checked = false; 
+                        }
+                        setTimeout(()=>{
+                            $("#successSpan").fadeOut();
+                        }, 1000);
+                        $("#successSpan").show();
+                        $("#requiredSpan").hide();
+                    }
+                },
+                complete: function (response) {
+                    AjaxCart.setLoadWaiting(false);
+                }
+            });
+        }
+
+        function loadQAList(pageNumber)
+                {
+                    AjaxCart.setLoadWaiting(true);
+                    var model = {
+                        Id: @Model.ProductQAModel.ProductId,
+                        CurrentPageNumber: pageNumber
+                    };
+                    $.ajax({
+                        type: 'POST',
+                        url: "/ProductQAPublicInfo/GetQuestionListByProductIdForPublicInfo",
+                        data: model,
+                        dataType: "json",
+                        success: function (result) {
+                            $('#qa-list').html(result.html);
+                        },
+                        complete: function (response) {
+                            AjaxCart.setLoadWaiting(false);
+                        }
+                    });
+                }
+
+    </script>
+}

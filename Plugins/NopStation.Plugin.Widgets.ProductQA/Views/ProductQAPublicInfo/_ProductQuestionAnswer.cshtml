@@ -1,0 +1,74 @@
+﻿@model ProductQuestionAnswerModel
+
+
+<link rel="stylesheet" href="~/Plugins/NopStation.ProductQA/Contents/css/styles.css" />
+
+@if (!Model.NoResults)
+{
+    <div class="question-answer-wrapper">
+        <div class="qa-lists">
+            @foreach (var questionAnswer in Model.ProductQuestionAnswerPublicInfoModels)
+            {
+                <div class="qa-item question-title">
+                    <strong>Q</strong>
+                    <div class="answer-wrapper">
+                        <div class="question-answer-item">
+                            <p class="question-text">@questionAnswer.QuestionText</p>
+                            <p class="qa-by">
+                                <span>@T("NopStation.ProductQuestionAnswer.ProductQnA.QuestionBy") @questionAnswer.QuestionByCustomerName on </span>
+                                <span>@questionAnswer.QuestionAskedDate.ToString("MMMM dd, yyyy")</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                @if (questionAnswer.AnswerText != null)
+                {
+                    <div class="qa-item answer-list">
+                        <strong>A</strong>
+                        <div class="answer-wrapper">
+                            <div class="question-answer-item">
+                                <p class="answer-text">@questionAnswer.AnswerText</p>
+                                <p class="qa-by">
+                                    @if (questionAnswer.AnswerByCustomerName != "")
+                                    {
+                                        <span>@T("NopStation.ProductQuestionAnswer.ProductQnA.AnswerBy") @questionAnswer.AnswerByCustomerName on </span>
+                                        <span>@questionAnswer.AnswerGivenDate.ToString("MMMM dd, yyyy")</span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <hr class="border-line"/>
+            }
+            @if (Model.TotalPages > 1)
+            {
+                <div class="pager">
+                    <ul class="question-pager">
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            if (Model.CurrentPageNumber == i)
+                            {
+                                <li class="currentPageActive">
+                                    <span>@i</span>
+                                </li>
+                            }
+                            else
+                            {
+                                <li onclick="loadQAList(@i)">
+                                    <span>@i</span>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <br />
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div>@T("NopStation.ProductQuestionAnswer.ProductQnA.Warning.NoQuestionsFound")</div>
+}

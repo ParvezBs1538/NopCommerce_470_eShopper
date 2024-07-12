@@ -1,0 +1,48 @@
+﻿@model PaymentModel
+
+@{
+    Layout = "_Root.Head";
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Payments.StripeKonbini/Contents/css/styles.css", string.Empty);
+}
+
+<script src="https://js.stripe.com/v3/"></script>
+
+<div class="konbini-loader">
+  <table width="100%" height="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="center" valign="middle">
+          <img src="/Plugins/NopStation.Plugin.Payments.StripeKonbini/Contents/images/loader.gif" />
+      </td>
+    </tr>
+  </table>
+</div>
+
+<script>
+    var stripe = Stripe('@Model.PublishableKey');
+    submitKonbini();
+
+    function submitKonbini () {
+        stripe.confirmKonbiniPayment('@Model.ClientSecret', {
+            payment_method: {
+                billing_details: {
+                    name: '@Model.Name',
+                    email: '@Model.Email',
+                },
+            },
+            payment_method_options: {
+                konbini: {
+                    confirmation_number: '@Model.ConfirmationNumber',
+                },
+            },
+        }) // Stripe.js will open a modal to display the Konbini voucher to your customer
+        .then(function(result) {
+            // This promise resolves when the customer closes the modal
+            if (result.error) {
+                // Inform the customer that there was an error.
+                alert(result.error.message)
+            }
+
+            window.location.href = '@Url.RouteUrl("StripeKonbiniCallback", new { orderId = Model.Id })?paymentIntentId=' + result.paymentIntent.id;
+        });
+    }
+</script>

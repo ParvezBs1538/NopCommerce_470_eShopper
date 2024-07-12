@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Zoho SalesIQ",
+  "SystemName": "NopStation.Plugin.Widgets.ZohoSalesIQ",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.ZohoSalesIQ.dll",
+  "Description": "This plugin allows you to connect with Zoho SalesIQ.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

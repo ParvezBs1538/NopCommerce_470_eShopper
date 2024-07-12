@@ -1,0 +1,11 @@
+﻿@model BadgeAjaxModel
+
+@if (Model.DetailsPage)
+{
+    <div class="badge-container badge-details" data-badge-detailsid="@Model.ProductId"></div>
+}
+else
+{
+    <div class="badge-container badge-overview" data-badge-overviewid="@Model.ProductId"></div>
+}
+

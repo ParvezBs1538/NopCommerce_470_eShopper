@@ -1,0 +1,187 @@
+@model ProductSearchModel
+
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.AffiliateStation.CatalogCommissions.ProductList").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("ProductCommissions.List");
+}
+@{
+    const string hideSearchBlockAttributeName = "ProductListPage.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<nop-antiforgery-token />
+<div class="content-header clearfix">
+    <h1 class="pull-left">
+        @T("Admin.NopStation.AffiliateStation.CatalogCommissions.ProductList")
+    </h1>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fa fa-search" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
+                        </div>
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchProductName" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchProductName" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" @(Model.AvailableCategories.SelectionIsNotPossible() ? Html.Raw("style=\"display:none\"") : null)>
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchCategoryId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchCategoryId" asp-items="Model.AvailableCategories" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" @(Model.AvailableCategories.SelectionIsNotPossible() ? Html.Raw("style=\"display:none\"") : null)>
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchIncludeSubCategories" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchIncludeSubCategories" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" @(Model.AvailableManufacturers.SelectionIsNotPossible() ? Html.Raw("style=\"display:none\"") : null)>
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchManufacturerId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchManufacturerId" asp-items="Model.AvailableManufacturers" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" @(Model.AvailableVendors.SelectionIsNotPossible() || Model.IsLoggedInAsVendor ? Html.Raw("style='display: none;'") : null)>
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchVendorId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchVendorId" asp-items="Model.AvailableVendors" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="form-group row" @(Model.HideStoresList ? Html.Raw("style=\"display:none\"") : null)>
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchStoreId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchStoreId" asp-items="Model.AvailableStores" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" @(Model.AvailableWarehouses.SelectionIsNotPossible() ? Html.Raw("style=\"display:none\"") : null)>
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchWarehouseId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchWarehouseId" asp-items="Model.AvailableWarehouses" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchProductTypeId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchProductTypeId" asp-items="Model.AvailableProductTypes" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchPublishedId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchPublishedId" asp-items="Model.AvailablePublishedOptions" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="text-center col-12">
+                                    <button type="button" id="search-catalogcommission-products" class="btn btn-primary btn-search">
+                                        <i class="fa fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "catalogcommission-products-grid",
+                            UrlRead = new DataUrl("GetProductList", "CatalogCommission", null),
+                            SearchButtonId = "search-catalogcommission-products",
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            Filters = new List<FilterParameter>
+                            {
+                                new FilterParameter(nameof(Model.SearchProductName)),
+                                new FilterParameter(nameof(Model.SearchCategoryId)),
+                                new FilterParameter(nameof(Model.SearchIncludeSubCategories), typeof(bool)),
+                                new FilterParameter(nameof(Model.SearchManufacturerId)),
+                                new FilterParameter(nameof(Model.SearchStoreId)),
+                                new FilterParameter(nameof(Model.SearchWarehouseId)),
+                                new FilterParameter(nameof(Model.SearchVendorId)),
+                                new FilterParameter(nameof(Model.SearchProductTypeId)),
+                                new FilterParameter(nameof(Model.SearchPublishedId))
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(CatalogCommissionModel.Name))
+                                {
+                                    Title = T("Admin.NopStation.AffiliateStation.CatalogCommissions.Fields.Name").Text,
+                                    Width = "300"
+                                },
+                                new ColumnProperty(nameof(CatalogCommissionModel.EntityId))
+                                {
+                                    Title = T("Admin.Common.View").Text,
+                                    Width = "100",
+                                    ClassName =  NopColumnClassDefaults.Button,
+                                    Render = new RenderButtonView(new DataUrl("~/Admin/Product/Edit"))
+                                },
+                                new ColumnProperty(nameof(CatalogCommissionModel.Commission))
+                                {
+                                    Title = T("Admin.NopStation.AffiliateStation.CatalogCommissions.Fields.Commission").Text,
+                                    Render = new RenderCustom("renderCommission"),
+                                    ClassName = NopColumnClassDefaults.CenterAll,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(CatalogCommissionModel.EntityId))
+                                {
+                                    Title = T("Admin.Common.Edit").Text,
+                                    Width = "100",
+                                    ClassName =  NopColumnClassDefaults.Button,
+                                    Render = new RenderButtonEdit(new DataUrl("~/Admin/CatalogCommission/Edit?entityName=Product&entityId=", true))
+                                }
+                            }
+                        })
+                    </div>
+                
+                    <script>
+                        function renderCommission(data, type, row, meta) {
+                            if (row.Commission == '' || row.Commission == null)
+                                return '<span class="label label-warning">Not set</span>';
+                            return row.Commission;
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

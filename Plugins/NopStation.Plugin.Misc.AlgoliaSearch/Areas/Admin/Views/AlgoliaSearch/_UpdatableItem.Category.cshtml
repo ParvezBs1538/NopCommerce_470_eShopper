@@ -1,0 +1,56 @@
+﻿@model UpdatableItemSearchModel
+
+<div class="card-body">
+    <div class="card card-default">
+        <div class="card-body">
+            @await Html.PartialAsync("Table", new DataTablesModel
+            {
+                Name = "updatableitem-categories-grid",
+                UrlRead = new DataUrl("UpdatableItemList", "AlgoliaSearch", new RouteValueDictionary { [nameof(Model.EntityName)] = "Category" }),
+                UrlDelete = new DataUrl("ValueDelete", "AlgoliaSearch", null),
+                Length = Model.PageSize,
+                LengthMenu = Model.AvailablePageSizes,
+                ColumnCollection = new List<ColumnProperty>
+                {
+                    new ColumnProperty(nameof(UpdatableItemModel.Name))
+                    {
+                        Title = T("Admin.NopStation.AlgoliaSearch.UpdatableItem.Name").Text,
+                        Width = "300"
+                    },
+                    new ColumnProperty(nameof(UpdatableItemModel.EntityId))
+                    {
+                        Title = T("Admin.Common.View").Text,
+                        Width = "100",
+                        ClassName =  NopColumnClassDefaults.Button,
+                        Render = new RenderButtonView(new DataUrl("~/Admin/Category/Edit"))
+                    },
+                    new ColumnProperty(nameof(UpdatableItemModel.UpdatedByCustomerName))
+                    {
+                        Title = T("Admin.NopStation.AlgoliaSearch.UpdatableItem.UpdatedBy").Text,
+                        Width = "100"
+                    },
+                    new ColumnProperty(nameof(UpdatableItemModel.LastUpdatedBy))
+                    {
+                        Title = T("Admin.Common.View").Text,
+                        Width = "100",
+                        ClassName =  NopColumnClassDefaults.Button,
+                        Render = new RenderButtonView(new DataUrl("~/Admin/Customer/Edit"))
+                    },
+                    new ColumnProperty(nameof(UpdatableItemModel.UpdatedOn))
+                    {
+                        Title = T("Admin.NopStation.AlgoliaSearch.UpdatableItem.UpdatedOn").Text,
+                        Width = "100",
+                        Render = new RenderDate()
+                    },
+                    new ColumnProperty(nameof(UpdatableItemModel.Id))
+                    {
+                        Title = T("Admin.Common.Delete").Text,
+                        ClassName = NopColumnClassDefaults.Button,
+                        Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                        Width = "100"
+                    }
+                }
+            })
+        </div>
+    </div>
+</div>

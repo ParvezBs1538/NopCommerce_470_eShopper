@@ -1,0 +1,31 @@
+﻿@model FeedDooFinderModel
+
+@await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+
+<div class="card-body">
+    <div class="card card-default">
+        <div class="card-body">
+            @T("Nopstation.Plugin.Widgets.DooFinder.GeneralInstructions")
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="ActiveScript_OverrideForStore" asp-input="ActiveScript" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="ActiveScript" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="ActiveScript" />
+                    <span asp-validation-for="ActiveScript"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="ApiScript_OverrideForStore" asp-input="ApiScript" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="ApiScript" />
+                </div>
+                <div class="col-md-9">
+                    <nop-textarea asp-for="ApiScript"></nop-textarea>
+                    <span asp-validation-for="ApiScript"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

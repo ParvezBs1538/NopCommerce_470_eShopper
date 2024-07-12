@@ -1,0 +1,29 @@
+﻿@{
+    var title = await NopHtml.GenerateTitleAsync();
+    var description = await @NopHtml.GenerateMetaDescriptionAsync();
+    var keywords = await NopHtml.GenerateMetaKeywordsAsync();
+}
+<!DOCTYPE html>
+<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" dir="@Html.GetUIDirection(!await Html.ShouldUseRtlThemeAsync())" class="@NopHtml.GeneratePageCssClasses()">
+<head>
+    <title>@title</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta name="description" content="@description" />
+    <meta name="keywords" content="@keywords" />
+    @NopHtml.GenerateCssFiles()
+    @NopHtml.GenerateScripts(ResourceLocation.Head)
+    @NopHtml.GenerateCanonicalUrls()
+    @*Favicon - upload favicon.ico file to the root directory*@
+    @await Component.InvokeAsync("Favicon")
+    @await Component.InvokeAsync("Widget", new { widgetZone = "head_html_tag" })
+</head>
+<body>
+    @await Component.InvokeAsync("Widget", new { widgetZone = "body_start_html_tag_after" })
+    @RenderBody()
+    @await Component.InvokeAsync("Widget", new { widgetZone = "body_end_html_tag_before" })
+
+
+    @NopHtml.GenerateCssFiles()
+    @NopHtml.GenerateScripts(ResourceLocation.Footer)
+</body>
+</html>

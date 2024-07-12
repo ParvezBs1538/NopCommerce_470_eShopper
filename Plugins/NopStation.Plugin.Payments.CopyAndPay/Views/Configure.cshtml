@@ -1,0 +1,107 @@
+﻿@model NopStation.Plugin.Payments.CopyAndPay.Models.ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.CopyAndPay.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("CopyAndPay");
+}
+
+<form asp-controller="CopyAndPay" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.CopyAndPay.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <p>@T("Admin.NopStation.CopyAndPay.Instructions")</p>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="TestMode_OverrideForStore" asp-input="TestMode" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="TestMode" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="TestMode" />
+                                    <span asp-validation-for="TestMode"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AdditionalFee_OverrideForStore" asp-input="AdditionalFee" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AdditionalFee" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AdditionalFee" />
+                                    <span asp-validation-for="AdditionalFee"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AdditionalFeePercentage_OverrideForStore" asp-input="AdditionalFeePercentage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AdditionalFeePercentage" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AdditionalFeePercentage" />
+                                    <span asp-validation-for="AdditionalFeePercentage"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="MadaEntityId_OverrideForStore" asp-input="MadaEntityId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="MadaEntityId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="MadaEntityId" />
+                                    <span asp-validation-for="MadaEntityId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EntityId_OverrideForStore" asp-input="EntityId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EntityId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="EntityId" />
+                                    <span asp-validation-for="EntityId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AuthorizationKey_OverrideForStore" asp-input="AuthorizationKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AuthorizationKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="AuthorizationKey" />
+                                    <span asp-validation-for="AuthorizationKey"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="APIUrl_OverrideForStore" asp-input="APIUrl" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="APIUrl" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="APIUrl" />
+                                    <span asp-validation-for="APIUrl"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

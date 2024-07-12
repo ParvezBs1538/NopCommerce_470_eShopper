@@ -1,0 +1,120 @@
+@model AbandonedCartSearchModel
+@using NopStation.Plugin.Widgets.AbandonedCarts.Models
+
+@{
+    const string hideSearchBlockAttributeName = "AbandonmentListPage.HideAbandonmentDetailsBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+
+}
+<div class="form-horizontal">
+    <nop-cards id="product-cards">
+        <nop-card asp-name="customer-orders" asp-icon="fas fa-cart-plus" asp-title="Abandonment Details" asp-hide-block-attribute-name="@hideSearchBlockAttributeName" asp-hide="@hideSearchBlock" asp-advanced="false">
+
+            <div class="card-body">
+                @await Html.PartialAsync("Table", new DataTablesModel
+                {
+                    Name = "Abandonment-grid",
+                    UrlRead = new DataUrl("ListDetails", "WidgetsAbandonedCarts", null),
+                    SearchButtonId = "search-Abandonment",
+                    Length = Model.PageSize,
+                    LengthMenu = Model.AvailablePageSizes,
+                    Filters = new List<FilterParameter>
+                    {
+                        new FilterParameter(nameof(Model.CustomerId), Model.CustomerId)
+                    },
+                    ColumnCollection = new List<ColumnProperty>
+                    {
+                        new ColumnProperty(nameof(AbandonmentListViewModel.ProductName))
+                        {
+                            Title = T("Plugins.Widgets.AbandonedCarts.Fields.Product").Text,
+                            Render = new RenderCustom("renderProductName")
+                        },
+                        new ColumnProperty(nameof(AbandonmentListViewModel.Quantity))
+                        {
+                            Title = T("Plugins.Widgets.AbandonedCarts.Fields.Quantity").Text,
+                            Width = "100"
+                        },
+                        new ColumnProperty(nameof(AbandonmentListViewModel.UnitPrice))
+                        {
+                            Title = T("Plugins.Widgets.AbandonedCarts.Fields.UnitPrice").Text,
+                            Width = "100"
+                        },
+                        new ColumnProperty(nameof(AbandonmentListViewModel.TotalPrice))
+                        {
+                            Title = T("Plugins.Widgets.AbandonedCarts.Fields.TotalPrice").Text,
+                            Width = "100"
+                        },
+                        new ColumnProperty(nameof(AbandonmentListViewModel.StatusName))
+                        {
+                            Title = T("Plugins.Widgets.AbandonedCarts.Fields.Status").Text,
+                            Width = "100",
+                            ClassName =  NopColumnClassDefaults.CenterAll,
+                            Render = new RenderCustom("renderColumnStatus")
+                        },
+                        new ColumnProperty(nameof(AbandonmentListViewModel.StatusChangedOn))
+                        {
+                            Title = T("Plugins.Widgets.AbandonedCarts.Fields.StatusChangedOn").Text,
+                            Width = "120",
+                            ClassName = NopColumnClassDefaults.CenterAll,
+                            Render = new RenderDate()
+                        },
+                        new ColumnProperty(nameof(AbandonmentListViewModel.FirstNotificationSentOn))
+                        {
+                            Title = T("Plugins.Widgets.AbandonedCarts.Fields.FirstNotificationSentOn").Text,
+                            Width = "120",
+                            ClassName = NopColumnClassDefaults.CenterAll,
+                            Render = new RenderDate()
+                        },
+                        new ColumnProperty(nameof(AbandonmentListViewModel.SecondNotificationSentOn))
+                        {
+                            Title = T("Plugins.Widgets.AbandonedCarts.Fields.SecondNotificationSentOn").Text,
+                            Width = "140",
+                            ClassName = NopColumnClassDefaults.CenterAll,
+                            Render = new RenderDate()
+                        },
+                        new ColumnProperty(nameof(AbandonmentListViewModel.Id))
+                        {
+                            Title = T("Admin.Common.View").Text,
+                            Width = "100",
+                            ClassName =  NopColumnClassDefaults.Button,
+                            Render = new RenderButtonView(new DataUrl("~/Admin/WidgetsAbandonedCarts/Edit/", nameof(AbandonmentListViewModel.Id)))
+                        }
+                    }
+                })
+
+            </div>
+            <script>
+                function renderProductName(data, type, row, meta) {
+                    var link = '@Url.Content("~/Admin/Product/Edit/")' + row.ProductId;
+                    var div = "";
+
+                    if (row.AttributeInfo && row.AttributeInfo.length > 0)
+                        div = "<div>" + row.AttributeInfo + "</div>";
+
+                    return '<a href="' + link + '">' + data + '</a>' + div;
+                }
+
+                function renderColumnStatus(data, type, row, meta) {
+                    var color;
+                    switch (row.StatusId) {
+                        case 1:
+                            color = 'blue';
+                            break;
+                        case 2:
+                            color = 'yellow';
+                            break;
+                        case 3:
+                            color = 'green';
+                            break;
+                        case 4:
+                            color = 'red';
+                            break;
+                    }
+                    return '<span class="grid-report-item ' + color + '">' + data + '</span >';
+                }
+
+            </script>
+        </nop-card>
+    </nop-cards>
+</div>
+

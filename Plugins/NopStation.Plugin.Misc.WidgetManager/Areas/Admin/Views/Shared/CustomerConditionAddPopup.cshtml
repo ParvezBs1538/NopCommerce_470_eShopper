@@ -1,0 +1,235 @@
+﻿@model AddCustomerToConditionSearchModel
+
+@using Nop.Web.Areas.Admin.Models.Customers
+
+@{
+    Layout = "_AdminPopupLayout";
+
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.WidgetManager.Conditions.Customers.AddNew").Text;
+}
+
+
+@if (ViewBag.RefreshPage == true)
+{
+    <script>
+        try {window.opener.document.getElementById('@(Context.Request.Query["btnId"])').click();}
+        catch (e){}
+        window.close();
+    </script>
+}
+else
+{
+    var controller = (string)ViewData["Controller"] ?? Url.ActionContext.RouteData.Values["controller"].ToString();
+    var create = (string)ViewData["CustomerConditionAddAction"] ?? "CustomerConditionAddPopup";
+
+    <form asp-controller="@controller" asp-action="@create"
+          asp-route-entityId="@Context.Request.Query["entityId"]"
+          asp-route-entityName="@Context.Request.Query["entityName"]"
+          asp-route-btnId="@Context.Request.Query["btnId"]"
+          asp-route-formId="@Context.Request.Query["formId"]">
+        <div class="content-header clearfix">
+            <h1 class="float-left">
+                @T("Admin.NopStation.WidgetManager.Conditions.Customers.AddNew")
+            </h1>
+            <div class="float-right">
+                &nbsp;
+            </div>
+        </div>
+        
+        <section class="content">
+            <div class="container-fluid">
+                <div class="form-horizontal">
+                    <div class="form-horizontal">
+                        <div class="cards-group">
+                            <div class="card card-default card-search card-popup">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <nop-label asp-for="SearchEmail" />
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <nop-editor asp-for="SearchEmail" />
+                                                </div>
+                                            </div>
+                                            @if (Model.UsernamesEnabled)
+                                            {
+                                                <div class="form-group row">
+                                                    <div class="col-md-4">
+                                                        <nop-label asp-for="SearchUsername" />
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <nop-editor asp-for="SearchUsername" />
+                                                    </div>
+                                                </div>
+                                            }
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <nop-label asp-for="SearchFirstName" />
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <nop-editor asp-for="SearchFirstName" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <nop-label asp-for="SearchLastName" />
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <nop-editor asp-for="SearchLastName" />
+                                                </div>
+                                            </div>
+                                            @if (Model.CompanyEnabled)
+                                            {
+                                                <div class="form-group row">
+                                                    <div class="col-md-4">
+                                                        <nop-label asp-for="SearchCompany" />
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <nop-editor asp-for="SearchCompany" />
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="col-md-6">
+                                            @if (Model.PhoneEnabled)
+                                            {
+                                                <div class="form-group row">
+                                                    <div class="col-md-4">
+                                                        <nop-label asp-for="SearchPhone" />
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <nop-editor asp-for="SearchPhone" />
+                                                    </div>
+                                                </div>
+                                            }
+                                            @if (Model.ZipPostalCodeEnabled)
+                                            {
+                                                <div class="form-group row">
+                                                    <div class="col-md-4">
+                                                        <nop-label asp-for="SearchZipPostalCode" />
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <nop-editor asp-for="SearchZipPostalCode" />
+                                                    </div>
+                                                </div>
+                                            }
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <nop-label asp-for="SearchIpAddress" />
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <nop-editor asp-for="SearchIpAddress" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <nop-label asp-for="SelectedCustomerRoleIds" />
+                                                </div>
+                                                <div class="col-md-8">                                               
+                                                        <nop-select asp-for="SelectedCustomerRoleIds" asp-items="Model.AvailableCustomerRoles" asp-multiple="true" />                                                                                                                                              
+                                                    <script>
+                                                        $(function () {
+                                                            var rolesIdsInput = $('#@Html.IdFor(model => model.SelectedCustomerRoleIds)').select2({
+                                                                closeOnSelect: false,
+                                                        @if (!Model.AvailableCustomerRoles.Any())
+                                                        {
+                                                            <text>
+                                                                    disabled: true,
+                                                                    placeholder: '@T("Admin.Catalog.Products.CustomerRoles.NoCustomerRolesAvailable")',
+                                                            </text>
+                                                        }
+                                                                                            });
+                                                                                        });                                                
+                                                    </script>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-sm-8 offset-sm-4">
+                                                    <button type="button" id="search-customers" class="btn btn-primary btn-search">@T("Admin.Common.Search")</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card card-default">
+                                <div class="card-body">
+                                    @{
+                                        var gridModel = new DataTablesModel
+                                        {
+                                            Name = "customers-grid",
+                                            UrlRead = new DataUrl("CustomerConditionAddList", controller, null),
+                                            SearchButtonId = "search-customers",
+                                            Length = Model.PageSize,
+                                            LengthMenu = Model.AvailablePageSizes,
+                                            Filters = new List<FilterParameter>
+                                            {
+                                                new FilterParameter(nameof(Model.SelectedCustomerRoleIds)),
+                                                new FilterParameter(nameof(Model.SearchEmail)),
+                                                new FilterParameter(nameof(Model.SearchUsername)),
+                                                new FilterParameter(nameof(Model.SearchFirstName)),
+                                                new FilterParameter(nameof(Model.SearchLastName)),
+                                                new FilterParameter(nameof(Model.SearchCompany)),
+                                                new FilterParameter(nameof(Model.SearchPhone)),
+                                                new FilterParameter(nameof(Model.SearchZipPostalCode)),
+                                                new FilterParameter(nameof(Model.SearchIpAddress)),
+                                            }
+                                        };
+
+                                        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.Id))
+                                        {
+                                            IsMasterCheckBox = true,
+                                            Render = new RenderCheckBox(nameof(AddCustomerToConditionModel.SelectedCustomerIds)),
+                                            ClassName = NopColumnClassDefaults.CenterAll,
+                                            Width = "30"
+                                        });
+                                        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.Email))
+                                        {
+                                            Title = T("Admin.Customers.Customers.Fields.Email").Text
+                                        });
+                                        if (Model.UsernamesEnabled)
+                                        {
+                                            gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.Username))
+                                            {
+                                                Title = T("Admin.Customers.Customers.Fields.Username").Text
+                                            });
+                                        }
+                                        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.FullName))
+                                        {
+                                            Title = T("Admin.Customers.Customers.Fields.FullName").Text
+                                        });
+                                        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.Active))
+                                        {
+                                            Title = T("Admin.Customers.Customers.Fields.Active").Text,
+                                            Width = "70",
+                                            ClassName = NopColumnClassDefaults.CenterAll,
+                                            Render = new RenderBoolean()
+                                        });
+                                        gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.Id))
+                                        {
+                                            Title = T("Admin.Common.Edit").Text,
+                                            Width = "80",
+                                            ClassName = NopColumnClassDefaults.Button,
+                                            Render = new RenderButtonEdit(new DataUrl("Edit"))
+                                        });
+                                    }
+                                    @await Html.PartialAsync("Table", gridModel)
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" name="save" class="btn btn-primary">
+                                        <i class="far fa-save"></i>
+                                        @T("Admin.Common.Save")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
+}

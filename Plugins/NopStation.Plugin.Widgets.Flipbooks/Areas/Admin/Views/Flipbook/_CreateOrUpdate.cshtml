@@ -1,0 +1,27 @@
+﻿@model FlipbookModel
+
+@{
+    const string hideInfoBlockAttributeName = "FlipbooksPage.HideInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideInfoBlockAttributeName, defaultValue: true);
+
+    const string hideContentsBlockAttributeName = "FlipbooksPage.HideContentsBlock";
+    var hideContentsBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideContentsBlockAttributeName);
+
+    const string hideSeoBlockAttributeName = "FlipbooksPage.HideSeoBlock";
+    var hideSeoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSeoBlockAttributeName);
+}
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <nop-cards id="country-cards">
+                <nop-card asp-name="flipbook-info" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.Flipbooks.Flipbooks.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</nop-card>
+                <nop-card asp-name="flipbook-seo" asp-icon="fas fa-search-plus" asp-title="@T("Admin.NopStation.Flipbooks.Flipbooks.Seo")" asp-hide-block-attribute-name="@hideSeoBlockAttributeName" asp-hide="@hideSeoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Seo", Model)</nop-card>
+                <nop-card asp-name="flipbook-contents" asp-icon="fas fa-paperclip" asp-title="@T("Admin.NopStation.Flipbooks.Flipbooks.Contents")" asp-hide-block-attribute-name="@hideContentsBlockAttributeName" asp-hide="@hideContentsBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Contents", Model)</nop-card>
+            </nop-cards>
+        </div>
+    </div>
+</section>

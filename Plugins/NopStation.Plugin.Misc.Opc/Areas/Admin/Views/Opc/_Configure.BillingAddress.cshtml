@@ -1,0 +1,40 @@
+﻿@model ConfigurationModel
+
+ <div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="PreselectPreviousBillingAddress_OverrideForStore" asp-input="PreselectPreviousBillingAddress" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="PreselectPreviousBillingAddress" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="PreselectPreviousBillingAddress" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="DefaultBillingAddressCountryId_OverrideForStore" asp-input="DefaultBillingAddressCountryId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="DefaultBillingAddressCountryId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="DefaultBillingAddressCountryId" asp-items="Model.AvailableCountries" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="SaveBillingAddressOnChangeFields_OverrideForStore" asp-input="SaveBillingAddressOnChangeFields" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="SaveBillingAddressOnChangeFields" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="SaveBillingAddressOnChangeFields" asp-items="Model.AvailableAddressFields" asp-multiple="true" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="PreselectShipToSameAddress_OverrideForStore" asp-input="PreselectShipToSameAddress" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="PreselectShipToSameAddress" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="PreselectShipToSameAddress" />
+        </div>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Order Ratings",
+  "SystemName": "NopStation.Plugin.Widgets.OrderRatings",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team, Jaber Kibria",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.OrderRatings.dll",
+  "Description": "This plugin allows you to provide rates on order.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

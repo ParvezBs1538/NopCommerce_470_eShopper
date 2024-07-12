@@ -1,0 +1,30 @@
+@model SurveyModel
+
+<div class="card-body">
+    <p>
+        @T("Admin.NopStation.DynamicSurvey.Surveys.SurveyAttributes.Hint")
+    </p>
+    @if (Model.Id > 0)
+    {
+        if (Model.SurveyAttributesExist)
+        {
+            @await Html.PartialAsync("_CreateOrUpdate.SurveyAttributes.Info", Model)
+        }
+        else
+        {
+            <div class="card card-default">
+                <div class="card-body">
+                    @T("Admin.NopStation.DynamicSurvey.Surveys.SurveyAttributes.NoAttributesAvailable")
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="card card-default">
+            <div class="card-body">
+                @T("Admin.NopStation.DynamicSurvey.Surveys.SurveyAttributes.SaveBeforeEdit")
+            </div>
+        </div>
+    }    
+</div>

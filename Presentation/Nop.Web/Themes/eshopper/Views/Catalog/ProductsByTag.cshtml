@@ -1,0 +1,28 @@
+﻿@model ProductsByTagModel
+@{
+    Layout = "_ColumnsTwo";
+
+    //title
+    NopHtml.AddTitleParts(string.Format(T("PageTitle.ProductsByTag").Text, Model.TagName));
+}
+@using Nop.Web.Models.Catalog;
+@using Nop.Web.Extensions;
+
+
+<div class="page category-page">
+    <div class="page-title">
+        <h2 class="title text-center">@String.Format(T("Products.Tags.ProductsTaggedWith").Text, Model.TagName)</h2>
+    </div>
+    <div class="page-body">
+        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ProductsByTagTop, additionalData = Model })
+        @await Html.PartialAsync("_CatalogSelectors", Model.CatalogProductsModel)
+        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ProductsByTagBeforeProductList, additionalData = Model })
+        @{
+            var catalogProductsViewData = new ViewDataDictionary(ViewData);
+            catalogProductsViewData["fetchUrl"] = Html.Raw(Url.Action("GetTagProducts", "Catalog", new { tagId = Model.Id }));
+        }
+        @await Html.PartialAsync("_CatalogProducts", Model.CatalogProductsModel, catalogProductsViewData)
+        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ProductsByTagBottom, additionalData = Model })
+    </div>
+</div>
+    

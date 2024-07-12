@@ -1,0 +1,90 @@
+[
+  {
+    "Name": "us-east-1",
+    "Value": 1
+  },
+  {
+    "Name": "us-east-2",
+    "Value": 2
+  },
+  {
+    "Name": "us-west-1",
+    "Value": 3
+  },
+  {
+    "Name": "us-west-2",
+    "Value": 4
+  },
+  {
+    "Name": "af-south-1",
+    "Value": 5
+  },
+  {
+    "Name": "ap-east-1",
+    "Value": 6
+  },
+  {
+    "Name": "ap-southeast-3",
+    "Value": 7
+  },
+  {
+    "Name": "ap-south-1",
+    "Value": 8
+  },
+  {
+    "Name": "ap-northeast-3",
+    "Value": 9
+  },
+  {
+    "Name": "ap-northeast-2",
+    "Value": 10
+  },
+  {
+    "Name": "ap-southeast-1",
+    "Value": 11
+  },
+  {
+    "Name": "ap-southeast-2",
+    "Value": 12
+  },
+  {
+    "Name": "ap-northeast-1",
+    "Value": 13
+  },
+  {
+    "Name": "ca-central-1",
+    "Value": 14
+  },
+  {
+    "Name": "eu-central-1",
+    "Value": 15
+  },
+  {
+    "Name": "eu-west-1",
+    "Value": 16
+  },
+  {
+    "Name": "eu-west-2",
+    "Value": 17
+  },
+  {
+    "Name": "eu-south-1",
+    "Value": 18
+  },
+  {
+    "Name": "eu-west-3",
+    "Value": 19
+  },
+  {
+    "Name": "eu-north-1",
+    "Value": 20
+  },
+  {
+    "Name": "me-south-1",
+    "Value": 21
+  },
+  {
+    "Name": "sa-east-1",
+    "Value": 22
+  }
+]

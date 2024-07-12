@@ -1,0 +1,10 @@
+﻿@model PublicInfoModel
+
+@if (Model.SettingModeId == (int)SettingMode.SiteId)
+{
+    <script async defer src="https://tools.luckyorange.com/core/lo.js?site-id=@(Model.SiteId)"></script>
+}
+else
+{
+    @Html.Raw(Model.TrackingCode)
+}

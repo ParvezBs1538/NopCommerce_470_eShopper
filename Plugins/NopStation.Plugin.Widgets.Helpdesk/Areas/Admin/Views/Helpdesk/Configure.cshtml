@@ -1,0 +1,293 @@
+﻿@model ConfigurationModel
+
+@{
+    NopHtml.SetActiveMenuItemSystemName("Helpdesk.Configuration");
+    ViewBag.PageTitle = T("Admin.NopStation.Helpdesk.Configuration").Text;
+}
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.AllowCustomerToCreateTicketFromOrderPage)").change(toggleAllowCustomerToCreateTicketFromOrderPage);
+        $("#@Html.IdFor(model => model.EnableTicketCategory)").click(toggleEnableTicketCategory);
+        $("#@Html.IdFor(model => model.EnableTicketDepartment)").click(toggleEnableTicketDepartment);
+        $("#@Html.IdFor(model => model.ShowMenuInCustomerNavigation)").click(toggleShowMenuInCustomerNavigation);
+
+        toggleAllowCustomerToCreateTicketFromOrderPage();
+        toggleEnableTicketCategory();
+        toggleEnableTicketDepartment();
+        toggleShowMenuInCustomerNavigation();
+    });
+
+    function toggleAllowCustomerToCreateTicketFromOrderPage() {
+        if ($('#@Html.IdFor(model => model.AllowCustomerToCreateTicketFromOrderPage)').is(':checked')) {
+            $('#pnlOrderPageWidgetZone').show();
+        } else {
+            $('#pnlOrderPageWidgetZone').hide();
+        }
+    }
+
+    function toggleEnableTicketCategory() {
+        if ($('#@Html.IdFor(model => model.EnableTicketCategory)').is(':checked')) {
+            $('#pnlTicketCategoryRequired').show();
+            $('#pnlDefaultTicketCategoryId').show();
+        } else {
+            $('#pnlTicketCategoryRequired').hide();
+            $('#pnlDefaultTicketCategoryId').hide();
+        }
+    }
+
+    function toggleEnableTicketDepartment() {
+        if ($('#@Html.IdFor(model => model.EnableTicketDepartment)').is(':checked')) {
+            $('#pnlTicketDepartmentRequired').show();
+            $('#pnlDefaultTicketDepartmentId').show();
+        } else {
+            $('#pnlTicketDepartmentRequired').hide();
+            $('#pnlDefaultTicketDepartmentId').hide();
+        }
+    }
+
+    function toggleShowMenuInCustomerNavigation() {
+        if ($('#@Html.IdFor(model => model.ShowMenuInCustomerNavigation)').is(':checked')) {
+            $('#pnlShowMenuInCustomerNavigation').show();
+        } else {
+            $('#pnlShowMenuInCustomerNavigation').hide();
+        }
+    }
+</script>
+
+<form asp-controller="Helpdesk" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Helpdesk.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="SendEmailOnNewTicket_OverrideForStore" asp-input="SendEmailOnNewTicket" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="SendEmailOnNewTicket" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="SendEmailOnNewTicket" />
+                                    <span asp-validation-for="SendEmailOnNewTicket"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="SendEmailOnNewResponse_OverrideForStore" asp-input="SendEmailOnNewResponse" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="SendEmailOnNewResponse" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="SendEmailOnNewResponse" />
+                                    <span asp-validation-for="SendEmailOnNewResponse"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="SendEmailsTo_OverrideForStore" asp-input="SendEmailsTo" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="SendEmailsTo" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="SendEmailsTo" />
+                                    <span asp-validation-for="SendEmailsTo"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EmailAccountId_OverrideForStore" asp-input="EmailAccountId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EmailAccountId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="EmailAccountId" asp-items="@Model.AvailableEmailAccounts" />
+                                    <span asp-validation-for="EmailAccountId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AllowCustomerToSetPriority_OverrideForStore" asp-input="AllowCustomerToSetPriority" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AllowCustomerToSetPriority" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AllowCustomerToSetPriority" />
+                                    <span asp-validation-for="AllowCustomerToSetPriority"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="DefaultTicketPriorityId_OverrideForStore" asp-input="DefaultTicketPriorityId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="DefaultTicketPriorityId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="DefaultTicketPriorityId" asp-items="@Model.AvailablePriorities" />
+                                    <span asp-validation-for="DefaultTicketPriorityId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AllowCustomerToUploadAttachmentInTicket_OverrideForStore" asp-input="AllowCustomerToUploadAttachmentInTicket" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AllowCustomerToUploadAttachmentInTicket" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AllowCustomerToUploadAttachmentInTicket" />
+                                    <span asp-validation-for="AllowCustomerToUploadAttachmentInTicket"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AllowCustomerToUploadAttachmentInResponse_OverrideForStore" asp-input="AllowCustomerToUploadAttachmentInResponse" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AllowCustomerToUploadAttachmentInResponse" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AllowCustomerToUploadAttachmentInResponse" />
+                                    <span asp-validation-for="AllowCustomerToUploadAttachmentInResponse"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableTicketDepartment_OverrideForStore" asp-input="EnableTicketDepartment" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableTicketDepartment" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableTicketDepartment" />
+                                    <span asp-validation-for="EnableTicketDepartment"></span>
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="EnableTicketDepartment">
+                                <div class="form-group row" id="pnlTicketDepartmentRequired">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="TicketDepartmentRequired_OverrideForStore" asp-input="TicketDepartmentRequired" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="TicketDepartmentRequired" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="TicketDepartmentRequired" />
+                                        <span asp-validation-for="TicketDepartmentRequired"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="pnlDefaultTicketDepartmentId">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="DefaultTicketDepartmentId_OverrideForStore" asp-input="DefaultTicketDepartmentId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="DefaultTicketDepartmentId" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-select asp-for="DefaultTicketDepartmentId" asp-items="@Model.AvailableDepartments" />
+                                        <span asp-validation-for="DefaultTicketDepartmentId"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableTicketCategory_OverrideForStore" asp-input="EnableTicketCategory" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableTicketCategory" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableTicketCategory" />
+                                    <span asp-validation-for="EnableTicketCategory"></span>
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="EnableTicketCategory">
+                                <div class="form-group row" id="pnlTicketCategoryRequired">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="TicketCategoryRequired_OverrideForStore" asp-input="TicketCategoryRequired" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="TicketCategoryRequired" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="TicketCategoryRequired" />
+                                        <span asp-validation-for="TicketCategoryRequired"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="pnlDefaultTicketCategoryId">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="DefaultTicketCategoryId_OverrideForStore" asp-input="TicketCategoryRequired" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="DefaultTicketCategoryId" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-select asp-for="DefaultTicketCategoryId" asp-items="@Model.AvailableCategories" />
+                                        <span asp-validation-for="DefaultTicketCategoryId"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ShowMenuInCustomerNavigation_OverrideForStore" asp-input="ShowMenuInCustomerNavigation" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowMenuInCustomerNavigation" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ShowMenuInCustomerNavigation" />
+                                    <span asp-validation-for="ShowMenuInCustomerNavigation"></span>
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="ShowMenuInCustomerNavigation">
+                                <div class="form-group row" id="pnlShowMenuInCustomerNavigation">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="NavigationWidgetZone_OverrideForStore" asp-input="NavigationWidgetZone" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="NavigationWidgetZone" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-select asp-for="NavigationWidgetZone" asp-items="@Model.AvailableNavigationWidgetZones" />
+                                        <span asp-validation-for="NavigationWidgetZone"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AllowCustomerToCreateTicketFromOrderPage_OverrideForStore" asp-input="AllowCustomerToCreateTicketFromOrderPage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AllowCustomerToCreateTicketFromOrderPage" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AllowCustomerToCreateTicketFromOrderPage" />
+                                    <span asp-validation-for="AllowCustomerToCreateTicketFromOrderPage"></span>
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="AllowCustomerToCreateTicketFromOrderPage">
+                                <div class="form-group row" id="pnlOrderPageWidgetZone">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="OrderPageWidgetZone_OverrideForStore" asp-input="OrderPageWidgetZone" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="OrderPageWidgetZone" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-select asp-for="OrderPageWidgetZone" asp-items="@Model.AvailableOrderPageWidgetZones" />
+                                        <span asp-validation-for="OrderPageWidgetZone"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="MinimumTicketCreateInterval_OverrideForStore" asp-input="MinimumTicketCreateInterval" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="MinimumTicketCreateInterval" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="MinimumTicketCreateInterval" />
+                                    <span asp-validation-for="MinimumTicketCreateInterval"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="MinimumResponseCreateInterval_OverrideForStore" asp-input="MinimumResponseCreateInterval" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="MinimumResponseCreateInterval" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="MinimumResponseCreateInterval" />
+                                    <span asp-validation-for="MinimumResponseCreateInterval"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

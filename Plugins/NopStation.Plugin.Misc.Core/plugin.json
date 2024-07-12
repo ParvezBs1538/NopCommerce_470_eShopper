@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Core",
+  "SystemName": "NopStation.Core",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": -100,
+  "FileName": "NopStation.Plugin.Misc.Core.dll",
+  "Description": "This plugin is used to manage Nop-Station plugins."
+}

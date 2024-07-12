@@ -1,0 +1,28 @@
+[
+  {
+    "Name": "home_page_before_best_sellers",
+    "Value": 1
+  },
+  {
+    "Name": "home_page_before_news",
+    "Value": 2
+  },
+  {
+    "Name": "home_page_before_poll",
+    "Value": 3
+  },
+  {
+    "Name": "home_page_before_products",
+    "Value": 4
+  },
+  {
+    "Name": "home_page_top",
+    "Value": 5
+  },
+  {
+    "Name": "viridi_before_footer_nav",
+    "Value": 6
+  }
+]
+
+

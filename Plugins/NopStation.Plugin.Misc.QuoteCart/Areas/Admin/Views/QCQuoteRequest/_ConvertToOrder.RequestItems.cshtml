@@ -1,0 +1,33 @@
+﻿@model ConvertToOrderModel
+
+<div class="card-body">
+    <div class="search-body">
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th class="text-left">@T("NopStation.Plugin.Misc.QuoteCart.Cart.Product(s)")</th>
+                    <th width="100">@T("NopStation.Plugin.Misc.QuoteCart.Cart.Quantity")</th>
+                    <th width="150">@T("NopStation.Plugin.Misc.QuoteCart.Cart.DiscountedPrice")</th>
+                    <th width="150">@T("NopStation.Plugin.Misc.QuoteCart.Cart.ItemTotal")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.QuoteRequestDetails.QuoteRequestItems)
+                {
+                    <tr>
+                        <td class="text-left">@Html.ActionLink(item.ProductName, "Edit", "Product", new { id = item.ProductId }, new { })</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.DiscountedPriceStr</td>
+                        <td>@item.TotalPriceStr</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-right pr-4" colspan="3">@T("Admin.Orders.Fields.OrderSubtotal"):</td>
+                    <td>@Model.QuoteRequestDetails.SubTotalStr</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

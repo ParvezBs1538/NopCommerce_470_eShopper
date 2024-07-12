@@ -1,0 +1,35 @@
+﻿@model QuoteRequestItemModel
+
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.AddRequestItem", Model.QuoteRequestId).Text;
+}
+
+<form asp-controller="QuoteRequestItem" asp-action="Create" method="post" id="request-form" enctype="multipart/form-data">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.AddRequestItem", Model.QuoteRequestId)
+            <small>
+                <i class="fas fa-arrow-circle-left"></i>
+                <a asp-action="Edit" asp-route-id="@Model.QuoteRequestId" asp-controller="QCQuoteRequest">@T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequest.BackToRequest")</a>
+            </small>
+        </h1>
+        <div class="float-right">
+            <button type="submit" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div asp-validation-summary="ModelOnly"></div>
+                <nop-cards id="quoterequest-item-cards">
+                    @await Html.PartialAsync("_CreateOrUpdate", Model)
+                </nop-cards>
+            </div>
+        </div>
+    </div>
+</form>

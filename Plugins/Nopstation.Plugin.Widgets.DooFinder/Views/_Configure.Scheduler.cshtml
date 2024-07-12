@@ -1,0 +1,107 @@
+﻿@model FeedDooFinderModel
+
+@await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+
+<script>
+    function copyText() {
+        // Select the text
+        var textToCopy = document.getElementById("textToCopy");
+        var range = document.createRange();
+        range.selectNode(textToCopy);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+
+        // Copy to clipboard
+        try {
+            document.execCommand('copy');
+            console.log('Text copied to clipboard');
+
+            // Change button text and disable after copying
+            var copyButton = document.getElementById("copyButton");
+            copyButton.textContent = 'Copied';
+            copyButton.disabled = true;
+        } catch (err) {
+            console.error('Unable to copy text to clipboard', err);
+        }
+
+        // Clear the selection
+        window.getSelection().removeAllRanges();
+    }
+</script>
+
+<div class="card-body">
+    <div class="card card-default">
+        <div class="card-body">
+            <div class="form-group row select-boxes-class">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="ScheduleFeedGeneratingHour_OverrideForStore" asp-input="ScheduleFeedGeneratingHour" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="ScheduleFeedGeneratingHour" />
+                </div>
+                <div class="col-md-1">
+                    <nop-select asp-for="ScheduleFeedGeneratingHour" asp-items="Model.AvailableHours" />
+                    <span asp-validation-for="ScheduleFeedGeneratingHour"></span>
+                </div>
+                <div class="col-md-2">
+                    <nop-override-store-checkbox asp-for="ScheduleFeedGeneratingMinute_OverrideForStore" asp-input="ScheduleFeedGeneratingMinute" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="ScheduleFeedGeneratingMinute" />
+                </div>
+                <div class="col-md-1">
+                    <nop-select asp-for="ScheduleFeedGeneratingMinute" asp-items="Model.AvailableMinutes" />
+                    <span asp-validation-for="ScheduleFeedGeneratingMinute"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="ScheduleFeedLastExecutionStartTime" />
+                </div>
+                <div class="col-md-9">
+                    <label class="control-label">@Model.ScheduleFeedLastExecutionStartTime (UTC)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="ScheduleFeedLastExecutionEndTime" />
+                </div>
+                <div class="col-md-9">
+                    <label class="control-label">@Model.ScheduleFeedLastExecutionEndTime (UTC)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="ScheduleFeedNextExecutionTime" />
+                </div>
+                <div class="col-md-9">
+                    <label class="control-label">@Model.ScheduleFeedNextExecutionTime (UTC)</label>
+                </div>
+            </div>
+            @if (Model.GeneratedFiles.Count > 0)
+            {
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="GeneratedFiles" />
+                    </div>
+                    <div class="col-md-9">
+                        @for (int i = 0; i <= Model.GeneratedFiles.Count - 1; i++)
+                        {
+                            var generatedFile = Model.GeneratedFiles[i];
+                            @generatedFile.StoreName <text>-</text> <a id="textToCopy" href="@generatedFile.FileUrl" target="_blank">@generatedFile.FileUrl</a>
+                            <p style="display:inline; color:blue; margin-left: 20px" id="copyButton" onclick="copyText()">Copy</p>
+                            if (i != Model.GeneratedFiles.Count - 1)
+                            {
+                                <br />
+                            }
+                        }
+                    </div>
+                </div>
+            }
+            <div class="form-group row">
+                <div class="col-md-3">
+                    &nbsp;
+                </div>
+                <div class="col-md-9">
+                    <input type="submit" name="generate" class="btn bg-green" value="@T("Nopstation.Plugin.Widgets.DooFinder.Generate")" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

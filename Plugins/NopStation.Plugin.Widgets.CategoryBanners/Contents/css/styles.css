@@ -1,0 +1,36 @@
+﻿.category-banner {
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+  .category-banner img {
+    max-width: 100%;
+  }
+
+  .category-banner .owl-nav button.owl-prev,
+  .category-banner .owl-nav button.owl-next {
+    border: 1px solid #ccc;
+    padding: 0 10px !important;
+    background-color: #eee;
+    font-size: 23px;
+    position: absolute;
+    margin: 0;
+  }
+
+  .category-banner .owl-nav button.owl-prev {
+    left: 0;
+  }
+
+  .category-banner .owl-nav button.owl-next {
+    right: 0;
+  }
+
+  .category-banner .owl-nav {
+    position: absolute;
+    top: 30%;
+    width: 100%;
+  }
+
+  .category-banner .owl-dots {
+    display: none;
+  }

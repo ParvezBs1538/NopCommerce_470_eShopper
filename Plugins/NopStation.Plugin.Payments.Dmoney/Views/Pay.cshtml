@@ -1,0 +1,22 @@
+﻿@model NopStation.Plugin.Payments.Dmoney.Models.PaymentPublicModel
+<html>
+<body onload='document.forms["form"].submit()'>
+    Redirecting to gateway...
+    <form name='form' action='@Model.GatewayUrl' method='post' style="display:none;">
+        <input type="hidden" name="orgCode" value="@Model.OrganizationCode" />
+        <input type="hidden" name="password" value="@Model.Password" />
+        <input type="hidden" name="secretKey" value="@Model.SecretKey" />
+        <input type="hidden" name="billerCode" value="@Model.BillerCode" />
+        <input type="hidden" name="billOrInvoiceNo" value="@Model.OrderId" />
+        <input type="hidden" name="transactionTrackingNo" value="@Model.TransactionTrackingNo" />
+        <input type="hidden" name="amount" value="@Model.OrderTotal" />
+        <input type="hidden" name="approvedUrl" value="@Model.ApproveUrl" />
+        <input type="hidden" name="cancelUrl" value="@Model.CancelUrl" />
+        <input type="hidden" name="declineUrl" value="@Model.DeclineUrl" />
+        <input type="hidden" name="language" value="EN" />
+        <input type="hidden" name="orderType" value="merchantPayment" />
+        <input type="hidden" name="currency" value="050" />
+        <input type="hidden" name="description" value="@Model.Description" />
+    </form>
+</body>
+</html>

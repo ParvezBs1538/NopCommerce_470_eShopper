@@ -1,0 +1,137 @@
+﻿#order-rating-modal,
+#order-ratings-modal {
+  width: 90%;
+  margin: 20px auto;
+  padding: 40px;
+  background-color: #FFF;
+  position: relative;
+}
+
+#order-rating-form .title {
+  margin: 0 0 20px;
+  font-size: 20px;
+  color: #444;
+  text-align: center;
+}
+
+#order-rating-form .order-created-date,
+#order-ratings-form .order-created-date {
+  margin: 10px 0;
+  text-align: center;
+}
+
+#order-rating-form .buttons,
+#order-ratings-form .buttons {
+  text-align: center;
+}
+
+#order-rating-form .button-1.save-order-rating-button,
+#order-ratings-form .button-1.save-order-rating-button {
+  min-width: 160px;
+  height: 36px;
+  border: none;
+  background-color: #4ab2f1;
+  padding: 0 15px;
+  text-align: center;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.review-rating .name-description label {
+  display: block;
+  width: 100%;
+  margin: 0 0 10px;
+  text-align: center;
+  font-size: 14px;
+  color: #444;
+}
+
+.order-rating-item .review-rating {
+  margin: 20px 0;
+  text-align: center;
+}
+
+  .order-rating-item .review-rating > * {
+    display: inline-block;
+  }
+
+.order-rating-item .rating-wrapper > * {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.order-rating-item .rating-wrapper .label.first {
+  color: #e4444c;
+}
+
+.order-rating-item .rating-wrapper .label.last {
+  color: #4cb17c;
+}
+
+.order-rating-item .inputs {
+  text-align: center;
+}
+
+  .order-rating-item .inputs label {
+    width: auto;
+  }
+
+.order-rating-item textarea {
+  min-height: 75px;
+}
+
+.order-rating-box {
+  margin: auto !important;
+}
+
+.not-rated {
+  cursor: pointer;
+}
+
+@media (min-width: 481px) {
+
+  #order-rating-modal,
+  #order-ratings-modal {
+    width: 94%;
+  }
+}
+
+@media (min-width: 769px) {
+
+  #order-rating-modal,
+  #order-ratings-modal {
+    width: 92.5%;
+    width: 600px;
+  }
+}
+
+
+@media (min-width: 1001px) {
+
+  /*  #order-rating-modal {
+    width: 980px;
+  }*/
+
+  /*  .order-rating-item .review-rating {
+    text-align: left;
+  }*/
+
+  .review-rating .name-description label {
+    display: inline-block;
+    /*width: 265px;*/
+    margin: 0 10px 0 0;
+    text-align: right;
+  }
+}
+
+/*@media (min-width: 1367px) {
+
+  #order-rating-modal {
+    width: 1200px;
+  }
+
+  .review-rating .name-description label {
+    width: 375px;
+  }
+}
+*/

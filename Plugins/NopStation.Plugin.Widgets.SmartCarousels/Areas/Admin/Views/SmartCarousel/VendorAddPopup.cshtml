@@ -1,0 +1,121 @@
+﻿@model AddVendorToCarouselSearchModel
+@using Nop.Web.Areas.Admin.Models.Vendors
+@{
+    Layout = "_AdminPopupLayout";
+
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.SmartCarousels.Carousels.Vendors.AddNew").Text;
+}
+
+@if (ViewBag.RefreshPage == true)
+{
+    <script>
+        try {window.opener.document.forms['@(Context.Request.Query["formId"])'].@(Context.Request.Query["btnId"]).click();}
+        catch (e){}
+        window.close();
+    </script>
+}
+else
+{
+    <form asp-controller="SmartCarousel" asp-action="VendorAddPopup"
+          asp-route-carouselid="@Context.Request.Query["CarouselId"]"
+          asp-route-btnId="@Context.Request.Query["btnId"]"
+          asp-route-formId="@Context.Request.Query["formId"]">
+        <div class="content-header clearfix">
+            <h1 class="float-left">
+                @T("Admin.NopStation.SmartCarousels.Carousels.Vendors.AddNew")
+            </h1>
+            <div class="float-right">
+                &nbsp;
+            </div>
+        </div>
+        
+        <section class="content">
+            <div class="container-fluid">
+                <div class="form-horizontal">
+                    <div class="form-horizontal">
+                        <div class="cards-group">
+                            <div class="card card-default card-search card-popup">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <div class="form-group row">
+                                                <div class="col-sm-4">
+                                                    <nop-label asp-for="SearchName" />
+                                                </div>
+                                                <div class=" col-sm-8">
+                                                    <nop-editor asp-for="SearchName" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-sm-4">
+                                                    <nop-label asp-for="SearchEmail" />
+                                                </div>
+                                                <div class=" col-sm-8">
+                                                    <nop-editor asp-for="SearchEmail" />
+                                                </div>
+                                            </div>
+                                            <div class=" form-group">
+                                                <div class="col-sm-8 offset-sm-4">
+                                                    <button type="button" id="search-vendors" class="btn btn-primary btn-search">
+                                                        <i class="fas fa-search"></i>
+                                                        @T("Admin.Common.Search")
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card card-default">
+                                <div class="card-body">
+                                    @await Html.PartialAsync("Table", new DataTablesModel
+                                    {
+                                        Name = "vendors-grid",
+                                        UrlRead = new DataUrl("VendorAddPopupList", "SmartCarousel", null),
+                                        SearchButtonId = "search-vendors",
+                                        Length = Model.PageSize,
+                                        LengthMenu = Model.AvailablePageSizes,
+                                        Filters = new List<FilterParameter>
+                                        {
+                                            new FilterParameter(nameof(Model.SearchName)),
+                                            new FilterParameter(nameof(Model.SearchEmail))
+                                        },
+                                        ColumnCollection = new List<ColumnProperty>
+                                        {
+                                            new ColumnProperty(nameof(VendorModel.Id))
+                                            {
+                                                IsMasterCheckBox = true,
+                                                Render = new RenderCheckBox(nameof(AddVendorToCarouselModel.SelectedVendorIds)),
+                                                ClassName =  NopColumnClassDefaults.CenterAll,
+                                                Width = "50"
+                                            },
+                                            new ColumnProperty(nameof(VendorModel.Name))
+                                            {
+                                                Title = T("Admin.Vendors.Fields.Name").Text
+                                            },
+                                            new ColumnProperty(nameof(VendorModel.Active))
+                                            {
+                                                Title = T("Admin.Vendors.Fields.Active").Text,
+                                                Width = "100",
+                                                ClassName = NopColumnClassDefaults.CenterAll,
+                                                Render = new RenderBoolean()
+                                            }
+                                        }
+                                    })
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" name="save" class="btn btn-primary">
+                                        <i class="far fa-save"></i>
+                                        @T("Admin.Common.Save")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       </section>
+    </form>
+}

@@ -1,0 +1,63 @@
+﻿@model ConfigurationModel
+
+ <div class="card-body">
+                            
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="EnableMostViewed_OverrideForStore" asp-input="EnableMostViewed" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="EnableMostViewed" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableMostViewed" />
+            <span asp-validation-for="EnableMostViewed"></span>
+        </div>
+    </div>
+
+    <nop-nested-setting asp-for="EnableMostViewed">
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="MostViewedARN_OverrideForStore" asp-input="MostViewedARN" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="MostViewedARN" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="MostViewedARN" />
+                <span asp-validation-for="MostViewedARN"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="MostViewedWidgetZoneId_OverrideForStore" asp-input="MostViewedWidgetZoneId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="MostViewedWidgetZoneId" />
+            </div>
+            <div class="col-md-9">
+                <nop-select asp-for="MostViewedWidgetZoneId" asp-items="@Model.AvailableWidgetZones" />
+                <span asp-validation-for="MostViewedWidgetZoneId"></span>
+            </div>
+        </div> 
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="MostViewedNumberOfItems_OverrideForStore" asp-input="MostViewedNumberOfItems" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="MostViewedNumberOfItems" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="MostViewedNumberOfItems" />
+                <span asp-validation-for="MostViewedNumberOfItems"></span>
+            </div>
+        </div> 
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="MostViewedAllowForGuestCustomer_OverrideForStore" asp-input="MostViewedAllowForGuestCustomer" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="MostViewedAllowForGuestCustomer" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="MostViewedAllowForGuestCustomer" />
+                <span asp-validation-for="MostViewedAllowForGuestCustomer"></span>
+            </div>
+        </div> 
+        
+    </nop-nested-setting>
+</div> 

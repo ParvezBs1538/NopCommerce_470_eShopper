@@ -1,0 +1,53 @@
+﻿@model PaymentModel
+
+@{
+    Layout = "_Root.Head";
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Payments.StripeBoleto/Contents/css/styles.css", string.Empty);
+}
+
+<script src="https://js.stripe.com/v3/"></script>
+
+<div class="boleto-loader">
+  <table width="100%" height="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="center" valign="middle">
+          <img src="/Plugins/NopStation.Plugin.Payments.StripeBoleto/Contents/images/loader.gif" />
+      </td>
+    </tr>
+  </table>
+</div>
+
+<script>
+    var stripe = Stripe('@Model.PublishableKey');
+    submitBoleto();
+
+    function submitBoleto () {
+        stripe.confirmBoletoPayment('@Model.ClientSecret', {
+            payment_method: {
+                boleto: {
+                    tax_id: '@Model.TaxId',
+                },
+                billing_details: {
+                    name: '@Model.Name',
+                    email: '@Model.Email',
+                    address: {
+                        line1: '@Model.Address1',
+                        city: '@Model.City',
+                        state: '@Model.State',
+                        postal_code: '@Model.ZipPostalCode',
+                        country: '@Model.Country',
+                    },
+                },
+            },
+        }) // Stripe.js will open a modal to display the Boleto voucher to your customer
+        .then(function(result) {
+            // This promise resolves when the customer closes the modal
+            if (result.error) {
+                // Inform the customer that there was an error.
+                alert(result.error.message)
+            }
+
+            window.location.href = '@Url.RouteUrl("StripeBoletoCallback", new { orderId = Model.Id })?paymentIntentId=' + result.paymentIntent.id;
+        });
+    }
+</script>

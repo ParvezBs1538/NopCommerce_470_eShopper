@@ -1,0 +1,55 @@
+@model IpRangeBlockRuleModel
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="FromIpAddress" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="FromIpAddress" asp-required="true" />
+                                <span asp-validation-for="FromIpAddress"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="ToIpAddress" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="ToIpAddress" asp-required="true" />
+                                <span asp-validation-for="ToIpAddress"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="Comment" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-textarea asp-for="Comment" />
+                                <span asp-validation-for="Comment"></span>
+                            </div>
+                        </div>
+                        @if (Model.Id > 0)
+                        {
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="CreatedOn" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Model.CreatedOn</div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

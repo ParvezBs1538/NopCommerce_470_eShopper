@@ -1,0 +1,179 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.AutoCancelOrder.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("AutoCancelOrder.Configuration");
+}
+
+<form asp-controller="AutoCancelOrder" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.AutoCancelOrder.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnablePlugin_OverrideForStore" asp-input="EnablePlugin" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnablePlugin" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnablePlugin" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="SendNotificationToCustomer_OverrideForStore" asp-input="SendNotificationToCustomer" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="SendNotificationToCustomer" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="SendNotificationToCustomer" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ApplyOnOrderStatuses_OverrideForStore" asp-input="ApplyOnOrderStatuses" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ApplyOnOrderStatuses" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="ApplyOnOrderStatuses" asp-items="Model.AvailableOrderStatuses" asp-multiple="true" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ApplyOnShippingStatuses_OverrideForStore" asp-input="ApplyOnShippingStatuses" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ApplyOnShippingStatuses" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="ApplyOnShippingStatuses" asp-items="Model.AvailableShippingStatuses" asp-multiple="true" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ApplyOnPaymentMethods_OverrideForStore" asp-input="ApplyOnPaymentMethods" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ApplyOnPaymentMethods" />
+                                </div>
+                                <div class="col-md-9">
+                                    <table class="table table-hover table-bordered" id="tablePaymentMethods">
+                                        <thead>
+                                            <tr>
+                                                <th>@T("Admin.NopStation.AutoCancelOrder.Configuration.PaymentMethod")</th>
+                                                <th>@T("Admin.NopStation.AutoCancelOrder.Configuration.Offset")</th>
+                                                <th>@T("Admin.NopStation.AutoCancelOrder.Configuration.Unit")</th>
+                                                <th>@T("Admin.Common.Delete")</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.ApplyOnPaymentMethods)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <select name="SystemName" class="form-control">
+                                                            @foreach (var listItem in Model.AvailablePaymentMethods)
+                                                            {
+                                                                if (listItem.Value == item.SystemName)
+                                                                {
+                                                                    <option value="@listItem.Value" selected>@listItem.Text</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@listItem.Value">@listItem.Text</option>
+
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" name="Offset" value="@item.Offset" class="form-control" />
+                                                    </td>
+                                                    <td>
+                                                        <select name="UnitTypeId" class="form-control">
+                                                            @foreach (var listItem in Model.AvailableUnits)
+                                                            {
+                                                                if (listItem.Value == item.UnitTypeId.ToString())
+                                                                {
+                                                                    <option value="@listItem.Value" selected>@listItem.Text</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@listItem.Value">@listItem.Text</option>
+
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-danger removeItem" onclick="removeTr(this)"><i class="far fa-trash-alt"></i></button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                    <button class="btn btn-primary addItem" type="button">
+                                        <i class="fas fa-plus-square"></i>
+                                        @T("Admin.Common.AddNew")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+
+<script id="hidden-template" type="text/x-custom-template">
+    <tr>
+        <td>
+            <select name="SystemName" class="form-control">
+                @foreach (var listItem in Model.AvailablePaymentMethods)
+                {
+                    <option value="@listItem.Value">@listItem.Text</option>
+                }
+            </select>
+        </td>
+        <td>
+            <input type="number" name="Offset" value="1" class="form-control" />
+        </td>
+        <td>
+            <select name="UnitTypeId" class="form-control">
+                @foreach (var listItem in Model.AvailableUnits)
+                {
+                    <option value="@listItem.Value">@listItem.Text</option>
+                }
+            </select>
+        </td>
+        <td>
+            <button type="button" class="btn btn-danger removeItem" onclick="removeTr(this)"><i class="far fa-trash-alt"></i></button>
+        </td>
+    </tr>
+</script>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        var template = $('#hidden-template').html();
+        $('.addItem').click(function () {
+            $('#tablePaymentMethods tbody').append(template);
+        });
+    })
+
+    function removeTr(t) {
+        $(t).closest("tr").remove();
+    }
+</script>

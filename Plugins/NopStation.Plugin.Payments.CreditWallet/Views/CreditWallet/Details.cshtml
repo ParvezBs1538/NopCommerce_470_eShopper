@@ -1,0 +1,89 @@
+﻿@using Nop.Core
+@model WalletDetailsModel
+
+@{
+    Layout = "_ColumnsTwo";
+
+    //title
+    NopHtml.AddTitleParts(T("PageTitle.Account").Text);
+    //page class
+    NopHtml.AppendPageCssClassParts("html-account-page");
+    NopHtml.AppendPageCssClassParts("html-customer-wallet-page");
+}
+
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = -10 })
+}
+
+<div class="page account-page wallet-page">
+    <div class="page-title">
+        <h1>@T("Account.MyAccount") - @T("NopStation.CreditWallet.Account.WalletInfo")</h1>
+    </div>
+    <div class="page-body">
+        <div class="wallet-overview">
+            <div class="current-balance">@T("NopStation.CreditWallet.Wallet.CurrentBalance", Model.AvailableCreditValue.ToString("0.00"), 
+                Model.AvailableCredit, Model.CreditUsedValue.ToString("0.00"), Model.CreditUsed)</div>
+            @if (Model.LowCredit)
+            {
+                <div class="min-balance">@T("NopStation.CreditWallet.Account.LowCreditWarning")</div>
+            }
+        </div>
+        @if (Model.ShowInvoicesInCustomerWalletPage)
+        {
+            <div class="section invoice-payments-history" style="margin-top: 15px;">
+                <div class="title">
+                    <strong>@T("NopStation.CreditWallet.Wallet.InvoicePayment.History")</strong>
+                </div>
+                @if (Model.Invoices.Count > 0)
+                {
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <colgroup>
+                                <col width="40%"/>
+                                <col width="30%"/>
+                                <col width="30%"/>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th class="date">
+                                    @T("NopStation.CreditWallet.Wallet.InvoicePayment.Fields.PaymentDate")
+                                </th>
+                                <th class="points-balance">
+                                    @T("NopStation.CreditWallet.Wallet.InvoicePayment.Fields.Amount")
+                                </th>
+                                <th class="points">
+                                    @T("NopStation.CreditWallet.Wallet.InvoicePayment.Fields.InvoiceReference")
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @for (var i = 0; i < Model.Invoices.Count; i++)
+                            {
+                                var item = Model.Invoices[i];
+                                <tr @(i%2 == 0 ? Html.Raw(" class=\"odd\"") : Html.Raw(" class=\"even\""))>
+                                    <td class="date">
+                                        @item.PaymentDate.ToLongDateString()
+                                    </td>
+                                    <td class="points-balance">
+                                        @item.AmountValue.ToString("0.00") (@item.Amount)
+                                    </td>
+                                    <td class="points">
+                                        @item.InvoiceReference
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="no-data">
+                        @T("NopStation.CreditWallet.Wallet.InvoicePayment.NoHistory")
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Quote Cart",
+  "SystemName": "NopStation.Plugin.Misc.QuoteCart",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Misc.QuoteCart.dll",
+  "Description": "This plugin adds quote cart functionality to your site.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

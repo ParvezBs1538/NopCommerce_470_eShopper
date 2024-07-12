@@ -1,0 +1,102 @@
+﻿@model SliderModel
+@inject AdminAreaSettings adminAreaSettings
+
+@{
+    var defaultGridPageSize = adminAreaSettings.DefaultGridPageSize;
+    var gridPageSizes = adminAreaSettings.GridPageSizes;
+}
+
+<div class="card-body">
+    @if (Model.Id > 0)
+    {
+        <div class="sub-card">
+            @await Html.PartialAsync("Table", new DataTablesModel
+       {
+           Name = "anywhereslider-items-grid",
+           UrlRead = new DataUrl("SliderItemList", "AnywhereSlider", new RouteValueDictionary { ["sliderId"] = Model.Id }),
+           UrlDelete = new DataUrl("SliderItemDelete", "AnywhereSlider", null),
+           Length = defaultGridPageSize,
+           LengthMenu = gridPageSizes,
+           ColumnCollection = new List<ColumnProperty>
+                {
+                    new ColumnProperty(nameof(SliderItemModel.PictureUrl))
+                    {
+                        Title = T("Admin.NopStation.AnywhereSlider.SliderItems.Fields.Picture").Text,
+                        Width = "150",
+                        Render = new RenderCustom("renderPictureUrl")
+                    },
+                    new ColumnProperty(nameof(SliderItemModel.MobilePictureUrl))
+                    {
+                        Title = T("Admin.NopStation.AnywhereSlider.SliderItems.Fields.MobilePicture").Text,
+                        Width = "150",
+                        Render = new RenderCustom("renderMobilePictureUrl")
+                    },
+                    new ColumnProperty(nameof(SliderItemModel.SliderItemTitle))
+                    {
+                        Title = T("Admin.NopStation.AnywhereSlider.SliderItems.Fields.Title").Text,
+                        Width = "100"
+                    },
+                    new ColumnProperty(nameof(SliderItemModel.DisplayOrder))
+                    {
+                        Title = T("Admin.NopStation.AnywhereSlider.SliderItems.Fields.DisplayOrder").Text,
+                        Width = "100",
+                        ClassName = NopColumnClassDefaults.CenterAll
+                    },
+                    new ColumnProperty(nameof(SliderItemModel.Id))
+                    {
+                        Title = T("Admin.Common.Delete").Text,
+                        Width = "100",
+                        Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                        ClassName = NopColumnClassDefaults.Button
+                    },
+                    new ColumnProperty(nameof(SliderItemModel.Id))
+                    {
+                        Title = T("Admin.Common.Edit").Text,
+                        Width = "100",
+                        ClassName =  NopColumnClassDefaults.Button,
+                        Render = new RenderCustom("renderColumnEdit")
+                    }
+                }
+            })
+
+            <script>
+                function renderPictureUrl(data, type, row, meta) {
+                    return '<a href="' + row.FullPictureUrl + '" target="_blank"><img alt="' + row.PictureId + '" src="' + row.PictureUrl + '" /></a>';
+                }
+                function renderMobilePictureUrl(data, type, row, meta) {
+                    return '<a href="' + row.MobileFullPictureUrl + '" target="_blank"><img alt="' + row.MobilePictureId + '" src="' + row.MobilePictureUrl + '" /></a>';
+                }
+                function renderColumnEdit(data, type, row, meta) {
+                    return '<button onclick=\"javascript:OpenWindow(\'@Url.Content("~/Admin/AnywhereSlider/SliderItemEditPopup/")' + data + '?btnId=btnRefresh&formId=anywhere-slider-form\', 800, 550, true); return false;\" class="btn btn-default"><i class="fa fa-pencil"></i>@T("Admin.Common.Edit")</button>';
+                }
+            </script>
+
+        </div>
+
+        <div class="panel-footer">
+            <button type="submit" id="btnAddNewItem" onclick="javascript:OpenWindow('@(Url.Action("SliderItemCreatePopup", "AnywhereSlider", new { sliderId = Model.Id, btnId = "btnRefresh", formId = "anywhere-slider-form" }))', 800, 550, true); return false;" class="btn btn-primary">
+                @T("Admin.NopStation.AnywhereSlider.SliderItems.AddNew")
+            </button>
+            <input type="submit" id="btnRefresh" style="display:none" />
+            <script>
+                $(document).ready(function () {
+                    $('#btnRefresh').click(function () {
+                        //refresh grid
+                        updateTable('#anywhereslider-items-grid');
+
+                        //return false to don't reload a page
+                        return false;
+                    });
+                });
+            </script>
+        </div>
+    }
+    else
+    {
+        <div class="card card-default">
+            <div class="card-body">
+                @T("Admin.NopStation.AnywhereSlider.SliderItems.SaveBeforeEdit")
+            </div>
+        </div>
+    }
+</div>

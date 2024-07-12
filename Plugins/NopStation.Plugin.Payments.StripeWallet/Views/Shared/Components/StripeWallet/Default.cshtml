@@ -1,0 +1,39 @@
+﻿@model PaymentInfoModel
+@inject Nop.Core.Domain.Orders.OrderSettings orderSettings
+
+<style>
+    .stripe_payment_item {
+        width: 20%;
+        display: inline-block;
+    }
+
+    @@media only screen and (max-width: 390px) {
+        #payment-request-button {
+            width: 70%;
+        }
+    }
+</style>
+
+<script asp-location="Footer">
+    $(document).ready(async () => {
+        $("#loader-st").show();
+        await StripeWallet.init(@Model.OrderTotal, '@Model.Currency', '@Model.Country', '@Model.PublishableKey',"@Url.Content("~/StripWallet/CreatePaymentIntent")" );
+    });
+</script>
+
+<div style="width: 100%; text-align:center">
+    <div id="payment-request-button" style="display: none" class="stripe_payment_item">
+        <!-- A Stripe Element will be inserted here if the browser supports this type of payment method. -->
+    </div>
+    <div id="loader-st" class="stripe_payment_item">
+        Loading...
+    </div>
+</div>
+
+<input type="hidden" asp-for="PaymentIntentId" />
+<input type="hidden" asp-for="PaymentIntentStatus" />
+
+@if (orderSettings.OnePageCheckoutEnabled)
+{
+    @NopHtml.GenerateInlineScripts(ResourceLocation.Footer)
+}

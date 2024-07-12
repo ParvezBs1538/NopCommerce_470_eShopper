@@ -1,0 +1,28 @@
+﻿@model ShipperModel
+
+@{
+    const string hideInfoBlockAttributeName = "ShipperPage.HideInfoBlock";
+    var customer = await workContext.GetCurrentCustomerAsync();
+    var hideInfoBlock =await genericAttributeService.GetAttributeAsync<bool>(customer, hideInfoBlockAttributeName);
+
+    const string hideLocationBlockAttributeName = "ShipperPage.HideLocationBlock";
+    var hideLocationBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideLocationBlockAttributeName);
+
+    const string hidePackagesBlockAttributeName = "ShipperPage.HidePackagesBlock";
+    var hidePackagesBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hidePackagesBlockAttributeName);
+}
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <nop-cards id="shipper-cards">
+                <nop-card asp-name="shipper-info" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.DMS.Shippers.Edit.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" >@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</nop-card>
+                <nop-card asp-name="shipper-last-location" asp-icon="fas fa-sitemap" asp-title="@T("Admin.NopStation.DMS.Shippers.Edit.LastLocation")" asp-hide-block-attribute-name="@hideLocationBlockAttributeName" asp-hide="@hideLocationBlock" >@await Html.PartialAsync("_CreateOrUpdate.LastLocation", Model)</nop-card>
+                <nop-card asp-name="shipper-assigned-shippments" asp-icon="fas fa-object-group" asp-title="@T("Admin.NopStation.DMS.Shippers.Edit.AssignedPackage")" asp-hide-block-attribute-name="@hidePackagesBlockAttributeName" asp-hide="@hidePackagesBlock">@await Html.PartialAsync("_CreateOrUpdate.AssignedPackage", Model.CourierShipmentSearchModel)</nop-card>
+                </nop-cards>
+        </div>
+    </div>
+</section>

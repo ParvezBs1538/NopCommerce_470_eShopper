@@ -1,0 +1,2 @@
+﻿4.60.1.0: Initial release
+4.60.1.1: Email template language fix

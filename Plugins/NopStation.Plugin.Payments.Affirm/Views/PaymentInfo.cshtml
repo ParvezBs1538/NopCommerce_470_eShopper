@@ -1,0 +1,218 @@
+﻿@model PaymentInfoModel
+@{
+    Layout = "";
+}
+<style>
+    .affirm-payment-form h5 {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        line-height: 1.2;
+    }
+
+    .affirm-payment-form .container {
+        padding-top: 30px;
+        width: 100%;
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto;
+        max-width: 540px;
+    }
+
+    form {
+        margin: 20px 0;
+    }
+
+    #payment_method-affirm {
+        margin: 0 0 18px 5px;
+        max-height: 30px;
+        width: auto;
+        vertical-align: middle;
+    }
+
+    .btn-primary {
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: .25rem !important;
+        transition: color .15s;
+        color: #fff;
+    }
+
+    .affirm-payment-form p {
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
+
+    .affirm-payment-form b, strong {
+        font-weight: bolder;
+    }
+
+    .card {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 1px solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+    }
+
+    .card-body {
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        padding: 1.25rem;
+    }
+
+    .btn-primary,
+    .btn-primary:active,
+    .btn-primary:visited {
+        background-color: #0f72e5 !important;
+    }
+
+        .btn-primary:hover {
+            background-color: #0055b9 !important;
+        }
+</style>
+
+<div class="container">
+    <form class="affirm-payment-form">
+        <h5>
+            Pay over time with
+
+            <img id="payment_method-affirm" src="https://cdn-assets.affirm.com/images/black_logo-white_bg.svg" />
+        </h5>
+        <span>
+            Just enter your basic information and get a real-time credit decision. If you're approved and
+            confirm your loan, your purchase will be on its way as soon as it's ready.
+        </span>
+    </form>
+    <input class="btn btn-primary"
+           type="button"
+           value="Pay with Affirm"
+           id="pay-btn" />
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $('.button-1.payment-info-next-step-button').hide();
+    });
+
+    function gotoConfirmStep() {
+        $('.button-1.payment-info-next-step-button').click();
+    }
+
+     /**************************************************************\
+              Step 1: Set up Affirm.js
+    \**************************************************************/
+    var _affirm_config = {
+        public_api_key: "@Model.PublicApiKey",
+        script: "@Model.JsURL"
+    };
+
+    /**************************************************************\
+              Step 2: Initialize Affirm
+    \**************************************************************/
+    (function(m, g, n, d, a, e, h, c) {
+      var b = m[n] || {},
+        k = document.createElement(e),
+        p = document.getElementsByTagName(e)[0],
+        l = function(a, b, c) {
+          return function() {
+            a[b]._.push([c, arguments]);
+          };
+        };
+      b[d] = l(b, d, "set");
+      var f = b[d];
+      b[a] = {};
+      b[a]._ = [];
+      f._ = [];
+      b._ = [];
+      b[a][h] = l(b, a, h);
+      b[c] = function() {
+        b._.push([h, arguments]);
+      };
+      a = 0;
+      for (
+        c = "set add save post open empty reset on off trigger ready setProduct".split(
+          " "
+        );
+        a < c.length;
+        a++
+      )
+        f[c[a]] = l(b, d, c[a]);
+      a = 0;
+      for (c = ["get", "token", "url", "items"]; a < c.length; a++)
+        f[c[a]] = function() {};
+      k.async = !0;
+      k.src = g[e];
+      p.parentNode.insertBefore(k, p);
+      delete g[e];
+      f(g);
+      m[n] = b;
+    })(
+      window,
+      _affirm_config,
+      "affirm",
+      "checkout",
+      "ui",
+      "script",
+      "ready",
+      "jsReady"
+    );
+
+    /**************************************************************\
+              Step 3: Render Affirm Checkout
+    \**************************************************************/
+    affirm.checkout(@Html.Raw(Model.AffirmJSON));
+
+    /**************************************************************\
+                  Step 4: Handle callbacks
+    \**************************************************************/
+    $("#pay-btn").click(function () {
+        affirm.checkout.open({
+            onFail: function(e) {
+              console.log(e);
+            },
+            onSuccess: function(a) {
+              //TODO: do ajax call with a.checkout_token
+                var postData = {
+                    checkoutToken: a.checkout_token
+                };
+                addAntiForgeryToken(postData);
+                $.ajax({
+                    cache: false,
+                    type: 'POST',
+                    url: '@Url.Action("Charge", "Affirm")',
+                    data: postData,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.success)
+                            gotoConfirmStep();
+                        else
+                            alert(data.message);
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert('Error in operation');
+                    }
+                });
+            }
+      });
+    });
+</script>

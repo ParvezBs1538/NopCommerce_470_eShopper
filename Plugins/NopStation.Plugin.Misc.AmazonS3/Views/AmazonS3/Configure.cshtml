@@ -1,0 +1,132 @@
+﻿@model ConfigurationModel
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("AmazonS3.Configuration");
+    ViewBag.PageTitle = T("Admin.NopStation.Plugin.Misc.AmazonS3.Configuration").Text;
+}
+
+<form asp-controller="AmazonS3" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Plugin.Misc.AmazonS3.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div class="card-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AWSS3Enable_OverrideForStore" asp-input="AWSS3Enable" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AWSS3Enable" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AWSS3Enable" />
+                                    <span asp-validation-for="AWSS3Enable"></span>
+                                    <br />
+                                    <span>@T("Admin.NopStation.Plugin.Misc.AmazonS3.Configuration.Info")</span>
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="AWSS3Enable">
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="RegionEndpointId_OverrideForStore" asp-input="RegionEndpointId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="RegionEndpointId" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-select asp-for="RegionEndpointId" asp-items="@(await((RegionEndpointEnum)Model.RegionEndpointId).ToSelectListAsync())" />
+                                        <span asp-validation-for="RegionEndpointId"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="CannedACLId_OverrideForStore" asp-input="CannedACLId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="CannedACLId" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-select asp-for="CannedACLId" asp-items="@(await((CannedACLEnum)Model.CannedACLId).ToSelectListAsync())" />
+                                        <span asp-validation-for="CannedACLId"></span>
+                                    </div>
+                                </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AWSS3AccessKeyId_OverrideForStore" asp-input="AWSS3AccessKeyId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AWSS3AccessKeyId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AWSS3AccessKeyId" />
+                                    <span asp-validation-for="AWSS3AccessKeyId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AWSS3SecretKey_OverrideForStore" asp-input="AWSS3SecretKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AWSS3SecretKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AWSS3SecretKey" />
+                                    <span asp-validation-for="AWSS3SecretKey"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AWSS3BucketName_OverrideForStore" asp-input="AWSS3BucketName" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AWSS3BucketName" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AWSS3BucketName" />
+                                    <span asp-validation-for="AWSS3BucketName"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AWSS3RootUrl_OverrideForStore" asp-input="AWSS3RootUrl" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AWSS3RootUrl" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AWSS3RootUrl" />
+                                    <span asp-validation-for="AWSS3RootUrl"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableCdn_OverrideForStore" asp-input="EnableCdn" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableCdn" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableCdn" />
+                                    <span asp-validation-for="EnableCdn"></span>
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="EnableCdn">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="CdnBaseUrl_OverrideForStore" asp-input="CdnBaseUrl" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="CdnBaseUrl" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="CdnBaseUrl" />
+                                    <span asp-validation-for="CdnBaseUrl"></span>
+                                </div>
+                            </div>
+                            </nop-nested-setting >
+                            </nop-nested-setting>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

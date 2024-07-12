@@ -1,0 +1,141 @@
+﻿@model WebApiNotificationTemplateSearchModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.WebApiNotification.PushNotificationTemplates.List").Text;
+
+    NopHtml.SetActiveMenuItemSystemName("WebApiNotificationTemplates");
+
+    NopHtml.AddCssFileParts("/Plugins/NopStation.Plugin.Misc.WebApiNotification/Contents/dist/emojionearea.min.css", string.Empty);
+}
+
+@{
+    const string hideSearchBlockAttributeName = "PushNotificationTemplates.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<form asp-controller="WebApiNotificationTemplate" asp-action="List" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.WebApiNotification.PushNotificationTemplates.List")
+        </h1>
+    </div>
+
+    <div class="content">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fa fa-search" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
+                        </div>
+
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchActiveId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchActiveId" asp-items="@Model.AvailableActiveTypes" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-8 offset-md-4">
+                                            <button type="button" id="search-pushnotificationtemplate" class="btn btn-primary btn-search">
+                                                <i class="fa fa-search"></i>
+                                                @T("Admin.Common.Search")
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "pushnotificationtemplate-grid",
+                            UrlRead = new DataUrl("GetList", "WebApiNotificationTemplate", null),
+                            SearchButtonId = "search-pushnotificationtemplate",
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            Filters = new List<FilterParameter>
+                            {
+                                new FilterParameter(nameof(Model.SearchActiveId))
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(WebApiNotificationTemplateModel.Name))
+                                {
+                                    Title = T("Admin.NopStation.WebApiNotification.PushNotificationTemplates.Fields.Name").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(WebApiNotificationTemplateModel.Title))
+                                {
+                                    Title = T("Admin.NopStation.WebApiNotification.PushNotificationTemplates.Fields.Title").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(WebApiNotificationTemplateModel.Active))
+                                {
+                                    Title = T("Admin.NopStation.WebApiNotification.PushNotificationTemplates.Fields.Active").Text,
+                                    Width = "50",
+                                    ClassName = NopColumnClassDefaults.CenterAll,
+                                    Render = new RenderBoolean()
+                                },
+                                new ColumnProperty(nameof(WebApiNotificationTemplateModel.Id))
+                                {
+                                    Title = T("Admin.Common.Edit").Text,
+                                    Width = "80",
+                                    ClassName = NopColumnClassDefaults.Button,
+                                    Render = new RenderButtonEdit(new DataUrl("Edit"))
+                                }
+                            }
+                   })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@*export selected (XML). We don't use GET approach because it's limited to 2K-4K chars and won't work for large number of entities*@
+<form asp-controller="PushNotificationTemplate" asp-action="ExportXmlSelected" method="post" id="export-xml-selected-form">
+    <input type="hidden" id="selectedIds" name="selectedIds" value="" />
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#exportxml-selected').click(function (e) {
+            e.preventDefault();
+            var ids = selectedIds.join(",");
+            $('#export-xml-selected-form #selectedIds').val(ids);
+            $('#export-xml-selected-form').submit();
+            updateTable('#orders-grid');
+            return false;
+        });
+    });
+</script>
+
+@*export selected (Excel). We don't use GET approach because it's limited to 2K-4K chars and won't work for large number of entities*@
+<form asp-controller="PushNotificationTemplate" asp-action="ExportExcelSelected" method="post" id="export-excel-selected-form">
+    <input type="hidden" id="selectedIds" name="selectedIds" value="" />
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#exportexcel-selected').click(function (e) {
+            e.preventDefault();
+            var ids = selectedIds.join(",");
+            $('#export-excel-selected-form #selectedIds').val(ids);
+            $('#export-excel-selected-form').submit();
+            updateTable('#orders-grid');
+            return false;
+        });
+    });
+</script>

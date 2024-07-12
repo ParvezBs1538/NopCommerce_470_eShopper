@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Smart Deal Carousel",
+  "SystemName": "NopStation.Plugin.Widgets.SmartDealCarousels",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.SmartDealCarousels.dll",
+  "Description": "This plugin allows to display carousels of deals on public store.",
+  "DependsOnSystemNames": [ "NopStation.Core", "NopStation.Plugin.Misc.WidgetManager" ]
+}

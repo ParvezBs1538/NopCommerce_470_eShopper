@@ -1,0 +1,115 @@
+﻿@model QuoteRequestDetailsModel
+
+@inject IWorkContext workContext
+
+@{
+    Layout = "_AdminLayout";
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.EditRequestDetails").Text;
+    NopHtml.SetActiveMenuItemSystemName("QuoteCart.Requests");
+
+    const string hideRequestItemDetailsBlockName = "QuoteRequestPage.HideRequestItemDetailsBlock";
+    var currentCustomer = await workContext.GetCurrentCustomerAsync();
+    var hideRequestItemDetailsBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideRequestItemDetailsBlockName);
+
+    const string hideDetailsBlockAttributeName = "QuoteCart.QuoteRequestDetails.HideDetailsBlock";
+    var hideDetailsBlock = await genericAttributeService.GetAttributeAsync<bool>(currentCustomer, hideDetailsBlockAttributeName);
+
+    const string hideCustomerBlockAttributeName = "QuoteCart.QuoteRequestDetails.HideCustomerBlock";
+    var hideCustomerBlock = await genericAttributeService.GetAttributeAsync<bool>(currentCustomer, hideCustomerBlockAttributeName);
+
+    const string hideMessageBlockAttributeName = "QuoteCart.QuoteRequestDetails.HideMessageBlock";
+    var hideMessageBlock = await genericAttributeService.GetAttributeAsync<bool>(currentCustomer, hideMessageBlockAttributeName);
+
+    const string hideCartBlockAttributeName = "QuoteCart.QuoteRequestDetails.HideCartBlock";
+    var hideCartBlock = await genericAttributeService.GetAttributeAsync<bool>(currentCustomer, hideCartBlockAttributeName);
+
+    const string hideFormsBlockAttributeName = "QuoteCart.QuoteRequestDetails.HideFormsBlock";
+    var hideFormsBlock = await genericAttributeService.GetAttributeAsync<bool>(currentCustomer, hideFormsBlockAttributeName);
+
+    NopHtml.AddPageCssClassParts("quote-request-details-page");
+    NopHtml.AddCssFileParts($"{QuoteCartDefaults.OUTPUT_PATH}/Contents/styles/admin-panel.css", excludeFromBundle: true);
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequest.ManageQuoteRequest", Model.Id)
+        <small>
+            <i class="fas fa-arrow-circle-left"></i>
+            <a asp-action="List">@T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.BackToList")</a>
+        </small>
+    </h1>
+    <div class="float-right">
+        <span id="request-delete" class="btn btn-danger">
+            <i class="far fa-trash-alt"></i>
+            @T("Admin.Common.Delete")
+        </span>
+    </div>
+</div>
+
+<div class="content">
+    <div class="form-horizontal">
+        <div class="cards-group">
+            <form asp-controller="QCQuoteRequest" asp-action="Edit" method="post" id="request-form">
+                <div asp-validation-summary="All"></div>
+                <input asp-for="Id" type="hidden" />
+
+                <nop-cards id="quoterequest-overview-cards">
+                    <nop-card asp-name="quoterequest-overview-details" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.RequestDetails")" asp-hide-block-attribute-name="@hideDetailsBlockAttributeName" asp-hide="@hideDetailsBlock" asp-advanced="false">
+                        @await Html.PartialAsync("_Overview.Details", Model)
+                    </nop-card>
+                    <nop-card asp-name="quoterequest-overview-message" asp-icon="fas fa-envelope" asp-title="@T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.Messages")" asp-hide-block-attribute-name="@hideMessageBlockAttributeName" asp-hide="@hideMessageBlock" asp-advanced="false">
+                        @await Html.PartialAsync("_Overview.Messages", Model)
+                    </nop-card>
+                    <nop-card asp-name="quoterequest-overview-items" asp-icon="fas fa-cart-arrow-down" asp-title="@T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.CartItems")" asp-hide-block-attribute-name="@hideCartBlockAttributeName" asp-hide="@hideCartBlock" asp-advanced="false">
+                        @await Html.PartialAsync("_Overview.Items", Model)
+                    </nop-card>
+                    @if (Model.SubmittedFormAttributes.Any())
+                    {
+                        <nop-card asp-name="quoterequest-overview-forms" asp-icon="fas fa-clipboard" asp-title="@T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.SubmittedInformation")" asp-hide-block-attribute-name="@hideFormsBlockAttributeName" asp-hide="@hideFormsBlock" asp-advanced="false">
+                            @await Html.PartialAsync("_Overview.Forms", Model)
+                        </nop-card>
+                    }
+                </nop-cards>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        toggleChangeRequestStatus(false);
+        $(".messages").animate({ scrollTop: $('.messages').prop("scrollHeight") }, 1000);
+    });
+
+    function toggleChangeRequestStatus(editmode) {
+        if (editmode) {
+            $('#pnlChangeRequestStatus').showElement();
+            $('#btnChangeRequestStatus').hideElement();
+        } else {
+            $('#pnlChangeRequestStatus').hideElement();
+            $('#btnChangeRequestStatus').showElement();
+        }
+    }
+
+    function discountedPriceSubmit(elem) {
+        var itemId = $(elem).data('item-id');
+        var value = $(elem).val();
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("AddDiscountedPriceForItem","QCQuoteRequest")",
+            data: {
+                quoteItemId: itemId,
+                discountedPrice: value
+            },
+            success: function (response) {
+                alert(response.message);
+            },
+            error: function (response) {
+                alert("Error sending quote request!");
+            }
+        });
+
+    }
+</script>
+
+<nop-delete-confirmation asp-model-id="@Model.Id" asp-button-id="request-delete" />

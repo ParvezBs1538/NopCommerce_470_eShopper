@@ -1,0 +1,101 @@
+﻿@model ConfigurationModel
+
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.SortPickupPointsByDistance)").click(toggleSortPickupPointsByDistance);
+        $("#@Html.IdFor(model => model.IncludeInTopMenu)").click(toggleIncludeInTopMenu);
+        $("#@Html.IdFor(model => model.IncludeInFooterColumn)").click(toggleIncludeInFooterColumn);
+        $("#@Html.IdFor(model => model.DistanceCalculationMethodId)").click(toggleDistanceCalculationMethodId);
+
+        toggleSortPickupPointsByDistance();
+        toggleIncludeInTopMenu();
+        toggleIncludeInFooterColumn();
+        toggleDistanceCalculationMethodId();
+    });
+
+    function toggleSortPickupPointsByDistance() {
+        if ($('#@Html.IdFor(model => model.SortPickupPointsByDistance)').is(':checked')) {
+            $('#pnlDistanceCalculationMethodId').show();
+            $('#pnlGoogleDistanceMatrixApiKey').show();
+        } else {
+            $('#pnlDistanceCalculationMethodId').hide();
+            $('#pnlGoogleDistanceMatrixApiKey').hide();
+        }
+    }
+
+    function toggleIncludeInTopMenu() {
+        if ($('#@Html.IdFor(model => model.IncludeInTopMenu)').is(':checked')) {
+            $('#pnlHideInMobileView').show();
+        } else {
+            $('#pnlHideInMobileView').hide();
+        }
+    }
+
+    function toggleIncludeInFooterColumn() {
+        if ($('#@Html.IdFor(model => model.IncludeInFooterColumn)').is(':checked')) {
+            $('#pnlFooterColumnSelector').show();
+        } else {
+            $('#pnlFooterColumnSelector').hide();
+        }
+    }
+
+    function toggleDistanceCalculationMethodId() {
+        var method = $('#@Html.IdFor(model => model.DistanceCalculationMethodId)').val();
+        if (method == "@((int)DistanceCalculationMethod.GoogleDistanceMatrix)") {
+            $('#emGoogleDistanceMatrix').show();
+            $('#pnlGoogleDistanceMatrixApiKey').show();
+            $('#emGeoCoordinate').hide();
+        } else {
+            $('#emGoogleDistanceMatrix').hide();
+            $('#pnlGoogleDistanceMatrixApiKey').hide();
+            $('#emGeoCoordinate').show();
+        }
+    }
+</script>
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="GoogleMapApiKey_OverrideForStore" asp-input="GoogleMapApiKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration"></nop-override-store-checkbox>
+            <nop-label asp-for="GoogleMapApiKey" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor-check asp-for="GoogleMapApiKey" />
+            <span asp-validation-for="GoogleMapApiKey"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="SortPickupPointsByDistance_OverrideForStore" asp-input="SortPickupPointsByDistance" asp-store-scope="@Model.ActiveStoreScopeConfiguration"></nop-override-store-checkbox>
+            <nop-label asp-for="SortPickupPointsByDistance" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="SortPickupPointsByDistance" />
+            <span asp-validation-for="SortPickupPointsByDistance"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="SortPickupPointsByDistance">
+        <div class="form-group row" id="pnlDistanceCalculationMethodId">
+            <div class="col-md-4">
+                <nop-override-store-checkbox asp-for="DistanceCalculationMethodId_OverrideForStore" asp-input="DistanceCalculationMethodId" asp-store-scope="@Model.ActiveStoreScopeConfiguration"></nop-override-store-checkbox>
+                <nop-label asp-for="DistanceCalculationMethodId" />
+            </div>
+            <div class="col-md-8">
+                <nop-select asp-for="DistanceCalculationMethodId" asp-items="@Model.AvailableDistanceCalculationMethods" />
+                <em id="emGoogleDistanceMatrix">@T("Admin.NopStation.StoreLocator.Configuration.GoogleDistanceMatrix.Hint")</em>
+                <em id="emGeoCoordinate">@T("Admin.NopStation.StoreLocator.Configuration.GeoCoordinate.Hint")</em>
+                <span asp-validation-for="DistanceCalculationMethodId"></span>
+            </div>
+        </div>
+        <div class="form-group row" id="pnlGoogleDistanceMatrixApiKey">
+            <div class="col-md-4">
+                <nop-override-store-checkbox asp-for="GoogleDistanceMatrixApiKey_OverrideForStore" asp-input="GoogleDistanceMatrixApiKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration"></nop-override-store-checkbox>
+                <nop-label asp-for="GoogleDistanceMatrixApiKey" />
+            </div>
+            <div class="col-md-8">
+                <nop-editor-check asp-for="GoogleDistanceMatrixApiKey" />
+                <span asp-validation-for="GoogleDistanceMatrixApiKey"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+</div>

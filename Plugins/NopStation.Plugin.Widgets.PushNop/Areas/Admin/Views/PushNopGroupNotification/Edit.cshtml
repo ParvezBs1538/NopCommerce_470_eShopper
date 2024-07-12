@@ -1,0 +1,135 @@
+@model GroupNotificationModel
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.PushNop.GroupNotifications.EditDetails").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("PushNop.SmartGroupNotifications");
+}
+
+<script>
+    $(document).ready(function () {
+        $('#btnSendTestNotification').click(function () {
+            var data = {};
+            data.id = @Model.Id;
+
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("GetNotificationDetails", "PushNopGroupNotification")",
+                data: addAntiForgeryToken(data),
+                dataType: 'json',
+                success: function (response) {
+                    if (response.Result) {
+                        Notification.requestPermission(function (result) {
+                            if (result === 'granted') {
+                                var title = response.Title;
+                                var body = response.Body;
+                                var icon = response.Icon;
+                                var badge = response.Badge;
+                                var sound = response.Sound;
+                                var image = response.Image;
+                                var vibrate = response.Vibratation;
+                                var dir = response.Dir;
+                                var url = response.Url;
+
+                                navigator.serviceWorker.ready.then(function (registration) {
+                                    registration.showNotification(title, {
+                                        body: body,
+                                        icon: icon,
+                                        image: image,
+                                        vibrate: vibrate,
+                                        badge: badge,
+                                        dir: dir,
+                                        sound: sound,
+                                        data: {
+                                            url: url
+                                        }
+                                    });
+                                });
+                            }
+                            else {
+                                alert('@T("Admin.NopStation.PushNop.GroupNotifications.Warning.AllowNotification")');
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+<form asp-controller="PushNopGroupNotification" asp-action="Edit" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.PushNop.GroupNotifications.EditDetails")
+            <small>
+                <i class="fa fa-arrow-circle-left"></i>
+                <a asp-action="List">@T("Admin.NopStation.PushNop.GroupNotifications.BackToList")</a>
+            </small>
+        </h1>
+        <div class="float-right">
+            <button type="button" class="btn bg-green" id="btnSendTestNotification">
+                <i class="fa fa-paper-plane"></i>
+                @T("Admin.NopStation.PushNop.GroupNotifications.SendTestNotification")
+            </button>
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+            <button type="submit" name="save-continue" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.SaveContinue")
+            </button>
+            <button type="button" class="btn bg-olive" data-toggle="modal" data-target="#copycampaign-window">
+                <i class="fa fa-clone"></i>
+                @T("Admin.NopStation.PushNop.GroupNotifications.CopyCampaign")
+            </button>
+            <span id="campaign-delete" class="btn btn-danger">
+                <i class="far fa-trash-alt"></i>
+                @T("Admin.Common.Delete")
+            </span>
+        </div>
+    </div>
+    @await Html.PartialAsync("_CreateOrUpdate", Model)
+</form>
+<nop-delete-confirmation asp-model-id="@Model.Id" asp-button-id="campaign-delete" />
+
+
+@*copy campaign form*@
+<div id="copycampaign-window" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="copycampaign-window-title">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="copycampaign-window-title">@T("Admin.NopStation.PushNop.GroupNotifications.Copy")</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form asp-controller="PushNopGroupNotification" asp-action="CopyCampaign" method="post">
+                <div class="form-horizontal">
+                    <div class="modal-body">
+                        <input asp-for="CopySmartGroupNotificationModel.Id" type="hidden" />
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <nop-label asp-for="CopySmartGroupNotificationModel.Name" />
+                            </div>
+                            <div class="col-md-8">
+                                <nop-editor asp-for="CopySmartGroupNotificationModel.Name" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <nop-label asp-for="CopySmartGroupNotificationModel.SendingWillStartOnUtc" />
+                            </div>
+                            <div class="col-md-8">
+                                <nop-editor asp-for="CopySmartGroupNotificationModel.SendingWillStartOnUtc" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            @T("Admin.NopStation.PushNop.GroupNotifications.Copy")
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

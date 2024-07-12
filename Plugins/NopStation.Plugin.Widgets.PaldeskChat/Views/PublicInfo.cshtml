@@ -1,0 +1,36 @@
+﻿@model PublicPaldeskChatModel
+
+@if (Model.IsRegistered && Model.ConfigureWithCustomerDataIfLoggedIn)
+{
+    <script>
+        custom_user_data = {
+            externalId: "@Model.CustomerGuid",
+            email: "@Model.CustomerEmail",
+            username: "@Model.CustomerUsername",
+            firstname: "@Model.CustomerFirstName",
+            lastname: "@Model.CustomerLastName",
+            additionalFields: "phoneNumber=@Model.CustomerPhoneNumber"
+        };
+    </script>
+}
+
+@if (Model.SettingModeId == (int)SettingMode.Key)
+{
+    <script>
+        if ("undefined" !== typeof requirejs) window.onload = function (e) { requirejs(["https://paldesk.io/api/widget-client?apiKey=@(Model.Key)"], function (e) { "undefined" !== typeof custom_user_data && (beebeeate_config.user_data = custom_user_data), BeeBeeate.widget.new(beebeeate_config) }) };
+        else {
+            var s = document.createElement("script"); s.async = !0, s.src = "https://paldesk.io/api/widget-client?apiKey=@(Model.Key)", s.onload = function () { "undefined" !== typeof custom_user_data && (beebeeate_config.user_data = custom_user_data), BeeBeeate.widget.new(beebeeate_config) };
+            if (document.body) {
+                document.body.appendChild(s)
+            }
+            else if (document.head) {
+                document.head.appendChild(s)
+            }
+        }
+
+    </script>
+}
+else
+{
+    @Html.Raw(Model.Script)
+}

@@ -1,0 +1,16 @@
+﻿@model PublicInfoModel
+
+@if (Model.TopMenu)
+{
+    <li>
+        <a href="@Url.RouteUrl("NopStationFAQ")">@T("NopStation.FAQ.FindFAQ")</a>
+    </li>
+}
+else
+{
+    <script asp-location="Footer" asp-exclude-from-bundle="true">
+        $(document).ready(function () {
+            $('@Model.FooterElementSelector').append('<li><a href="@Url.RouteUrl("NopStationFAQ")">@T("NopStation.FAQ.FindFAQ")</a></li>');
+        });
+    </script>
+}

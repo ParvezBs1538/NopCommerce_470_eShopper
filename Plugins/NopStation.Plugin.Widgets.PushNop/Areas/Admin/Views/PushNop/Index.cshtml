@@ -1,0 +1,45 @@
+﻿@model PushNopDashbordModel
+
+@{
+    NopHtml.AppendCssFileParts("/lib_npm/admin-lte/css/AdminLTE.min.css",string.Empty);
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.PushNop.Dashboard").Text;
+    NopHtml.SetActiveMenuItemSystemName("PushNop.Dashboard");
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.PushNop.Dashboard")
+    </h1>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12">
+                            @await Html.PartialAsync("_CommonStatistics")
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @await Html.PartialAsync("_WebAppDevice.Info")
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @await Html.PartialAsync("_Dashboard.SubscriberList")
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @await Html.PartialAsync("_Dashboard.CampaignList")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

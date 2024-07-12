@@ -1,0 +1,134 @@
+
+@media only screen and (max-width: 991px) {
+
+  .vendor-profile-image-container-mobile,
+  .vendor-page-header {
+    display: block !important;
+  }
+
+  .vendor-page-cover-picture {
+    display: none;
+  }
+}
+
+.vendor-profile-image-container-mobile {
+  display: none;
+}
+
+.vendor-review-selectors {
+  margin: 0 0 20px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  padding: 20px 0;
+}
+
+.vendor-review-selectors {
+  margin: 0 0 20px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  padding: 20px 0;
+}
+
+.description-box {
+  padding: 20px 0;
+}
+
+.vendor-review-selectors:first-child {
+  border-top: none;
+}
+
+.vendor-review-selectors:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.vendor-review-selectors > div {
+  display: inline-block;
+  margin: 5px;
+}
+
+.vendor-review-selectors span {
+  vertical-align: middle;
+  font-size: 16px;
+}
+
+.vendor-review-selectors select {
+  margin: 0 8px;
+}
+
+
+.vendor-page-header {
+  display: flex;
+}
+
+.vendor-profile {
+  min-width: 300px;
+}
+
+.vendor-profile-name, .vendor-profile-image-container {
+  text-align: center;
+}
+
+.align-items-center {
+  align-items: center !important;
+}
+
+.vendor-page-profile .title, .vendor-page-reviews .title {
+  font-size: 20px;
+}
+
+.vendor-shop-description {
+  padding-bottom: 10px;
+}
+
+.vendor-page-reviews .title {
+  margin: 0 0 0;
+  border-bottom: 1px solid #ddd;
+  padding: 0px 0px 2px 0;
+}
+
+.vendor-profile.align-items-center {
+  display: flex;
+}
+
+.vendor-profile-name {
+  max-width: 150px;
+  padding: 0 20px;
+}
+
+.vendor-page-cover-picture img,
+.vendor-profile-image-container-mobile img {
+  width: 100%;
+}
+
+.overall-reviews-container {
+  padding: 20px 10px;
+}
+
+.vendor-action-buttons button {
+  background-color: #4ab2f1;
+  color: white;
+  padding: 8px;
+  border: 0;
+  margin: 10px 0;
+}
+
+.overall-reviews-container .vendor-overall-review {
+  margin: 0 0 15px;
+  line-height: 22px;
+  color: #444;
+  font-weight: bold;
+}
+
+.vendor-total-reviews {
+  font-style: italic;
+}
+
+@media (min-width: 1001px) {
+  .overall-reviews-container .vendor-overall-review {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+}

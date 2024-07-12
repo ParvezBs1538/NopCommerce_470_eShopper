@@ -1,0 +1,5 @@
+﻿@model Nop.Web.Models.Catalog.VendorModel
+
+<div class="vendor-shop-profile-page-body">
+    @await Component.InvokeAsync(typeof(VendorShopProfileViewComponent), new {additionalData = Model })
+</div>

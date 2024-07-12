@@ -1,0 +1,127 @@
+﻿@model ConfigurationModel
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="EnableAutoComplete_OverrideForStore" asp-input="EnableAutoComplete" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="EnableAutoComplete" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="EnableAutoComplete" />
+            <span asp-validation-for="EnableAutoComplete"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="EnableAutoComplete">
+        <div class="form-group row" id="pnlAutoCompleteListSize">
+            <div class="col-md-4">
+                <nop-override-store-checkbox asp-for="AutoCompleteListSize_OverrideForStore" asp-input="AutoCompleteListSize" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="AutoCompleteListSize" />
+            </div>
+            <div class="col-md-8">
+                <nop-editor asp-for="AutoCompleteListSize" />
+                <span asp-validation-for="AutoCompleteListSize"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="SearchTermMinimumLength_OverrideForStore" asp-input="SearchTermMinimumLength" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="SearchTermMinimumLength" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="SearchTermMinimumLength" />
+            <span asp-validation-for="SearchTermMinimumLength"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="ShowProductImagesInSearchAutoComplete_OverrideForStore" asp-input="ShowProductImagesInSearchAutoComplete" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="ShowProductImagesInSearchAutoComplete" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="ShowProductImagesInSearchAutoComplete" />
+            <span asp-validation-for="ShowProductImagesInSearchAutoComplete"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="AllowCustomersToSelectPageSize_OverrideForStore" asp-input="AllowCustomersToSelectPageSize" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="AllowCustomersToSelectPageSize" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="AllowCustomersToSelectPageSize" />
+            <span asp-validation-for="AllowCustomersToSelectPageSize"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="AllowCustomersToSelectPageSize">
+        <div class="form-group row" id="pnlSearchPagePageSizeOptions">
+            <div class="col-md-4">
+                <nop-override-store-checkbox asp-for="SearchPagePageSizeOptions_OverrideForStore" asp-input="SearchPagePageSizeOptions" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="SearchPagePageSizeOptions" />
+            </div>
+            <div class="col-md-8">
+                <nop-editor asp-for="SearchPagePageSizeOptions" />
+                <span asp-validation-for="SearchPagePageSizeOptions"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+    <div class="form-group row" id="pnlSearchPageProductsPerPage">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="SearchPageProductsPerPage_OverrideForStore" asp-input="SearchPageProductsPerPage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="SearchPageProductsPerPage" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="SearchPageProductsPerPage" />
+            <span asp-validation-for="SearchPageProductsPerPage"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="AllowProductViewModeChanging_OverrideForStore" asp-input="AllowProductViewModeChanging" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="AllowProductViewModeChanging" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="AllowProductViewModeChanging" />
+            <span asp-validation-for="AllowProductViewModeChanging"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="DefaultViewMode_OverrideForStore" asp-input="DefaultViewMode" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="DefaultViewMode" />
+        </div>
+        <div class="col-md-8">
+            <nop-select asp-for="DefaultViewMode" asp-items="Model.AvailableViewModes" />
+            <span asp-validation-for="DefaultViewMode"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="HidePoweredByAlgolia_OverrideForStore" asp-input="HidePoweredByAlgolia" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="HidePoweredByAlgolia" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="HidePoweredByAlgolia" />
+            <span asp-validation-for="HidePoweredByAlgolia"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="EnableMultilingualSearch_OverrideForStore" asp-input="EnableMultilingualSearch" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="EnableMultilingualSearch" />
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-4">
+                    <nop-editor asp-for="EnableMultilingualSearch" />
+                    <span asp-validation-for="EnableMultilingualSearch"></span>
+                </div>
+                <div class="col-md-8">
+                    <div class="callout bg-gray-light no-margin">
+                        @T("Admin.NopStation.AlgoliaSearch.Configuration.Fields.EnableMultilingualSearch.Warnings")
+                    </div>
+                </div>
+            
+        </div>
+    </div>
+</div>

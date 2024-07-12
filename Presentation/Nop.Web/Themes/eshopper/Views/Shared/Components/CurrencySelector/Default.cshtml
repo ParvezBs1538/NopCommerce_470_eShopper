@@ -1,0 +1,63 @@
+﻿@*@model CurrencySelectorModel
+    @using Microsoft.AspNetCore.Http
+    @using System.Net
+    @using Nop.Core
+    @inject IWebHelper webHelper
+    @inject IHttpContextAccessor httpContextAccessor
+
+    @if (Model.AvailableCurrencies.Count > 1)
+    {
+
+
+        var currencies = Model.AvailableCurrencies.Select(x => new SelectListItem
+        {
+            Text = x.Name,
+            Value = webHelper.ModifyQueryString(Url.RouteUrl("ChangeCurrency", new { customercurrency = x.Id }), "returnurl=" + WebUtility.UrlEncode(webHelper.GetRawUrl(httpContextAccessor.HttpContext.Request)), null),
+            Selected = x.Id.Equals(Model.CurrentCurrencyId)
+        });*@
+@*@Html.DropDownList("customerCurrency", currencies, new { onchange = "setLocation(this.value);" })*@
+
+
+
+@*<div class="btn-group">
+            <button class="btn btn-default dropdown-toggle usa" data-toggle="dropdown" data-hover="dropdown">
+                @foreach(var just_currency in currencies)
+                {
+                    if(just_currency.Selected==true)
+                    {
+                        @just_currency.Text
+                    }
+                }
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" >
+
+                @foreach(var currency in currencies)
+                {
+                    <li><a href="@currency.Value" >@currency.Text</a></li>
+
+                }
+
+            </ul>
+        </div>
+    }*@
+
+@model CurrencySelectorModel
+
+@inject Nop.Core.IWebHelper webHelper
+
+@if (Model.AvailableCurrencies.Count > 1)
+{
+    <div class="currency-selector">
+        @{
+            var returnUrl = webHelper.GetRawUrl(Context.Request);
+            var currencies = Model.AvailableCurrencies.Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = Url.RouteUrl("ChangeCurrency", new { customercurrency = x.Id, returnUrl },webHelper.GetCurrentRequestProtocol()),
+                Selected = x.Id.Equals(Model.CurrentCurrencyId)
+            });
+            <select id="customerCurrency" name="customerCurrency" asp-items="@currencies" onchange="setLocation(this.value);" aria-label="@T("Currency.Selector.Label")"></select>
+        }
+    </div>
+}

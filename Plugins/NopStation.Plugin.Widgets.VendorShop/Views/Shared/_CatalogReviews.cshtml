@@ -1,0 +1,31 @@
+﻿@model VendorProfileModel
+
+
+<div class="reviews-container">
+    <div class="ajax-reviews-busy"></div>
+    <div class="reviews-wrapper">
+        @await Html.PartialAsync("_ReviewsInLines", Model)
+    </div>
+</div>
+<script asp-location="Footer">
+    $(document).ready(function () {
+        CatalogReviews.init({
+            ajax: @Model.UseAjaxLoading.ToString().ToLowerInvariant(),
+            browserPath: '@Context.Request.Path',
+            fetchUrl: '@ViewData["FetchUrl"]'
+        });
+
+        addPagerHandlers();
+        $(CatalogReviews).on('loaded', function () {
+            addPagerHandlers();
+        });
+    });
+
+    function addPagerHandlers() {
+        $('[data-page]').on('click', function (e) {
+            e.preventDefault();
+            CatalogReviews.getReviews($(this).data('page'));
+            return false;
+        });
+    }
+</script>

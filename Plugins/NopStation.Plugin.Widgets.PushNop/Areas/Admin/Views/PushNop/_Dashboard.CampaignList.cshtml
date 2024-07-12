@@ -1,0 +1,87 @@
+﻿@using Nop.Core
+@using NopStation.Plugin.Widgets.PushNop.Areas.Admin.Models
+@inject Nop.Services.Common.IGenericAttributeService genericAttributeService
+@inject IWorkContext workContext
+@{
+    const string panelId = "latest-campaigns-box";
+    const string hidePanelAttributeName = "Reports.HideLatestCampaignsPanel";
+    var hidePanel = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hidePanelAttributeName);
+}
+
+<div class="card card-primary card-outline @if (hidePanel){<text>collapsed-box</text>}" id="@panelId">
+    <div class="card-header with-border clearfix">
+        <h3 class="card-title">
+            <i class="fa fa-cart-plus"></i>
+            @T("Admin.NopStation.PushNop.GroupNotifications.Dashboard.List")
+        </h3>
+        <div class="card-tools float-right">
+            <button class="btn btn-tool" data-widget="collapse">
+                @if (hidePanel)
+                {
+                    <text><i class="fa fa-plus"></i></text>
+                }
+                else
+                {
+                    <text><i class="fa fa-minus"></i></text>
+                }
+            </button>
+        </div>
+    </div>
+    <script>
+    $(document).ready(function () {
+        $('#@panelId').on('click', 'button[data-widget="collapse"]', function () {
+            var collapsed = !$('#@panelId').hasClass('collapsed-box');
+            saveUserPreferences('@(Url.Action("SavePreference", "Preferences"))', '@hidePanelAttributeName', collapsed);
+        });
+    });
+    </script>
+
+    <div class="card-body">
+        @await Html.PartialAsync("Table", new DataTablesModel
+        {
+            Name = "pushnotificationCampaign-grid",
+            UrlRead = new DataUrl("GetList", "PushNopGroupNotification", null),
+            SearchButtonId = "search-pushnotificationCampaign",
+            Length = 10,
+            ColumnCollection = new List<ColumnProperty>
+            {
+                new ColumnProperty(nameof(GroupNotificationModel.Name))
+                {
+                    Title = T("Admin.NopStation.PushNop.GroupNotifications.Fields.Name").Text,
+                    Width = "150"
+                },
+                new ColumnProperty(nameof(GroupNotificationModel.Title))
+                {
+                    Title = T("Admin.NopStation.PushNop.GroupNotifications.Fields.Title").Text,
+                    Width = "150"
+                },
+                new ColumnProperty(nameof(GroupNotificationModel.SendToAll))
+                {
+                    Title = T("Admin.NopStation.PushNop.GroupNotifications.Fields.SendToAll").Text,
+                    Width = "80",
+                    ClassName =  NopColumnClassDefaults.CenterAll,
+                    Render = new RenderBoolean()
+                },
+                new ColumnProperty(nameof(GroupNotificationModel.Subscriptions))
+                {
+                    Title = T("Admin.NopStation.PushNop.GroupNotifications.Fields.Subscriptions").Text,
+                    Width = "80",
+                    ClassName =  NopColumnClassDefaults.CenterAll
+                },
+                new ColumnProperty(nameof(GroupNotificationModel.SendingWillStartOn))
+                {
+                    Title = T("Admin.NopStation.PushNop.GroupNotifications.Fields.SendingWillStartOn").Text,
+                    Width = "100",
+                    Render = new RenderDate()
+                },
+                new ColumnProperty(nameof(GroupNotificationModel.Id))
+                {
+                    Title = T("Admin.Common.Edit").Text,
+                    Width = "80",
+                    ClassName =  NopColumnClassDefaults.Button,
+                    Render = new RenderButtonEdit(new DataUrl("~/Admin/PushNopGroupNotification/Edit"))
+                }
+            }
+        })
+    </div>
+</div>

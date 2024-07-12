@@ -1,0 +1,13 @@
+﻿@model List<MegaMenuModel>
+@using Nop.Web.Models.Catalog
+
+@{
+    NopHtml.AddCssFileParts("~/Plugins/NopStation.Plugin.Widgets.SmartMegaMenu/Contents/css/style.css");
+    NopHtml.AddCssFileParts("~/Plugins/NopStation.Plugin.Widgets.SmartMegaMenu/Contents/css/responsive.css");
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, $"~/Plugins/NopStation.Plugin.Widgets.SmartMegaMenu/Contents/scripts/masonry.pkgd.min.js");
+}
+
+@foreach (var model in Model)
+{
+    @await Html.PartialAsync("Default.Menu.cshtml", model)
+}

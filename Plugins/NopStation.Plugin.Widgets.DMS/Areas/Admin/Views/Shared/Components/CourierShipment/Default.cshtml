@@ -1,0 +1,126 @@
+@model CourierShipmentModel
+@inject DMSSettings dmsSettings
+
+<div class="card card-default" id="pnlCourierShipment">
+    <div class="card-header">
+        @T("Admin.NopStation.DMS.CourierShipments.Details")
+    </div>
+    <div class="card-body">
+        <div asp-validation-summary="All"></div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="ShipperId" />
+            </div>
+            <div class="col-md-9">
+                @if (Model.Delivered)
+                {
+                    <div class="form-text-row">@Model.ShipperName</div>
+                }
+                else
+                {
+                    <nop-select asp-for="ShipperId" asp-items="@Model.AvailableShippers" />
+                }
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="ShipmentPickupPointId" />
+            </div>
+            <div class="col-md-9">
+                <nop-select asp-for="ShipmentPickupPointId" asp-items="@Model.AvailablePickupPoints" />
+            </div>
+        </div>
+        @if (Model.Id > 0)
+        {
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="CreatedOn" />
+                </div>
+                <div class="col-md-9">
+                    <div class="form-text-row">@Model.CreatedOn</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="UpdatedOn" />
+                </div>
+                <div class="col-md-9">
+                    <div class="form-text-row">@Model.UpdatedOn</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="ShipmentStatusId" />
+                </div>
+                <div class="col-md-9">
+                    @if (Model.ShipmentStatusId != (int)ShipmentStatusTypes.Delivered)
+                    {
+                        <nop-select asp-for="ShipmentStatusId" asp-items="@Model.AvailableShipmentStatusTypes" />
+                    }
+                    else
+                    {
+                        var ShipmentStatus = (ShipmentStatusTypes.Delivered).ToString();
+                        <div class="form-text-row">@ShipmentStatus</div>
+                        @if (Model.PODContainPhoto)
+                        {
+                            <a href="@Model.PODPhotoUrl" target="_blank"><img src="@Model.PODPhotoUrl" width="150" /></a>
+                            ;
+
+                        }
+                    }
+                </div>
+            </div>
+        }
+        @if (!Model.Delivered)
+        {
+            <div class="form-group row">
+                <div class="col-md-3">
+                </div>
+                <div class="col-md-9">
+                    <button type="button" id="btnCourierShipment" class="btn btn-primary">
+                        @T("Admin.Common.Save")
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@if (!Model.Delivered)
+{
+    <script>
+        $(document).ready(function () {
+            $('#btnCourierShipment').click(function () {
+                if (!confirm('@T("Admin.Common.AreYouSure").Text'))
+                    return;
+
+                var shipperId = $('#@Html.IdFor(x => x.ShipperId)').val();
+                var shipmentStatusId = $('#@Html.IdFor(x => x.ShipmentStatusId)').val();
+                var shipmentPickupPointId = $('#@Html.IdFor(x => x.ShipmentPickupPointId)').val();
+
+                var postData = {
+                    ShipperId: shipperId,
+                    //SignaturePictureId: signaturePictureId,
+                    ShipmentStatusId: shipmentStatusId,
+                    ShipmentId: '@Model.ShipmentId',
+                    ShipmentPickupPointId: shipmentPickupPointId
+                };
+                addAntiForgeryToken(postData);
+
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "@(Url.Action("SaveCourierShipment", "CourierShipment"))",
+                    data: postData,
+                    success: function (data, textStatus, jqXHR) {
+                        if (!data.Result) {
+                            alert(data.Message);
+                            return;
+                        }
+                        $('#pnlCourierShipment').replaceWith(data.Html);
+                    }
+                });
+            });
+        });
+    </script>
+}

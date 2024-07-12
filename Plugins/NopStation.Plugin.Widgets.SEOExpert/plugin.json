@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "SEO Expert",
+  "SystemName": "NopStation.Plugin.Widgets.SEOExpert",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.SEOExpert.dll",
+  "Description": "Generate SEO Meta Title, Meta Description, Meta Keywords through ChatGPT",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

@@ -1,0 +1,150 @@
+﻿@model CourierShipmentsModel
+
+@{
+    Layout = "_ColumnsTwo";
+    //title
+    NopHtml.AddTitleParts(T("PageTitle.Account").Text);
+    //page class
+    NopHtml.AppendPageCssClassParts("html-account-page");
+    NopHtml.AppendPageCssClassParts("html-shipment-list-page");
+    NopHtml.AddCssFileParts("/Plugins/NopStation.Plugin.Widgets.DMS/Contents/css/styles.css", string.Empty);
+    NopHtml.AddScriptParts(ResourceLocation.Footer, "/Plugins/NopStation.Plugin.Widgets.DMS/Contents/js/public.CourierShipments.js");
+}
+
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = (CustomerNavigationEnum)(-1000) })
+}
+
+<div class="page account-page order-list-page">
+    <div class="page-title">
+        <h1>@T("Account.MyAccount") - @T("NopStation.DMS.Account.Shipments")</h1>
+    </div>
+
+    <div class="container">
+        <div>
+            <form asp-controller="DMS" asp-action="Shipments" method="get">
+                <div class="user-details">
+                    <div class="inputs input-box">
+                        <label asp-for="TrackingNumber" asp-postfix=":"></label>
+                        <input asp-for="TrackingNumber" class="clear" />
+                    </div>
+                    <div class="inputs input-box">
+                        <label asp-for="Email" asp-postfix=":"></label>
+                        <input asp-for="Email" class="clear" />
+                    </div>
+                    <div class="inputs input-box">
+                        <label asp-for="ShippingStatusId" asp-postfix=":"></label>
+                        <nop-select asp-for="ShippingStatusId" asp-items="@Model.AvailableShippingStatusOptions" class="clear" />
+                    </div>
+                    <div class="user-details-button">
+                        <button type="submit" class="button-1 search-box-button" id="btnSubmit" name="btnSearch">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="page-body">
+        @if (Model.InvalidAccount)
+        {
+            <div class="shipment-list">
+                @Model.WarningMessage
+            </div>
+        }
+        else if (Model.CourierShipments.Count > 0)
+        {
+            <div class="product-list">
+                <div class="item-grid">
+                    <div class="shipment-list">
+                        @await Html.PartialAsync("_Shipments", Model)
+                    </div>
+                </div>
+            </div>
+
+            var pager = Html.Pager(Model)
+                .QueryParam("pagenumber")
+                // for search page
+                .BooleanParameterName("FilterOptionId")
+                .RenderEmptyParameters(true);
+
+            if (!await pager.IsEmpty())
+            {
+                <div class="pager">
+                    @pager
+                </div>
+            }
+        }
+        else
+        {
+            <div class="no-data">
+                @T("NopStation.DMS.Account.Shipments.NoShipments")
+            </div>
+        }
+
+
+        <div class="product-selectors">
+            @if (Model.AllowShippersToSelectPageSize)
+            {
+                <div class="product-page-size">
+                    <span>@T("Catalog.PageSize")</span>
+                    @Html.DropDownList("shipments-pagesize", Model.PageSizeOptions, new { aria_label = T("Catalog.PageSize.Label") })
+                    <span>@T("Catalog.PageSize.PerPage")</span>
+                </div>
+                <script asp-location="Footer">
+                    $(document).ready(function () {
+                        var $pageSizeEl = $('#shipments-pagesize');
+                        $pageSizeEl.on('change', function () {
+                            CourierShipments.getCourierShipments();
+                        });
+
+                        $(CourierShipments).on('before', function (e) {
+                            e.payload.urlBuilder
+                                .addParameter('pagesize', $pageSizeEl.val());
+                        });
+                    });
+                </script>
+            }
+        <div class="product-page-size">
+            <span>@T("NopStation.DMS.Shipments.Period")</span>
+            @Html.DropDownList("shipments-filteroptions", Model.AvailableFilterOptions)
+        </div>
+        <script asp-location="Footer">
+            $(document).ready(function () {
+                var $filterOptionsEl = $('#shipments-filteroptions');
+                $filterOptionsEl.on('change', function () {
+                    CourierShipments.getCourierShipments();
+                });
+
+                $(CourierShipments).on('before', function (e) {
+                    e.payload.urlBuilder
+                        .addParameter('filteroptionid', $filterOptionsEl.val());
+                });
+            });
+        </script>
+        </div>
+    </div>
+</div>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        CourierShipments.init({
+            ajax: @Model.UseAjaxLoading.ToString().ToLowerInvariant(),
+            browserPath: '@Context.Request.Path',
+            fetchUrl: '/dms/ShipmentsPartial'
+        });
+        addPagerHandlers();
+        $(CourierShipments).on('loaded', function () {
+            addPagerHandlers();
+        });
+    });
+    //'/DMS/Shipments'
+    function addPagerHandlers() {
+        $('[data-page]').on('click', function (e) {
+            e.preventDefault();
+            CourierShipments.getCourierShipments($(this).data('page'));
+            return false;
+        });
+    }
+</script>
+@NopHtml.GenerateInlineScripts(ResourceLocation.Footer)

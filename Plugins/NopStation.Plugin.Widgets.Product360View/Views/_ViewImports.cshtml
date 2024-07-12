@@ -1,0 +1,25 @@
+﻿@inherits Nop.Web.Framework.Mvc.Razor.NopRazorPage<TModel>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Nop.Web.Framework
+
+@inject INopHtmlHelper NopHtml
+@inject IGenericAttributeService genericAttributeService
+@inject IWorkContext workContext
+
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@using Nop.Core;
+@using Nop.Services.Common;
+@using Nop.Web.Areas.Admin.Components
+@using Nop.Web.Framework.UI
+@using Nop.Web.Framework.Extensions
+@using System.Text.Encodings.Web
+@using NopStation.Plugin.Widgets.Product360View
+@using NopStation.Plugin.Widgets.Product360View.Domain
+@using NopStation.Plugin.Widgets.Product360View.Models
+@using Nop.Services
+@using Nop.Web.Framework.Models.DataTables
+@using Microsoft.AspNetCore.Routing
+
+@using Nop.Web.Components
+@using Nop.Web.Models.Customer
+@using Nop.Web.Models.Catalog

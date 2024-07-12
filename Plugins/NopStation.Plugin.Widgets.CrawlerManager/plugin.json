@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Crawler Manager",
+  "SystemName": "NopStation.Plugin.Widgets.CrawlerManager",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.CrawlerManager.dll",
+  "Description": "This plugin enables to manage Crawlers to the site.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

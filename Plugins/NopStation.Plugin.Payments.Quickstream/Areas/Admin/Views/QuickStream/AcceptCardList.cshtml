@@ -1,0 +1,108 @@
+﻿@model AcceptedCardSearchModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.QuickStream.AcceptedCards.List").Text;
+    NopHtml.SetActiveMenuItemSystemName("QuickStream.AcceptedCards");
+    Layout = "_AdminLayout";
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.QuickStream.AcceptedCards.List")
+    </h1>
+    <div class="float-right">
+        <button type="button" id="sync-button" class="btn bg-olive">
+            <i class="fas fa-sync"></i>
+            @T("Admin.NopStation.QuickStream.AcceptedCards.Sync")
+        </button>
+    </div>
+</div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                           {
+                               Name = "order-reference-bank-payment",
+                               UrlRead = new DataUrl("AcceptCardList", "QuickStream", null),
+                               Length = Model.PageSize,
+                               LengthMenu = Model.AvailablePageSizes,
+                               SearchButtonId = "search-reference",
+                               ColumnCollection = new List<ColumnProperty>
+                               {
+                                    new ColumnProperty(nameof(AcceptedCardModel.CardScheme))
+                                    {
+                                        Title = T("Admin.NopStation.QuickStream.AcceptedCards.Fields.CardScheme").Text,
+                                        Width = "80"
+                                    },
+                                    new ColumnProperty(nameof(AcceptedCardModel.CardType))
+                                    {
+                                        Title = T("Admin.NopStation.QuickStream.AcceptedCards.Fields.CardType").Text,
+                                        Width = "80"
+                                    },
+                                    new ColumnProperty(nameof(AcceptedCardModel.PictureUrl))
+                                    {
+                                        Title = T("Admin.NopStation.QuickStream.AcceptedCards.Fields.PictureId").Text,
+                                        Width = "150",
+                                        ClassName = NopColumnClassDefaults.CenterAll,
+                                        Render=new RenderPicture()
+                                    },
+                                    new ColumnProperty(nameof(AcceptedCardModel.Surcharge))
+                                    {
+                                        Title = T("Admin.NopStation.QuickStream.AcceptedCards.Fields.Surcharge").Text,
+                                        Width = "80",
+                                        ClassName = NopColumnClassDefaults.CenterAll
+                                    },
+                                    new ColumnProperty(nameof(AcceptedCardModel.IsEnable))
+                                    {
+                                        Title = T("Admin.NopStation.QuickStream.AcceptedCards.Fields.IsEnable").Text,
+                                        Width = "80",
+                                        ClassName = NopColumnClassDefaults.CenterAll,
+                                        Render = new RenderBoolean()
+                                    },
+                                    new ColumnProperty(nameof(AcceptedCardModel.Id))
+                                    {
+                                        Title = T("Admin.Common.Edit").Text,
+                                        Width = "100",
+                                        ClassName = NopColumnClassDefaults.Button,
+                                        Render = new RenderButtonEdit(new DataUrl("~/Admin/QuickStream/Edit/"))
+                                    }
+                                }
+                           })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $("#sync-button").on('click',function (e) {
+        console.log('clicked');
+        e.preventDefault();
+        var postData = {
+
+        };
+        addAntiForgeryToken(postData);
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "@Url.Action("Sync", "QuickStream")",
+            data: postData,
+            dataType: "json",
+            success: function (response) {
+                console.log("request success");
+                window.location.reload();
+            },
+            error: function (error) {
+                alert(error.responseText);
+            },
+            complete: function (jqXHR, textStatus) {
+                //console.log("request success");
+            }
+        });
+    });
+</script>

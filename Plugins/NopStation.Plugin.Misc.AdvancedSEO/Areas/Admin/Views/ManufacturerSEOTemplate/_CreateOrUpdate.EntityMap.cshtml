@@ -1,0 +1,68 @@
+﻿@model ManufacturerSEOTemplateModel
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+
+<div class="card-body">
+    @await Html.PartialAsync("Table", new DataTablesModel
+    {
+        Name = "nopstation-manufacturer-seo-template-mapping-grid",
+        UrlRead = new DataUrl("ManufacturerSEOTemplateMappingList", "ManufacturerSEOTemplate", new RouteValueDictionary { [nameof(ManufacturerManufacturerSEOTemplateMappingSearchModel.ManufacturerSEOTemplateId)] = Model.Id }),
+        UrlDelete = new DataUrl("ManufacturerSEOTemplateMappingDelete", "ManufacturerSEOTemplate", null),
+        //PrimaryKeyColumn = nameof(ManufacturerManufacturerSEOTemplateMappingModel.Id),
+        Length = Model.ManufacturerManufacturerSEOTemplateMappingSearchModel.PageSize,
+        LengthMenu = Model.ManufacturerManufacturerSEOTemplateMappingSearchModel.AvailablePageSizes,
+        ColumnCollection = new List<ColumnProperty>
+        {
+            //new ColumnProperty(nameof(ManufacturerManufacturerSEOTemplateMappingModel.Id))
+            //{
+            //    Width = "50"
+            //},
+            new ColumnProperty(nameof(ManufacturerManufacturerSEOTemplateMappingModel.ManufacturerName))
+            {
+                Title = T("Admin.NopStation.Plugin.Misc.AdvancedSEO.ManufacturerManufacturerSEOTemplateMapping.Fields.Manufacturer").Text,
+            },
+            new ColumnProperty(nameof(ManufacturerManufacturerSEOTemplateMappingModel.ManufacturerName))
+            {
+                Title = T("Admin.Common.View").Text,
+                Width = "100",
+                Render = new RenderCustom("renderManufacturerViewBtn")
+            },
+            new ColumnProperty(nameof(ManufacturerManufacturerSEOTemplateMappingModel.Id))
+            {
+                Title = T("Admin.Common.Delete").Text,
+                Width = "100",
+                ClassName =  NopColumnClassDefaults.Button,
+                Render = new RenderButtonRemove(T("Admin.Common.Delete").Text)
+            }
+        }
+    })
+    <div class="card-footer mt-2">
+        <button type="button" id="add-new-categories-to-mapping" class="btn btn-primary">@T("Admin.Common.AddNew")</button>
+    </div>
+
+    <input type="submit" id="btnmanufacturermappedrelode" style="display: none" />
+
+    <script>
+        function renderManufacturerViewBtn(data, type, row, meta) {
+            return '<a href="/Admin/Manufacturer/Edit/' + row.ManufacturerId + '">' + "@T("Admin.Common.View")" + '</a>'
+        }
+
+        $(document).ready(function() {
+            $('#add-new-categories-to-mapping').click(function () {
+                var manufacturerSEOTemplateId = $("#@Html.IdFor(model => model.Id)").val();
+                javascript: OpenWindow('/Admin/ManufacturerSEOTemplate/ManufacturerAddPopup?manufacturerSEOTemplateId=' + manufacturerSEOTemplateId + '&btnId=btnmanufacturermappedrelode&formId=EditManufacturerSEOTemplate', 800, 800, true);
+                return false;
+            })
+
+            $('#btnmanufacturermappedrelode').click(function () {
+                //refresh grid
+                updateTable('#nopstation-manufacturer-seo-template-mapping-grid');
+
+                //return false to don't reload a page
+                return false;
+            });
+        });
+    </script>
+</div>

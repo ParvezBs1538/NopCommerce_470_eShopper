@@ -1,0 +1,13 @@
+﻿
+@{
+    var walletMenuClass = "inactive";
+    if (Url.ActionContext.RouteData.Values["controller"].ToString().Equals("creditwallet", StringComparison.InvariantCultureIgnoreCase) &&
+        Url.ActionContext.RouteData.Values["action"].ToString().Equals("details", StringComparison.InvariantCultureIgnoreCase))
+    {
+        walletMenuClass = "active";
+    }
+}
+
+<li class="wallet-details @walletMenuClass">
+    <a href="@Url.RouteUrl("CustomerCreditWallet")">@T("NopStation.CreditWallet.CustomerNav")</a>
+</li>

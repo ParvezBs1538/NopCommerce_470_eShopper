@@ -1,0 +1,105 @@
+﻿#login-modal {
+  width: 90%;
+  margin: 20px auto;
+  padding: 40px;
+  background-color: #FFF;
+  position: relative;
+}
+
+  #login-modal .returning-wrapper .title {
+    text-align: center;
+  }
+
+  #login-modal .returning-wrapper .form-fields {
+    overflow: hidden;
+    padding: 30px 15px 0;
+  }
+
+  #login-modal .returning-wrapper .inputs.reversed {
+    white-space: normal;
+  }
+
+    #login-modal .returning-wrapper .inputs.reversed * {
+      display: inline-block;
+      width: auto;
+      margin: 5px;
+      font-size: 14px;
+      color: #444;
+    }
+
+  #login-modal .returning-wrapper .buttons {
+    background-color: #fff;
+    padding: 30px 0;
+    text-align: center;
+  }
+
+    #login-modal .returning-wrapper .buttons .login-button {
+      min-width: 140px;
+      border: none;
+      background-color: #4ab2f1;
+      padding: 10px 30px;
+      text-align: center;
+      font-size: 15px;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+#login-form .title {
+  margin: 0 0 20px;
+  font-size: 20px;
+  color: #444;
+  text-align: center;
+}
+
+@media (min-width: 481px) {
+  #login-modal {
+    width: 92.5%;
+  }
+}
+
+@media (min-width: 769px) {
+  #login-modal {
+    width: 92.5%;
+  }
+}
+
+@media (min-width: 1001px) {
+
+  #login-modal {
+    width: 540px;
+  }
+
+    #login-modal .returning-wrapper {
+      margin: 0 auto;
+    }
+
+      #login-modal .returning-wrapper .form-fields {
+        min-height: 200px;
+        padding: 30px 0 0;
+      }
+
+      #login-modal .returning-wrapper .inputs label {
+        width: 110px;
+      }
+
+      #login-modal .returning-wrapper input[type="text"],
+      #login-modal .returning-wrapper input[type="email"],
+      #login-modal .returning-wrapper input[type="password"] {
+        max-width: 300px;
+        width: 100%;
+      }
+}
+
+@media (min-width: 1367px) {
+
+  #login-modal {
+    width: 540px;
+  }
+
+    #login-modal .returning-wrapper input[type="text"],
+    #login-modal .returning-wrapper input[type="email"],
+    #login-modal .returning-wrapper input[type="password"] {
+      max-width: 320px;
+      width: 100%;
+    }
+}

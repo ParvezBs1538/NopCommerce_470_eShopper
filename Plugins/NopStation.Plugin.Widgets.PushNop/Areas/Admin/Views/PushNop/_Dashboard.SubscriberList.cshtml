@@ -1,0 +1,73 @@
+﻿@using Nop.Core
+@using NopStation.Plugin.Widgets.ProgressiveWebApp.Areas.Admin.Models
+@inject Nop.Services.Common.IGenericAttributeService genericAttributeService
+@inject IWorkContext workContext
+@{
+    const string panelId = "latest-subscribers-box";
+    const string hidePanelAttributeName = "Reports.HideLatestSubscribersPanel";
+    var hidePanel = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hidePanelAttributeName);
+}
+
+<div class="card card-primary card-outline @if (hidePanel){<text>collapsed-box</text>}" id="@panelId">
+    <div class="card-header with-border clearfix">
+        <h3 class="card-title">
+            <i class="fa fa-cart-plus"></i>
+            @T("Admin.NopStation.PushNop.WebAppDevices.LatestSubscriberList")
+        </h3>
+        <div class="card-tools float-right">
+            <button class="btn btn-box-tool" data-widget="collapse">
+                @if (hidePanel)
+                {
+                    <text><i class="fa fa-plus"></i></text>
+                }
+                else
+                {
+                    <text><i class="fa fa-minus"></i></text>
+                }
+            </button>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#@panelId').on('click', 'button[data-widget="collapse"]', function () {
+                var collapsed = !$('#@panelId').hasClass('collapsed-box');
+                saveUserPreferences('@(Url.Action("SavePreference", "Preferences"))', '@hidePanelAttributeName', collapsed);
+            });
+        });
+    </script>
+    <div class="card-body">
+        @await Html.PartialAsync("Table", new DataTablesModel
+        {
+            Name = "WebAppDevice-grid",
+            UrlRead = new DataUrl("~/Admin/WebAppDevice/GetList", null),
+            Length = 30,
+            SearchButtonId = "search-device",
+            ColumnCollection = new List<ColumnProperty>
+            {
+                new ColumnProperty(nameof(WebAppDeviceModel.CustomerName))
+                {
+                    Title = T("Admin.NopStation.PWA.WebAppDevices.Fields.Customer").Text,
+                    Width = "100"
+                },
+                new ColumnProperty(nameof(WebAppDeviceModel.StoreName))
+                {
+                    Title = T("Admin.NopStation.PWA.WebAppDevices.Fields.Store").Text,
+                    Width = "100"
+                },
+                new ColumnProperty(nameof(WebAppDeviceModel.CreatedOn))
+                {
+                    Title = T("Admin.NopStation.PWA.WebAppDevices.Fields.CreatedOn").Text,
+                    Width = "50",
+                    Render = new RenderDate()
+                },
+                new ColumnProperty(nameof(WebAppDeviceModel.Id))
+                {
+                    Title = T("Admin.Common.View").Text,
+                    Width = "80",
+                    ClassName =  NopColumnClassDefaults.Button,
+                    Render = new RenderButtonView(new DataUrl("~/Admin/WebAppDevice/View"))
+                }
+            }
+        })
+    </div>
+</div>

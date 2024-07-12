@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop Station",
+  "FriendlyName": "Nop-Station Amazon S3",
+  "SystemName": "NopStation.Plugin.Misc.AmazonS3",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 2,
+  "FileName": "NopStation.Plugin.Misc.AmazonS3.dll",
+  "Description": "This plugin allows you to integrate Amazon S3",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

@@ -1,0 +1,169 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("MegaMenu.Configuration");
+    ViewBag.PageTitle = T("Admin.NopStation.MegaMenu.Configuration").Text;
+}
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.HideManufacturers)").change(toggleManufacturerProperties);
+        $("#@Html.IdFor(model => model.ShowNumberofCategoryProducts)").change(toggleShowNumberofCategoryProducts);
+        $("#@Html.IdFor(model => model.ShowCategoryPicture)").change(toggleShowCategoryPicture);
+        $("#@Html.IdFor(model => model.EnableMegaMenu)").change(toggleEnableMegaMenu);
+
+        toggleManufacturerProperties();
+        toggleShowNumberofCategoryProducts();
+        toggleShowCategoryPicture();
+        toggleEnableMegaMenu();
+    });
+
+    function toggleManufacturerProperties() {
+        if ($('#@Html.IdFor(model => model.HideManufacturers)').is(':checked')) {
+            $('#pnlManufacturer').hide();
+        } else {
+            $('#pnlManufacturer').show();
+        }
+    }
+
+    function toggleShowNumberofCategoryProducts() {
+        if ($('#@Html.IdFor(model => model.ShowNumberofCategoryProducts)').is(':checked')) {
+            $('#pnlShowNumberofCategoryProducts').show();
+        } else {
+            $('#pnlShowNumberofCategoryProducts').hide();
+        }
+    }
+
+    function toggleShowCategoryPicture() {
+        if ($('#@Html.IdFor(model => model.ShowCategoryPicture)').is(':checked')) {
+            $('#pnlShowCategoryPicture').show();
+        } else {
+            $('#pnlShowCategoryPicture').hide();
+        }
+    }
+
+    function toggleEnableMegaMenu() {
+        if ($('#@Html.IdFor(model => model.EnableMegaMenu)').is(':checked')) {
+            $('#pnlEnableMegaMenu').show();
+        } else {
+            $('#pnlEnableMegaMenu').hide();
+        }
+    }
+</script>
+
+<form asp-controller="MegaMenu" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.MegaMenu.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="form-horizontal">
+            @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+            <div asp-validation-summary="All"></div>
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="panel-body">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <nop-override-store-checkbox asp-for="EnableMegaMenu_OverrideForStore" asp-input="EnableMegaMenu" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="EnableMegaMenu" />
+                            </div>
+                            <div class="col-md-8">
+                                <nop-editor asp-for="EnableMegaMenu" />
+                                <span asp-validation-for="EnableMegaMenu"></span>
+                            </div>
+                        </div>
+                        <div id="pnlEnableMegaMenu">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="MaxCategoryLevelsToShow_OverrideForStore" asp-input="MaxCategoryLevelsToShow" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="MaxCategoryLevelsToShow" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="MaxCategoryLevelsToShow" />
+                                    <span asp-validation-for="MaxCategoryLevelsToShow"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="ShowNumberofCategoryProducts_OverrideForStore" asp-input="ShowNumberofCategoryProducts" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowNumberofCategoryProducts" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="ShowNumberofCategoryProducts" />
+                                    <span asp-validation-for="ShowNumberofCategoryProducts"></span>
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="ShowNumberofCategoryProducts">
+                                <div class="form-group row" id="pnlShowNumberofCategoryProducts">
+                                    <div class="col-md-4">
+                                        <nop-override-store-checkbox asp-for="ShowNumberOfCategoryProductsIncludeSubcategories_OverrideForStore" asp-input="ShowNumberOfCategoryProductsIncludeSubcategories" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="ShowNumberOfCategoryProductsIncludeSubcategories" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="ShowNumberOfCategoryProductsIncludeSubcategories" />
+                                        <span asp-validation-for="ShowNumberOfCategoryProductsIncludeSubcategories"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="SelectedCategoryIds_OverrideForStore" asp-input="SelectedCategoryIds" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="SelectedCategoryIds" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-select asp-for="SelectedCategoryIds" asp-items="Model.AvailableCategories" asp-multiple="true" />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="HideManufacturers_OverrideForStore" asp-input="HideManufacturers" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="HideManufacturers" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="HideManufacturers" />
+                                    <span asp-validation-for="HideManufacturers"></span>
+                                </div>
+                            </div>
+
+                            <div id="pnlManufacturer">
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <nop-override-store-checkbox asp-for="SelectedManufacturerIds_OverrideForStore" asp-input="SelectedManufacturerIds" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="SelectedManufacturerIds" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="SelectedManufacturerIds" asp-items="Model.AvailableManufacturers" asp-multiple="true" />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="ShowMainCategoryPictureRight_OverrideForStore" asp-input="HideManufacturers" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowMainCategoryPictureRight" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="ShowMainCategoryPictureRight" />
+                                    <span asp-validation-for="ShowMainCategoryPictureRight"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,181 @@
+﻿@model WalletSearchModel
+
+@{
+    Layout = "_AdminLayout";
+
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.CreditWallet.Wallets.List").Text;
+    NopHtml.SetActiveMenuItemSystemName("Wallets");
+
+    const string hideSearchBlockAttributeName = "WalletListPage.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.CreditWallet.Wallets.List")
+    </h1>
+    <div class="float-right">
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fas fa-search" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                        </div>
+
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row" style="display: @(Model.FirstNameEnabled ? "auto" : "none")">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchFirstName" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchFirstName" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchEmail" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchEmail" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row" style="display: @(Model.LastNameEnabled ? "auto" : "none")">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchLastName" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchLastName" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SelectedCustomerRoleIds" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SelectedCustomerRoleIds" asp-items="Model.AvailableCustomerRoles" asp-multiple="true" />
+                                            <script>
+                                                $(document).ready(function() {
+                                                    var rolesIdsInput =
+                                                        $('#@Html.IdFor(model => model.SelectedCustomerRoleIds)')
+                                                            .data("kendoMultiSelect");
+                                                        rolesIdsInput.setOptions({
+                                                            autoClose: false,
+                                                            filter: "contains"
+                                                        });
+
+                                                    @if (Model.AvailableCustomerRoles.Count == 0)
+                                                    {
+                                                        <text>
+                                                            rolesIdsInput.setOptions({
+                                                                enable: false,
+                                                                placeholder:
+                                                                    'Select roles'
+                                                            });
+                                                            rolesIdsInput._placeholder();
+                                                            rolesIdsInput._enable();
+                                                        </text>
+                                                    }
+                                                });
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="text-center col-12">
+                                    <button type="button" id="search-wallets" class="btn btn-primary btn-search">
+                                        <i class="fas fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "wallets-grid",
+                            UrlRead = new DataUrl("List", "Wallet", null),
+                            SearchButtonId = "search-wallets",
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            Filters = new List<FilterParameter>
+                            {
+                                new FilterParameter(nameof(Model.SearchEmail)),
+                                new FilterParameter(nameof(Model.SearchFirstName)),
+                                new FilterParameter(nameof(Model.SearchLastName)),
+                                new FilterParameter(nameof(Model.SelectedCustomerRoleIds))
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(WalletModel.WalletCustomerEmail))
+                                {
+                                    Title = T("Admin.NopStation.CreditWallet.Wallets.Fields.WalletCustomer").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(WalletModel.WalletCustomerId))
+                                {
+                                    Title = T("Admin.Common.View").Text,
+                                    Render = new RenderButtonView(new DataUrl("~/Admin/Customer/Edit")),
+                                    ClassName =  NopColumnClassDefaults.CenterAll,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(WalletModel.CreditLimit))
+                                {
+                                    Title = T("Admin.NopStation.CreditWallet.Wallets.Fields.CreditLimit").Text,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(WalletModel.CreditUsed))
+                                {
+                                    Title = T("Admin.NopStation.CreditWallet.Wallets.Fields.CreditUsed").Text,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(WalletModel.AvailableCredit))
+                                {
+                                    Title = T("Admin.NopStation.CreditWallet.Wallets.Fields.AvailableCredit").Text,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(WalletModel.Active))
+                                {
+                                    Title = T("Admin.NopStation.CreditWallet.Wallets.Fields.Active").Text,
+                                    Width = "50",
+                                    ClassName =  NopColumnClassDefaults.CenterAll,
+                                    Render = new RenderBoolean()
+                                },
+                                new ColumnProperty(nameof(WalletModel.WalletCustomerId))
+                                {
+                                    Title = T("Admin.Common.Edit").Text,
+                                    Width = "50",
+                                    ClassName =  NopColumnClassDefaults.CenterAll,
+                                    Render = new RenderCustom("renderWalletUrl")
+                                }
+                            }
+                        })
+                        
+                        <script>
+                            function renderWalletUrl(data, type, row, meta) {
+                                return '<a class="btn btn-default" href="@Url.Content("~/Admin/Customer/Edit/")' + row.WalletCustomerId + '?#customer-wallet"><i class="fas fa-pencil-alt"></i>@T("Admin.Common.Edit")</a>';
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

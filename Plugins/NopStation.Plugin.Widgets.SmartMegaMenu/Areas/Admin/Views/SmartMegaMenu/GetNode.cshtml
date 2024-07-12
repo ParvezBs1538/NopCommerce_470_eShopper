@@ -1,0 +1,296 @@
+﻿@model MegaMenuItemModel
+@inject Nop.Services.Localization.ILocalizationService localizationService 
+
+@if (string.IsNullOrWhiteSpace(Model.RibbonBackgroundColor))
+{
+    Model.RibbonBackgroundColor = "#4ab2f1";
+}
+@if (string.IsNullOrWhiteSpace(Model.RibbonTextColor))
+{
+    Model.RibbonTextColor = "#444444";
+}
+
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.ShowRibbonText)").click(toggleShowRibbonText_@(Model.Id));
+        $("#@Html.IdFor(model => model.ShowPicture)").click(toggleShowPicture_@(Model.Id));
+
+        toggleShowRibbonText_@(Model.Id)();
+        toggleShowPicture_@(Model.Id)();
+    });
+
+    function toggleShowRibbonText_@(Model.Id)() {
+        if ($('#@Html.IdFor(model => model.ShowRibbonText)').is(':checked')) {
+            $('#pnlRibbonText_@(Model.Id)').showElement();
+            $('#pnlRibbonBackgroundColor_@(Model.Id)').showElement();
+            $('#pnlRibbonTextColor_@(Model.Id)').showElement();
+        } else {
+            $('#pnlRibbonText_@(Model.Id)').hideElement();
+            $('#pnlRibbonBackgroundColor_@(Model.Id)').hideElement();
+            $('#pnlRibbonTextColor_@(Model.Id)').hideElement();
+        }
+    }
+
+    function toggleShowPicture_@(Model.Id)() {
+        if ($('#@Html.IdFor(model => model.ShowPicture)').is(':checked')) {
+            $('#pnlPictureId_@(Model.Id)').showElement();
+        } else {
+            $('#pnlPictureId_@(Model.Id)').hideElement();
+        }
+    }
+
+</script>
+
+<div class="card-body menu-item-tree" id="menu-item-@Model.Id">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="MenuItemTypeId" />
+
+    @if (!string.IsNullOrEmpty(Model.Name))
+    {   
+        <div style="text-align: center; margin-bottom: 5px">
+            <em>@(await localizationService.GetLocalizedEnumAsync((MenuItemType)Model.MenuItemTypeId)): @Model.Name </em>
+        </div>
+    }
+
+    @if (Model.MenuItemTypeId == (int)MenuItemType.CustomLink)
+    {
+        @(await Html.LocalizedEditorAsync<MegaMenuItemModel, MegaMenuItemLocalizedModel>("megamenu-item-info-localized",
+            @<div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <nop-label asp-for="@Model.Locales[item].Title" />
+                    </div>
+                    <div class="col-md-8">
+                        <nop-editor asp-for="@Model.Locales[item].Title" />
+                        <span asp-validation-for="@Model.Locales[item].Title"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <nop-label asp-for="@Model.Locales[item].Url" />
+                    </div>
+                    <div class="col-md-8">
+                        <nop-editor asp-for="@Model.Locales[item].Url" />
+                        <span asp-validation-for="@Model.Locales[item].Url"></span>
+                    </div>
+                </div>
+                <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+            </div>
+,
+            @<div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <nop-label asp-for="Title" />
+                    </div>
+                    <div class="col-md-8">
+                        <nop-editor asp-for="Title" asp-required="true" />
+                        <span asp-validation-for="Title"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <nop-label asp-for="Url" />
+                    </div>
+                    <div class="col-md-8">
+                        <nop-editor asp-for="Url" asp-required="true" />
+                        <span asp-validation-for="Url"></span>
+                    </div>
+                </div>
+            </div>
+        ))
+    }
+    else if (Model.MenuItemTypeId == (int)MenuItemType.ProductTag || 
+        Model.MenuItemTypeId == (int)MenuItemType.Topic)
+    {
+        @(await Html.LocalizedEditorAsync<MegaMenuItemModel, MegaMenuItemLocalizedModel>("megamenu-item-info-localized",
+            @<div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <nop-label asp-for="@Model.Locales[item].Title" />
+                    </div>
+                    <div class="col-md-8">
+                        <nop-editor asp-for="@Model.Locales[item].Title" />
+                        <span asp-validation-for="@Model.Locales[item].Title"></span>
+                    </div>
+                </div>
+                <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+            </div>
+,
+            @<div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <nop-label asp-for="Title" />
+                    </div>
+                    <div class="col-md-8">
+                        <nop-editor asp-for="Title" asp-required="true" />
+                        <span asp-validation-for="Title"></span>
+                    </div>
+                </div>
+            </div>
+        ))
+    }
+
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-label asp-for="OpenInNewTab" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="OpenInNewTab" />
+            <span asp-validation-for="OpenInNewTab"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-label asp-for="CssClass" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="CssClass" />
+            <span asp-validation-for="CssClass"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-label asp-for="ShowRibbonText" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="ShowRibbonText" />
+            <span asp-validation-for="ShowRibbonText"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="ShowRibbonText" disable-auto-generation="true">
+        <div class="form-group row" id="pnlRibbonText_@(Model.Id)">
+            <div class="col-md-4">
+                <nop-label asp-for="RibbonText" />
+            </div>
+            <div class="col-md-8">
+                <nop-editor asp-for="RibbonText" asp-required="true" />
+                <span asp-validation-for="RibbonText"></span>
+            </div>
+        </div>
+        <div class="form-group row" id="pnlRibbonBackgroundColor_@(Model.Id)">
+            <div class="col-md-4">
+                <nop-label asp-for="RibbonBackgroundColor" />
+            </div>
+            <div class="col-md-8">
+                <input type="color" asp-for="RibbonBackgroundColor" />
+                <span asp-validation-for="RibbonBackgroundColor"></span>
+            </div>
+        </div>
+        <div class="form-group row" id="pnlRibbonTextColor_@(Model.Id)">
+            <div class="col-md-4">
+                <nop-label asp-for="RibbonTextColor" />
+            </div>
+            <div class="col-md-8">
+                <input type="color" asp-for="RibbonTextColor" />
+                <span asp-validation-for="RibbonTextColor"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-label asp-for="ShowPicture" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="ShowPicture" />
+            <span asp-validation-for="ShowPicture"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="ShowPicture" disable-auto-generation="true">
+        <div class="form-group row" id="pnlPictureId_@(Model.Id)">
+            <div class="col-md-4">
+                <nop-label asp-for="PictureId" />
+            </div>
+            <div class="col-md-8">
+                <nop-editor asp-for="PictureId" />
+                <span asp-validation-for="PictureId"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-label asp-for="SelectedCustomerRoleIds" />
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-12" style="margin-bottom: 5px">
+                    <nop-select asp-for="SelectedCustomerRoleIds" asp-items="Model.AvailableCustomerRoles" asp-multiple="true" />
+                    <script>
+                        $(function () {
+                            var rolesIdsInput = $('#@Html.IdFor(model => model.SelectedCustomerRoleIds)').select2({
+                            closeOnSelect: false,
+                            @if (!Model.AvailableCustomerRoles.Any())
+                            {
+                                <text>
+                                        disabled: true,
+                                        placeholder: 'No customer roles available',
+                                </text>
+                            }
+                            });
+                        });
+                    </script>
+                </div>
+                <div class="col-md-12">
+                    @await Component.InvokeAsync(typeof(AclDisabledWarningViewComponent))
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-group row">
+        <div class="col-md-9 offset-md-4">
+            <button type="button" name="save" onclick="saveMenuItem_@(Model.Id)()" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+            <button type="button" class="btn btn-danger" onclick="openConfirmationModal(@Model.Id, @Model.MenuItemTypeId)">
+                <i class="far fa-trash-alt"></i>
+                @T("Admin.Common.Delete")
+            </button>
+        </div>
+    </div>
+
+    @if (Model.MenuItemTypeId == (int)MenuItemType.Category)
+    {
+        //to-do
+    }
+
+    <script>
+        function saveMenuItem_@(Model.Id)() {
+            var data = {};
+            data.Id = @Model.Id;
+            data.Title = $('#@Html.IdFor(model => model.Title)').val();
+            data.MenuItemTypeId = $('#@Html.IdFor(model => model.MenuItemTypeId)').val();
+            data.Url = $('#@Html.IdFor(model => model.Url)').val();
+            data.OpenInNewTab = $('#@Html.IdFor(model => model.OpenInNewTab)').is(':checked');
+            data.CssClass = $('#@Html.IdFor(model => model.CssClass)').val();
+            data.ShowRibbonText = $('#@Html.IdFor(model => model.ShowRibbonText)').is(':checked');
+            data.RibbonText = $('#@Html.IdFor(model => model.RibbonText)').val();
+            data.RibbonBackgroundColor = $('#@Html.IdFor(model => model.RibbonBackgroundColor)').val();
+            data.RibbonTextColor = $('#@Html.IdFor(model => model.RibbonTextColor)').val();
+            data.ShowPicture = $('#@Html.IdFor(model => model.ShowPicture)').is(':checked');
+            data.PictureId = $('#@Html.IdFor(model => model.PictureId)').val();
+            data.SelectedCustomerRoleIds = $('#@Html.IdFor(model => model.SelectedCustomerRoleIds)').val();
+
+            data.Locales = [];
+            @{
+                var i = 0;
+                foreach (var item in Model.Locales)
+                {
+                    <text>
+                    var locales_@(item.LanguageId) = {};
+                    locales_@(item.LanguageId).Title = $('#@Html.IdFor(model => model.Locales[i].Title)').val();
+                    locales_@(item.LanguageId).Url = $('#@Html.IdFor(model => model.Locales[i].Url)').val();
+                    locales_@(item.LanguageId).LanguageId = @item.LanguageId;
+                    data.Locales.push(locales_@(item.LanguageId));
+                    </text>
+                    i++;
+                }
+            }
+
+            addAntiForgeryToken(data);
+
+            updateMenuItem(data);
+        }
+    </script>
+</div>

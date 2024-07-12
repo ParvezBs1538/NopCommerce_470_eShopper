@@ -1,0 +1,54 @@
+﻿@model ConfigurationModel
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store asp-for="DefaultPackagingSlipPaperSizeId_OverrideForStore" asp-input="DefaultPackagingSlipPaperSizeId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="DefaultPackagingSlipPaperSizeId" />
+        </div>
+        <div class="col-md-8">
+            <nop-select asp-for="DefaultPackagingSlipPaperSizeId" asp-items="@Model.AvailablePaperSizes"/>
+            <span asp-validation-for="DefaultPackagingSlipPaperSizeId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store asp-for="PrintPackagingSlipLandscape_OverrideForStore" asp-input="PrintPackagingSlipLandscape" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="PrintPackagingSlipLandscape" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="PrintPackagingSlipLandscape" />
+            <span asp-validation-for="PrintPackagingSlipLandscape"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store asp-for="PrintEachPackagingSlipInNewPage_OverrideForStore" asp-input="PrintEachPackagingSlipInNewPage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="PrintEachPackagingSlipInNewPage" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="PrintEachPackagingSlipInNewPage" />
+            <span asp-validation-for="PrintEachPackagingSlipInNewPage"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store asp-for="PrintProductsOnPackagingSlip_OverrideForStore" asp-input="PrintProductsOnPackagingSlip" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="PrintProductsOnPackagingSlip" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="PrintProductsOnPackagingSlip" />
+            <span asp-validation-for="PrintProductsOnPackagingSlip"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store asp-for="PrintWeightInfoOnPackagingSlip_OverrideForStore" asp-input="PrintWeightInfoOnPackagingSlip" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="PrintWeightInfoOnPackagingSlip" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="PrintWeightInfoOnPackagingSlip" />
+            <span asp-validation-for="PrintWeightInfoOnPackagingSlip"></span>
+        </div>
+    </div>
+</div>

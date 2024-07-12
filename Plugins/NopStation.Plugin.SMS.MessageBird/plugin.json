@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station MessageBird Sms",
+  "SystemName": "NopStation.Plugin.SMS.MessageBird",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.SMS.MessageBird.dll",
+  "Description": "This plugin allows to send SMS on multiple events using MessageBird gateway.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

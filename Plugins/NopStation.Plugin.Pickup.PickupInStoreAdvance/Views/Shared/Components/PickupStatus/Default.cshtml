@@ -1,0 +1,21 @@
+﻿@model PickupStatusModel
+
+@if (!string.IsNullOrEmpty(Model.Status))
+{
+
+    <div class="pickup-in-store-deliver-status">
+        @T("NopStation.PickupInStoreAdvance.Status.PickupStatus") : @Model.Status
+    </div>
+}
+@if (Model.StatusId == (int)PickUpStatusType.ReadyForPick && !string.IsNullOrEmpty(Model.ReadyTime))
+{
+    <div class="pickup-in-store-ready-time">
+        @T("NopStation.PickupInStoreAdvance.Order.ReadyTime") @Model.ReadyTime
+    </div>
+}
+@if (Model.StatusId == (int)PickUpStatusType.PickedUpByCustomer && !string.IsNullOrEmpty(Model.DeliveryTime))
+{
+    <div class="pickup-in-store-delivery-time">
+        @T("NopStation.PickupInStoreAdvance.Order.DeliveryTime") @Model.DeliveryTime
+    </div>
+}

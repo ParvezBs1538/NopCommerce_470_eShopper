@@ -1,0 +1,66 @@
+﻿@using Microsoft.AspNetCore.Routing
+@model CourierShipmentSearchModel
+
+<div class="card-body">
+        @await Html.PartialAsync("Table", new DataTablesModel
+   {
+       Name = "dmscouriershipment-grid",
+       UrlRead = new DataUrl("List", "CourierShipment", null),
+       SearchButtonId = "search-dmscouriershipment",
+       Length = Model.PageSize,
+       LengthMenu = Model.AvailablePageSizes,
+       Filters = new List<FilterParameter>
+        {
+        new FilterParameter(nameof(Model.SearchOrderId)),
+        new FilterParameter(nameof(Model.SearchShipperId),(int)Model.SearchShipperId),
+        new FilterParameter(nameof(Model.SearchCustomOrderNumber)),
+        new FilterParameter(nameof(Model.SearchShipmentId)),
+        new FilterParameter(nameof(Model.SearchShipmentTrackingNumber)),
+        },
+       ColumnCollection = new List<ColumnProperty>
+        {
+        new ColumnProperty(nameof(CourierShipmentModel.ShipmentId))
+        {
+        Title = T("Admin.NopStation.DMS.CourierShipments.Fields.ShipmentId").Text,
+        Width = "50",
+        ClassName =  NopColumnClassDefaults.CenterAll,
+        Render = new RenderLink(new DataUrl("~/Admin/Order/ShipmentDetails", nameof(CourierShipmentModel.ShipmentId))),
+        },
+        new ColumnProperty(nameof(CourierShipmentModel.ShipperName))
+        {
+        Title = T("Admin.NopStation.DMS.CourierShipments.Fields.Shipper").Text,
+        Width = "250",
+        Render = new RenderLink(new DataUrl("~/Admin/Customer/Edit", nameof(CourierShipmentModel.ShipperNopCustomerId))),
+        },
+        new ColumnProperty(nameof(CourierShipmentModel.TrackingNumber))
+        {
+        Title = T("Admin.NopStation.DMS.CourierShipments.Fields.TrackingNumber").Text,
+        Width = "150"
+        },
+        new ColumnProperty(nameof(CourierShipmentModel.ShipmentStatus))
+        {
+        Title = T("Admin.NopStation.DMS.CourierShipments.Fields.ShipmentStatus").Text,
+        Width = "100",
+        },
+        new ColumnProperty(nameof(CourierShipmentModel.CreatedOn))
+        {
+        Title = T("Admin.NopStation.DMS.CourierShipments.Fields.CreatedOn").Text,
+        Width = "100",
+        Render = new RenderDate()
+        },
+        new ColumnProperty(nameof(CourierShipmentModel.UpdatedOn))
+        {
+        Title = T("Admin.NopStation.DMS.CourierShipments.Fields.UpdatedOn").Text,
+        Width = "100",
+        Render = new RenderDate()
+        },
+        new ColumnProperty(nameof(CourierShipmentModel.Id))
+        {
+        Title = T("Admin.Common.Delete").Text,
+        Width = "100",
+        Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+        ClassName = NopColumnClassDefaults.Button
+        }
+        }
+   })
+ </div>

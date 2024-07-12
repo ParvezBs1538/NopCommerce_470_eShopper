@@ -1,0 +1,62 @@
+﻿@model IEnumerable<CarouselModel>
+
+@foreach (var carousel in Model)
+{
+    var carouselType = carousel.CarouselType.ToString().ToLower();
+    var bg = "";
+    var bgClass = "";
+
+    if (carousel.ShowBackground)
+    {
+        if (carousel.BackgroundType == BackgroundType.Picture)
+        {
+            bg = $"background:url('{carousel.BackgroundPictureUrl}') no-repeat center; background-size: cover;";
+            bgClass = $"bg-class";
+        }
+        else
+        {
+            bg = $"background-color:{carousel.BackgroundColor};";
+            bgClass = $"bg-class;";
+        }
+    }
+
+    <div class="carousel-grid carousel-@carouselType @carousel.CustomCssClass @bgClass" style="@bg">
+        @if (carousel.DisplayTitle)
+        {
+            <div class="title">
+                <strong>@carousel.Title</strong>
+            </div>
+        }
+
+        <div class="carousel-container">
+            @{
+                switch (carousel.CarouselType)
+                {
+                    case CarouselType.Product:
+                        await Html.RenderPartialAsync("ProductSmartCarousel", carousel);
+                        break;
+                    case CarouselType.Manufacturer:
+                        await Html.RenderPartialAsync("ManufacturerSmartCarousel", carousel);
+                        break;
+                    case CarouselType.Category:
+                        await Html.RenderPartialAsync("CategorySmartCarousel", carousel);
+                        break;
+                    case CarouselType.Vendor:
+                        await Html.RenderPartialAsync("VendorSmartCarousel", carousel);
+                        break;
+                    case CarouselType.Picture:
+                    default:
+                        await Html.RenderPartialAsync("PictureSmartCarousel", carousel);
+                        break;
+                }
+            }
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(carousel.CustomUrl))
+        {
+            <div class="see-more">
+                <a class="see-more-button" href="@carousel.CustomUrl">@T("NopStation.SmartCarousels.SeeMore")</a>
+            </div>
+        }
+    </div>
+}

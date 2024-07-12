@@ -1,0 +1,8 @@
+﻿@model TopMenuModel
+
+@foreach (var flipbook in Model.Flipbooks)
+{
+    <li>
+        <a href="@Url.RouteUrl("GenericUrl", new { SeName = flipbook.SeName })">@flipbook.Name</a>
+    </li>
+}

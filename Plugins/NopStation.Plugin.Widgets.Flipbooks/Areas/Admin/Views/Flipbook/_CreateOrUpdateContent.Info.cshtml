@@ -1,0 +1,62 @@
+@model FlipbookContentModel
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.IsImage)").change(toggleIsImage);
+
+        toggleIsImage();
+    });
+
+    function toggleIsImage() {
+        if ($('#@Html.IdFor(model => model.IsImage)').is(':checked')) {
+            $('[data-card-name=flipbookcontent-products]').hideElement();
+            $('#pnlImageId').showElement();
+            $('#pnlRedirectUrl').showElement();
+        } else {
+            $('[data-card-name=flipbookcontent-products]').showElement();
+            $('#pnlImageId').hideElement();
+            $('#pnlRedirectUrl').hideElement();
+        }
+    }
+</script>
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="IsImage" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="IsImage" />
+            <span asp-validation-for="IsImage"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="IsImage">
+        <div class="form-group row" id="pnlImageId">
+            <div class="col-md-3">
+                <nop-label asp-for="ImageId" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="ImageId" />
+                <span asp-validation-for="ImageId"></span>
+            </div>
+        </div>
+        <div class="form-group row" id="pnlRedirectUrl">
+            <div class="col-md-3">
+                <nop-label asp-for="RedirectUrl" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="RedirectUrl" />
+                <span asp-validation-for="RedirectUrl"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DisplayOrder" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DisplayOrder" />
+            <span asp-validation-for="DisplayOrder"></span>
+        </div>
+    </div>
+</div>

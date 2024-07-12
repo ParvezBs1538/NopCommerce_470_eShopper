@@ -1,0 +1,273 @@
+﻿@model PopupModel
+
+@{
+    var guid = Guid.NewGuid();
+}
+
+<link rel="stylesheet" href="~/lib_npm/farbstastic/farbtastic.css" />
+<script src="~/lib_npm/farbstastic/farbtastic.min.js" asp-location="Head"></script>
+
+<script>
+    var enableStickyButton = @Model.EnableStickyButton.ToString().ToLower();
+
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.OpenPopupOnLoadPage)").click(toggleOpenPopupOnLoadPage);
+        $("#@Html.IdFor(model => model.EnableStickyButton)").click(toggleEnableStickyButton);
+
+        toggleOpenPopupOnLoadPage();
+        toggleEnableStickyButton();
+    });
+    
+    function toggleOpenPopupOnLoadPage() {
+        var parentFormGroup = $('input[name="@Html.IdFor(model => model.EnableStickyButton)"]').closest('.form-group');
+        var parentFormGroupId = $(parentFormGroup).attr('id');
+        if (!parentFormGroupId) {
+            parentFormGroupId = '@guid';
+            $(parentFormGroup).attr('id', parentFormGroupId);
+        }
+
+        if ($('#@Html.IdFor(model => model.OpenPopupOnLoadPage)').is(':checked')) {
+            $('#@Html.IdFor(model => model.EnableStickyButton)').prop('checked', enableStickyButton);
+            $('#@Html.IdFor(model => model.EnableStickyButton)').prop('disabled', false);
+
+            if (!enableStickyButton) {
+                $('#pnlEnableStickyButton').hide();
+                $('#' + parentFormGroupId).removeClass('opened');
+            }
+        } else {
+            $('#@Html.IdFor(model => model.EnableStickyButton)').prop('checked', true);
+            $('#@Html.IdFor(model => model.EnableStickyButton)').prop('disabled', true);
+            $('#pnlEnableStickyButton').show();
+
+            $('#' + parentFormGroupId).addClass('parent-setting');
+            $('#' + parentFormGroupId).addClass('opened');
+        }
+    }
+    
+    function toggleEnableStickyButton() {
+        if ($('#@Html.IdFor(model => model.EnableStickyButton)').is(':checked')) {
+            $('#pnlEnableStickyButton').show();
+            enableStickyButton = true;
+        } else {
+            $('#pnlEnableStickyButton').hide();
+            enableStickyButton = false;
+        }
+    }
+
+</script>
+
+<div class="card-body">
+    @(await Html.LocalizedEditorAsync<PopupModel, PopupLocalizedModel>("popup-info-localized",
+        @<div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.Locales[item].Name" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="@Model.Locales[item].Name" />
+                    <span asp-validation-for="@Model.Locales[item].Name"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.Locales[item].StickyButtonText" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="@Model.Locales[item].StickyButtonText" />
+                    <span asp-validation-for="@Model.Locales[item].StickyButtonText"></span>
+                </div>
+            </div>
+            <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+        </div>
+        ,@<div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="Name" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="Name" asp-required="true" />
+                    <span asp-validation-for="Name"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="StickyButtonText" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="StickyButtonText" />
+                    <span asp-validation-for="StickyButtonText"></span>
+                </div>
+            </div>
+        </div>
+    ))
+    
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DeviceTypeId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="DeviceTypeId" asp-items="Model.AvailableDeviceTypes" />
+            <span asp-validation-for="DeviceTypeId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="OpenPopupOnLoadPage" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="OpenPopupOnLoadPage" />
+            <span asp-validation-for="OpenPopupOnLoadPage"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="OpenPopupOnLoadPage">
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="DelayTime" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="DelayTime" asp-postfix="ms" />
+                <span asp-validation-for="DelayTime"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="AllowCustomerToSelectDoNotShowThisPopupAgain" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="AllowCustomerToSelectDoNotShowThisPopupAgain" />
+                <span asp-validation-for="AllowCustomerToSelectDoNotShowThisPopupAgain"></span>
+            </div>
+        </div>
+        <nop-nested-setting asp-for="AllowCustomerToSelectDoNotShowThisPopupAgain">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="PreSelectedDoNotShowThisPopupAgain" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="PreSelectedDoNotShowThisPopupAgain" />
+                    <span asp-validation-for="PreSelectedDoNotShowThisPopupAgain"></span>
+                </div>
+            </div>
+        </nop-nested-setting>
+    </nop-nested-setting>
+    
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnableStickyButton" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableStickyButton" />
+            <span asp-validation-for="EnableStickyButton"></span>
+        </div>
+    </div>
+    @if (string.IsNullOrEmpty(Model.StickyButtonColor))
+    {
+        Model.StickyButtonColor = "#4ab2f1";
+    }
+    <nop-nested-setting asp-for="EnableStickyButton" disable-auto-generation="true">
+        <div id="pnlEnableStickyButton">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="StickyButtonColor" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="StickyButtonColor" />
+                    <div id="color-picker"></div>
+                    <script>
+                    $(document).ready(function(){
+                        $('#color-picker').farbtastic('#@Html.IdFor(model => model.StickyButtonColor)');
+                    });
+                    </script>
+                    <span asp-validation-for="StickyButtonColor"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="StickyButtonPositionId" />
+                </div>
+                <div class="col-md-9">
+                    <nop-select asp-for="StickyButtonPositionId" asp-items="Model.AvailablePositions" />
+                    <span asp-validation-for="StickyButtonPositionId"></span>
+                </div>
+            </div>
+        </div>
+    </nop-nested-setting>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="CssClass" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="CssClass" />
+            <span asp-validation-for="CssClass"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Active" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Active" />
+            <span asp-validation-for="Active"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SelectedStoreIds" />
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-4">
+                    <nop-select asp-for="SelectedStoreIds" asp-items="Model.AvailableStores" asp-multiple="true" />
+                    <script>
+                        $(function () {
+                            var storesIdsInput = $('#@Html.IdFor(model => model.SelectedStoreIds)').select2({
+                                closeOnSelect: false,
+                        @if (!Model.AvailableStores.Any())
+                        {
+                            <text>
+                                    disabled: true,
+                                    placeholder: 'No stores available',
+                            </text>
+                        }
+                                            });
+                                        });
+                    </script>
+                </div>
+                <div class="col-md-8">
+                    @await Component.InvokeAsync(typeof(MultistoreDisabledWarningViewComponent))
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SelectedCustomerRoleIds" />
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-4">
+                    <nop-select asp-for="SelectedCustomerRoleIds" asp-items="Model.AvailableCustomerRoles" asp-multiple="true" />
+                    <script>
+                        $(function () {
+                            var rolesIdsInput = $('#@Html.IdFor(model => model.SelectedCustomerRoleIds)').select2({
+                            closeOnSelect: false,
+                            @if (!Model.AvailableCustomerRoles.Any())
+                            {
+                                <text>
+                                        disabled: true,
+                                        placeholder: 'No customer roles available',
+                                </text>
+                            }
+                        });
+                    });
+                    </script>
+                </div>
+                <div class="col-md-8">
+                    @await Component.InvokeAsync(typeof(AclDisabledWarningViewComponent))
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,109 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.PaldeskChat.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("PaldeskChat.Configuration");
+}
+
+<form asp-controller="PaldeskChat" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.PaldeskChat.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            @T("Admin.NopStation.PaldeskChat.Configuration.Instructions")
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnablePlugin_OverrideForStore" asp-input="EnablePlugin" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnablePlugin" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnablePlugin" />
+                                    <span asp-validation-for="EnablePlugin"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ConfigureWithCustomerDataIfLoggedIn_OverrideForStore" asp-input="ConfigureWithCustomerDataIfLoggedIn" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ConfigureWithCustomerDataIfLoggedIn" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ConfigureWithCustomerDataIfLoggedIn" />
+                                    <span asp-validation-for="ConfigureWithCustomerDataIfLoggedIn"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="SettingModeId_OverrideForStore" asp-input="SettingModeId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="SettingModeId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="SettingModeId" asp-items="Model.AvailableSettingModes" />
+                                    <span asp-validation-for="SettingModeId"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row" id="pnlKey">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="Key_OverrideForStore" asp-input="Key" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="Key" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="Key" />
+                                    <span asp-validation-for="Key"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row" id="pnlScript">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="Script_OverrideForStore" asp-input="Script" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="Script" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-textarea asp-for="Script" />
+                                    <span asp-validation-for="Script"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.SettingModeId)").click(toggleScript);
+
+        toggleScript();
+
+        function toggleScript() {
+            var settingModeId = $("#@Html.IdFor(model => model.SettingModeId)").val();
+            if (settingModeId == @((int)SettingMode.Script)) {
+                $('#pnlScript').show();
+                $('#pnlKey').hide();
+            }
+            else {
+                $('#pnlScript').hide();
+                $('#pnlKey').show();
+            }
+        }
+    });
+</script>

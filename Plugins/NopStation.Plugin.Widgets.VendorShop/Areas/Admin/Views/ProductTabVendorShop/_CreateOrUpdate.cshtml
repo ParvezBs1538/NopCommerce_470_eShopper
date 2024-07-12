@@ -1,0 +1,25 @@
+﻿@model ProductTabModel
+
+@{ const string hideInfoBlockAttributeName = "ProductTabPage.HideInfoBlock";
+                var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideInfoBlockAttributeName);
+
+                const string hidePropertiesBlockAttributeName = "ZwartProductTabPage.HidePropertiesBlock";
+                var hidePropertiesBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hidePropertiesBlockAttributeName);
+
+                const string hideItemsBlockAttributeName = "ZwartProductTabPage.HideItemsBlock";
+                var hideItemsBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideItemsBlockAttributeName, defaultValue: true); }
+
+<input asp-for="Id" type="hidden" />
+<div asp-validation-summary="All"></div>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <nop-cards id="producttab-panels">
+                <nop-card asp-name="producttab-info" asp-icon="fa fa-info" asp-title="@T("Admin.NopStation.VendorShop.ProductTabs.ProductTabs.Tab.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</nop-card>
+                <nop-card asp-name="producttab-properties" asp-icon="fa fa-bars" asp-title="@T("Admin.NopStation.VendorShop.ProductTabs.ProductTabs.Tab.Properties")" asp-hide-block-attribute-name="@hidePropertiesBlockAttributeName" asp-hide="@hidePropertiesBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Properties", Model)</nop-card>
+                <nop-card asp-name="producttab-items" asp-icon="fa fa-th-list" asp-title="@T("Admin.NopStation.VendorShop.ProductTabs.ProductTabs.Tab.ProductTabItems")" asp-hide-block-attribute-name="@hideItemsBlockAttributeName" asp-hide="@hideItemsBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.ProductTabItems", Model)</nop-card>
+            </nop-cards>
+        </div>
+    </div>
+</div>

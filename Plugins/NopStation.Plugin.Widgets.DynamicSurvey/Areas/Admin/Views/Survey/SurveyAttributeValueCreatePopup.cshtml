@@ -1,0 +1,25 @@
+@model SurveyAttributeValueModel
+
+@{
+    Layout = "_AdminPopupLayout";
+
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.DynamicSurvey.Surveys.SurveyAttributes.Values.AddNew").Text;
+}
+<form asp-controller="Survey" asp-action="SurveyAttributeValueCreatePopup"
+      asp-route-surveyAttributeMappingId="@Context.Request.Query["surveyAttributeMappingId"]"
+      asp-route-btnId="@Context.Request.Query["btnId"]"
+      asp-route-formId="@Context.Request.Query["formId"]">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.DynamicSurvey.Surveys.SurveyAttributes.Values.AddNew")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+    @await Html.PartialAsync("_CreateOrUpdateSurveyAttributeValue", Model)
+</form>

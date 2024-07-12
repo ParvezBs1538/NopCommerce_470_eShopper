@@ -1,0 +1,11 @@
+﻿@model PublicInfoModel
+
+<style>
+    .product-pdf-button {
+        background-image: url(/Plugins/NopStation.Plugin.Widgets.ProductPdf/Contents/images/print-button.png);
+    }
+</style>
+
+<div class="product-pdf">
+    <button type="button" class="button-2 product-pdf-button" onclick="setLocation('@Url.RouteUrl("DownloadProductPdf", new { productId = Model.ProductId })')">@T("NopStation.ProductPdf.PrintPdf")</button>
+</div>

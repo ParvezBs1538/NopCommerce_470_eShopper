@@ -1,0 +1,24 @@
+﻿@model FlipbookContentModel
+
+@{
+    const string hideInfoBlockAttributeName = "FlipbooksPage.HideContentInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideInfoBlockAttributeName);
+
+    const string hideProductsBlockAttributeName = "FlipbooksPage.HideContentProductsBlock";
+    var hideProductsBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideProductsBlockAttributeName, defaultValue: true);
+}
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+<input asp-for="FlipbookId" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <nop-cards id="country-cards">
+                <nop-card asp-name="flipbookcontent-info" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.Flipbooks.FlipbookContents.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdateContent.Info", Model)</nop-card>
+                <nop-card asp-name="flipbookcontent-products" asp-icon="fas fa-globe" asp-title="@T("Admin.NopStation.Flipbooks.FlipbookContents.Products")" asp-hide-block-attribute-name="@hideProductsBlockAttributeName" asp-hide="@hideProductsBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdateContent.Products", Model)</nop-card>
+            </nop-cards>
+        </div>
+    </div>
+</section>

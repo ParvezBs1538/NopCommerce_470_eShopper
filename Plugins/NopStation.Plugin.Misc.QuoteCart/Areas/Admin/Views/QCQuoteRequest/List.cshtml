@@ -1,0 +1,232 @@
+﻿@model QuoteRequestSearchModel
+@{
+    Layout = "_AdminLayout";
+    //page title
+    ViewBag.PageTitle = @T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.Manage").Text;
+    NopHtml.SetActiveMenuItemSystemName("QuoteCart.Requests");
+}
+@{
+    const string hideSearchBlockAttributeName = "QuoteRequestPage.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<form asp-controller="QCQuoteRequest" asp-action="List" method="post">
+    <nop-antiforgery-token />
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.Manage")
+        </h1>
+    </div>
+    <div class="content">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                                <div class="search-text">@T("Admin.Common.Search")</div>
+                                <div class="icon-search"><i class="fas fa-search" aria-hidden="true"></i></div>
+                                <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                            </div>
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <nop-label asp-for="SearchStartDate" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="SearchStartDate" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <nop-label asp-for="SearchEndDate" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="SearchEndDate" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <nop-label asp-for="SearchCustomerEmail" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="SearchCustomerEmail" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <nop-label asp-for="SearchRequestStatusIds" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="SearchRequestStatusIds" asp-items="Model.AvailableRequestStatuses" asp-multiple="true" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <nop-label asp-for="SearchFormId" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="SearchFormId" asp-items="Model.AvailableForms" />
+                                    </div>
+                                </div>
+                                <div class="form-group row" @(Model.HideStoresList ? Html.Raw("style=\"display:none\"") : null)>
+                                    <div class="col-md-4">
+                                        <nop-label asp-for="SearchStoreId" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="SearchStoreId" asp-items="Model.AvailableStores" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <nop-label asp-for="GoDirectlyToCustomRequestNumber" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="input-group input-group-short">
+                                            <nop-editor asp-for="GoDirectlyToCustomRequestNumber" />
+                                            <span class="input-group-append">
+                                                <button type="submit" id="go-to-request-by-number" name="go-to-request-by-number" class="btn btn-info btn-flat">
+                                                    @T("Admin.Common.Go")
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-center col-12">
+                                <button type="button" id="btnSearch" class="btn btn-primary btn-search">
+                                    <i class="fas fa-search"></i>
+                                    @T("Admin.Common.Search")
+                                </button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                       {
+                           Name = "customer-requests-grid",
+                           UrlRead = new DataUrl("List", "QCQuoteRequest", null),
+                           SearchButtonId = "btnSearch",
+                           Length = Model.PageSize,
+                           LengthMenu = Model.AvailablePageSizes,
+                           Filters =
+                           [
+                                new FilterParameter(nameof(Model.SearchStartDate)),
+                                new FilterParameter(nameof(Model.SearchEndDate)),
+                                new FilterParameter(nameof(Model.SearchStoreId)),
+                                new FilterParameter(nameof(Model.SearchRequestStatusIds)),
+                                new FilterParameter(nameof(Model.SearchCustomerEmail))
+                           ],
+                           ColumnCollection =
+                           [
+                                new ColumnProperty(nameof(QuoteRequestModel.Id))
+                                {
+                                    Title = T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.Fields.Id").Text,
+                                    ClassName = NopColumnClassDefaults.CenterAll,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(QuoteRequestModel.CreatedOn))
+                                {
+                                    Title = T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.Fields.CreatedOnUtc").Text,
+                                    Render = new RenderDate(),
+                                    Width = "140"
+                                },
+                                new ColumnProperty(nameof(QuoteRequestModel.RequestStatus))
+                                {
+                                    Title = T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.Fields.RequestStatus").Text,
+                                    Width = "100",
+                                    Render = new RenderCustom("renderColumnStatus")
+                                },
+                                new ColumnProperty(nameof(QuoteRequestModel.CustomerEmail))
+                                {
+                                    Title = T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.Fields.Customer").Text,
+                                    Width = "160"
+                                },
+                                new ColumnProperty(nameof(QuoteRequestDetailsModel.StoreName))
+                                {
+                                    Title = T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.Fields.Store").Text,
+                                    Visible = !Model.HideStoresList,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(QuoteRequestDetailsModel.ShareQuote))
+                                {
+                                    Title = T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.Fields.ShareQuote").Text,
+                                    ClassName =  NopColumnClassDefaults.Button,
+                                    Render = new RenderCustom("renderShareQuote"),
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(QuoteRequestDetailsModel.Id))
+                                {
+                                    Title = T("Admin.Common.View").Text,
+                                    ClassName =  NopColumnClassDefaults.Button,
+                                    Render = new RenderButtonView(new DataUrl("~/Admin/QCQuoteRequest/Edit/")),
+                                    Width = "100"
+                                }
+                            ]
+                       })
+                        <script>
+                            function renderColumnStatus(data, type, row, meta) {
+                                var color;
+                                switch (row.RequestStatusId) {
+                                case 10:
+                                    color = 'yellow';
+                                    break;
+                                case 20:
+                                    color = 'blue';
+                                    break;
+                                case 30:
+                                    color = 'green';
+                                    break;
+                                case 40:
+                                    color = 'red';
+                                    break;
+                                }
+                                return '<span class="grid-report-item ' + color + '">' + data + '</span >';
+                            }
+
+                            function copyToClipboard(url) {
+                                var $temp = $("<input>");
+                                $("body").append($temp);
+                                $temp.val(url).select();
+                                document.execCommand("copy");
+                                $temp.remove();
+                                showAlert('copied-to-clipboard');
+                            }
+
+                            function renderColumnEditCustomerEmail(data, type, row, meta) {
+                                if (!row.CustomerFullName) {
+                                    row.CustomerFullName = '';
+                                }
+                                return '<span>' + row.CustomerFullName + '(' + row.CustomerEmail + ')' +'</span>';
+                            }
+
+                            function renderShareQuote(data, type, row, meta) {
+                                return `<button type="button" class="btn btn-default" onclick='copyToClipboard("${row.ShareQuote}")'><i class="fa fa-link"></i> Share Link</button>`;
+                            }
+
+                            $(function () {
+                                $("#@Html.IdFor(model => model.GoDirectlyToCustomRequestNumber)").keydown(
+                                    function (event) {
+                                        if (event.keyCode === 13) {
+                                            $("#go-to-request-by-number").click();
+                                            return false;
+                                        }
+                                    });
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<nop-alert asp-alert-id="copied-to-clipboard" asp-alert-message="@T("NopStation.Plugin.Misc.QuoteCart.QuoteRequest.CopiedToClipboard")" />

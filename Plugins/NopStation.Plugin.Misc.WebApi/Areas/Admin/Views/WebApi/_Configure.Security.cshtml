@@ -1,0 +1,94 @@
+﻿@model ConfigurationModel
+
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.CheckIat)").click(toggleTokenSecondsValid);
+        $("#@Html.IdFor(model => model.EnableJwtSecurity)").click(toggleEnableJwtSecurity);
+
+        toggleTokenSecondsValid();
+        toggleEnableJwtSecurity();
+    });
+
+    function toggleTokenSecondsValid() {
+        if ($('#@Html.IdFor(model => model.CheckIat)').is(':checked')) {
+            $('#pnlTokenSecondsValid').show();
+        } else {
+            $('#pnlTokenSecondsValid').hide();
+        }
+    }
+
+    function toggleEnableJwtSecurity() {
+        if ($('#@Html.IdFor(model => model.EnableJwtSecurity)').is(':checked')) {
+            $('#pnlEnableJwtSecurity').show();
+        } else {
+            $('#pnlEnableJwtSecurity').hide();
+        }
+    }
+</script>
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="SecretKey_OverrideForStore" asp-input="SecretKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="SecretKey" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="SecretKey" />
+            <span asp-validation-for="SecretKey"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="EnableJwtSecurity_OverrideForStore" asp-input="EnableJwtSecurity" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="EnableJwtSecurity" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableJwtSecurity" />
+            <span asp-validation-for="EnableJwtSecurity"></span>
+        </div>
+    </div>
+    <div id="pnlEnableJwtSecurity">
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="TokenKey_OverrideForStore" asp-input="TokenKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="TokenKey" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor-check asp-for="TokenKey" />
+                <span asp-validation-for="TokenKey"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="TokenSecret_OverrideForStore" asp-input="TokenSecret" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="TokenSecret" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor-check asp-for="TokenSecret" />
+                <span asp-validation-for="TokenSecret"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="CheckIat_OverrideForStore" asp-input="CheckIat" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="CheckIat" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="CheckIat" />
+                <span asp-validation-for="CheckIat"></span>
+            </div>
+        </div>
+        <nop-nested-setting asp-for="CheckIat">
+            <div class="form-group row" id="pnlTokenSecondsValid">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="TokenSecondsValid_OverrideForStore" asp-input="TokenSecondsValid" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="TokenSecondsValid" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="TokenSecondsValid" />
+                    <span asp-validation-for="TokenSecondsValid"></span>
+                </div>
+            </div>
+        </nop-nested-setting>
+    </div>
+</div>

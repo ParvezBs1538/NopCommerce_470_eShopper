@@ -1,0 +1,78 @@
+﻿@model ConfigurationModel
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="EnablePlugin_OverrideForStore" asp-input="EnablePlugin" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="EnablePlugin" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="EnablePlugin" />
+            <span asp-validation-for="EnablePlugin"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="IncludeInTopMenu_OverrideForStore" asp-input="IncludeInTopMenu" asp-store-scope="@Model.ActiveStoreScopeConfiguration"></nop-override-store-checkbox>
+            <nop-label asp-for="IncludeInTopMenu" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="IncludeInTopMenu" />
+            <span asp-validation-for="IncludeInTopMenu"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="IncludeInTopMenu">
+        <div class="form-group row" id="pnlHideInMobileView">
+            <div class="col-md-4">
+                <nop-override-store-checkbox asp-for="HideInMobileView_OverrideForStore" asp-input="HideInMobileView" asp-store-scope="@Model.ActiveStoreScopeConfiguration"></nop-override-store-checkbox>
+                <nop-label asp-for="HideInMobileView" />
+            </div>
+            <div class="col-md-8">
+                <nop-editor asp-for="HideInMobileView" />
+                <span asp-validation-for="HideInMobileView"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="IncludeInFooterColumn_OverrideForStore" asp-input="IncludeInFooterColumn" asp-store-scope="@Model.ActiveStoreScopeConfiguration"></nop-override-store-checkbox>
+            <nop-label asp-for="IncludeInFooterColumn" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="IncludeInFooterColumn" />
+            <span asp-validation-for="IncludeInFooterColumn"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="IncludeInFooterColumn">
+        <div class="form-group row" id="pnlFooterColumnSelector">
+            <div class="col-md-4">
+                <nop-override-store-checkbox asp-for="FooterColumnSelector_OverrideForStore" asp-input="FooterColumnSelector" asp-store-scope="@Model.ActiveStoreScopeConfiguration"></nop-override-store-checkbox>
+                <nop-label asp-for="FooterColumnSelector" />
+            </div>
+            <div class="col-md-8">
+                <nop-editor asp-for="FooterColumnSelector" />
+                <span asp-validation-for="FooterColumnSelector"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="PublicDispalyPageSize_OverrideForStore" asp-input="PublicDispalyPageSize" asp-store-scope="@Model.ActiveStoreScopeConfiguration"></nop-override-store-checkbox>
+            <nop-label asp-for="PublicDispalyPageSize" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="PublicDispalyPageSize" />
+            <span asp-validation-for="PublicDispalyPageSize"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="PictureSize_OverrideForStore" asp-input="PictureSize" asp-store-scope="@Model.ActiveStoreScopeConfiguration"></nop-override-store-checkbox>
+            <nop-label asp-for="PictureSize" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="PictureSize" />
+            <span asp-validation-for="PictureSize"></span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,111 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("ShippingByVendor.Configuration");
+
+    ViewBag.PageTitle = T("Admin.NopStation.ShippingByVendor.Configuration").Text;
+}
+
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.EnableFreeShippingOverAmountX)").click(toggleEnableFreeShippingOverAmountX);
+
+        toggleEnableFreeShippingOverAmountX();
+    });
+
+    function toggleEnableFreeShippingOverAmountX() {
+        if ($('#@Html.IdFor(model => model.EnableFreeShippingOverAmountX)').is(':checked')) {
+            $('#pnlEnableFreeShippingOverAmountX').show();
+        } else {
+            $('#pnlEnableFreeShippingOverAmountX').hide();
+        }
+    }
+</script>
+
+<form asp-controller="ShippingByVendor" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.ShippingByVendor.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="EnablePlugin_OverrideForStore" asp-input="EnablePlugin" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnablePlugin" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="EnablePlugin" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="ShippingCharge_OverrideForStore" asp-input="ShippingCharge" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShippingCharge" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="ShippingCharge" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="EnableFreeShippingOverAmountX_OverrideForStore" asp-input="EnableFreeShippingOverAmountX" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableFreeShippingOverAmountX" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="EnableFreeShippingOverAmountX" />
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="EnableFreeShippingOverAmountX">
+                                <div id="pnlEnableFreeShippingOverAmountX">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-override-store-checkbox asp-for="AmountX_OverrideForStore" asp-input="AmountX" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="AmountX" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="AmountX" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-override-store-checkbox asp-for="WithDiscounts_OverrideForStore" asp-input="WithDiscounts" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="WithDiscounts" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="WithDiscounts" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-override-store-checkbox asp-for="TransitDays_OverrideForStore" asp-input="TransitDays" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="TransitDays" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="TransitDays" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

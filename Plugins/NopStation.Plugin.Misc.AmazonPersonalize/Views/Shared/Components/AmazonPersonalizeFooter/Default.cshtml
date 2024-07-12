@@ -1,0 +1,28 @@
+﻿@inject Nop.Core.IWorkContext workContext
+
+@{
+    var supportRtl =(await workContext.GetWorkingLanguageAsync()).Rtl;
+    <script  asp-exclude-from-bundle="true" asp-location="Footer" src= "~/Plugins/NopStation.Plugin.Misc.AmazonPersonalize/Contents/script/owl.carousel.min.js"></script>
+    <script  asp-exclude-from-bundle="true" asp-location="Footer" src= "~/Plugins/NopStation.Plugin.Misc.AmazonPersonalize/Contents/script/nopstation.recommendation.js"></script>
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Misc.AmazonPersonalize/Contents/css/styles.css",string.Empty);
+
+    if (supportRtl)
+    {
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Misc.AmazonPersonalize/Contents/css/rtl/owl.theme.green.min.css",string.Empty);
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Misc.AmazonPersonalize/Contents/css/rtl/owl.carousel.css",string.Empty);
+    }
+    else
+    {
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Misc.AmazonPersonalize/Contents/css/owl.theme.green.min.css",string.Empty);
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Misc.AmazonPersonalize/Contents/css/owl.carousel.css",string.Empty);
+    }
+}
+
+<script asp-exclude-from-bundle="true" asp-location="Footer">
+    var recommendationdata = {};
+    recommendationdata.RecommendationFailure = '@T("NopStation.Recommender.LoadingFailed")';
+
+    $(document).ready(function () {
+        Recommendation.init('@Url.RouteUrl("Recommendation")', '.recommendation-container', '.recommendation-container .loader', recommendationdata);
+    });
+</script>

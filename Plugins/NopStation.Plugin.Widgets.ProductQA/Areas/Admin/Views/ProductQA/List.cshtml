@@ -1,0 +1,206 @@
+﻿@model ProductQASearchModel
+@{
+    Layout = "_AdminLayout";
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.ProductQuestionAnswer.ProductQnAList").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("ProductQAList");
+
+    const string hideSearchBlockAttributeName = "ProductQAListPage.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.ProductQuestionAnswer.ProductQnAList")
+    </h1>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fa fa-search" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                        </div>
+
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchStoreId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchStoreId" asp-items="Model.AvailableStores" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchProductId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="search-product-name" autocomplete="off" class="form-control" />
+                                            <span id="search-product-friendly-name"></span>
+                                            <button type="button" id="search-product-clear" class="btn bg-gray" style="display: none; margin-top: 5px;">@T("Admin.Common.Clear")</button>
+                                            <input asp-for="SearchProductId" autocomplete="off" style="display: none;" />
+                                            <script>
+                                            $(document).ready(function() {
+                                                $('#search-product-name').autocomplete({
+                                                    delay: 500,
+                                                    minLength: 3,
+                                                    source: '@Url.Action("SearchAutoComplete", "SearchComplete")',
+                                                    select: function(event, ui) {
+                                                        $('#@Html.IdFor(model => model.SearchProductId)').val(ui.item.productid);
+                                                        $('#search-product-friendly-name').text(ui.item.label);
+
+                                                        $('#search-product-clear').show();
+                                                        return false;
+                                                    }
+                                                });
+
+                                                //remove button
+                                                $('#search-product-clear').click(function() {
+                                                    $('#@Html.IdFor(model => model.SearchProductId)').val('0');
+                                                    $('#search-product-friendly-name').text('');
+                                                    $('#search-product-clear').hide();
+                                                    return false;
+                                                });
+                                            });
+                                            </script>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" @(Model.ApprovalOptions.SelectionIsNotPossible() ? Html.Raw("style='display: none;'") : null)>
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchApproveOptionId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchApproveOptionId" asp-items="Model.ApprovalOptions" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group  row" @(Model.AnswerOptions.SelectionIsNotPossible() ? Html.Raw("style='display: none;'") : null)>
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchAnswerOptionId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="SearchAnswerOptionId" asp-items="Model.AnswerOptions" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group  row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="CreatedFrom" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="CreatedFrom" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group  row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="CreatedTo" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="CreatedTo" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="text-center col-12">
+                                    <button type="button" id="search-productsqa" class="btn btn-primary btn-search">
+                                        <i class="fa fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                   {
+                       Name = "productqa-grid",
+                       UrlRead = new DataUrl("List", "ProductQA", null),
+                       UrlDelete = new DataUrl("Delete", "ProductQA", null),
+                       SearchButtonId = "search-productsqa",
+                       Length = Model.PageSize,
+                       LengthMenu = Model.AvailablePageSizes,
+                       Filters = new List<FilterParameter>
+                       {
+                           new FilterParameter(nameof(Model.SearchStoreId)),
+                           new FilterParameter(nameof(Model.SearchProductId)),
+                           new FilterParameter(nameof(Model.SearchApproveOptionId)),
+                           new FilterParameter(nameof(Model.SearchAnswerOptionId)),
+                           new FilterParameter(nameof(Model.CreatedFrom)),
+                           new FilterParameter(nameof(Model.CreatedTo))
+                       },
+                       ColumnCollection = new List<ColumnProperty>
+                        {
+                            new ColumnProperty(nameof(ProductQAModel.QuestionText))
+                            {
+                                Title = T("Admin.NopStation.ProductQuestionAnswer.ProductQnA.Fields.QuestionText").Text,
+                                Width = "180"
+                            },
+                            new ColumnProperty(nameof(ProductQAModel.AnswerText))
+                            {
+                                Title = T("Admin.NopStation.ProductQuestionAnswer.ProductQnA.Fields.AnswerText").Text,
+                                Width = "180",
+                            },
+                            new ColumnProperty(nameof(ProductQAModel.ProductInformation))
+                            {
+                                Title = T("Admin.NopStation.ProductQuestionAnswer.ProductQnA.Fields.ProductInformation").Text,
+                                Width = "180",
+                                Render = new RenderLink(new DataUrl("~/Admin/Product/Edit", nameof(ProductQAModel.ProductId))),
+                                ClassName = NopColumnClassDefaults.CenterAll
+                            },
+                            new ColumnProperty(nameof(ProductQAModel.CustomerInformation))
+                            {
+                                Title = T("Admin.NopStation.ProductQuestionAnswer.ProductQnA.Fields.CustomerInformation").Text,
+                                Width = "180",
+                                Render = new RenderLink(new DataUrl("~/Admin/Customer/Edit", nameof(ProductQAModel.CustomerId))),
+                                ClassName = NopColumnClassDefaults.CenterAll
+                            },
+
+                            new ColumnProperty(nameof(ProductQAModel.IsApproved))
+                            {
+                                Title = T("Admin.NopStation.ProductQuestionAnswer.ProductQnA.Fields.IsApproved").Text,
+                                Width = "80",
+                                Render = new RenderBoolean(),
+                                ClassName = NopColumnClassDefaults.CenterAll
+                            },
+                            new ColumnProperty(nameof(ProductQAModel.AnsweredByCustomerName))
+                            {
+                                Title = T("Admin.NopStation.ProductQuestionAnswer.ProductQnA.Fields.AnsweredBy").Text,
+                                Width = "100",
+                                Render = new RenderLink(new DataUrl("~/Admin/Customer/Edit", nameof(ProductQAModel.UpdatedByCustomerId))),
+                                ClassName = NopColumnClassDefaults.CenterAll
+                            },
+                            new ColumnProperty(nameof(ProductQAModel.Id))
+                            {
+                                Title = T("Admin.NopStation.ProductQuestionAnswer.ProductQnA.Edit").Text,
+                                Width = "100",
+                                ClassName = NopColumnClassDefaults.Button,
+                                Render = new RenderButtonEdit(new DataUrl("~/Admin/ProductQA/Edit/"))
+                            },
+                            new ColumnProperty(nameof(ProductQAModel.Id))
+                            {
+                                Title = T("Admin.Common.Delete").Text,
+                                ClassName = NopColumnClassDefaults.Button,
+                                Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                                Width = "100"
+                            }
+                        }
+                   })
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+</section>

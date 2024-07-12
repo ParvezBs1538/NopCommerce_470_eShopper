@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Dmoney",
+  "SystemName": "NopStation.Plugin.Payments.Dmoney",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team, Jaber Kibria",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.Dmoney.dll",
+  "Description": "This plugin enables dmoney gateway payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

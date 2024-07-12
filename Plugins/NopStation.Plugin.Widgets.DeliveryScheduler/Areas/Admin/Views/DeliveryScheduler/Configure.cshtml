@@ -1,0 +1,40 @@
+﻿@model ConfigurationModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.DeliveryScheduler.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("DeliveryScheduler.Configuration");
+}
+
+@{
+    const string hideInfoBlockAttributeName = "DeliveryScheduler.HideInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideInfoBlockAttributeName);
+
+    const string hideOverrideBlockAttributeName = "DeliveryScheduler.HideOverrideBlock";
+    var hideOverrideBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideOverrideBlockAttributeName);
+}
+
+<form asp-controller="DeliveryScheduler" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.DeliveryScheduler.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <nop-cards id="scheduler-panels">
+                    <nop-card asp-name="scheduler-info" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.DeliveryScheduler.Configuration.Settings")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_Configure.Info", Model)</nop-card>
+                    <nop-card asp-name="scheduler-override" asp-icon="fa fa-bars" asp-title="@T("Admin.NopStation.DeliveryScheduler.Configuration.OffsetOverride")" asp-hide-block-attribute-name="@hideOverrideBlockAttributeName" asp-hide="@hideOverrideBlock" asp-advanced="false">@await Html.PartialAsync("_Configure.Override", Model)</nop-card>
+                </nop-cards>
+            </div>
+        </div>
+    </section>
+</form>

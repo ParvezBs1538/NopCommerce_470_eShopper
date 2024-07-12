@@ -1,0 +1,77 @@
+﻿@model FilterProductTagsModel
+@using NopStation.Plugin.Misc.AjaxFilter.Domains;
+@using NopStation.Plugin.Misc.AjaxFilter.Domains.Enums
+@using NopStation.Plugin.Misc.AjaxFilter.Models;
+@using Nop.Web.Framework.UI;
+@inject AjaxFilterSettings ajaxFilterSettings
+
+<script>
+
+    $(".collaspe-tags").accordion({
+        collapsible: (((`@(ajaxFilterSettings.CloseProductTagsFilterByDefualt)`).toLowerCase()) == "true" ? true : false),
+        active: ((`@(ajaxFilterSettings.CloseProductTagsFilterByDefualt)`).toLowerCase()) == "true" ? true : false
+    });
+
+</script>
+
+@if (Model.ProductTags != null && Model.ProductTags.Count > 0)
+{
+    <div id="vendors-filter-section">
+        <div class="vendors-section">
+            <div class="filter-section collaspe-tags">
+                <div class="title">
+                    <h5 class="mb-0 collapsed ajaxfilter-title"
+                    data-toggle="collapse"
+                    data-parent="#accordionEx"
+                    data-target="#productTagNavigation"
+                    aria-expanded="true"
+                    aria-controls="collapseOne">
+                    @T("NopStation.Plugin.Misc.AjaxFilter.Filters.ProductTags")
+                </h5>
+                </div>
+                
+                <div class="listbox collapse show" id="productTagNavigation" aria-labelledby="productTagNavigation">
+                    <div class="ajaxfilter-section">
+                        @if (Model.CheckOrDropdown == FiltersUI.UseCheckboxes)
+                        {
+                            <ul class="itemsThree">
+                                @for (int i = 0; i < Model.ProductTags.OrderBy(pva => pva.Name).Count(); i++)
+                                {
+                                    var tagFilterItem = Model.ProductTags.OrderBy(pva => pva.Name).ElementAt(i);
+                                    <li class="itemThree">
+                                        <input class="Name-@tagFilterItem.Id d-none" 
+                                                   type="checkbox"
+                                                   data-tag-id="@tagFilterItem.Id"
+                                                   data-tag-name="@tagFilterItem.Name"
+                                                   value="@tagFilterItem.Id"
+                                                   onclick="AjaxFilter.setFilter(this, 'producttag')"
+                                                  
+                                                   @(tagFilterItem.CheckedState == CheckedState.Checked ? "Checked" : "")
+                                                   @(tagFilterItem.CheckedState == CheckedState.Disabled ? "Disabled" : "")
+                                                   @(tagFilterItem.CheckedState == CheckedState.CheckedDisabled ? "Disabled Checked" : "") />
+                                        <label for="productTagsModel_ProductTags_@(i)_Id">
+                                            <span class="square @(tagFilterItem.CheckedState == CheckedState.Checked ? "active" : "") Name-@(tagFilterItem.Id)" id="square_specyficationModel_SpecificationAttributes__@(tagFilterItem.Id)_@(i)_Id"> </span>
+                                            <i>@tagFilterItem.Name </i>
+                                            <span>(@tagFilterItem.Count)</span>
+                                        </label>
+
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else if (Model.CheckOrDropdown == FiltersUI.UseDropdowns)
+                        {
+                            <select onchange="AjaxFilter.setFilter('producttag')">
+                                <option value="" selected="selected">@(Model.ProductTags.Where(x => x.CheckedState != CheckedState.Disabled).Count() > 0 ? T("NopStation.Plugin.Misc.AjaxFilter.Filters.All") : T("NopStation.Plugin.Misc.AjaxFilter.Filters.Empty")) </option>
+                                @foreach (var tagFilterItem in Model.ProductTags.Where(x => x.CheckedState != CheckedState.Disabled).OrderBy(pva => pva.Name))
+                                {
+                                    <!option value="@tagFilterItem.Id" @(tagFilterItem.CheckedState == CheckedState.Checked || tagFilterItem.CheckedState == CheckedState.CheckedDisabled ? "Selected" : "")>@tagFilterItem.Name</!option>
+                                }
+                            </select>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

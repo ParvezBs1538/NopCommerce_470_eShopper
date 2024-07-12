@@ -1,0 +1,31 @@
+@model FormAttributeMappingModel
+
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.Plugin.Misc.QuoteCart.Forms.FormAttributes.AddNew").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("QuoteCart.Forms");
+}
+
+<form asp-controller="QuoteForm" asp-action="FormAttributeMappingCreate" method="post" id="formattribute-form">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Plugin.Misc.QuoteCart.Forms.FormAttributes.AddNew")
+            <small>
+                <i class="fas fa-arrow-circle-left"></i>
+                <a asp-action="Edit" asp-route-id="@Model.FormId">@T("Admin.NopStation.Plugin.Misc.QuoteCart.Forms.FormAttributes.BackToForm")</a>
+            </small>
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+            <button type="submit" name="save-continue" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.SaveContinue")
+            </button>
+        </div>
+    </div>
+    @await Html.PartialAsync("_CreateOrUpdateFormAttributeMapping", Model)
+</form>

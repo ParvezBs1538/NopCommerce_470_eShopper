@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Web Api Push Notification",
+  "SystemName": "NopStation.Plugin.Misc.WebApiNotification",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop Station Team",
+  "DisplayOrder": 2,
+  "FileName": "NopStation.Plugin.Misc.WebApiNotification.dll",
+  "Description": "This plugin allows to enable nopStation web api push notification.",
+  "DependsOnSystemNames": [ "NopStation.Core", "NopStation.Plugin.Misc.WebApi" ]
+}

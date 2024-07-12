@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Heap Analytics",
+  "SystemName": "NopStation.Plugin.Widgets.Heap",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.Heap.dll",
+  "Description": "This plugin allows you to connect with Heap.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

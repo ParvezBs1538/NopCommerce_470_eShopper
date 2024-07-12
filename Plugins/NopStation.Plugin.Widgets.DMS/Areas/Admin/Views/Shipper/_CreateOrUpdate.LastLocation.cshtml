@@ -1,0 +1,110 @@
+﻿@model ShipperModel
+<div class="card-body">
+    <div id="map" style="height:400px;"></div>
+</div>
+@if (Model.GeoMapId == (int)GeoMapType.OpenStreet)
+{
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <link href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" rel="stylesheet" />
+    <script>
+        var element = document.getElementById('map');
+        var map = L.map(element);
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        var target = L.latLng('@Model.Latitude', '@Model.Longitude');
+        map.setView(target, 17);
+        L.marker(target).addTo(map);
+    </script>
+}
+else
+{
+    <script>
+        (g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })
+            ({ key: "@Model.GoogleApiKey", v: "weekly" });</script>
+
+    <script>
+        function getNextPosition() {
+            var customerId = @Model.CustomerId;
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.Action("GetLocation", "ShipperDevice"))",
+                data: {
+                    customerId: customerId
+                },
+                success: function (data, textStatus, jqXHR) {
+                    if (data.Result) {
+                        return {
+                            lat: data.lat,
+                            lng: data.lng,
+                        };
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                },
+
+            });
+
+        }
+        const total = 100;
+        const intersectionObserver = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("drop");
+                    intersectionObserver.unobserve(entry.target);
+                }
+            }
+        });
+
+        async function initMap() {
+            // Request needed libraries.
+            const { Map } = await google.maps.importLibrary("maps");
+            const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+            const position = { lat: 23.837195, lng: 90.364273 };
+            const map = new Map(document.getElementById("map"), {
+                zoom: 16,
+                center: position,
+                mapId: "4504f8b37365c3d0",
+            });
+            google.maps.event.addListenerOnce(map, "idle", () => {
+                PlaceMarker(map, AdvancedMarkerElement);
+            });
+        }
+
+        function PlaceMarker(map, AdvancedMarkerElement) {
+            const content = createMarker(map, AdvancedMarkerElement);
+            setTimeout(function () {
+                content.remove();
+                PlaceMarker(map, AdvancedMarkerElement);
+            }, @Model.LocationUpdateIntervalInSeconds); // Wait for 3 seconds before calling PlaceMarker again
+        }
+        function createMarker(map, AdvancedMarkerElement) {
+            const iconImage = document.createElement("img");
+            iconImage.src = "/Plugins/NopStation.Plugin.Widgets.DMS/Contents/image/TrackingIcon.png";
+            iconImage.style.width = "50px";
+            iconImage.style.height = "50px";
+
+            const advancedMarker = new AdvancedMarkerElement({
+                position: getNextPosition(),
+                map: map,
+                content: iconImage
+            });
+            const content = advancedMarker.content;
+
+            content.style.opacity = "0";
+            content.addEventListener("animationend", (event) => {
+                content.classList.remove("drop");
+                content.style.opacity = "1";
+            });
+
+            const time = 0.0; // 0s delay for easy to see the animation
+            content.style.setProperty("--delay-time", time + "s");
+            intersectionObserver.observe(content);
+            return content;
+        }
+
+        initMap();
+    </script>
+}

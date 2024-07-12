@@ -1,0 +1,75 @@
+﻿@using Nop.Web.Framework.Mvc.Routing
+@using Nop.Core.Domain.Topics
+@model MegaMenuModel.MenuTreeItemModel
+
+@{
+    string url;
+
+    if (Model.MenuItemType == MenuItemType.Topic)
+    {
+        url = Url.RouteUrl<Topic>(new { SeName = Model.SeName });
+    }
+    else if (Model.MenuItemType != MenuItemType.CustomLink)
+    {
+        url = Url.RouteUrl(Model.RouteName, Model.RouteParameter);
+    }
+    else
+    {
+        url = Model.Url;
+    }
+
+    var target = "";
+    if (Model.OpenInNewTab)
+    {
+        target = "target=_blank";
+    }
+}
+
+@if (Model.Children.Count > 0)
+{
+    <li class="has-children">
+        <a href="@url" @target>
+            @if (Model.ShowPicture)
+            {
+                <span class="category-container">
+                    <img class="image-container" src="@Model.PictureModel.ImageUrl" alt="@Model.PictureModel.AlternateText" title="@Model.PictureModel.Title" />
+                </span>
+            }
+
+            <span class="category-name">
+                @Model.Title
+            </span>
+            @if (Model.ShowRibbonText && !string.IsNullOrEmpty(@Model.RibbonText))
+            {
+                <span style="background-color: @Model.RibbonBackgroundColor; color: @Model.RibbonTextColor" class="ribbon-container">@Model.RibbonText</span>
+            }
+        </a>
+        <span class="right-arrow">&gt;</span>
+        <ul class="sublist">
+            @foreach (var category in Model.Children)
+            {
+                @await Html.PartialAsync("_MenuItem.MegaMenu.cshtml", category)
+            }
+        </ul>
+    </li>
+}
+else
+{
+    <li>
+        <a href="@url" @target>
+            @if (Model.ShowPicture)
+            {
+                <span class="category-container">
+                    <img class="image-container" src="@Model.PictureModel.ImageUrl" alt="@Model.PictureModel.AlternateText" title="@Model.PictureModel.Title" />
+                </span>
+            }
+            <span class="category-name">
+                @Model.Title
+            </span>
+            @if (!string.IsNullOrEmpty(@Model.RibbonText))
+            {
+                <span style="background-color: @Model.RibbonBackgroundColor; color: @Model.RibbonTextColor" class="ribbon-container">@Model.RibbonText</span>
+            }
+        </a>
+    </li>
+}

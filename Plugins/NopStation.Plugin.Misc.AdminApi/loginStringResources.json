@@ -1,0 +1,13 @@
+﻿[
+  "Account.Login.Fields.Email",
+  "Account.Login.Fields.Username",
+  "Account.Login.Fields.Password",
+  "Account.Login.Fields.RememberMe",
+  "Account.Login.Welcome",
+  "Account.Register.Result.Disabled",
+  "Account.Register",
+  "Account.Login.CheckoutAsGuestOrRegister",
+  "Account.Login.CheckoutAsGuest",
+  "Account.Login.Unsuccessful",
+  "Account.Login.LoginButton"
+]

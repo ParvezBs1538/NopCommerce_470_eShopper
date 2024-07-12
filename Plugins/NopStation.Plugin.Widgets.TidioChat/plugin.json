@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Tidio Chat",
+  "SystemName": "NopStation.Plugin.Widgets.TidioChat",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.TidioChat.dll",
+  "Description": "This plugin allows you to connect with Tidio chat.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

@@ -1,0 +1,91 @@
+﻿@model OrderRatingModel
+@using Nop.Web.Framework.UI
+
+@{
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.OrderRatings/Contents/css/styles.css", "");
+}
+
+@if (Model.RatedOn.HasValue)
+{
+    <div class="product-review-box order-rating-box">
+        <div class="rating" title="@T("NopStation.OrderRatings.OrderDetails.YourRate", Model.Rating, Model.Id)">
+            <div style="width: @((Model.Rating * 20) + "%")"></div>
+        </div>
+    </div>
+    if (Model.ShowOrderRatedDateInDetailsPage)
+    {
+        <div class="order-rating-date">
+            @T("NopStation.OrderRatings.OrderDetails.RatedOn", Model.RatedOn.Value)
+        </div>
+    }
+}
+else
+{
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "/Plugins/NopStation.Plugin.Widgets.OrderRatings/Contents/js/jquery.fullscreen-popup.min.js");
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "/Plugins/NopStation.Plugin.Widgets.OrderRatings/Contents/js/jquery.magnific-popup.min.js");
+
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.OrderRatings/Contents/css/magnific-popup.css",string.Empty);
+
+    <div class="product-review-box order-rating-box not-rated">
+        <div class="rating">
+            <div style="width: 0%"></div>
+        </div>
+    </div>
+
+    <div style="display: none" id="order-rating-modal">
+        <form action="@Url.RouteUrl("SaveOrderRating")" method="post" id="order-rating-form">
+            <div class="title">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <label for="CustomOrderNumber">@T("NopStation.OrderRatings.Fields.OrderId") @Model.CustomOrderNumber</label>
+            </div>
+            <div class="fieldset order-rating-item">
+                <div class="form-fields">
+                    <div class="order-created-date">
+                        @T("NopStation.OrderRatings.OrderDetails.CreatedOn", Model.CreatedOn.ToString("dd/MM/yyyy"))
+                    </div>
+                    <div class="review-rating">
+                        <div class="name-description">
+                            <label for="Rating">@T("NopStation.OrderRatings.Fields.Rating"):</label>
+                        </div>
+                        <div class="rating-wrapper">
+                            <div class="label first">@T("NopStation.OrderRatings.Fields.Rating.Bad")</div>
+                            <div class="rating-options">
+                                <input asp-for="Rating" value="1" type="radio" id="addorderrating_1_@(Model.Id)" aria-label="@T("NopStation.OrderRatings.Rating.Bad")" />
+                                <input asp-for="Rating" value="2" type="radio" id="addorderrating_2_@(Model.Id)" aria-label="@T("NopStation.OrderRatings.Rating.NotGood")" />
+                                <input asp-for="Rating" value="3" type="radio" id="addorderrating_3_@(Model.Id)" aria-label="@T("NopStation.OrderRatings.Rating.Average")" />
+                                <input asp-for="Rating" value="4" type="radio" id="addorderrating_4_@(Model.Id)" aria-label="@T("NopStation.OrderRatings.Rating.Good")" />
+                                <input asp-for="Rating" value="5" type="radio" checked="checked" id="addorderrating_5_@(Model.Id)" aria-label="@T("NopStation.OrderRatings.Rating.Excellent")" />
+                            </div>
+                            <div class="label last">@T("NopStation.OrderRatings.Fields.Rating.Excellent")</div>
+                        </div>
+                    </div>
+                    <div class="inputs">
+                        <label for="Note">@T("NopStation.OrderRatings.Fields.Note"):</label>
+                        <textarea asp-for="Note" class="review-text"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit" name="add-ratings" class="button-1 save-order-rating-button">@T("NopStation.OrderRatings.Rating.SubmitButton")</button>
+            </div>
+        </form>
+    </div>
+    <button type="button" style="display: none" id="order-rating-button"></button>
+
+    <script asp-location="Footer" asp-exclude-from-bundle="true">
+        $(document).ready(function () {
+            $("#order-rating-button").magnificPopup({
+                items: {
+                    src: '#order-rating-modal',
+                    type: 'inline'
+                },
+                preloader: true
+            });
+
+            $('.order-rating-box.not-rated').click(function () {
+                $("#order-rating-button").click();
+                $("#order-rating-modal").show();
+            });
+        })
+    </script>
+}

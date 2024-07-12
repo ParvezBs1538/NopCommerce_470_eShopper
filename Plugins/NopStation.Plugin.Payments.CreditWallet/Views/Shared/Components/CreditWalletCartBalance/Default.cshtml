@@ -1,0 +1,22 @@
+﻿@model string
+
+<style>
+    .credit-wallet-cart-balance {
+        padding: 5px 30px 15px;
+    }
+    .credit-wallet-cart-balance td:last-child {
+        text-align: right;
+    }
+</style>
+<div class="credit-wallet-cart-balance">
+    <table>
+        <tr>
+            <td>
+                <label>@T("Admin.NopStation.CreditWallet.Balance", "")</label>
+            </td>
+            <td>
+                @Model
+            </td>
+        </tr>
+    </table>
+</div>

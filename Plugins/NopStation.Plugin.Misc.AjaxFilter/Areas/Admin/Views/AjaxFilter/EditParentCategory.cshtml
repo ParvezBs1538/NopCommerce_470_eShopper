@@ -1,0 +1,68 @@
+﻿@model AjaxFilterParentCategoryModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.Plugin.Misc.AjaxFilter.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("AjaxFilter.Configuration");
+}
+
+<form asp-controller="AjaxFilter" asp-action="EditParentCategory" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Plugin.Misc.AjaxFilter.Configuration")
+            <small>
+                <i class="fas fa-arrow-circle-left"></i>
+                <a asp-action="List">@T("Admin.NopStation.Plugin.Misc.AjaxFilter.BackToList")</a>
+            </small>
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+
+                                <input asp-for="Id" hidden />
+                                <input asp-for="CategoryId" hidden />
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnablePriceRangeFiltering" asp-input="EnablePriceRangeFiltering" />
+                                    <nop-label asp-for="EnablePriceRangeFiltering" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnablePriceRangeFiltering" />
+                                </div>
+
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableSpecificationAttributeFiltering" asp-input="EnableSpecificationAttributeFiltering" />
+                                    <nop-label asp-for="EnableSpecificationAttributeFiltering" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableSpecificationAttributeFiltering" />
+                                </div>
+
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableSearchForSpecifications" asp-input="EnableSearchForSpecifications" />
+                                    <nop-label asp-for="EnableSearchForSpecifications" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableSearchForSpecifications" />
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

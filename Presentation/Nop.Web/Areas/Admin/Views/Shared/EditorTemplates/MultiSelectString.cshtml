@@ -1,0 +1,24 @@
+﻿@model List<string>
+<div class="select2-blue">
+    <select asp-for="@Model" asp-items="@((IEnumerable<SelectListItem>)ViewData["SelectList"])" multiple="multiple" class="form-control select2" data-dropdown-css-class="select2-blue"></select>
+</div>
+<script>
+    $(function() {
+        $("#@Html.IdForModel()").select2({
+            tags: true,
+            createTag: function(params) {
+                var term = $.trim(params.term);
+
+                if (term === '') {
+                    return null;
+                }
+
+                return {
+                    id: term,
+                    text: term,
+                    newTag: true
+                }
+            }
+        })
+    });
+</script>

@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Pickup in store advance",
+  "SystemName": "NopStation.PickupInStoreAdvance",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Pickup.PickupInStoreAdvance.dll",
+  "Description": "This plugin allows to configure and manage pickup points and orders when \"Pickup in store\" option is enabled",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

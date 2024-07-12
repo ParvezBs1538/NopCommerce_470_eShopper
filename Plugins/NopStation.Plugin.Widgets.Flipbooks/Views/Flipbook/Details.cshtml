@@ -1,0 +1,433 @@
+﻿@model FlipbookDetailsModel
+@using Nop.Web.Framework.UI
+
+@{
+    Layout = "_ColumnsOne";
+
+    //title
+    NopHtml.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    //meta
+    NopHtml.AddMetaDescriptionParts(Model.MetaDescription);
+    NopHtml.AddMetaKeywordParts(Model.MetaKeywords);
+
+    NopHtml.AddScriptParts(ResourceLocation.Footer, "/Plugins/NopStation.Plugin.Widgets.Flipbooks/Contents/lib/modernizr.2.5.3.min.js");
+    NopHtml.AddScriptParts(ResourceLocation.Footer, "/Plugins/NopStation.Plugin.Widgets.Flipbooks/Contents/lib/hash.js");
+    NopHtml.AddScriptParts(ResourceLocation.Footer, "/Plugins/NopStation.Plugin.Widgets.Flipbooks/Contents/js/magazine.js");
+    NopHtml.AddScriptParts(ResourceLocation.Footer, "/Plugins/NopStation.Plugin.Widgets.Flipbooks/Contents/lib/turn.min.js");
+}
+
+<style>
+    .hard {
+        background-color: grey;
+    }
+
+    .prod {
+        background-color: cadetblue
+    }
+
+    .gradient {
+        z-index: -1;
+    }
+</style>
+
+<div id="product-page" class="prod" style="display:none">
+    <div>
+        @{
+            int counter = 1;
+        }
+        @foreach (var content in Model.Contents)
+        {
+            <div id="catalog-page-@(counter)">
+                @if (content.IsImage)
+                {
+                    <a target="_blank" href="@content.RedirectUrl">
+                        <img src="@content.ImageUrl" />
+                    </a>
+                }
+                else
+                {
+                    <div class="catalog-product-@content.Id">
+                        @await Html.PartialAsync("_CatalogProducts", content)
+                    </div>
+                }
+            </div>
+            counter++;
+        }
+    </div>
+</div>
+
+<div id="canvas">
+    <div class="magazine-viewport">
+        <div class="">
+            <div class="magazine">
+                <div ignore="1" class="next-button"></div>
+                <div ignore="1" class="previous-button"></div>
+            </div>
+        </div>
+    </div>
+    <div class="thumbnails">
+        <div>
+            <ul></ul>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" asp-location="Footer">
+
+    function loadApp() {
+        $('#canvas').fadeIn(1000);
+        var flipbook = $('.magazine');
+        // Check if the CSS was already loaded
+        if (flipbook.width() == 0 || flipbook.height() == 0) {
+            setTimeout(loadApp, 10);
+            return;
+        }
+        // Create the flipbook
+        flipbook.turn({
+            // Magazine width
+            width: 1170,
+            // Magazine height
+            height: 600,
+            // Duration in millisecond
+            duration: 1000,
+            // Hardware acceleration
+            acceleration: !isChrome(),
+            // Enables gradients
+            gradients: true,
+            // Auto center this flipbook
+            autoCenter: true,
+            // Elevation from the edge of the flipbook when turning a page
+            elevation: 50,
+            // The number of pages
+
+            pages: '@Model.Contents.Count()',
+
+            // Events
+
+            when: {
+                turning: function (event, page, view) {
+
+                    var book = $(this),
+                        currentPage = book.turn('page'),
+                        pages = book.turn('pages');
+
+                    // Update the current URI
+
+                    Hash.go('page/' + page).update();
+
+                    // Show and hide navigation buttons
+
+                    disableControls(page);
+
+                    $('.thumbnails .page-' + currentPage).
+                        parent().
+                        removeClass('current');
+
+                    $('.thumbnails .page-' + page).
+                        parent().
+                        addClass('current');
+                },
+
+                turned: function (event, page, view) {
+                    disableControls(page);
+                    $(this).turn('center');
+                    if (page == 1) {
+                        $(this).turn('peel', 'br');
+                    }
+                },
+
+                missing: function (event, pages) {
+                    // Add pages that aren't in the magazine
+                    for (var i = 0; i < pages.length; i++)
+                        addPageMagazine(pages[i], $(this));
+                }
+            }
+        });
+
+        // Zoom.js
+
+        $('.magazine-viewport').zoom({
+            flipbook: $('.magazine'),
+            max: function () {
+                return largeMagazineWidth() / $('.magazine').width();
+            },
+            when: {
+                swipeLeft: function () {
+                    $(this).zoom('flipbook').turn('next');
+                },
+                swipeRight: function () {
+                    $(this).zoom('flipbook').turn('previous');
+                },
+
+                resize: function (event, scale, page, pageElement) {
+                    if (scale == 1)
+                        loadSmallPage(page, pageElement);
+                    else
+                        loadLargePage(page, pageElement);
+                },
+
+                zoomIn: function () {
+
+                    $('.thumbnails').hide();
+                    $('.made').hide();
+                    $('.magazine').removeClass('animated').addClass('zoom-in');
+                    $('.zoom-icon').removeClass('zoom-icon-in').addClass('zoom-icon-out');
+
+                    if (!window.escTip && !$.isTouch) {
+                        escTip = true;
+
+                        $('<div />', { 'class': 'exit-message' }).
+                            html('<div>Press ESC to exit</div>').
+                            appendTo($('body')).
+                            delay(2000).
+                            animate({ opacity: 0 }, 500, function () {
+                                $(this).remove();
+                            });
+                    }
+                },
+
+                zoomOut: function () {
+
+                    $('.exit-message').hide();
+                    $('.thumbnails').fadeIn();
+                    $('.made').fadeIn();
+                    $('.zoom-icon').removeClass('zoom-icon-out').addClass('zoom-icon-in');
+
+                    setTimeout(function () {
+                        $('.magazine').addClass('animated').removeClass('zoom-in');
+                        resizeViewport();
+                    }, 0);
+                }
+            }
+        });
+
+        // Using arrow keys to turn the page
+
+        $(document).keydown(function (e) {
+
+            var previous = 37, next = 39, esc = 27;
+
+            switch (e.keyCode) {
+                case previous:
+
+                    // left arrow
+                    $('.magazine').turn('previous');
+                    e.preventDefault();
+
+                    break;
+                case next:
+
+                    //right arrow
+                    $('.magazine').turn('next');
+                    e.preventDefault();
+
+                    break;
+                case esc:
+
+                    $('.magazine-viewport').zoom('zoomOut');
+                    e.preventDefault();
+
+                    break;
+            }
+        });
+
+        // URIs - Format #/page/1
+
+        Hash.on('^page\/([0-9]*)$', {
+            yep: function (path, parts) {
+                var page = parts[1];
+
+                if (page !== undefined) {
+                    if ($('.magazine').turn('is'))
+                        $('.magazine').turn('page', page);
+                }
+            },
+            nop: function (path) {
+
+                if ($('.magazine').turn('is'))
+                    $('.magazine').turn('page', 1);
+            }
+        });
+
+        $(window).resize(function () {
+            resizeViewport();
+        }).bind('orientationchange', function () {
+            resizeViewport();
+        });
+
+        // Events for thumbnails
+
+        $('.thumbnails').click(function (event) {
+
+            var page;
+
+            if (event.target && (page = /page-([0-9]+)/.exec($(event.target).attr('class')))) {
+
+                $('.magazine').turn('page', page[1]);
+            }
+        });
+
+        $('.thumbnails li').
+            bind($.mouseEvents.over, function () {
+
+                $(this).addClass('thumb-hover');
+
+            }).bind($.mouseEvents.out, function () {
+
+                $(this).removeClass('thumb-hover');
+            });
+
+        if ($.isTouch) {
+
+            $('.thumbnails').
+                addClass('thumbanils-touch').
+                bind($.mouseEvents.move, function (event) {
+                    event.preventDefault();
+                });
+
+        } else {
+
+            $('.thumbnails ul').mouseover(function () {
+                $('.thumbnails').addClass('thumbnails-hover');
+            }).mousedown(function () {
+                return false;
+            }).mouseout(function () {
+                $('.thumbnails').removeClass('thumbnails-hover');
+            });
+        }
+
+        // Regions
+
+        if ($.isTouch) {
+            $('.magazine').bind('touchstart', regionClick);
+        } else {
+            $('.magazine').click(regionClick);
+        }
+
+        // Events for the next button
+
+        $('.next-button').bind($.mouseEvents.over, function () {
+
+            $(this).addClass('next-button-hover');
+
+        }).bind($.mouseEvents.out, function () {
+
+            $(this).removeClass('next-button-hover');
+
+        }).bind($.mouseEvents.down, function () {
+
+            $(this).addClass('next-button-down');
+
+        }).bind($.mouseEvents.up, function () {
+
+            $(this).removeClass('next-button-down');
+
+        }).click(function () {
+
+            $('.magazine').turn('next');
+        });
+
+        // Events for the next button
+
+        $('.previous-button').bind($.mouseEvents.over, function () {
+
+            $(this).addClass('previous-button-hover');
+
+        }).bind($.mouseEvents.out, function () {
+
+            $(this).removeClass('previous-button-hover');
+
+        }).bind($.mouseEvents.down, function () {
+
+            $(this).addClass('previous-button-down');
+
+        }).bind($.mouseEvents.up, function () {
+
+            $(this).removeClass('previous-button-down');
+
+        }).click(function () {
+
+            $('.magazine').turn('previous');
+        });
+
+        resizeViewport();
+
+        $('.magazine').addClass('animated');
+    }
+
+    function loadMagazine() {
+        $("#flipbook").turn({
+            width: 400,
+            height: 300,
+            autoCenter: true
+        });
+    }
+
+    // Zoom icon
+
+    $('.zoom-icon').bind('mouseover', function () {
+
+        if ($(this).hasClass('zoom-icon-in'))
+            $(this).addClass('zoom-icon-in-hover');
+
+        if ($(this).hasClass('zoom-icon-out'))
+            $(this).addClass('zoom-icon-out-hover');
+
+    }).bind('mouseout', function () {
+
+        if ($(this).hasClass('zoom-icon-in'))
+            $(this).removeClass('zoom-icon-in-hover');
+
+        if ($(this).hasClass('zoom-icon-out'))
+            $(this).removeClass('zoom-icon-out-hover');
+
+    }).bind('click', function () {
+
+        if ($(this).hasClass('zoom-icon-in'))
+            $('.magazine-viewport').zoom('zoomIn');
+        else if ($(this).hasClass('zoom-icon-out'))
+            $('.magazine-viewport').zoom('zoomOut');
+    });
+
+    $('#canvas').hide();
+
+    var divProd = "";
+
+    function loadProductPage(page, pageElement) {
+
+        $("#catalog-page-" + page).children().clone().appendTo(pageElement);
+        //pageElement.appendchild(divProd);
+        pageElement.find('.loader').remove();
+    }
+
+    function addPageMagazine(page, book) {
+
+        var id, pages = book.turn('pages');
+
+        // Create a new element for this page
+        var element = $('<div />', {});
+
+        // Add the page to the flipbook
+        if (book.turn('addPage', element, page)) {
+
+            // Add the initial HTML
+            // It will contain a loader indicator and a gradient
+            element.html('<div class="gradient"></div><div class="loader"></div>');
+
+            // Load the page
+            loadProductPage(page, element);
+        }
+    }
+
+    // Load the HTML4 version if there's not CSS transform
+
+    yepnope({
+        test: Modernizr.csstransforms,
+        yep: ['/Plugins/NopStation.Plugin.Widgets.Flipbooks/Contents/lib/turn.js'],
+        nope: ['/Plugins/NopStation.Plugin.Widgets.Flipbooks/Contents/lib/turn.html4.min.js'],
+        both: ['/Plugins/NopStation.Plugin.Widgets.Flipbooks/Contents/lib/zoom.min.js', '/Plugins/NopStation.Plugin.Widgets.Flipbooks/Contents/js/magazine.js', '/Plugins/NopStation.Plugin.Widgets.Flipbooks/Contents/styles/magazine.css'],
+        complete: loadApp
+    });
+
+</script>
+@NopHtml.GenerateInlineScripts(ResourceLocation.Footer)

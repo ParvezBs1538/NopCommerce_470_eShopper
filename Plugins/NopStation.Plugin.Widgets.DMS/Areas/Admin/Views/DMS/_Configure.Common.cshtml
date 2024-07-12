@@ -1,0 +1,107 @@
+﻿@using Nop.Services
+@model ConfigurationModel
+@{
+    var googleTypeId = (int)GeoMapType.Google;
+}
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="AllowCustomersToDeleteAccount_OverrideForStore" asp-input="AllowCustomersToDeleteAccount" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="AllowCustomersToDeleteAccount" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="AllowCustomersToDeleteAccount" />
+            <span asp-validation-for="AllowCustomersToDeleteAccount"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="GeoMapId_OverrideForStore" asp-input="GeoMapId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="GeoMapId" />
+        </div>
+        <div class="col-md-8">
+            <nop-select asp-for="GeoMapId" asp-items="@await (((GeoMapType)Model.GeoMapId).ToSelectListAsync())" />
+            <span asp-validation-for="GeoMapId"></span>
+        </div>
+    </div>
+    <div class="form-group row" id="pnlGoogleMapApiKey">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="GoogleMapApiKey_OverrideForStore" asp-input="GoogleMapApiKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="GoogleMapApiKey" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="GoogleMapApiKey" />
+            <span asp-validation-for="GoogleMapApiKey"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="LocationUpdateIntervalInSeconds_OverrideForStore" asp-input="LocationUpdateIntervalInSeconds" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="LocationUpdateIntervalInSeconds" />
+        </div>
+        <div class="col-md-8">
+            <nop-select asp-for="LocationUpdateIntervalInSeconds" asp-items="@Model.AvailableLocationUpdateIntervals" />
+            <span asp-validation-for="LocationUpdateIntervalInSeconds"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="UseAjaxLoading_OverrideForStore" asp-input="UseAjaxLoading" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="UseAjaxLoading" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="UseAjaxLoading" />
+            <span asp-validation-for="UseAjaxLoading"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="AllowShippersToSelectPageSize_OverrideForStore" asp-input="AllowShippersToSelectPageSize" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="AllowShippersToSelectPageSize" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="AllowShippersToSelectPageSize" />
+            <span asp-validation-for="AllowShippersToSelectPageSize"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="AllowShippersToSelectPageSize">
+        <div class="form-group row" id="pnlPageSizeOptions">
+            <div class="col-md-4">
+                <nop-override-store-checkbox asp-for="PageSizeOptions_OverrideForStore" asp-input="PageSizeOptions" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="PageSizeOptions" />
+            </div>
+            <div class="col-md-8">
+                <nop-editor asp-for="PageSizeOptions" />
+                <span asp-validation-for="PageSizeOptions"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+    <div class="form-group row" id="pnlShipmentPageSize">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="ShipmentPageSize_OverrideForStore" asp-input="ShipmentPageSize" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="ShipmentPageSize" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="ShipmentPageSize" />
+            <span asp-validation-for="ShipmentPageSize"></span>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.GeoMapId)").change(toggleGoogleMapApiKey);
+        toggleGoogleMapApiKey();
+        console.log("noo");
+    });
+
+    function toggleGoogleMapApiKey() {
+        if ($('#@Html.IdFor(model => model.GeoMapId)').val() === '@googleTypeId') {
+            console.log($('#@Html.IdFor(model => model.GeoMapId)').val());
+            $('#pnlGoogleMapApiKey').show();
+        } else {
+            $('#pnlGoogleMapApiKey').hide();
+        }
+    }
+
+</script>

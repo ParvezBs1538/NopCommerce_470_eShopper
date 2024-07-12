@@ -1,0 +1,17 @@
+﻿@model List<ExternalAuthenticationMethodModel>
+@if (Model.Any())
+{
+    <div class="title">@T("Account.AssociatedExternalAuth.Or")</div>
+}
+@foreach (var authenticationMethod in Model)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="external-authentication">
+                <div class="offer offer-default">
+                    @await Component.InvokeAsync(authenticationMethod.ViewComponent)
+                </div>
+            </div>
+        </div>  
+    </div>
+}

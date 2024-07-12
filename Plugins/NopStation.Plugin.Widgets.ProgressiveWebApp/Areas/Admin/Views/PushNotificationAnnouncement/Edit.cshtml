@@ -1,0 +1,39 @@
+@model PushNotificationAnnouncementModel
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.PWA.PushNotificationAnnouncements.EditDetails").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("PWA.PushNotificationAnnouncements");
+}
+<form asp-controller="PushNotificationAnnouncement" asp-action="Edit" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.PWA.PushNotificationAnnouncements.EditDetails")
+            <small>
+                <i class="fas fa-arrow-circle-left"></i>
+                <a asp-action="List">@T("Admin.NopStation.PWA.PushNotificationAnnouncements.BackToList")</a>
+            </small>
+        </h1>
+        <div class="float-right">
+            <a asp-controller="PushNotificationAnnouncement" asp-action="SendNow" asp-route-id="@Model.Id"
+               onclick="return confirm('@T("Admin.NopStation.PWA.PushNotificationAnnouncements.AreYouSure")')" class="btn bg-green">
+                <i class="fa fa-paper-plane"></i>
+                @T("Admin.NopStation.PWA.PushNotificationAnnouncements.SendNow")
+            </a>
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+            <button type="submit" name="save-continue" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.SaveContinue")
+            </button>
+            <span id="announcement-delete" class="btn btn-danger">
+                <i class="far fa-trash-alt"></i>
+                @T("Admin.Common.Delete")
+            </span>
+        </div>
+    </div>
+    @await Html.PartialAsync("_CreateOrUpdate", Model)
+</form>
+<nop-delete-confirmation asp-model-id="@Model.Id" asp-button-id="announcement-delete" />

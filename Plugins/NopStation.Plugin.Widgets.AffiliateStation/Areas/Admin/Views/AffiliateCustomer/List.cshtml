@@ -1,0 +1,179 @@
+﻿@model AffiliateCustomerSearchModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.AffiliateStation.AffiliateCustomers.List").Text;
+
+    NopHtml.SetActiveMenuItemSystemName("AffiliateCustomers.List");
+}
+
+@{
+    const string hideSearchBlockAttributeName = "AffiliateCustomers.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<form asp-controller="AffiliateCustomer" asp-action="List" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.AffiliateStation.AffiliateCustomers.List")
+        </h1>
+    </div>
+    
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                
+                    <div class="card card-default card-search">
+                        <div class="card-body">
+                            <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                                <div class="search-text">@T("Admin.Common.Search")</div>
+                                <div class="icon-search"><i class="fa fa-search" aria-hidden="true"></i></div>
+                                <div class="icon-collapse"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
+                            </div>
+
+                            <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="AffiliateFirstName" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="AffiliateFirstName" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="AffiliateLastName" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="AffiliateLastName" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="CustomerEmail" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="CustomerEmail" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="ApplyStatusIds" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="ApplyStatusIds" asp-items="@Model.AvailableApplyStatuses" asp-multiple="true" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="CreatedFrom" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="CreatedFrom" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="CreatedTo" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="CreatedTo" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="ActiveStatusId" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="ActiveStatusId" asp-items="@Model.AvailableActiveStatuses" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="text-center col-12">
+                                        <button type="button" id="search-affiliate-customer" class="btn btn-primary btn-search">
+                                            <i class="fa fa-search"></i>
+                                            @T("Admin.Common.Search")
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-default">
+                        <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                    {
+                        Name = "affiliate-customer-grid",
+                        UrlRead = new DataUrl("GetList", "AffiliateCustomer", null),
+                        SearchButtonId = "search-affiliate-customer",
+                        Length = Model.PageSize,
+                        LengthMenu = Model.AvailablePageSizes,
+                        Filters = new List<FilterParameter>
+                            {
+                                new FilterParameter(nameof(Model.AffiliateFirstName)),
+                                new FilterParameter(nameof(Model.AffiliateLastName)),
+                                new FilterParameter(nameof(Model.CustomerEmail)),
+                                new FilterParameter(nameof(Model.CreatedFrom)),
+                                new FilterParameter(nameof(Model.CreatedTo)),
+                                new FilterParameter(nameof(Model.ActiveStatusId)),
+                                new FilterParameter(nameof(Model.ApplyStatusIds))
+                            },
+                        ColumnCollection = new List<ColumnProperty>
+                                {
+                                    new ColumnProperty(nameof(AffiliateCustomerModel.CustomerFullName))
+                                    {
+                                        Title = T("Admin.NopStation.AffiliateStation.AffiliateCustomers.Fields.Customer").Text,
+                                        Render = new RenderCustom("renderCustomerUrl"),
+                                        Width = "180"
+                                    },
+                                    new ColumnProperty(nameof(AffiliateCustomerModel.AffiliateName))
+                                    {
+                                        Title = T("Admin.NopStation.AffiliateStation.AffiliateCustomers.Fields.Affiliate").Text,
+                                        Width = "180"
+                                    },
+                                    new ColumnProperty(nameof(AffiliateCustomerModel.ApplyStatus))
+                                    {
+                                        Title = T("Admin.NopStation.AffiliateStation.AffiliateCustomers.Fields.ApplyStatus").Text,
+                                        Width = "80"
+                                    },
+                                    new ColumnProperty(nameof(AffiliateCustomerModel.Active))
+                                    {
+                                        Title = T("Admin.NopStation.AffiliateStation.AffiliateCustomers.Fields.Active").Text,
+                                        Width = "80",
+                                        Render = new RenderBoolean()
+                                    },
+                                    new ColumnProperty(nameof(AffiliateCustomerModel.CreatedOn))
+                                    {
+                                        Title = T("Admin.NopStation.AffiliateStation.AffiliateCustomers.Fields.CreatedOn").Text,
+                                        Width = "80",
+                                        Render = new RenderDate()
+                                    },
+                                    new ColumnProperty(nameof(AffiliateCustomerModel.AffiliateId))
+                                    {
+                                        Title = T("Admin.Common.Edit").Text,
+                                        Width = "100",
+                                        ClassName = NopColumnClassDefaults.Button,
+                                        Render = new RenderButtonEdit(new DataUrl("~/Admin/Affiliate/Edit/"))
+                                    }
+                                }
+                        })
+                        </div>
+
+                        <script>
+                            function renderCustomerUrl(data, type, row, meta) {
+                                return '<a href="/Admin/Customer/Edit/' + row.CustomerId + '">' + row.CustomerEmail + '</a>';
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

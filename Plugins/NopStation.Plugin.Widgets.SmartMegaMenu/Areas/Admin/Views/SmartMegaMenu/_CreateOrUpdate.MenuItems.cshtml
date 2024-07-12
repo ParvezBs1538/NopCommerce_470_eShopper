@@ -1,0 +1,437 @@
+﻿@model MegaMenuModel
+
+<style>
+    .menu-options .card,
+    #tree .jqtree-element.jqtree_common {
+        border-radius: 0;
+        margin-bottom: 4px;
+    }
+
+    .jqtree-element.jqtree_common {
+        padding: 0 !important;
+    }
+
+    .jqtree-title.jqtree_common {
+        padding: 10px 25px;
+        margin-left: 0 !important;
+        background-color: #e3e3e3;
+    }
+
+    ul.jqtree-tree .jqtree-title + .edit {
+        right: 25px;
+        width: auto !important;
+        padding: 10px 0;
+    }
+
+    .select-container {
+        height: 44px;
+        background-color: #ccc;
+        padding: 12px;
+        border: 0 solid rgba(0,0,0,.125);
+        box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%);
+        position: absolute;
+        right: 0;
+    }
+
+    #btn-items-delete:disabled {
+        color: #fff;
+        background-color: #eee !important;
+        border-color: #dddddd !important;
+    }
+
+    #btn-items-delete {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin-bottom: -7px;
+        margin-top: -7px;
+    }
+
+    ul.jqtree-tree .jqtree-title + .edit {
+        right: 50px !important;
+    }
+
+</style>
+
+<div class="card-body">
+    @if (Model.Id > 0)
+    {
+        <div class="row">
+            <div class="col-md-5">
+                <div class="card card-default">
+                    <div class="card-header">
+                        @T("Admin.NopStation.SmartMegaMenu.MegaMenus.MenuOptions")
+                    </div>
+                    <div class="card-body menu-options" id="accordion">
+                        <p>
+                            <em>@T("Admin.NopStation.SmartMegaMenu.MegaMenus.MenuOptions.Hint")</em>
+                        </p>
+                        @await Html.PartialAsync("_CreateOrUpdate.MenuItems.Categories", Model.AddCategoryToMegaMenuSearchModel)
+                        @await Html.PartialAsync("_CreateOrUpdate.MenuItems.Manufacturers", Model.AddManufacturerToMegaMenuSearchModel)
+                        @await Html.PartialAsync("_CreateOrUpdate.MenuItems.Vendors", Model.AddVendorToMegaMenuSearchModel)
+                        @await Html.PartialAsync("_CreateOrUpdate.MenuItems.Topics", Model.AddTopicToMegaMenuSearchModel)
+                        @await Html.PartialAsync("_CreateOrUpdate.MenuItems.ProductTags", Model.AddProductTagToMegaMenuSearchModel)
+                        @await Html.PartialAsync("_CreateOrUpdate.MenuItems.Pages", Model)
+                        @await Html.PartialAsync("_CreateOrUpdate.MenuItems.Custom", Model)
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-7">
+                <div class="card card-default">
+                    <div class="card-header">
+                        @T("Admin.NopStation.SmartMegaMenu.MegaMenus.Navigation")
+                        <div class="float-right">
+                            <button type="button" id="btn-items-delete" name="save" class="btn btn-danger" disabled>
+                                <i class="far fa-trash-alt"></i>
+                                @T("Admin.Common.Delete.Selected")
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            <em>@T("Admin.NopStation.SmartMegaMenu.MegaMenus.Navigation.Hint")</em>
+                        </p>
+                        <div id="tree"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script asp-location="Footer">
+            @{
+                var loaderImagePath = "/Plugins/NopStation.Plugin.Widgets.SmartMegaMenu/Contents/image/loader.gif";
+            }
+
+                                                var selectedNodeIds = [];
+
+            $(document).ready(function () {
+                generateTree()
+            });
+
+            function generateTree() {
+                $.ajax({
+                    url: '@Url.Action("GetMenuTree", "SmartMegaMenu", new { menuId = Model.Id })',
+                    type: "GET",
+                    success: function (response) {
+                        initTree(response)
+                    },
+                    error: function (xhr) {
+                        alert("Error getting menu tree!");
+                    }
+                });
+            }
+
+            function initTree(data) {
+                $('#tree').tree({
+                    autoOpen: false,
+                    dragAndDrop: true,
+                    data: data,
+                    rtl: @((await workContext.GetWorkingLanguageAsync()).Rtl.ToString().ToLower()),
+                    saveState: true,
+                    closedIcon: '&rtri;',
+                    openedIcon: '&dtri;',
+                    useContextMenu: false,
+                    onDragStop: onDragStop,
+                    onCreateLi: function (node, $li) {
+                        $li.find('.jqtree-element')
+                            .append(
+                                `<a data-toggle="collapse" onclick="nodePropExpand(event)" href="#menuCollapse${node.id}" role="button" aria-expanded="false" aria-controls="collapseExample" class="edit" data-node-id="${node.id}">@T("Admin.Common.Edit")</a>
+                                                <label class="select-container" type="button" for="menu-item-checkbox-${node.id}">
+                                                    <input type="checkbox" name="item-node" value="${node.id}" onchange="checkSelectedNodes()" id="menu-item-checkbox-${node.id}" />
+                                                </label>
+                                                <div class="collapse mt-2" id="menuCollapse${node.id}">
+                                                    <img class="d-block m-auto" src="@loaderImagePath"/>
+                                                <div/>`
+                            );
+                        selectedNodeIds = [];
+                    }
+                });
+            }
+
+            function nodePropExpand(event) {
+                var element = $(event.target);
+                var nodeId = element.data("node-id");
+
+                $(`#menuCollapse${nodeId}`).on('show.bs.collapse', function () {
+                    element.text("@T("Admin.NopStation.SmartMegaMenu.Close")");
+
+                    $([document.documentElement, document.body]).animate({
+                        scrollTop: element.offset().top
+                    }, 500);
+
+                    var loaded = element.data("loaded");
+                    if (loaded != 1) {
+                        element.attr("data-loaded", 1);
+                        getNodeHtml(nodeId)
+                    }
+                })
+
+                $(`#menuCollapse${nodeId}`).on('hide.bs.collapse', function () {
+                    element.text("@T("Admin.Common.Edit")");
+                })
+            }
+
+            $('.menu-options .card').on('show.bs.collapse', function (e) {
+                $this = $(this);
+
+                setTimeout(function () {
+                    $([document.documentElement, document.body]).animate({
+                        scrollTop: $this.offset().top
+                    }, 500);
+                }, 350);
+            })
+
+            $('.menu-options .card').on('shown.bs.collapse', function () {
+                $($.fn.dataTable.tables(true)).DataTable()
+                    .columns.adjust();
+            });
+
+            function getNodeHtml(nodeId) {
+                $.ajax({
+                    url: '@Url.Action("GetNode", "SmartMegaMenu")',
+                    type: "GET",
+                    data: {
+                        menuItemId: nodeId
+                    },
+                    success: function (response) {
+                        $(`#menuCollapse${nodeId}`).html(response.html);
+                    },
+                    error: function (xhr) {
+                        alert("Error getting properties!");
+                    }
+                });
+            }
+
+            function addMenuItem(id, type, parentId) {
+                var postData = {
+                    CategoryId: id,
+                    ManufacturerId: id,
+                    VendorId: id,
+                    TopicId: id,
+                    ProductTagId: id,
+                    PageTypeId: id,
+                    MenuItemTypeId: type,
+                    MegaMenuId: @Model.Id
+                                                                                };
+                addAntiForgeryToken(postData);
+
+                $.ajax({
+                    url: '@Url.Action("CreateMenuItem", "SmartMegaMenu")',
+                    type: "POST",
+                    data: postData,
+                    success: function (response) {
+                        $('#tree').tree('appendNode', response.data);
+                        checkSelectedNodes();
+                    },
+                    error: function (xhr) {
+                        alert("Error getting properties!");
+                    }
+                });
+            }
+
+            function onDragStop(e) {
+                var obj = [];
+
+                e.tree.children.forEach(function (item, index) {
+                    obj.push(simplifyData(item, index));
+                });
+
+                var postData = {
+                    Data: obj,
+                    MegaMenuId: @Model.Id
+                                                                };
+
+                addAntiForgeryToken(postData);
+
+                $.ajax({
+                    url: '@Url.Action("UpdateMenuItemOrder", "SmartMegaMenu")',
+                    type: "POST",
+                    data: postData,
+                    success: function (response) {
+                        checkSelectedNodes();
+                    },
+                    error: function (xhr) {
+                        alert("Error getting properties!");
+                    }
+                });
+            }
+
+            function simplifyData(item, index) {
+                var obj = {};
+                obj.id = item.id;
+                obj.children = [];
+
+                if (item.children) {
+                    item.children.forEach(function (item, index) {
+                        obj.children.push(simplifyData(item, index));
+                    });
+                }
+                return obj;
+            }
+
+            function updateMenuItem(data) {
+                $.ajax({
+                    url: '@Url.Action("UpdateMenuItem", "SmartMegaMenu")',
+                    type: "Post",
+                    data: data,
+                    success: function (response) {
+                        if (response.Result) {
+                            var node = $('#tree').tree('getNodeById', data.Id);
+                            $('#tree').tree('updateNode', node, response.Node.name);
+                            checkSelectedNodes();
+                            return;
+                        }
+                        checkSelectedNodes();
+                        alert(response.Errors.join("\r\n"));
+                    },
+                    error: function (xhr) {
+                        alert("Error getting menu tree!");
+                    }
+                });
+            }
+
+            function checkSelectedNodes() {
+                selectedNodeIds = [];
+
+                $('input[name="item-node"]:checked').each(function () {
+                    var nodeId = parseInt($(this).val());
+                    if (selectedNodeIds.indexOf(nodeId) === -1) {
+                        selectedNodeIds.push(nodeId);
+                    }
+
+                    getChildNodeIds(nodeId);
+                });
+
+                $('#btn-items-delete').attr('disabled', selectedNodeIds.length < 1);
+            }
+
+            function getChildNodeIds(nodeId) {
+                var node = $('#tree').tree('getNodeById', nodeId);
+                for (var i = 0; i < node.children.length; i++) {
+                    var child = node.children[i].id;
+                    if (selectedNodeIds.indexOf(child) === -1) {
+                        selectedNodeIds.push(child);
+                    }
+
+                    $(`input[name="item-node"][value="${child}"]`).prop('checked', true).prop('readonly', true);
+                    getChildNodeIds(child)
+                }
+            }
+
+            function enableChildNodes(nodeId) {
+                var node = $('#tree').tree('getNodeById', nodeId);
+                for (var i = 0; i < node.children.length; i++) {
+                    var child = node.children[i].id;
+
+                    $(`input[name="item-node"][value="${child}"]`).removeAttr('readonly');
+                    enableChildNodes(child)
+                }
+            }
+
+            function openConfirmationModal(menuItemId, type) {
+                $("#megamenu-item-delete-confirmation").modal("show");
+                $('#menu-item-to-delete').val(menuItemId)
+            }
+
+            $('#item-delete-confirm-btn').click(function () {
+                var id = $('#menu-item-to-delete').val();
+                $("#megamenu-item-delete-confirmation").modal("hide");
+
+                var ids = [];
+                ids.push(id);
+
+                deleteMenuItems(ids);
+            });
+
+            function deleteMenuItems(ids) {
+                var postData = {
+                    ids: ids
+                };
+
+                addAntiForgeryToken(postData);
+
+                $.ajax({
+                    url: '@Url.Action("DeleteMenuItems", "SmartMegaMenu")',
+                    type: "POST",
+                    data: postData,
+                    success: function (response) {
+                        if (response.Result) {
+                            ids.forEach(function (item, index) {
+                                var node = $('#tree').tree('getNodeById', parseInt(item));
+                                if (node) {
+                                    $('#tree').tree('removeNode', node);
+                                }
+                            })
+                        }
+                        checkSelectedNodes();
+                    },
+                    error: function (xhr) {
+                        alert("Error deleting node(s)!");
+                    }
+                });
+            }
+
+            $('#btn-items-delete').click(function () {
+                $("#megamenu-items-delete-confirmation").modal("show");
+            })
+
+            $('#item-deletes-confirm-btn').click(function () {
+                $("#megamenu-items-delete-confirmation").modal("hide");
+                deleteMenuItems(selectedNodeIds);
+            })
+
+        </script>
+
+        <div id="megamenu-item-delete-confirmation" class="modal fade" tabindex="-1" aria-labelledby="megamenu-item-delete-confirmation-title" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">@T("Admin.Common.AreYouSure")</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="modal-body">
+                            @T("Admin.Common.DeleteConfirmation")
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" id="menu-item-to-delete" />
+                            <span class="btn btn-default" data-dismiss="modal">@T("Admin.Common.NoCancel")</span>
+                            <button type="button" class="btn btn-danger float-right" id="item-delete-confirm-btn">
+                                @T("Admin.Common.Delete")
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="megamenu-items-delete-confirmation" class="modal fade" tabindex="-1" aria-labelledby="megamenu-item-delete-confirmation-title" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">@T("Admin.Common.AreYouSure")</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="modal-body">
+                            @T("Admin.Common.ActionConfirmation")
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="item-deletes-confirm-btn" class="btn btn-primary float-right">
+                                @T("Admin.Common.Yes")
+                            </button>
+                            <span class="btn btn-default float-right margin-r-5" data-dismiss="modal">@T("Admin.Common.NoCancel")</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card card-default">
+            <div class="card-body">
+                @T("Admin.NopStation.SmartMegaMenu.MegaMenus.MenuItems.SaveBeforeEdit")
+            </div>
+        </div>
+    }
+</div>

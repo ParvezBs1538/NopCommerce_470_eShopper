@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Email Validator (Verifalia)",
+  "SystemName": "NopStation.Plugin.EmailValidator.Verifalia",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Jaber Kibria",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.EmailValidator.Verifalia.dll",
+  "Description": "This plugin allows to validate email address using Verifalia API.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

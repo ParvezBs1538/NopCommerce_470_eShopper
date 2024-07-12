@@ -1,0 +1,19 @@
+[
+  {
+    "Name": "vendor-page-top",
+    "Value": 1001
+  },
+  {
+    "Name": "vendor-page-bottom",
+    "Value": 1002
+  },
+  {
+    "Name": "vendor-page-middle",
+    "Value": 1003
+  },
+  {
+    "Name": "vendor-page-feature-products",
+    "Value": 1004
+  }
+  
+]

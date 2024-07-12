@@ -1,0 +1,140 @@
+﻿@model ConfigurationModel
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.DisableSilent)").click(toggleDisableSilent);
+
+        toggleDisableSilent();
+        //togglePayButton();
+
+        @*$('#fileUploader').change(function (e) {
+            var file = $(this).val();
+            var ext = file.split('.').pop();
+            if (ext.toLowerCase() !== 'mp3') {
+                alert('@T("NopStation.PWA.InvalidMp3")')
+                return;
+            }
+
+            var tokens = file.split('\\');
+            var filename = tokens[tokens.length - 1];
+            $('#fileUploaderMsg').removeClass('text-danger');
+            $('#fileUploaderMsg').html(filename);
+            $('#fileUploaderMsg').show();
+
+            var photo = document.getElementById("fileUploader").files[0];
+            var formData = new FormData();
+            formData.append("SoundFile", photo);
+
+            fetch('/Admin/ProgressiveWebApp/UploadMp3', { method: "POST", body: formData })
+                .then(response => {
+                    response.json().then(json => {
+                        if (json.success) {
+                            $('#fileUploaderMsg').html('@T("NopStation.PWA.Mp3Upload.Success")');
+                            $('#@Html.IdFor(x=> x.SoundFileUrl)').val(json.soundurl);
+                            togglePayButton();
+                        }
+                        else {
+                            $('#fileUploaderMsg').addClass('text-danger');
+                            $('#fileUploaderMsg').html(json.message);
+                        }
+                    })
+                });
+        });
+
+        $('#mp3Play').click(function () {
+            var audio = new Audio($('#@Html.IdFor(x=> x.SoundFileUrl)').val());
+            audio.play();
+        });*@
+    });
+
+    function toggleDisableSilent() {
+        if ($('#@Html.IdFor(model => model.DisableSilent)').is(':checked')) {
+            $('#pnlDisableSilent').show();
+        } else {
+            $('#pnlDisableSilent').hide();
+        }
+    }
+
+    @*function togglePayButton() {
+        var url = $('#@Html.IdFor(x=> x.SoundFileUrl)').val();
+        if (url) {
+            $('#mp3Play').show();
+        }
+    }*@
+
+</script>
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="DisableSilent_OverrideForStore" asp-input="DisableSilent" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="DisableSilent" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DisableSilent" />
+            <span asp-validation-for="DisableSilent"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="DisableSilent">
+        <div id="pnlDisableSilent">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="Vibration_OverrideForStore" asp-input="Vibration" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="Vibration" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="Vibration" />
+                    <span asp-validation-for="Vibration"></span>
+                </div>
+            </div>
+            @*<div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="SoundFileUrl_OverrideForStore" asp-input="SoundFileUrl" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="SoundFileUrl" />
+                    </div>
+                    <div class="col-md-9">
+                        <label class="btn btn-success">
+                            <i class="fa fa-upload" aria-hidden="true"></i>
+                            @T("NopStation.PWA.UploadMp3")
+                            <input type="file" style="display:none" id="fileUploader">
+                        </label>
+                        <button type="button" class="btn" title="Play" style="display:none" id="mp3Play"><i class="fa fa-play" aria-hidden="true"></i></button>
+                        <span id="fileUploaderMsg" style="display:none"></span>
+                        <input type="hidden" asp-for="SoundFileUrl" />
+                        <span asp-validation-for="SoundFileUrl"></span>
+                    </div>
+                </div>*@
+        </div>
+    </nop-nested-setting>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="DefaultIconId_OverrideForStore" asp-input="DefaultIconId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="DefaultIconId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DefaultIconId" />
+            <span asp-validation-for="DefaultIconId"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="AbandonedCartCheckingOffset_OverrideForStore" asp-input="AbandonedCartCheckingOffset" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="AbandonedCartCheckingOffset" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="AbandonedCartCheckingOffset" />
+            <span asp-validation-for="AbandonedCartCheckingOffset"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="UnitTypeId_OverrideForStore" asp-input="UnitTypeId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="UnitTypeId" />
+        </div>
+        <div class="col-md-3">
+            <nop-select asp-for="UnitTypeId" asp-items="Model.AvailableUnits" />
+            <span asp-validation-for="UnitTypeId"></span>
+        </div>
+    </div>
+</div>

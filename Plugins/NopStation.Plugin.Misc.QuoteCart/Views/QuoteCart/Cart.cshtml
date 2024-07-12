@@ -1,0 +1,158 @@
+﻿@using Nop.Web.Framework.Mvc.Routing;
+@model CartModel
+@{
+    Layout = "_ColumnsOne";
+}
+
+<script asp-location="Footer">
+    function removeFromQuoteCart(itemId){
+        $.ajax({
+            type: "POST",
+            url: "/QuoteCart/RemoveQuoteItem",
+            data: {
+                itemId : itemId
+            },
+            success: function (response) {
+                location.reload();
+            },
+            error: function (response) {
+                displayBarNotification('@T("NopStation.Plugin.Misc.QuoteCart.Cart.FailToRemove")', 'error', 3500);
+            }
+        });
+    }
+</script>
+
+<div class="page shopping-cart-page">
+    <div class="page-title">
+        <h1>@T("NopStation.Plugin.Misc.QuoteCart.QuoteCart")</h1>
+    </div>
+    <div class="page-body">
+        <div class="order-summary-content">
+            @if (Model.Items.Any())
+            {
+                <form asp-route="QuoteCart.UpdateCart" method="post" enctype="multipart/form-data" id="quote-cart-form">
+                    <div class="table-wrapper">
+                        <table class="cart">
+                            <colgroup>
+                                <col width="1" />
+                                <col width="1" />
+                                <col />
+                                <col width="1" />
+                                <col width="1" />
+                                <col width="1" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="sku">
+                                        @T("NopStation.Plugin.Misc.QuoteCart.Cart.SKU")
+                                    </th>
+                                    <th class="product-picture">
+                                        @T("NopStation.Plugin.Misc.QuoteCart.Cart.Image")
+                                    </th>
+                                    <th class="product">
+                                        @T("NopStation.Plugin.Misc.QuoteCart.Cart.Product(s)")
+                                    </th>
+                                    @if(Model.CustomProperties["DisplayPrice"] == "True")
+                                    {
+                                        <th class="unit-price">
+                                            @T("NopStation.Plugin.Misc.QuoteCart.Cart.UnitPrice")
+                                        </th>
+                                    }
+                                    <th class="quantity">
+                                        @T("NopStation.Plugin.Misc.QuoteCart.Cart.Quantity")
+                                    </th>
+                                    @if (Model.CustomProperties["DisplayPrice"] == "True")
+                                    {
+                                        <th class="subtotal">
+                                            @T("NopStation.Plugin.Misc.QuoteCart.Cart.ItemTotal")
+                                        </th>
+                                    }
+
+                                    <th class="remove-from-cart">
+                                        @T("NopStation.Plugin.Misc.QuoteCart.Cart.Remove")
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Items)
+                                {
+                                    <tr>
+                                        <td class="sku">
+                                            <label class="td-title">@T("NopStation.Plugin.Misc.QuoteCart.Cart.SKU"):</label>
+                                            <span class="sku-number">@item.Sku</span>
+                                        </td>
+                                        <td class="product-picture">
+                                            <a href="@Url.RouteUrl("Product", new {SeName = item.ProductSeName})" class="product-name">
+                                                <img alt="@item.Picture.AlternateText" src="@item.Picture.ImageUrl" title="@item.Picture.Title" />
+                                            </a>
+                                        </td>
+                                        <td class="product">
+                                            <a href="@(Url.RouteUrl<Nop.Core.Domain.Catalog.Product>(new { SeName = item.ProductSeName }))" class="product-name">@item.ProductName</a>
+                                             
+                                            @if (!string.IsNullOrEmpty(item.AttributeInfo))
+                                            {
+                                                <div class="attributes">
+                                                    @Html.Raw(item.AttributeInfo)
+                                                </div>
+                                            }
+                                            @if (!string.IsNullOrEmpty(item.RentalInfo))
+                                            {
+                                                <div class="rental-info">
+                                                    @Html.Raw(item.RentalInfo)
+                                                </div>
+                                            }
+                                        </td>
+                                        @if (Model.CustomProperties["DisplayPrice"] == "True")
+                                        {
+                                            <td class="unit-price">
+                                                <label class="td-title">@T("NopStation.Plugin.Misc.QuoteCart.Cart.UnitPrice"):</label>
+                                                <span class="product-unit-price">@item.UnitPrice</span>
+                                            </td>
+                                        }
+                                        <td class="quantity">
+                                            <label class="td-title" for="itemquantity@(item.Id)">@T("NopStation.Plugin.Misc.QuoteCart.Cart.Quantity"):</label>
+                                            <input name="itemquantity@(item.Id)" id="itemquantity@(item.Id)" type="text" value="@(item.Quantity)" class="qty-input" aria-label="@T("ShoppingCart.Quantity")" />
+                                        </td>
+                                        @if (Model.CustomProperties["DisplayPrice"] == "True")
+                                        {
+                                            <td class="subtotal">
+                                                <label class="td-title" for="itemtotal@(item.Id)">@T("NopStation.Plugin.Misc.QuoteCart.Cart.ItemTotal"):</label>
+                                                <span class="product-subtotal">
+                                                    @if (Model.CustomerCanEnterPrice)
+                                                    {
+                                                        <input name="itemtotal@(item.Id)" id="itemtotal@(item.Id)" type="text" value="@(item.SubTotalValue)" class="total-input" aria-label="@T("ShoppingCart.SubTotal")" />
+                                                    }
+                                                    else
+                                                    {
+                                                        @item.SubTotal
+
+                                                    }
+                                                </span>
+                                            </td>
+                                        }
+                                        <td class="remove-from-cart">
+                                            <button type="button" name="updatecart" class="remove-btn" onclick="removeFromQuoteCart(@(item.Id))"></button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="cart-options">
+                        <div class="common-buttons">
+                            <button type="submit" name="updatecart" id="updatecart" class="button-2 update-cart-button">@T("NopStation.Plugin.Misc.QuoteCart.UpdateCart")</button>
+                        </div>
+                    </div>
+                </form>
+                @await Html.PartialAsync("_Cart.QuoteForm", Model)
+            }
+            else
+            {
+                <div class="no-data">
+                    @T("NopStation.Plugin.Misc.QuoteCart.Cart.CartIsEmpty")
+                </div>
+            }
+            
+        </div>
+    </div>
+</div>

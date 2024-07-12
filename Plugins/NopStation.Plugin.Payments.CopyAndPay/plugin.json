@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "COPYandPay",
+  "SystemName": "NopStation.Plugin.Payments.CopyAndPay",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.CopyAndPay.dll",
+  "Description": "This is a plugin which will confirm the payment by COPYandPay payment.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

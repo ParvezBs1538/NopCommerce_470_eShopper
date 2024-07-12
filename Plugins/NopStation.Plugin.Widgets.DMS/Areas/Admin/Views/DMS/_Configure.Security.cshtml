@@ -1,0 +1,103 @@
+﻿@model ConfigurationModel
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="EnableJwtSecurity_OverrideForStore" asp-input="EnableJwtSecurity" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="EnableJwtSecurity" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="EnableJwtSecurity" />
+            <span asp-validation-for="EnableJwtSecurity"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="EnableJwtSecurity">
+        <div id="pnlEnableJwtSecurity">
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <nop-override-store-checkbox asp-for="TokenKey_OverrideForStore" asp-input="TokenKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="TokenKey" />
+                </div>
+                <div class="col-md-8">
+                    <nop-editor-check asp-for="TokenKey" />
+                    <span asp-validation-for="TokenKey"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <nop-override-store-checkbox asp-for="TokenSecret_OverrideForStore" asp-input="TokenSecret" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="TokenSecret" />
+                </div>
+                <div class="col-md-8">
+                    <nop-editor-check asp-for="TokenSecret" />
+                    <span asp-validation-for="TokenSecret"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <nop-override-store-checkbox asp-for="CheckIat_OverrideForStore" asp-input="CheckIat" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="CheckIat" />
+                </div>
+                <div class="col-md-8">
+                    <nop-editor asp-for="CheckIat" />
+                    <span asp-validation-for="CheckIat"></span>
+                </div>
+            </div>
+            <nop-nested-setting asp-for="CheckIat">
+                <div class="form-group row" id="pnlTokenSecondsValid">
+                    <div class="col-md-4">
+                        <nop-override-store-checkbox asp-for="TokenSecondsValid_OverrideForStore" asp-input="TokenSecondsValid" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="TokenSecondsValid" />
+                    </div>
+                    <div class="col-md-8">
+                        <nop-editor asp-for="TokenSecondsValid" />
+                        <span asp-validation-for="TokenSecondsValid"></span>
+                    </div>
+                </div>
+            </nop-nested-setting>
+        </div>
+    </nop-nested-setting>
+
+    @if (!string.IsNullOrWhiteSpace(Model.NST))
+    {
+        <div class="card panel-default">
+            <div class="card-header">
+                @T("Admin.NopStation.DMS.NST")
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="NST" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <nop-editor asp-for="NST" />
+                            <div class="input-group-btn">
+                                <button type="button" onclick="copyText()" name="copyNST" class="btn btn-info">
+                                    @T("Admin.NopStation.DMS.NST.CopyButton")
+                                </button>
+                            </div>
+                        </div>
+                        <span id="msg-copied" style="display:none">@T("Admin.NopStation.DMS.NST.Copied").Text</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <script>
+        function copyText() {
+            var copyText = document.getElementById("@Html.IdFor(x=> x.NST)");
+
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+
+            document.execCommand("copy");
+
+            $('#msg-copied').show();
+            setTimeout(function () {
+                $('#msg-copied').hide();
+            }, 3000);
+        }
+    </script>
+</div>

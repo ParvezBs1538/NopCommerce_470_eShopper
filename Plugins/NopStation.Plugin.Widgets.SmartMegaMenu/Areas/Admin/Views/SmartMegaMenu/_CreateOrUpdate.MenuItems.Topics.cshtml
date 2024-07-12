@@ -1,0 +1,47 @@
+﻿@model AddTopicToMegaMenuSearchModel
+
+<div class="card">
+    <div class="card-header" id="headingTopic">
+        <h3 class="card-title">@T("Admin.NopStation.SmartMegaMenu.MegaMenus.MenuOptions.Topics")</h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool"  data-toggle="collapse" data-target="#collapseTopic" aria-expanded="true" aria-controls="collapseTopic"><i class="fas fa-plus"></i></button>
+        </div>
+    </div>
+    <div id="collapseTopic" class="collapse" aria-labelledby="headingTopic" data-parent="#accordion">
+        <div class="card-body">
+            @await Html.PartialAsync("Table", new DataTablesModel
+            {
+                Name = "menu-topic-grid",
+                UrlRead = new DataUrl("GetTopics", "SmartMegaMenu",  new RouteValueDictionary { [nameof(Model.MegaMenuId)] = Model.MegaMenuId}),
+                Length = Model.PageSize,
+                LengthMenu = Model.AvailablePageSizes,
+                Filters = new List<FilterParameter>
+                {
+                    new FilterParameter(nameof(Model.SearchKeywords)),
+                },
+                ColumnCollection = new List<ColumnProperty>
+                {
+                    new ColumnProperty(nameof(TopicModel.Id))
+                    {
+                        Title = T("Admin.NopStation.SmartMegaMenu.MegaMenus.MenuOptions.Select").Text,
+                        ClassName =  NopColumnClassDefaults.CenterAll,
+                        Width = "50",
+                        Render = new RenderCustom("renderTopicMenuSelector"),
+                    },
+                    new ColumnProperty(nameof(TopicModel.Title))
+                    {
+                        Title = T("Admin.ContentManagement.Topics.Fields.Title").Text,
+                        Width = "180"
+                    }
+                }
+            })
+
+            <script asp-location="Footer">
+                function renderTopicMenuSelector(data, type, row, meta) {
+                    return `<input onclick="addMenuItem(` + data + `, ` + @((int)MenuItemType.Topic) + `);" type="button" class="checkboxGroups" value="@T("Admin.NopStation.SmartMegaMenu.MegaMenus.MenuOptions.Add")" >`;
+                }
+
+            </script>
+        </div>
+    </div>
+</div>

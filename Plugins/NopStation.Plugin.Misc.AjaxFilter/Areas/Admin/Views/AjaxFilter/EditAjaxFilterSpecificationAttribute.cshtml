@@ -1,0 +1,83 @@
+﻿@model AjaxFilterSpecificationAttributeModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.Plugin.Misc.AjaxFilter.Configuration.Specification").Text;
+    NopHtml.SetActiveMenuItemSystemName("AjaxFilter.Configuration");
+}
+
+<form asp-controller="AjaxFilter" asp-action="EditAjaxFilterSpecificationAttribute" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Plugin.Misc.AjaxFilter.Configuration.Specification")
+            <small>
+                <i class="fas fa-arrow-circle-left"></i>
+                <a asp-action="Configure">@T("Admin.NopStation.Plugin.Misc.AjaxFilter.Configuration.Specification.BackToConfigure")</a>
+            </small>
+        </h1>
+        
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+
+                                <input asp-for="Id" hidden />
+                                <input asp-for="SpecificationId" hidden />
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="MaxSpecificationAttributesToDisplay" asp-input="MaxSpecificationAttributesToDisplay" />
+                                    <nop-label asp-for="MaxSpecificationAttributesToDisplay" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="MaxSpecificationAttributesToDisplay" />
+                                </div>
+
+
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="CloseSpecificationAttributeByDefault" asp-input="CloseSpecificationAttributeByDefault" />
+                                    <nop-label asp-for="CloseSpecificationAttributeByDefault" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="CloseSpecificationAttributeByDefault" />
+                                </div>
+
+                                <div class="col-md-3" hidden>
+                                    <nop-override-store-checkbox asp-for="AlternateName" asp-input="AlternateName"/>
+                                    <nop-label asp-for="AlternateName" />
+                                </div>
+                                <div class="col-md-9" hidden>
+                                    <nop-editor asp-for="AlternateName" />
+                                </div>
+                                <div class="col-md-3" hidden>
+                                    <nop-override-store-checkbox asp-for="DisplayOrder" asp-input="DisplayOrder" />
+                                    <nop-label asp-for="DisplayOrder" />
+                                </div>
+                                <div class="col-md-9" hidden>
+                                    <nop-editor asp-for="DisplayOrder" />
+                                </div>
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="HideProductCount" asp-input="HideProductCount" />
+                                    <nop-label asp-for="HideProductCount" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="HideProductCount" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

@@ -1,0 +1,88 @@
+﻿@model FilterProductsModel
+@using NopStation.Plugin.Misc.AjaxFilter.Domains;
+@using NopStation.Plugin.Misc.AjaxFilter.Domains.Enums
+@using NopStation.Plugin.Misc.AjaxFilter.Models;
+@inject AjaxFilterSettings ajaxFilterSettings
+
+<script>
+
+    $(".collaspe-misc").accordion({
+        collapsible: (((`@(ajaxFilterSettings.CloseMiscFilterByDefualt)`).toLowerCase()) == "true" ? true : false),
+        active: ((`@(ajaxFilterSettings.CloseMiscFilterByDefualt)`).toLowerCase()) == "true" ? true : false
+    });
+
+</script>
+
+<div id="product-filter-section">
+    <div class="product-section m-0">
+        <div class="product-filter-section filter-section collaspe-misc">
+            <div class="title title-product">
+                <h5 class="mb-0 collapsed ajaxfilter-title"
+                    data-toggle="collapse"
+                    data-parent="#accordionEx"
+                    data-target="#productNavigation"
+                    aria-expanded="true"
+                    aria-controls="productNavigation">
+                    @T("NopStation.Plugin.Misc.AjaxFilter.Filters.Miscellaneous")
+                    <i class="fa fa-angle-down rotate-icon float-right"></i>
+                    <span id="productFilterClear"
+                          class="reset-specification-filter"
+                          onclick="AjaxFilter.resetProductFilter(this, 'product')">
+                        <a class=""></a>
+                    </span>
+                </h5>
+            </div>
+
+            <div class="listbox collapse show" id="productNavigation" aria-labelledby="productNavigation">
+                <div class="ajaxfilter-section productsec pb-0">
+                    <input class="Name d-none productFilterClear"
+                           type="checkbox"
+                           id="discountedProduct"
+                           data-option-id="discountedProduct"
+                           data-option-name="On Sale/Discounted Products"
+                           onclick="AjaxFilter.setFilter(this, 'discountedProduct')" @(Model.DiscountedProduct ? "Checked" : "")>
+                    <label>
+                        <span class="square"></span>
+                        <span> On Sale/Discounted Products </span>
+                    </label>
+                </div>
+                <div class="ajaxfilter-section productsec pb-0">
+                    <input class="Name d-none productFilterClear"
+                           type="checkbox"
+                           data-option-id="freeShipping"
+                           data-option-name="Free shipping"
+                           id="freeShipping"
+                           onclick="AjaxFilter.setFilter(this, 'freeShipping')" @(Model.FreeShipping ? "Checked" : "")>
+                    <label>
+                        <span class="square"></span>
+                        <span>Free Shipping</span>
+                    </label>
+                </div>
+                <div class="ajaxfilter-section productsec pb-0">
+                    <input class="Name d-none productFilterClear"
+                           type="checkbox"
+                           id="taxExempt"
+                           data-option-id="taxExempt"
+                           data-option-name="Tax exempt"
+                           onclick="AjaxFilter.setFilter(this, 'taxExempt')" @(Model.TaxExempt ? "Checked" : "")>
+                    <label>
+                        <span class="square"></span>
+                        <span>Tax Exempt</span>
+                    </label>
+                </div>
+                <div class="ajaxfilter-section productsec pb-0">
+                    <input class="Name d-none productFilterClear"
+                           type="checkbox"
+                           id="newProduct"
+                           data-option-id="newProduct"
+                           data-option-name="New product"
+                           onclick="AjaxFilter.setFilter(this, 'newProduct')" @(Model.NewProduct ? "Checked" : "")>
+                    <label>
+                        <span class="square"></span>
+                        <span>New Product</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

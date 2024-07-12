@@ -1,0 +1,216 @@
+﻿@model SyncModel
+@inject Nop.Core.IWorkContext workContext
+@using Nop.Services;
+@using NopStation.Plugin.CRM.Zoho;
+
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.ZohoCRM.Sync").Text;
+    NopHtml.SetActiveMenuItemSystemName("ZohoCRM.Sync");
+    var customerGuid = (await workContext.GetCurrentCustomerAsync()).CustomerGuid;
+    var disabled = "disabled";
+    var signalrJsRef = $"~/Plugins/{ZohoDefaults.PluginDirectory}/Areas/Admin/Contents/js/signalr.js";
+}
+
+<style>
+    .sync-items {
+        list-style: none;
+        padding: 0;
+    }
+
+        .sync-items li {
+            line-height: 10px;
+        }
+
+    .progress-item {
+    }
+</style>
+
+<script src="@signalrJsRef"></script>
+
+<form asp-controller="ZohoCRM" asp-action="Sync" method="post" id="sync-form">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.ZohoCRM.Sync")
+        </h1>
+        <div class="float-right">
+            @if (!string.IsNullOrWhiteSpace(Model.ClientId))
+            {
+                <button type="button" class="btn btn-success" onclick="javascript:OpenWindow('@Model.OAuthUrl', 600, 600, true); return false;">
+                    <i class="fa fa-shield-alt"></i>
+                    @T("Admin.NopStation.ZohoCRM.Configuration.OAuthAuthorizationButton")
+                </button>
+            }
+
+            @if (Model.CanSync)
+            {
+                disabled = "";
+                <script asp-location="Footer">
+                    var tables = [@Html.Raw("'" + string.Join("', '", Model.AvailableTables.Select(x => x.Value)) + "'")]
+                    $(document).ready(function () {
+                        var connection = new signalR.HubConnectionBuilder()
+                            .withUrl('/synczohoitems')
+                            .build();
+
+                        connection.on('zohoSynced', res => {
+                            if (res.currentStep == 'OpenModal') {
+                                $('#updateModal').modal('show');
+                                $('#updateModal .modal-footer').addClass('d-none');
+                            }
+                            else if (res.currentStep == 'ShowCloseButton') {
+                                $('#updateModal .modal-footer').removeClass('d-none');
+                            }
+
+                            checkStep(res);
+                        });
+
+                        function checkStep(res) {
+                            $.each(tables, function (k, table) {
+                                var label = '#' + table + '-pregress label';
+                                var italic = '#' + table + '-pregress label i';
+
+                                removeLabelClasses(label)
+                                removeItalicClasses(italic)
+
+                                if (table === res.currentStep) {
+                                    $(label).addClass('text-info');
+                                    $(italic).addClass('fa-spinner');
+                                }
+                                else if (res.selectedTables.some(x => x === table)) {
+                                    if (res.completedTables.some(x => x === table)) {
+                                        $(label).addClass('text-success');
+                                        $(italic).addClass('fa-check');
+                                    }
+                                    else {
+                                        $(label).addClass('text-secondary');
+                                        $(italic).addClass('fa-sync-alt');
+                                    }
+                                }
+                                else {
+                                    $(label).addClass('text-danger');
+                                    $(italic).addClass('fa-times');
+                                }
+                            });
+                        }
+
+                        function removeLabelClasses(label) {
+                            $(label).removeClass('text-danger');
+                            $(label).removeClass('text-secondary');
+                            $(label).removeClass('text-success');
+                            $(label).removeClass('text-info');
+                        }
+
+                        function removeItalicClasses(italic) {
+                            $(italic).removeClass('fa-times');
+                            $(italic).removeClass('fa-spinner');
+                            $(italic).removeClass('fa-check');
+                            $(italic).removeClass('fa-sync-alt');
+                        }
+
+                        function start() {
+                            connection.start().catch(function (err) {
+                                setTimeout(function () {
+                                    start();
+                                }, 10000);
+                            });
+                        }
+
+                        connection.onclose(function () {
+                            start();
+                        });
+
+                        start();
+
+                        $("#sync-button").click(function () {
+                            var data = {};
+                            addAntiForgeryToken(data);
+
+                            $.ajax({
+                                url: "@Url.Action("Sync", "ZohoCRM")",
+                                type: "POST",
+                                data: $('#sync-form').serialize(),
+                                success: function (result) {
+                                    console.log(result);
+                                }
+                            });
+                        });
+                    });
+                </script>
+            }
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="SyncTables" />
+                                </div>
+                                <div class="col-md-9">
+                                    <ul class="sync-items">
+                                        @foreach (var item in Model.AvailableTables)
+                                        {
+                                            <li>
+                                                <input type="checkbox" value="@item.Value" name="SyncTables" id="@(item.Value)-select" checked>
+                                                <label for="@(item.Value)-select">@item.Text</label>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="SyncType" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="SyncType" asp-items="@((await SyncType.DifferentialSync.ToSelectListAsync()).ToList())" />
+                                    <span asp-validation-for="SyncType"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-9 offset-md-3">
+                                    <button type="button" class="btn btn-success" id="sync-button" @disabled>
+                                        <i class="fa fa-sync-alt"></i>
+                                        @T("Admin.NopStation.ZohoCRM.Sync.SyncButton")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">@T("Admin.NopStation.ZohoCRM.Sync.SyncStatus")</h5>
+            </div>
+            <div class="modal-body">
+                @foreach (var item in Model.AvailableTables)
+                {
+                    <div class="form-group row">
+                        <div class="col-md-12" id="@(item.Value)-pregress" data-item="@item.Value">
+                            <label class="text-secondary">
+                                <i class="fa fa-spinner" aria-hidden="true"></i>
+                                @item.Text
+                            </label>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="modal-footer d-none">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@T("Admin.NopStation.ZohoCRM.Sync.Close")</button>
+            </div>
+        </div>
+    </div>
+</div>

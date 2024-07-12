@@ -1,0 +1,135 @@
+﻿@model TicketModel
+@using Nop.Services.Stores
+@inject IStoreService storeService
+
+<div class="card-body">
+    @await Html.PartialAsync("Table", new DataTablesModel
+    {
+        Name = "ticket-responses-grid",
+        UrlRead = new DataUrl("ResponseList", "Ticket", new RouteValueDictionary { [nameof(Model.ResponseSearchModel.Ticketid)] = Model.ResponseSearchModel.Ticketid }),
+        UrlDelete = new DataUrl("ResponseDelete", "Ticket", new RouteValueDictionary { [nameof(Model.ResponseSearchModel.Ticketid)] = Model.ResponseSearchModel.Ticketid }),
+        Length = Model.ResponseSearchModel.PageSize,
+        LengthMenu = Model.ResponseSearchModel.AvailablePageSizes,
+        ColumnCollection = new List<ColumnProperty>
+        {
+            new ColumnProperty(nameof(ResponseModel.Body))
+            {
+                Title = T("Admin.NopStation.Helpdesk.Responses.Fields.Body").Text
+            },
+            new ColumnProperty(nameof(ResponseModel.DisplayToCustomer))
+            {
+                Title = T("Admin.NopStation.Helpdesk.Responses.Fields.DisplayToCustomer").Text,
+                Width = "100",
+                Render = new RenderBoolean()
+            },
+            new ColumnProperty(nameof(ResponseModel.CreatedByCustomerEmail))
+            {
+                Title = T("Admin.NopStation.Helpdesk.Responses.Fields.CreateBy").Text,
+                Width = "100",
+            },
+            new ColumnProperty(nameof(ResponseModel.CreatedOn))
+            {
+                Title = T("Admin.NopStation.Helpdesk.Responses.Fields.CreatedOn").Text,
+                Width = "100",
+                Render = new RenderDate()
+            },
+            new ColumnProperty(nameof(ResponseModel.DownloadId))
+            {
+                Title = T("Admin.NopStation.Helpdesk.Responses.Fields.DownloadId").Text,
+                Width = "100",
+                Render = new RenderCustom("renderDownload")
+            },
+            new ColumnProperty(nameof(ResponseModel.Id))
+            {
+                Title = T("Admin.Common.Delete").Text,
+                Width = "100",
+                ClassName =  NopColumnClassDefaults.Button,
+                Render = new RenderButtonRemove(T("Admin.Common.Delete").Text)
+            }
+        }
+    })
+    <script>
+        function renderDownload(data, type, row, meta) {
+            if (row.DownloadId > 0)
+                return '<a href="/Admin/Ticket/DownloadFile/' + row.DownloadId + '">Download</a>'
+            else
+                return '<p>N/A</p>'
+        }
+    </script>
+    <div class="card card-default no-margin">
+        <div class="card-header">
+            @T("Admin.NopStation.Helpdesk.Responses.AddTitle")
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.ResponseAddModel.Body" />
+                </div>
+                <div class="col-md-9">
+                    <nop-textarea asp-for="@Model.ResponseAddModel.Body" />
+                    <span asp-validation-for="@Model.ResponseAddModel.Body"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.ResponseAddModel.DisplayToCustomer" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="@Model.ResponseAddModel.DisplayToCustomer" />
+                    <span asp-validation-for="@Model.ResponseAddModel.DisplayToCustomer"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.ResponseAddModel.DownloadId" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="@Model.ResponseAddModel.DownloadId" />
+                    <span asp-validation-for="@Model.ResponseAddModel.DownloadId"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-9 col-md-offset-3">
+                    <button type="button" id="addResponses" class="btn btn-primary">@T("Admin.NopStation.Helpdesk.Responses.AddButton")</button>
+                </div>
+            </div>
+        </div>
+        <script>
+        $(document).ready(function () {
+            $('#addResponses').click(function () {
+                $('#addResponses').attr('disabled', true);
+                var postData = {
+                    Body: $("#@Html.IdFor(model => model.ResponseAddModel.Body)").val(),
+                    DisplayToCustomer: $("#@Html.IdFor(model => model.ResponseAddModel.DisplayToCustomer)").is(':checked'),
+                    DownloadId: $("#@Html.IdFor(model => model.ResponseAddModel.DownloadId)").val(),
+                    TicketId: '@(Model.Id)'
+                };
+                addAntiForgeryToken(postData);
+
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "@(Url.Action("ResponseAdd", "Ticket"))",
+                    data: postData,
+                    success: function (data, textStatus, jqXHR) {
+                        if (data.Result) {
+                            //reload grid
+                            updateTable('#ticket-responses-grid');
+
+                            $("#@Html.IdFor(model => model.ResponseAddModel.Body)").val('');
+                            $("#@Html.IdFor(model => model.ResponseAddModel.DownloadId)").val(0);
+                            $("#@Html.IdFor(model => model.ResponseAddModel.DisplayToCustomer)").prop('checked', false);
+                        } else {
+                            //display errors if returned
+                            display_nop_error(data);
+                        }
+                    },
+                    complete: function (jqXHR, textStatus) {
+                        $('#addResponses').attr('disabled', false);
+                    }
+                });
+            });
+        });
+        </script>
+    </div>
+</div>

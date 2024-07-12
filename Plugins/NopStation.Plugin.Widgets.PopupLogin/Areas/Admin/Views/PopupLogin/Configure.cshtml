@@ -1,0 +1,55 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("PopupLogin.Configuration");
+    ViewBag.PageTitle = T("Admin.NopStation.PopupLogin.Configuration").Text;
+}
+
+<form asp-controller="PopupLogin" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.PopupLogin.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+                <div class="card-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnablePopupLogin_OverrideForStore" asp-input="EnablePopupLogin" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnablePopupLogin" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnablePopupLogin" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="LoginUrlElementSelector_OverrideForStore" asp-input="LoginUrlElementSelector" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="LoginUrlElementSelector" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="LoginUrlElementSelector" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

@@ -1,0 +1,57 @@
+﻿@model ConfigurationModel
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="VapidSubjectEmail_OverrideForStore" asp-input="VapidSubjectEmail" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="VapidSubjectEmail" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="VapidSubjectEmail" asp-required="true" />
+            <span asp-validation-for="VapidSubjectEmail"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="VapidPublicKey_OverrideForStore" asp-input="VapidPublicKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="VapidPublicKey" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor-check asp-for="VapidPublicKey" asp-required="true" />
+            <span asp-validation-for="VapidPublicKey"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="VapidPrivateKey_OverrideForStore" asp-input="VapidPrivateKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="VapidPrivateKey" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor-check asp-for="VapidPrivateKey" asp-required="true" />
+            <span asp-validation-for="VapidPrivateKey"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-9 offset-md-3">
+            <button type="button" id="btnGenerateKeys" class="btn btn-primary">@T("Admin.NopStation.PWA.Configuration.GenerateKeys")</button>
+        </div>
+        <script>
+            $(document).ready(function () {
+                $('#btnGenerateKeys').click(function () {
+                    var data = {};
+                    addAntiForgeryToken(data);
+                    $.ajax({
+                        url: "@Url.Action("GetVapidKeys", "ProgressiveWebApp")",
+                        type: "POST",
+                        dataType: 'json',
+                        data: data,
+                        success: function (result) {
+                            $("#@Html.IdFor(x=> x.VapidPrivateKey)").val(result.PrivateKey);
+                            $("#@Html.IdFor(x=> x.VapidPublicKey)").val(result.PublicKey);
+                        }
+                    });
+                });
+            });
+        </script>
+    </div>
+</div>

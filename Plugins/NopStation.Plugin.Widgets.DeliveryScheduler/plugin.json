@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Delivery Scheduler",
+  "SystemName": "NopStation.Plugin.Widgets.DeliveryScheduler",
+  "Version": "4.50.1.2",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.DeliveryScheduler.dll",
+  "Description": "This plugin allows to select delivery time on checkout page.",
+  "DependsOnSystemNames": [ "NopStation.Core", "Shipping.FixedByWeightByTotal" ]
+}

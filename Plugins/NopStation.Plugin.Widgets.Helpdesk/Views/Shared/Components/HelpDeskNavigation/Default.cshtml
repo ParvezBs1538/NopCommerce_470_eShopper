@@ -1,0 +1,17 @@
+﻿@model NavigationModel
+
+@if (Model.ShowMenuInCustomerNavigation)
+{
+    var ticketPage = false;
+    if (Url.ActionContext.RouteData.Values["controller"].ToString().Equals("helpdeskticket", StringComparison.InvariantCultureIgnoreCase) &&
+        (Url.ActionContext.RouteData.Values["action"].ToString().Equals("list", StringComparison.InvariantCultureIgnoreCase) ||
+        Url.ActionContext.RouteData.Values["action"].ToString().Equals("addnew", StringComparison.InvariantCultureIgnoreCase) ||
+        Url.ActionContext.RouteData.Values["action"].ToString().Equals("details", StringComparison.InvariantCultureIgnoreCase)))
+    {
+        ticketPage = true;
+    }
+
+    <li class="customer-tickets @(ticketPage ? "active" : "inactive")">
+        <a href="@Url.RouteUrl("HelpdeskTickets")">@T("NopStation.Helpdesk.Navigation.MyTickets")</a>
+    </li>
+}

@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Lucky Orange",
+  "SystemName": "NopStation.Plugin.Widgets.LuckyOrange",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team, Jaber Kibria",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.LuckyOrange.dll",
+  "Description": "This plugin allows you to connect with LuckyOrange.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

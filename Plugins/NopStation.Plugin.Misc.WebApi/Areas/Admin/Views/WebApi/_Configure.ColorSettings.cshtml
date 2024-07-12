@@ -1,0 +1,234 @@
+﻿@model ConfigurationModel
+@using NopStation.Plugin.Misc.WebApi.Areas.Admin.Domains
+
+<style type="text/css">
+    .color-input {
+        display: none;
+    }
+</style>
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="PrimaryThemeColor_OverrideForStore" asp-input="PrimaryThemeColor" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="PrimaryThemeColor" />
+        </div>
+        <div class="col-md-9">
+            <input type="color" id="@Html.IdFor(model => model.PrimaryThemeColor)Picker" value="@Html.ValueFor(model => model.PrimaryThemeColor)" />
+            <div class="color-input">
+                <nop-editor asp-for="PrimaryThemeColor" />
+            </div>
+            <span asp-validation-for="PrimaryThemeColor"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="BottomBarActiveColor_OverrideForStore" asp-input="BottomBarActiveColor" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="BottomBarActiveColor" />
+        </div>
+        <div class="col-md-9">
+            <input type="color" id="@Html.IdFor(model => model.BottomBarActiveColor)Picker" value="@Html.ValueFor(model => model.BottomBarActiveColor)" />
+            <div class="color-input">
+                <nop-editor asp-for="BottomBarActiveColor" />
+            </div>
+            <span asp-validation-for="BottomBarActiveColor"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="BottomBarInactiveColor_OverrideForStore" asp-input="BottomBarInactiveColor" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="BottomBarInactiveColor" />
+        </div>
+        <div class="col-md-9">
+            <input type="color" id="@Html.IdFor(model => model.BottomBarInactiveColor)Picker" value="@Html.ValueFor(model => model.BottomBarInactiveColor)" />
+            <div class="color-input">
+                <nop-editor asp-for="BottomBarInactiveColor" />
+            </div>
+            <span asp-validation-for="BottomBarInactiveColor"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="BottomBarBackgroundColor_OverrideForStore" asp-input="BottomBarBackgroundColor" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="BottomBarBackgroundColor" />
+        </div>
+        <div class="col-md-9">
+            <input type="color" id="@Html.IdFor(model => model.BottomBarBackgroundColor)Picker" value="@Html.ValueFor(model => model.BottomBarBackgroundColor)" />
+            <div class="color-input">
+                <nop-editor asp-for="BottomBarBackgroundColor" />
+            </div>
+            <span asp-validation-for="BottomBarBackgroundColor"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="TopBarBackgroundColor_OverrideForStore" asp-input="TopBarBackgroundColor" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="TopBarBackgroundColor" />
+        </div>
+        <div class="col-md-9">
+            <input type="color" id="@Html.IdFor(model => model.TopBarBackgroundColor)Picker" value="@Html.ValueFor(model => model.TopBarBackgroundColor)" />
+            <div class="color-input">
+                <nop-editor asp-for="TopBarBackgroundColor" />
+            </div>
+            <span asp-validation-for="TopBarBackgroundColor"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="TopBarTextColor_OverrideForStore" asp-input="TopBarTextColor" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="TopBarTextColor" />
+        </div>
+        <div class="col-md-9">
+            <input type="color" id="@Html.IdFor(model => model.TopBarTextColor)Picker" value="@Html.ValueFor(model => model.TopBarTextColor)" />
+            <div class="color-input">
+                <nop-editor asp-for="TopBarTextColor" />
+            </div>
+            <span asp-validation-for="TopBarTextColor"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="GradientStartingColor_OverrideForStore" asp-input="GradientStartingColor" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="GradientStartingColor" />
+        </div>
+        <div class="col-md-9">
+            <input type="color" id="@Html.IdFor(model => model.GradientStartingColor)Picker" value="@Html.ValueFor(model => model.GradientStartingColor)" />
+            <div class="color-input">
+                <nop-editor asp-for="GradientStartingColor" />
+            </div>
+            <span asp-validation-for="GradientStartingColor"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="GradientMiddleColor_OverrideForStore" asp-input="GradientMiddleColor" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="GradientMiddleColor" />
+        </div>
+        <div class="col-md-9">
+            <input type="color" id="@Html.IdFor(model => model.GradientMiddleColor)Picker" value="@Html.ValueFor(model => model.GradientMiddleColor)" />
+            <div class="color-input">
+                <nop-editor asp-for="GradientMiddleColor" />
+            </div>
+            <span asp-validation-for="GradientMiddleColor"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="GradientEndingColor_OverrideForStore" asp-input="GradientEndingColor" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="GradientEndingColor" />
+        </div>
+        <div class="col-md-9">
+            <input type="color" id="@Html.IdFor(model => model.GradientEndingColor)Picker" value="@Html.ValueFor(model => model.GradientEndingColor)" />
+            <div class="color-input">
+                <nop-editor asp-for="GradientEndingColor" />
+            </div>
+            <span asp-validation-for="GradientEndingColor"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="GradientEnabled_OverrideForStore" asp-input="GradientEnabled" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="GradientEnabled" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="GradientEnabled" />
+            <span asp-validation-for="GradientEnabled"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ResetToDefaultColors" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ResetToDefaultColors" />
+        </div>
+    </div>
+    <nop-nested-setting asp-for="ResetToDefaultColors">
+        <div id="pnlResetToDefaultColors" class="form-group row">
+            <div class="col-md-3">
+                <label></label>
+            </div>
+            <div class="col-md-9">
+                <div id="resetToDefaultColors" class="btn bg-red">
+                    <i class="fa fa-refresh"></i>
+                    @T("Admin.NopStation.WebApi.Configuration.ResetToDefaultColors")
+                </div>
+            </div>
+        </div>
+    </nop-nested-setting>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.PrimaryThemeColor)Picker").change(function () {
+            $("#@Html.IdFor(model => model.PrimaryThemeColor)").val($(this).val());
+        });
+        $("#@Html.IdFor(model => model.BottomBarActiveColor)Picker").change(function () {
+            $("#@Html.IdFor(model => model.BottomBarActiveColor)").val($(this).val());
+        });
+        $("#@Html.IdFor(model => model.BottomBarBackgroundColor)Picker").change(function () {
+            $("#@Html.IdFor(model => model.BottomBarBackgroundColor)").val($(this).val());
+        });
+        $("#@Html.IdFor(model => model.BottomBarInactiveColor)Picker").change(function () {
+            $("#@Html.IdFor(model => model.BottomBarInactiveColor)").val($(this).val());
+        });
+        $("#@Html.IdFor(model => model.TopBarBackgroundColor)Picker").change(function () {
+            $("#@Html.IdFor(model => model.TopBarBackgroundColor)").val($(this).val());
+        });
+        $("#@Html.IdFor(model => model.TopBarTextColor)Picker").change(function () {
+            $("#@Html.IdFor(model => model.TopBarTextColor)").val($(this).val());
+        });
+        $("#@Html.IdFor(model => model.GradientStartingColor)Picker").change(function () {
+            $("#@Html.IdFor(model => model.GradientStartingColor)").val($(this).val());
+        });
+        $("#@Html.IdFor(model => model.GradientMiddleColor)Picker").change(function () {
+            $("#@Html.IdFor(model => model.GradientMiddleColor)").val($(this).val());
+        });
+        $("#@Html.IdFor(model => model.GradientEndingColor)Picker").change(function () {
+            $("#@Html.IdFor(model => model.GradientEndingColor)").val($(this).val());
+        });
+
+        $("#@Html.IdFor(model => model.ResetToDefaultColors)").click(toggleResetToDefaultColors);
+
+        toggleResetToDefaultColors();
+
+        $("#resetToDefaultColors").on("click", function () {
+            if (confirm("@T("Admin.NopStation.WebApi.Configuration.ResetColors.Confirmation")")) {
+                $("#@Html.IdFor(model => model.PrimaryThemeColor)Picker").val("@WebApiDefaults.PrimaryThemeColor");
+                $("#@Html.IdFor(model => model.PrimaryThemeColor)").val("@WebApiDefaults.PrimaryThemeColor");
+
+                $("#@Html.IdFor(model => model.BottomBarActiveColor)Picker").val("@WebApiDefaults.BottomBarActiveColor");
+                $("#@Html.IdFor(model => model.BottomBarActiveColor)").val("@WebApiDefaults.BottomBarActiveColor");
+
+                $("#@Html.IdFor(model => model.BottomBarInactiveColor)Picker").val("@WebApiDefaults.BottomBarInactiveColor");
+                $("#@Html.IdFor(model => model.BottomBarInactiveColor)").val("@WebApiDefaults.BottomBarInactiveColor");
+
+                $("#@Html.IdFor(model => model.BottomBarBackgroundColor)Picker").val("@WebApiDefaults.BottomBarBackgroundColor");
+                $("#@Html.IdFor(model => model.BottomBarBackgroundColor)").val("@WebApiDefaults.BottomBarBackgroundColor");
+
+                $("#@Html.IdFor(model => model.TopBarBackgroundColor)Picker").val("@WebApiDefaults.TopBarBackgroundColor");
+                $("#@Html.IdFor(model => model.TopBarBackgroundColor)").val("@WebApiDefaults.TopBarBackgroundColor");
+
+                $("#@Html.IdFor(model => model.TopBarTextColor)Picker").val("@WebApiDefaults.TopBarTextColor");
+                $("#@Html.IdFor(model => model.TopBarTextColor)").val("@WebApiDefaults.TopBarTextColor");
+
+                $("#@Html.IdFor(model => model.GradientStartingColor)Picker").val("@WebApiDefaults.GradientStartingColor");
+                $("#@Html.IdFor(model => model.GradientStartingColor)").val("@WebApiDefaults.GradientStartingColor");
+
+                $("#@Html.IdFor(model => model.GradientMiddleColor)Picker").val("@WebApiDefaults.GradientMiddleColor");
+                $("#@Html.IdFor(model => model.GradientMiddleColor)").val("@WebApiDefaults.GradientMiddleColor");
+
+                $("#@Html.IdFor(model => model.GradientEndingColor)Picker").val("@WebApiDefaults.GradientEndingColor");
+                $("#@Html.IdFor(model => model.GradientEndingColor)").val("@WebApiDefaults.GradientEndingColor");
+            }
+        });
+    });
+
+    function toggleResetToDefaultColors() {
+        if ($('#@Html.IdFor(model => model.ResetToDefaultColors)').is(':checked')) {
+            $('#pnlResetToDefaultColors').show();
+        } else {
+            $('#pnlResetToDefaultColors').hide();
+        }
+    }
+</script>

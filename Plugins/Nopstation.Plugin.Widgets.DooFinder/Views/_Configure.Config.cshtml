@@ -1,0 +1,50 @@
+﻿@model FeedDooFinderModel
+
+@await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+
+<div class="card-body">
+    <div class="card card-default">
+        <div class="card-body">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="ProductPictureSize_OverrideForStore" asp-input="ProductPictureSize" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="ProductPictureSize" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="ProductPictureSize" />
+                    <span asp-validation-for="ProductPictureSize"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="PricesConsiderPromotions_OverrideForStore" asp-input="PricesConsiderPromotions" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="PricesConsiderPromotions" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="PricesConsiderPromotions" />
+                    <span asp-validation-for="PricesConsiderPromotions"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="CurrencyId_OverrideForStore" asp-input="CurrencyId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="CurrencyId" />
+                </div>
+                <div class="col-md-9">
+                    <nop-select asp-for="CurrencyId" asp-items="Model.AvailableCurrencies" />
+                    <span asp-validation-for="CurrencyId"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="AddAttributes_OverrideForStore" asp-input="AddAttributes" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="AddAttributes" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="AddAttributes" />
+                    <span asp-validation-for="AddAttributes"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

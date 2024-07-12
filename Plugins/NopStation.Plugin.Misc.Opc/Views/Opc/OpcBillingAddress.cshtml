@@ -1,0 +1,87 @@
+﻿@model CheckoutBillingAddressModel
+
+<div class="checkout-data">
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OpCheckoutBillingAddressTop })
+    @if (Model.ShipToSameAddressAllowed)
+    {
+        <div class="section ship-to-same-address" id="ship-to-same-address">
+            <p class="selector">
+                <input asp-for="ShipToSameAddress" onclick="Billing.toggleShippingAddress(this)" />
+                <label asp-for="ShipToSameAddress">@T("Checkout.ShipToSameAddress")</label>
+            </p>
+        </div>
+    }
+    @if (Model.ExistingAddresses.Count >= 0)
+    {
+        <div class="section select-billing-address">
+            <label for="billing-address-select">@T("Checkout.SelectBillingAddressOrEnterNewOne")</label>
+            <div>
+                <select name="billing_address_id" id="billing-address-select" class="address-select"
+                    title="" onchange="Billing.newAddress(this)">
+                    @{
+                        //var billingAddressId = Model.CustomProperties.ContainsKey("CustomerBillingAddress") ? int.Model.CustomProperties["CustomerBillingAddress"] : 0;
+
+                        var billingAddressId = 0;
+                        if (Model.CustomProperties.ContainsKey("CustomerBillingAddress"))
+                        {
+                            int.TryParse(Model.CustomProperties["CustomerBillingAddress"], out billingAddressId);
+                        }
+                    }
+                    @foreach (var address in Model.ExistingAddresses)
+                    {
+                        var addressLine = "";
+                        addressLine += address.FirstName;
+                        addressLine += " " + address.LastName;
+                        if (address.StreetAddressEnabled && !string.IsNullOrEmpty(address.Address1))
+                        {
+                            addressLine += ", " + address.Address1;
+                        }
+                        if (address.CityEnabled && !string.IsNullOrEmpty(address.City))
+                        {
+                            addressLine += ", " + address.City;
+                        }
+                        if (address.CountyEnabled && !string.IsNullOrEmpty(address.County))
+                        {
+                            addressLine += ", " + address.County;
+                        }
+                        if (address.StateProvinceEnabled && !string.IsNullOrEmpty(address.StateProvinceName))
+                        {
+                            addressLine += ", " + address.StateProvinceName;
+                        }
+                        if (address.ZipPostalCodeEnabled && !string.IsNullOrEmpty(address.ZipPostalCode))
+                        {
+                            addressLine += " " + address.ZipPostalCode;
+                        }
+                        if (address.CountryEnabled && !string.IsNullOrWhiteSpace(address.CountryName))
+                        {
+                            addressLine += ", " + address.CountryName;
+                        }
+                        //how should we render "FormattedCustomAddressAttributes" here?
+                        if (billingAddressId > 0 && billingAddressId == address.Id)
+                        {
+                            <option value="@(address.Id)" selected data-country="@address.CountryId">@(addressLine)</option>
+                        }
+                        else
+                        {
+                            <option value="@(address.Id)" data-country="@address.CountryId">@(addressLine)</option>
+                        }
+
+                    }
+                    <option value="" id="billing-new" data-country="" data-issaved="0" selected="@Model.NewAddressPreselected">@T("Checkout.NewAddress")</option>
+                </select>
+            </div>
+        </div>
+    }
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OpCheckoutBillingAddressMiddle })
+    <div class="section new-billing-address" id="billing-new-address-form">
+        <div class="enter-address">
+            <div asp-validation-summary="ModelOnly" class="message-error"></div>
+            @{
+                var dataDictAddress = new ViewDataDictionary(ViewData);
+                dataDictAddress.TemplateInfo.HtmlFieldPrefix = "BillingNewAddress";
+                @await Html.PartialAsync("_CreateOrUpdateBillingAddress", Model.BillingNewAddress, dataDictAddress)
+            }
+        </div>
+    </div>
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.OpCheckoutBillingAddressBottom })
+</div>

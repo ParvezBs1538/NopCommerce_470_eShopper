@@ -1,0 +1,55 @@
+﻿@using Nop.Web.Framework.UI
+@model ProductRequestModel
+
+@{
+    Layout = "_ColumnsTwo";
+    NopHtml.AddTitleParts(T("NopStation.ProductRequests.Account.CreateNewRequest").Text);
+}
+
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = -1 })
+}
+
+<div class="page account-page customer-info-page">
+    <div class="page-title">
+        <h1>@T("Account.MyAccount") - @T("NopStation.ProductRequests.Account.CreateNewRequest")</h1>
+    </div>
+    <div class="page-body">
+        <form asp-route="AddProductRequest" method="post">
+            <div asp-validation-summary="ModelOnly" class="message-error"></div>
+            <div class="fieldset">
+                <div class="form-fields">
+                    <div class="inputs">
+                        <label asp-for="Name" asp-postfix=":"></label>
+                        <input asp-for="Name" class="review-title" />
+                        <nop-required />
+                        <span asp-validation-for="Name"></span>
+                    </div>
+                    <div class="inputs">
+                        <label asp-for="Link" asp-postfix=":"></label>
+                        <input asp-for="Link" class="review-title" />
+                        @if (Model.LinkRequired)
+                        {
+                        <nop-required />
+                        }
+                        <span asp-validation-for="Link"></span>
+                    </div>
+                    <div class="inputs">
+                        <label asp-for="Description" asp-postfix=":"></label>
+                        <textarea asp-for="Description" class="review-title"></textarea>
+                        @if (Model.DescriptionRequired)
+                        {
+                            <nop-required />
+                        }
+                        <span asp-validation-for="Description"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <input type="submit" name="add-request" class="button-1" value="@T("NopStation.ProductRequests.ProductRequests.SubmitButton")" />
+            </div>
+        </form>
+    </div>
+</div>
+

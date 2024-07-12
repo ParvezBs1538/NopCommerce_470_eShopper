@@ -1,0 +1,119 @@
+﻿@model OnlineCustomerSearchModel
+@{
+    //page title
+    ViewBag.PageTitle = T("NopStation.Plugin.Widgets.CrawlerManager.GuestCustomers").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("CrawlerManager.GuestList");
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("NopStation.Plugin.Widgets.CrawlerManager.GuestCustomers")
+    </h1>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "guest-customers-grid",
+                            UrlRead = new DataUrl("GuestList", "CrawlerManager", null),
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(OnlineCustomerModel.CustomerInfo))
+                                {
+                                    Title = T("Admin.Customers.OnlineCustomers.Fields.CustomerInfo").Text,
+                                    Width = "100",
+                                    Render = new RenderLink(new DataUrl("~/Admin/Customer/Edit", nameof(CustomerModel.Id)))
+                                },
+                                new ColumnProperty(nameof(OnlineCustomerModel.LastIpAddress))
+                                {
+                                    Title = T("Admin.Customers.OnlineCustomers.Fields.IPAddress").Text, 
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(OnlineCustomerModel.Location))
+                                {
+                                    Title = T("Admin.Customers.OnlineCustomers.Fields.Location").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(OnlineCustomerModel.LastActivityDate))
+                                {
+                                    Title = T("Admin.Customers.OnlineCustomers.Fields.LastActivityDate").Text,
+                                    Width = "200",
+                                    Render = new RenderDate()
+                                },
+                                new ColumnProperty(nameof(OnlineCustomerModel.LastVisitedPage))
+                                {
+                                    Title = T("Admin.Customers.OnlineCustomers.Fields.LastVisitedPage").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(OnlineCustomerModel.Id))
+                                {
+                                    Title = T("NopStation.Plugin.Widgets.CrawlerManager.AddCrawler").Text,
+                                    Width = "100",
+                                    ClassName =  NopColumnClassDefaults.CenterAll,
+                                    Render = new RenderButtonCustom(NopButtonClassDefaults.Olive, T("NopStation.Plugin.Widgets.CrawlerManager.AddCrawler").Text)
+                                    {
+                                        OnClickFunctionName = "markAsPrimaryStoreCurrency"
+                                    }
+                                }
+                            }
+                        })
+
+                        <button type="submit" class="btn btn-default" id="btnMarkPSC" style="display:none" />
+                        
+                        <script>
+                            var selectedId;
+                            $(document).ready(function () {
+
+                                $("#btnMarkPSC-action-confirmation-submit-button").bind("click", function () {
+                                    var postData = {
+                                        selectedId: selectedId
+                                    };
+                                    addAntiForgeryToken(postData);
+                                    $.ajax({
+                                        cache: false,
+                                        type: "POST",
+                                        url: "@(Url.Action("AddCrawler", "CrawlerManager"))",
+                                        data: postData,
+                                        success: function (data, textStatus, jqXHR) {
+                                            updateTable('#guest-customers-grid');
+                                            if (!data.result) {
+                                                if (data.exist)
+                                                    alert("@T("NopStation.Plugin.Widgets.CrawlerManager.error.exist")");
+                                                else
+                                                    alert("@T("NopStation.Plugin.Widgets.CrawlerManager.error.crawlerAdd")");
+                                            }
+                                            else {
+                                                alert("@T("NopStation.Plugin.Widgets.CrawlerManager.success.crawlerAdd")");
+                                                updateTable('#guest-customers-grid');
+                                            }
+                                        },
+                                        error: function (jqXHR, textStatus, errorThrown) {
+                                            alert("@T("NopStation.Plugin.Widgets.CrawlerManager.error.crawlerAdd")");
+                                        }
+                                    });
+                                    $('#btnMarkPSC-action-confirmation').modal('toggle');
+                                });
+                            });
+
+                            function markAsPrimaryStoreCurrency(id) {
+                                selectedId = id;
+                                $("#btnMarkPSC").click();
+                            };
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<nop-action-confirmation asp-button-id="btnMarkPSC" asp-additional-confirm="NopStation.Plugin.Widgets.CrawlerManager.ModalConfirmation" />

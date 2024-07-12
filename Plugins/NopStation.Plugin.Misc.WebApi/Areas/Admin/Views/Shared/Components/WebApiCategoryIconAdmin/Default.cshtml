@@ -1,0 +1,9 @@
+﻿@model CategoryIconModel
+@{
+    const string hideCategoryIconBlockAttributeName = "CategoryIcon.HideCategoryIconBlock";
+    var hideCategoryIconBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideCategoryIconBlockAttributeName);
+}
+
+<nop-card asp-name="category-banners" asp-icon="far fa-image" asp-title="@T("Admin.NopStation.WebApi.Tab.CategoryBanner")" asp-hide-block-attribute-name="@hideCategoryIconBlockAttributeName" asp-hide="@hideCategoryIconBlock" asp-advanced="true">
+    @await Html.PartialAsync("_CategoryIcons.cshtml", Model)
+</nop-card>

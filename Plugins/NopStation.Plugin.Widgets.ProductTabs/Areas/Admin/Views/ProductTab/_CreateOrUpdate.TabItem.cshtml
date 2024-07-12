@@ -1,0 +1,20 @@
+﻿@model ProductTabItemModel
+
+@{ const string hideInfoBlockAttributeName = "ProductTabItemPage.HideInfoBlock";
+                var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideInfoBlockAttributeName);
+
+                const string hideProductsBlockAttributeName = "ProductTabItemPage.HideItemsBlock";
+                var hideProductsBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideProductsBlockAttributeName, defaultValue: true); }
+
+<input asp-for="Id" type="hidden" />
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <nop-cards id="product-panels">
+                <nop-card asp-name="tabitem-info" asp-icon="fa fa-info" asp-title="@T("Admin.NopStation.ProductTabs.ProductTabItems.Tab.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.TabItem.Info", Model)</nop-card>
+                <nop-card asp-name="tabitem-products" asp-icon="fa fa-th-list" asp-title="@T("Admin.NopStation.ProductTabs.ProductTabItems.Tab.Products")" asp-hide-block-attribute-name="@hideProductsBlockAttributeName" asp-hide="@hideProductsBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.TabItem.Products", Model)</nop-card>
+            </nop-cards>
+        </div>
+    </div>
+</div>

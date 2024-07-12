@@ -1,0 +1,37 @@
+@model int
+@inject Nop.Services.Catalog.IManufacturerService manufacturerService
+
+<select class="form-control" data-placeholder="Search for a manufacturer" style="width: 100%" id="@Html.IdForModel()" name="@Html.NameForModel()">
+    @if (Model > 0) 
+    {
+        var manufacturer = await manufacturerService.GetManufacturerByIdAsync(Model);
+        if (manufacturer != null && !manufacturer.Deleted)
+        {
+            <option value="@Model" selected="selected">@manufacturer.Name</option>
+        }
+    }
+</select>
+
+<script>
+    $(document).ready(function () {
+        $('#@Html.IdForModel()').select2({
+            ajax: {
+                url: '@(Url.Action("Manufacturers", "Select2"))',
+                dataType: 'json',
+                data: function (params) {
+                    var query = {
+                        q: params.term,
+                        page: params.page || 1
+                    }
+                    return query;
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+
+                    return data;
+                },
+                minimumInputLength: 1
+            }
+        });
+    });
+</script>

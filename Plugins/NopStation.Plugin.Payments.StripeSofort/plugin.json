@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Stripe Sofort",
+  "SystemName": "NopStation.Plugin.Payments.StripeSofort",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.StripeSofort.dll",
+  "Description": "This plugin enables Stripe Sofort payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

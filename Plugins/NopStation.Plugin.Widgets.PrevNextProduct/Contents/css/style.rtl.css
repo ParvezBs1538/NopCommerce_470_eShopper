@@ -1,0 +1,70 @@
+.prev-next-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0px;
+}
+
+.previous-product,
+.next-product {
+  width: 49.7%;
+}
+
+  .previous-product a,
+  .next-product a {
+    display: block;
+    padding: 15px 10px;
+    align-items: center;
+    background-color: #f6f6f6;
+    font-size: 15px;
+  }
+
+  .previous-product a {
+    direction: ltr;
+    text-align: right;
+  }
+
+  .next-product a {
+    text-align: left;
+  }
+
+  .previous-product a::after {
+    content: "";
+    background: url(/Plugins/NopStation.Plugin.Widgets.PrevNextProduct/Contents/images/arrow-right.svg) no-repeat right;
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    cursor: pointer;
+    padding-left: 30px
+  }
+
+  .next-product a::before {
+    content: "";
+    background: url(/Plugins/NopStation.Plugin.Widgets.PrevNextProduct/Contents/images/arrow-left.svg) no-repeat left;
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    cursor: pointer;
+    padding-right: 30px
+  }
+
+@media(max-width: 767px) {
+  .previous-product, .next-product {
+    width: 10%;
+  }
+
+    .previous-product a,
+    .next-product a {
+      font-size: 0px;
+      text-align: center;
+    }
+
+      .previous-product a::after {
+        font-size: 15px;
+        padding-left: 15px;
+      }
+
+      .next-product a::before {
+        font-size: 15px;
+        padding-right: 15px;
+      }
+}

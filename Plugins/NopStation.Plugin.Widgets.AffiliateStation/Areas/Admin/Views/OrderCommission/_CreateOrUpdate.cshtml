@@ -1,0 +1,193 @@
+@model OrderCommissionModel
+@using NopStation.Plugin.Widgets.AffiliateStation.Domains
+@using Nop.Core.Domain.Payments
+
+<script>
+    $(document).ready(function () {
+        toggleChangeTotalCommissionAmount(false);
+    });
+
+    function toggleChangeTotalCommissionAmount(editmode) {
+        if (editmode) {
+            $('#pnlChangeTotalCommissionAmount').show();
+            $('#btnChangeTotalCommissionAmount').hide();
+        } else {
+            $('#pnlChangeTotalCommissionAmount').hide();
+            $('#btnChangeTotalCommissionAmount').show();
+        }
+    }
+</script>
+
+@if (Model.PaymentStatusId == (int)PaymentStatus.Paid)
+{
+    <script>
+        $(document).ready(function () {
+            $('#@Html.IdFor(model => model.CommissionStatusId)').change(toggleCommissionStatus);
+            toggleCommissionStatus();
+        });
+
+        function toggleCommissionStatus() {
+            var statusId = $('#@Html.IdFor(model => model.CommissionStatusId)').val();
+            if (statusId == @((int)CommissionStatus.Pending)) {
+                $('#pnlCommissionPaidOn').hide();
+            }
+            else {
+                $('#pnlCommissionPaidOn').show();
+            }
+            if (statusId == @((int)CommissionStatus.PartiallyPaid)) {
+                $('#pnlPartialPaidAmount').show();
+            }
+            else {
+                $('#pnlPartialPaidAmount').hide();
+            }
+        }
+    </script>
+}
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="OrderId" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group input-group-short">
+                                    <div class="input-group-text">
+                                        <strong>
+                                            <div class="form-text-row">@Model.OrderId</div>
+                                        </strong>
+                                    </div>
+                                    <div class="input-group-btn">
+                                        <a class="btn btn-default" asp-controller="Order" asp-action="Edit" asp-route-id="@Model.OrderId">#@Model.OrderId - @T("Admin.Common.View")</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="CustomerId" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">
+                                    <a asp-controller="Customer" asp-action="Edit" asp-route-id="@Model.CustomerId">@Model.CustomerInfo - @T("Admin.Common.View")</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="AffiliateId" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">
+                                    <a asp-controller="Affiliate" asp-action="Edit" asp-route-id="@Model.AffiliateId">@Model.AffiliateName - @T("Admin.Common.View")</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="TotalCommissionAmountStr" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group input-group-short">
+                                    <div class="input-group-text">
+                                        <strong>
+                                            <div class="form-text-row">@Model.TotalCommissionAmountStr</div>
+                                        </strong>
+                                    </div>
+                                    <div class="input-group-btn">
+                                        <button type="submit" name="btnChangeTotalCommissionAmount" onclick="toggleChangeTotalCommissionAmount(true);return false;" id="btnChangeTotalCommissionAmount" class="btn btn-primary">
+                                            @T("Admin.NopStation.AffiliateStation.OrderCommissions.Fields.TotalCommissionAmount.Change")
+                                        </button>
+                                        <div id="pnlChangeTotalCommissionAmount" style="margin-top: 3px;">
+                                            <nop-editor asp-for="TotalCommissionAmount" />
+                                            <button type="submit" name="btnSaveTotalCommissionAmount" id="btnSaveTotalCommissionAmount" class="btn btn-primary" style="margin-left: 3px">
+                                                @T("Admin.Common.Save")
+                                            </button>
+                                            <nop-action-confirmation asp-button-id="btnSaveTotalCommissionAmount" />
+                                            <button type="submit" name="btnCancelTotalCommissionAmount" onclick="toggleChangeTotalCommissionAmount(false);return false;" id="btnCancelTotalCommissionAmount" class="btn bg-teal" style="margin-left: 3px">
+                                                @T("Admin.Common.Cancel")
+                                            </button>
+                                            <div class="input-group-btn-hint">
+                                                <em>@T("Admin.NopStation.AffiliateStation.OrderCommissions.Fields.TotalCommissionAmount.Change.ForAdvancedUsers")</em>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="OrderStatus" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.OrderStatus</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="PaymentStatus" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.PaymentStatus</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="CommissionStatus" />
+                            </div>
+                            <div class="col-md-9">
+                                @if (Model.PaymentStatusId == (int)PaymentStatus.Paid)
+                                {
+                                    <nop-select asp-for="CommissionStatusId" asp-items="@Model.AvailableCommissionStatuses" />
+                                }
+                                else
+                                {
+                                    <div class="form-text-row">
+                                        @Model.CommissionStatus
+                                    </div>
+                                    <em>@T("Admin.NopStation.AffiliateStation.OrderCommissions.Fields.CommissionStatus.Change.ForPaidOrders")</em>
+                                }
+                            </div>
+                        </div>
+                        @if (Model.PaymentStatusId == (int)PaymentStatus.Paid)
+                        {
+                            <div class="form-group row" id="pnlPartialPaidAmount">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="PartialPaidAmount" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="PartialPaidAmount" />
+                                    <span asp-validation-for="PartialPaidAmount"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" id="pnlCommissionPaidOn">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="CommissionPaidOn" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="CommissionPaidOn" />
+                                    <span asp-validation-for="CommissionPaidOn"></span>
+                                </div>
+                            </div>
+                        }
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="CreatedOn" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.CreatedOn</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

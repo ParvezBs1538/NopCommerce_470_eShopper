@@ -1,0 +1,172 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.StripePaymentElement.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("StripePaymentElement.Configuration");
+}
+
+@await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+
+<form asp-controller="StripePaymentElement" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.StripePaymentElement.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+            @*<button type="button" name="importexcel" class="btn bg-olive" data-toggle="modal" data-target="#importexcel-window">
+                <i class="fas fa-upload"></i>
+                @T("Admin.NopStation.StripePaymentElement.Configuration.Import.AppleVerfyFile")
+            </button>*@
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="TransactionModeId_OverrideForStore" asp-input="TransactionModeId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="TransactionModeId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="TransactionModeId" asp-items="@Model.TransactionModeValues" />
+                                    <span asp-validation-for="TransactionModeId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AdditionalFee_OverrideForStore" asp-input="AdditionalFee" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AdditionalFee" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AdditionalFee" />
+                                    <span asp-validation-for="AdditionalFee"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AdditionalFeePercentage_OverrideForStore" asp-input="AdditionalFeePercentage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AdditionalFeePercentage" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AdditionalFeePercentage" />
+                                    <span asp-validation-for="AdditionalFeePercentage"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ApiKey_OverrideForStore" asp-input="ApiKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ApiKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="ApiKey" />
+                                    <span asp-validation-for="ApiKey"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="PublishableKey_OverrideForStore" asp-input="PublishableKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="PublishableKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="PublishableKey" />
+                                    <span asp-validation-for="PublishableKey"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="Theme_OverrideForStore" asp-input="Theme" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="Theme" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="Theme" asp-items="@Model.ThemeValues" />
+                                    <span asp-validation-for="Theme"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="Layout_OverrideForStore" asp-input="Layout" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="Layout" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="Layout" asp-items="@Model.LayoutValues" />
+                                    <span asp-validation-for="Layout"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableLogging_OverrideForStore" asp-input="EnableLogging" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableLogging" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableLogging" />
+                                    <span asp-validation-for="EnableLogging"></span>
+                                </div>
+                            </div>
+                            @*<div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="AppleVerificationFileExist" />
+                                </div>
+                                <div class="col-md-9">
+                                    @if (Model.AppleVerificationFileExist)
+                                    {
+                                        <span style="margin-top:9px; display:inherit">&nbsp; <i class="fas fa-check true-icon"></i></span>
+                                    }
+                                    else
+                                    {
+                                        <span style="margin-top:9px; display:inherit">&nbsp; <i class="fas fa-times false-icon"></i></span>
+                                    }
+                                </div>
+                            </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+
+<div id="importexcel-window" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importexcel-window-title">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="importexcel-window-title">@T("Admin.NopStation.StripePaymentElement.Configuration.Import.AppleMarchentId")</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form asp-controller="StripePaymentElement" asp-action="UploadFile" method="post" enctype="multipart/form-data">
+                <div class="form-horizontal">
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <div class="label-wrapper">
+                                    <label class="col-form-label">
+                                        @T("Admin.NopStation.StripePaymentElement.Configuration.Import.VerificationFile")
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="file" id="importexcelfile" name="importexcelfile" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            @T("Import File")
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

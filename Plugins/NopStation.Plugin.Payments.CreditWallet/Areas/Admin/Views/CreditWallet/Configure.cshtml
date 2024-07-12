@@ -1,0 +1,138 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.CreditWallet.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("CreditWallet.Configuration");
+}
+
+<form asp-controller="CreditWallet" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.CreditWallet.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            
+                            @(await Html.LocalizedEditorAsync<ConfigurationModel, ConfigurationModel.ConfigurationLocalizedModel>("plugin-settings-localized",
+                                @<div>
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-override-store-checkbox asp-for="DescriptionText_OverrideForStore" asp-input="@Model.Locales[item].DescriptionText" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="@Model.Locales[item].DescriptionText" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="@Model.Locales[item].DescriptionText" asp-template="RichEditor" />
+                                            <span asp-validation-for="@Model.Locales[item].DescriptionText"></span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+                                </div>
+                                ,
+                                @<div>
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-override-store-checkbox asp-for="DescriptionText_OverrideForStore" asp-input="DescriptionText" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="DescriptionText" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="DescriptionText" asp-template="RichEditor" />
+                                            <span asp-validation-for="DescriptionText"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                ,
+                                //localizable settings per store (overridden store settings) are not supported yet
+                                true
+                                ))
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AdditionalFee_OverrideForStore" asp-input="AdditionalFee" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AdditionalFee" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AdditionalFee" />
+                                    <span asp-validation-for="AdditionalFee"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AdditionalFeePercentage_OverrideForStore" asp-input="AdditionalFeePercentage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AdditionalFeePercentage" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AdditionalFeePercentage" />
+                                    <span asp-validation-for="AdditionalFeePercentage"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="SkipPaymentInfo_OverrideForStore" asp-input="SkipPaymentInfo" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="SkipPaymentInfo" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="SkipPaymentInfo" />
+                                    <span asp-validation-for="SkipPaymentInfo"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="HideMethodIfInsufficientBalance_OverrideForStore" asp-input="HideMethodIfInsufficientBalance" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="HideMethodIfInsufficientBalance" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="HideMethodIfInsufficientBalance" />
+                                    <span asp-validation-for="HideMethodIfInsufficientBalance"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ShowAvailableCreditOnCheckoutPage_OverrideForStore" asp-input="ShowAvailableCreditOnCheckoutPage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowAvailableCreditOnCheckoutPage" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ShowAvailableCreditOnCheckoutPage" />
+                                    <span asp-validation-for="ShowAvailableCreditOnCheckoutPage"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ShowInvoicesInCustomerWalletPage_OverrideForStore" asp-input="ShowInvoicesInCustomerWalletPage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowInvoicesInCustomerWalletPage" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ShowInvoicesInCustomerWalletPage" />
+                                    <span asp-validation-for="ShowInvoicesInCustomerWalletPage"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="MaxInvoicesToShowInCustomerWalletPage_OverrideForStore" asp-input="MaxInvoicesToShowInCustomerWalletPage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="MaxInvoicesToShowInCustomerWalletPage" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="MaxInvoicesToShowInCustomerWalletPage" />
+                                    <span asp-validation-for="MaxInvoicesToShowInCustomerWalletPage"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

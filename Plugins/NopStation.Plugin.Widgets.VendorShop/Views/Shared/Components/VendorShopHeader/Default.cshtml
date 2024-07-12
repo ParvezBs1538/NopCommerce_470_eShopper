@@ -1,0 +1,94 @@
+﻿@model VendorShopHeaderModel
+<div class="vendor-page-header">
+    <div class="vendor-profile align-items-center">
+        <div class="vendor-profile-image-container">
+            <img src="@Model.ProfilePictureUrl" />
+        </div>
+
+        <div class="vendor-profile-name">
+            <h3>@Model.VendorName</h3>
+            <div class="vendor-action-buttons">
+                @if (Model.EnableSubscribeFeature && Model.IsRegisteredCustomer)
+                {
+                
+                        @if (!Model.IsCurrentCustomerSubscribed)
+                        {
+                            <button id="vendor-subscribe-button" class="button-2 button-sub-unsub">
+                                @T("NopStation.VendorShop.Subscribe.Text")
+                            </button>
+                        }
+                        else
+                        {
+                            <button id="vendor-unsubscribe-button" class="button-2 button-sub-unsub">
+                                @T("NopStation.VendorShop.Unsubscribe.Text")
+                            </button>
+                        }
+               
+                }
+               
+            </div>
+        </div>
+
+    </div>
+
+    <div class="vendor-profile-image-container-mobile">
+        <img src="@Model.MobileBannerPictureUrl" />
+    </div>
+
+    <div class="vendor-page-cover-picture">
+        <img src="@Model.BannerPictureUrl" />
+    </div>
+</div>
+
+@if(!string.IsNullOrEmpty(Model.Description))
+{
+    <div class="description-box">
+        @Html.Raw(Model.Description)
+    </div>
+}
+
+<nop-antiforgery-token />
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $(".button-sub-unsub").click(function () {
+            var vendorId = @Model.VendorId;
+            var postData = {
+                VendorId: vendorId
+            };
+            addAntiForgeryToken(postData);
+
+            var url;
+            var buttonText;
+            var buttonElement = $(this);
+
+            if (buttonElement.attr("id") === "vendor-subscribe-button") {
+                url = "@(Url.Action("Subscribe", "VendorSubscriber"))";
+                buttonText = "Unsubscribe";
+            } else {
+                url = "@(Url.Action("Unsubscribe", "VendorSubscriber"))";
+                buttonText = "Subscribe";
+            }
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: url,
+                data: postData,
+                success: function (data, textStatus, jqXHR) {
+                    buttonElement.text(buttonText);
+                    if (buttonElement.attr("id") === "vendor-subscribe-button") {
+                        buttonElement.attr("id", "vendor-unsubscribe-button");
+                    } else {
+                        buttonElement.attr("id", "vendor-subscribe-button");
+                    }
+
+                    displayBarNotification(data.message, 'success', 3500);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                }
+            });
+        });
+    });
+
+
+</script>

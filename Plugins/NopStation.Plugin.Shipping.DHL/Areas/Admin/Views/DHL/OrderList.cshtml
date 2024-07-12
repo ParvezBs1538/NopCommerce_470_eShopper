@@ -1,0 +1,318 @@
+﻿@model NopStation.Plugin.Shipping.DHL.Areas.Admin.Models.DHLOrderSearchModel
+
+@inject IStoreService storeService
+@using Nop.Services.Stores
+
+@using Nop.Web.Framework.Models.DataTables
+
+@{
+    Layout = "_AdminLayout";
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.DHL.Orders.List").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("DHL.OrderList");
+}
+
+<style>
+    a.disabled {
+        pointer-events: none;
+        cursor: default;
+    }
+</style>
+
+<div class="content-header clearfix">
+    <h1 class="pull-left">
+        @T("Admin.NopStation.DHL.Orders.List")
+    </h1>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "orders-grid",
+                            UrlRead = new DataUrl("OrderList", "DHL", null),
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(DHLOrderModel.CustomOrderNumber))
+                                {
+                                    Title = T("Admin.NopStation.DHL.Orders.Fields.CustomOrderNumber").Text,
+                                    Width = "70",
+                                    ClassName = NopColumnClassDefaults.CenterAll
+                                },
+                                new ColumnProperty(nameof(DHLOrderModel.OrderStatus))
+                                {
+                                    Title = T("Admin.NopStation.DHL.Orders.Fields.OrderStatus").Text,
+                                    Width = "100",
+                                    Render = new RenderCustom("renderColumnOrderStatus")
+                                },
+                                new ColumnProperty(nameof(DHLOrderModel.ShippingStatus))
+                                {
+                                    Title = T("Admin.NopStation.DHL.Orders.Fields.ShippingStatus").Text,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(DHLOrderModel.CustomerFullName))
+                                {
+                                    Title = T("Admin.NopStation.DHL.Orders.Fields.CustomerFullName").Text,
+                                    Width = "120"
+                                },
+                                new ColumnProperty(nameof(DHLOrderModel.StoreName))
+                                {
+                                    Title = T("Admin.NopStation.DHL.Orders.Fields.StoreName").Text,
+                                    Width = "100",
+                                    Visible = storeService.GetAllStoresAsync().Result.Count > 1
+                                },
+                                new ColumnProperty(nameof(DHLOrderModel.CreatedOn))
+                                {
+                                    Title = T("Admin.NopStation.DHL.Orders.Fields.CreatedOn").Text,
+                                    Width = "100",
+                                    Render = new RenderDate()
+                                },
+                                new ColumnProperty(nameof(DHLOrderModel.AirwayBillNumber))
+                                {
+                                    Title = T("Admin.NopStation.DHL.Orders.Fields.AirwayBillNumber").Text,
+                                    Width = "70",
+                                    ClassName =  NopColumnClassDefaults.Button,
+                                    Render = new RenderCustom("renderAirwayBillNumber")
+                                },
+                                new ColumnProperty(nameof(DHLOrderModel.ConfirmationNumber))
+                                {
+                                    Title = T("Admin.NopStation.DHL.Orders.Fields.ConfirmationNumber").Text,
+                                    Width = "70",
+                                    ClassName =  NopColumnClassDefaults.Button,
+                                    Render = new RenderCustom("renderConfirmationNumber")
+                                },
+                                new ColumnProperty(nameof(DHLOrderModel.ReadyByTime))
+                                {
+                                    Title = T("Admin.NopStation.DHL.Orders.Fields.ReadyByTime").Text,
+                                    Width = "80",
+                                    Render = new RenderDate()
+                                },
+                                new ColumnProperty(nameof(DHLOrderModel.NextPickupDate))
+                                {
+                                    Title = T("Admin.NopStation.DHL.Orders.Fields.NextPickupDate").Text,
+                                    Width = "90",
+                                    Render = new RenderDate()
+                                },
+                                new ColumnProperty(nameof(DHLOrderModel.Id))
+                                {
+                                     Title = T("Admin.NopStation.DHL.Orders.Fields.ShippingLabel").Text,
+                                     Width = "70",
+                                     Render = new RenderCustom("renderShippingLabel")
+                                }
+                            }
+                        })
+
+                        <script>
+
+                            function renderColumnOrderStatus(data, type, row, meta) {
+                                var color;
+                                switch (row.OrderStatusId) {
+                                    case 10:
+                                        color = 'yellow';
+                                        break;
+                                    case 20:
+                                        color = 'blue';
+                                        break;
+                                    case 30:
+                                        color = 'green';
+                                        break;
+                                    case 40:
+                                        color = 'red';
+                                        break;
+                                }
+                                return '<span class="grid-report-item ' + color + '">' + data + '</span >';
+                            }
+
+                            function renderAirwayBillNumber(data, type, row, meta) {
+                                var returnHtml = '';
+                                if (row.AirwayBillNumber) {
+                                    returnHtml = '<span>' + row.AirwayBillNumber + '</span>';
+                                }
+                                else {
+                                    returnHtml = '<button type="button" id="submit-shipment" class="btn btn-default" onclick="submitToDHL(' + row.Id + ')"><i class="fa fa-send"></i>Submit</button>';
+                                }
+                                return returnHtml;
+                            }
+
+                            function renderConfirmationNumber(data, type, row, meta) {
+                                var returnHtml = '';
+                                if (row.CanBookPickup) {
+                                    returnHtml = '<button type="button" id="book-pickup-request" class="btn btn-yellow" onclick="bookPickupRequest(' + row.Id + ')"><i class="fa fa-send"></i>Book Pickup</button>';
+                                }
+                                else {
+                                    if (row.ConfirmationNumber) {
+                                        returnHtml = '<span>' + row.ConfirmationNumber + '</span>';
+                                    } else { }
+                                }
+                                return returnHtml;
+                            }
+
+                            function renderShippingLabel(data, type, row, meta) {
+                                var returnHtml = '';
+                                if (row.HasShippingLabel) {
+                                    returnHtml = '<a href="/Admin/DHL/GenerateShippingLabel/?orderId=' + row.Id + '" class="btn bg-purple"> <i class="fa fa-file-pdf-o"></i> Shipping Label </a>';
+                                }
+                                else { }
+                                return returnHtml;
+                            }
+                        </script>
+
+                        <script type="text/javascript">
+                                var selectedIds = [];
+                                var reportAggregates = "";
+
+                                $(document).ready(function () {
+                                    //search button
+
+                                    $('#mastercheckbox').click(function () {
+                                        $('.checkboxGroups').attr('checked', $(this).is(':checked')).change();
+                                    });
+
+                                    //wire up checkboxes.
+                                    $('#orders-grid').on('change', 'input[type=checkbox][id!=mastercheckbox][class=checkboxGroups]', function (e) {
+                                        var $check = $(this);
+                                        if ($check.is(":checked") == true) {
+                                            var checked = jQuery.inArray($check.val(), selectedIds);
+                                            if (checked == -1) {
+                                                //add id to selectedIds.
+                                                selectedIds.push($check.val());
+                                            }
+                                        }
+                                        else {
+                                            var checked = jQuery.inArray($check.val(), selectedIds);
+                                            if (checked > -1) {
+                                                //remove id from selectedIds.
+                                                selectedIds = $.grep(selectedIds, function (item, index) {
+                                                    return item != $check.val();
+                                                });
+                                            }
+                                        }
+                                        updateMasterCheckbox();
+                                    });
+                                });
+
+                                function additionalData() {
+                                    var data = {
+                                    };
+                                    addAntiForgeryToken(data);
+                                    return data;
+                                }
+
+                                function onDataBound(e) {
+                                    $('#orders-grid input[type=checkbox][id!=mastercheckbox][class=checkboxGroups]').each(function () {
+                                        var currentId = $(this).val();
+                                        var checked = jQuery.inArray(currentId, selectedIds);
+                                        //set checked based on if current checkbox's value is in selectedIds.
+                                        $(this).attr('checked', checked > -1);
+                                    });
+
+                                    updateMasterCheckbox();
+
+                                    //update order totals summary
+                                    if (reportAggregates != "") {
+                                        for (var key in reportAggregates) {
+                                            $('#aggregator-profit-block').text(reportAggregates['aggregatorprofit']);
+                                            $('#aggregator-shipping-block').text(reportAggregates['aggregatorshipping']);
+                                            $('#aggregator-tax-block').text(reportAggregates['aggregatortax']);
+                                            $('#aggregator-total-block').text(reportAggregates['aggregatortotal']);
+                                        }
+                                    }
+                                }
+
+                                function updateMasterCheckbox() {
+                                    var numChkBoxes = $('#orders-grid input[type=checkbox][id!=mastercheckbox][class=checkboxGroups]').length;
+                                    var numChkBoxesChecked = $('#orders-grid input[type=checkbox][id!=mastercheckbox][class=checkboxGroups]:checked').length;
+                                    $('#mastercheckbox').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                                }
+
+                                function submitToDHL(orderId) {
+                                    $("#submit-shipment").prop('disabled', true);
+                                    $("#submit-shipment").addClass('disabled');
+                                    var postData = {
+                                        orderId: orderId
+                                    };
+                                    addAntiForgeryToken(postData);
+
+                                    $.ajax({
+                                        url: "@Url.Action("SendDHLShipmentRequest", "DHL")",
+                                        data: postData,
+                                        type: "POST",
+                                        cache: false,
+                                        dataType: "json",
+                                        success: function (data) {
+                                            if (data.success && data.alreadySubmitted) {
+                                                alert("Request already sumitted to DHL\r\n" + "Message Reference: " + data.messageReference + " " + "Airway Bill Number: " + data.airwayBillNumber);
+                                                
+                                                //reload grid
+                                                updateTable('#orders-grid');
+                                            }
+                                            else if (data.success) {
+                                                alert("Message Reference: " + data.messageReference + " " + "Airway Bill Number: " + data.airwayBillNumber);
+                                                //reload grid
+                                                updateTable('#orders-grid');
+                                            } else {
+                                                alert(data.message);
+                                            }
+                                        },
+                                        error: function () {
+                                            alert("failure");
+                                        }
+                                    });
+
+                                    $("#submit-shipment").prop('disabled', false);
+                                    $("#submit-shipment").removeClass('disabled');
+                                }
+
+                                function bookPickupRequest(orderId) {
+                                    $("#book-pickup-request").prop('disabled', true);
+                                    $("#book-pickup-request").addClass('disabled');
+                                    var postData = {
+                                        orderId: orderId
+                                    };
+                                    addAntiForgeryToken(postData);
+
+                                    $.ajax({
+                                        url: '@Url.Action("BookPickupRequest", "DHL")',
+                                        data: postData,
+                                        type: "POST",
+                                        cache: false,
+                                        dataType: "json",
+                                        success: function (data) {
+                                            if (data.success && data.alreadyBooked) {
+                                                alert("Pickup request already booked to DHL\r\n" + "Message Reference: " + data.messageReference + ", " + "ConfirmationNumber: " + data.confirmationNumber +
+                                                    ", " + "Ready By Time: " + data.readyByTime + ", " + "Next Pickup Date: " + data.nextPickupDate);
+                                                //reload grid
+                                                updateTable('#orders-grid');
+                                            }
+                                            else if (data.success) {
+                                                alert("Successfully booked pickup request \r\n" + "Message Reference: " + data.messageReference + ", " + "ConfirmationNumber: " + data.confirmationNumber +
+                                                    ", " + "Ready By Time: " + data.readyByTime + ", " + "Next Pickup Date: " + data.nextPickupDate);
+                                                 //reload grid
+                                                updateTable('#orders-grid');
+                                            }else {
+                                                alert(data.message);
+                                            }
+                                        },
+                                        error: function () {
+                                            alert("failure");
+                                        }
+                                    });
+
+                                    $("#book-pickup-request").prop('disabled', false);
+                                    $("#book-pickup-request").removeClass('disabled');
+                                }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

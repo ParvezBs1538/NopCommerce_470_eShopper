@@ -1,0 +1,97 @@
+﻿@model ConfigurationModel
+@using NopStation.Plugin.Widgets.Announcement.Domains
+@using Nop.Services
+
+@{
+    NopHtml.SetActiveMenuItemSystemName("Announcement.Configure");
+    ViewBag.PageTitle = T("Admin.NopStation.Announcement.Configuration").Text;
+}
+
+<form asp-controller="Announcement" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Announcement.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="EnablePlugin_OverrideForStore" asp-input="EnablePlugin" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnablePlugin" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="EnablePlugin" />
+                                    <span asp-validation-for="EnablePlugin"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="WidgetZone_OverrideForStore" asp-input="WidgetZone" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="WidgetZone" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor-check asp-for="WidgetZone" />
+                                    <span asp-validation-for="WidgetZone"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="ItemSeparator_OverrideForStore" asp-input="ItemSeparator" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ItemSeparator" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor-check asp-for="ItemSeparator" />
+                                    <span asp-validation-for="ItemSeparator"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="DisplayTypeId_OverrideForStore" asp-input="DisplayTypeId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="DisplayTypeId" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-select asp-for="DisplayTypeId" asp-items="@((await DisplayType.Fade.ToSelectListAsync()).ToList())" />
+                                    <span asp-validation-for="DisplayTypeId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="AllowCustomersToMinimize_OverrideForStore" asp-input="AllowCustomersToMinimize" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AllowCustomersToMinimize" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor-check asp-for="AllowCustomersToMinimize" />
+                                    <span asp-validation-for="AllowCustomersToMinimize"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="AllowCustomersToClose_OverrideForStore" asp-input="AllowCustomersToClose" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AllowCustomersToClose" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor-check asp-for="AllowCustomersToClose" />
+                                    <span asp-validation-for="AllowCustomersToClose"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

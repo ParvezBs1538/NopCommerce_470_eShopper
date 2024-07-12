@@ -1,0 +1,11 @@
+﻿@inject Nop.Core.IWorkContext workContext
+
+@{
+    NopHtml.AppendCssFileParts($"/Plugins/NopStation.Plugin.Widgets.ProductTabs/Contents/css/styles.css",string.Empty);
+}
+
+<script asp-location="Footer">
+    $(function () {
+        $(".ns-product-tab").tabs();
+    });
+</script>

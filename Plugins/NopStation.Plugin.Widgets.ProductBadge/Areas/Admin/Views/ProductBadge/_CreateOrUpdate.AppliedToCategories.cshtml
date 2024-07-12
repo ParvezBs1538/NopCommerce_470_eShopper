@@ -1,0 +1,66 @@
+@model BadgeModel
+
+@if (Model.Id > 0)
+{
+    <div class="card-body">
+        @await Html.PartialAsync("Table", new DataTablesModel
+        {
+            Name = "categories-grid",
+            UrlRead = new DataUrl("CategoryList", "ProductBadge", new RouteValueDictionary { [nameof(Model.BadgeCategorySearchModel.BadgeId)] = Model.BadgeCategorySearchModel.BadgeId }),
+            UrlDelete = new DataUrl("CategoryDelete", "ProductBadge", new RouteValueDictionary { [nameof(Model.BadgeCategorySearchModel.BadgeId)] = Model.BadgeCategorySearchModel.BadgeId }),
+            Length = Model.BadgeCategorySearchModel.PageSize,
+            LengthMenu = Model.BadgeCategorySearchModel.AvailablePageSizes,
+            ColumnCollection = new List<ColumnProperty>
+            {
+                new ColumnProperty(nameof(BadgeCategoryModel.CategoryName))
+                {
+                    Title = T("Admin.NopStation.ProductBadge.Badges.Categories.Category").Text
+                },
+                new ColumnProperty(nameof(BadgeCategoryModel.CategoryId))
+                {
+                    Title = T("Admin.Common.View").Text,
+                    Width = "150",
+                    ClassName =  NopColumnClassDefaults.Button,
+                    Render = new RenderButtonView(new DataUrl("~/Admin/Category/Edit/"))
+                },
+                new ColumnProperty(nameof(BadgeCategoryModel.Published))
+                {
+                    Title = T("Admin.NopStation.ProductBadge.Badges.Categories.Published").Text,
+                    Width = "100",
+                    ClassName =  NopColumnClassDefaults.CenterAll,
+                    Render = new RenderBoolean()
+                },
+                new ColumnProperty(nameof(BadgeCategoryModel.Id))
+                {
+                    Title = T("Admin.Common.Delete").Text,
+                    Width = "150",
+                    Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                    ClassName =  NopColumnClassDefaults.Button
+                }
+            }
+        })
+    </div>
+    <div class="card-footer">
+        <button type="submit" id="btnAddNewCategory" onclick="javascript:OpenWindow('@(Url.Action("CategoryAddPopup", "ProductBadge", new { badgeId = Model.Id, btnId = "btnRefreshCategories", formId = "badge-form" }))', 800, 800, true); return false;" class="btn btn-primary">
+            @T("Admin.NopStation.ProductBadge.Badges.Categories.AddNew")
+        </button>
+        <button type="submit" id="btnRefreshCategories" style="display: none"></button>
+        <script>
+            $(document).ready(function () {
+                $('#btnRefreshCategories').click(function () {
+                    //refresh grid
+                    updateTable('#categories-grid');
+
+                    //return false to don't reload a page
+                    return false;
+                });
+            });
+        </script>
+    </div>
+}
+else
+{
+    <div class="card-body">
+        @T("Admin.NopStation.ProductBadge.Badges.Categories.SaveBeforeEdit")
+    </div>
+}

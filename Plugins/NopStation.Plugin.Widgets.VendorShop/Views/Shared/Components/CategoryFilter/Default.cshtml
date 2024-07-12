@@ -1,0 +1,122 @@
+@model CategoryNavigationModel
+
+@functions {
+    bool BreadCrumbContainsCurrentCategoryId(CategorySimpleModel category)
+    {
+        if (Model.CurrentCategoryId == 0)
+            return false;
+
+        if (category.Id == Model.CurrentCategoryId)
+            return true;
+
+        foreach (var subCategory in category.SubCategories)
+        {
+            if (BreadCrumbContainsCurrentCategoryId(subCategory))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    async Task CategoryLine(CategoryNavigationModel.CategoryLineModel lineModel)
+    {
+        var active = lineModel.Category.Id == lineModel.CurrentCategoryId || lineModel.Category.SubCategories.Count(BreadCrumbContainsCurrentCategoryId) > 0;
+        var last = lineModel.Category.Id == lineModel.CurrentCategoryId;
+        var liClass = active ? "active" : "inactive";
+        if (last)
+        {
+            liClass += " last";
+        }
+
+        <li class="@liClass">
+            <a href="@Url.RouteUrl("Category", new { SeName = lineModel.Category.SeName })">
+                @lineModel.Category.Name
+                @if (lineModel.Category.NumberOfProducts.HasValue)
+                {
+                    <text> </text>
+
+                    @T("Categories.TotalProducts", lineModel.Category.NumberOfProducts.Value)
+                }
+            </a>
+            @{
+                if (lineModel.Category.Id == lineModel.CurrentCategoryId ||
+                lineModel.Category.SubCategories.Count(BreadCrumbContainsCurrentCategoryId) > 0)
+                {
+                    if (lineModel.Category.SubCategories.Count > 0)
+                    {
+                        <ul class="sublist">
+                            @foreach (var subCategory in lineModel.Category.SubCategories)
+                            {
+                                var categoryLineModel = new CategoryNavigationModel.CategoryLineModel
+                        {
+                            CurrentCategoryId = lineModel.CurrentCategoryId,
+                            Category = subCategory
+                        };
+                                await CategoryLine(categoryLineModel);
+                            }
+                        </ul>
+                    }
+                }
+            }
+        </li>
+    }
+}
+
+
+@if (Model.Categories.Count > 0)
+{
+    <div class="block block-category-navigation">
+        <h5 class="allcaps dark-blue title">@T("Categories")</h5>
+        <div class="listbox">
+            <ul class="list">
+                @foreach (var category in Model.Categories)
+                {
+                    <li class="item">
+                        <input id="attribute-category-@category.Id" type="checkbox" data-category-id="@category.Id" checked="@(category.Id == Model.CurrentCategoryId)" />
+                        <label for="attribute-category-@category.Id">
+                            @category.Name
+                        </label>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+<script asp-location="Footer">
+
+    $(document).ready(function () {
+        const CATEGORY_PARAM_NAME = 'categoryIds';
+        const currentUrl = new URL(location.href);
+        const categories = currentUrl.searchParams.get(CATEGORY_PARAM_NAME);
+        var $catEls = $('[data-category-id]');
+        if (categories) {
+            var categoryIds = categories.split(',');
+            $catEls.each(function () {
+                if (categoryIds.includes($(this).data().categoryId.toString())) {
+                    $(this).attr('checked', true);
+                    $(this).trigger('change');
+                }
+            });
+        }
+        $catEls.on('change', function () {
+            $('[data-category-id]', $(this).parent()).attr('checked', true);
+            CatalogProducts.getProducts();
+        });
+
+        $(CatalogProducts).on('before', function (e) {
+            var selectedCats = $.map($catEls, function (el) {
+                var $cEl = $(el);
+                if ($cEl.is(':checked')) return $cEl.data('category-id')
+                return null;
+            });
+
+            if (selectedCats && selectedCats.length > 0) {
+                e.payload.urlBuilder
+                    .addParameter(CATEGORY_PARAM_NAME, selectedCats.join(','));
+            }
+        });
+    });
+</script>

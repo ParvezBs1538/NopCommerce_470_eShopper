@@ -1,0 +1,127 @@
+@model SqlParameterModel
+
+<div class="card-body">
+    @if (Model.Id > 0)
+    {
+        <div class="mb-2">
+            @await Html.PartialAsync("Table", new DataTablesModel
+        {
+        Name = "sqlparametervalues-grid",
+        UrlRead = new DataUrl("ValueList", "SqlParameter", new RouteValueDictionary { [nameof(Model.SqlParameterValueSearchModel.SqlParameterId)] = Model.SqlParameterValueSearchModel.SqlParameterId }),
+        UrlDelete = new DataUrl("ValueDelete", "SqlParameter", null),
+        UrlUpdate = new DataUrl("ValueEdit", "SqlParameter", null),
+        Length = Model.SqlParameterValueSearchModel.PageSize,
+        LengthMenu = Model.SqlParameterValueSearchModel.AvailablePageSizes,
+        ColumnCollection = new List<ColumnProperty>
+        {
+        new ColumnProperty(nameof(SqlParameterValueModel.Value))
+        {
+        Title = T("Admin.NopStation.SqlManager.SqlParameterValues.Fields.Value").Text,
+        Width = "200",
+        Editable = true,
+        EditType = EditType.String,
+        //Render = new RenderCustom("renderParameterValue"),
+        },
+        new ColumnProperty(nameof(SqlParameterValueModel.IsValid))
+        {
+        Title = T("Admin.NopStation.SqlManager.SqlParameterValues.Fields.Value.IsValid").Text,
+        Width = "200",
+        Render = new RenderCustom("renderParameterValue"),
+        },
+        new ColumnProperty(nameof(SqlParameterValueModel.Id))
+        {
+        Title = T("Admin.Common.Edit").Text,
+        Width = "200",
+        ClassName =  NopColumnClassDefaults.Button,
+        Render = new RenderButtonsInlineEdit()
+        },
+        new ColumnProperty(nameof(SqlParameterValueModel.Id))
+        {
+        Title = T("Admin.Common.Delete").Text,
+        Width = "100",
+        Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+        ClassName = NopColumnClassDefaults.Button
+        }
+        }
+        })
+            <script>
+                function renderParameterValue(data, type, row, meta) {
+                    var value = (row.IsValid) ? "Valid" : '<div><span style="color: red">' + "Invalid data type" + ' <i class="fa fa-exclamation-triangle" title="Invalid data!"></i></span></div>';
+                    return value;
+                }
+            </script>
+        </div>
+
+        <div class="card card-default">
+            <div class="card-header">
+                @T("Admin.NopStation.SqlManager.SqlParameters.Values.AddNew")
+            </div>
+            <div class="card-body">
+                <script>
+                    $(document).ready(function () {
+                        $('#addParameterValue').click(function () {
+                            var value = $("#@Html.IdFor(model => model.AddSqlParameterValueModel.Value)").val();
+
+                            if (!value) {
+                                $("#addParameterValueAlert").click();
+                                return;
+                            }
+
+                            $('#addParameterValue').attr('disabled', true);
+
+                            var postData = {
+                                Value: value,
+                                SqlParameterId: @Model.Id
+                                                                    };
+                            addAntiForgeryToken(postData);
+
+                            $.ajax({
+                                cache: false,
+                                type: "POST",
+                                url: "@(Url.Action("ValueCreate", "SqlParameter"))",
+                                data: postData,
+                                success: function (data, textStatus, jqXHR) {
+                                    if (!data.Result) {
+                                        alert(data.Message);
+                                        return;
+                                    }
+                                    $("#@Html.IdFor(model => model.AddSqlParameterValueModel.Value)").val('');
+                                    updateTable('#sqlparametervalues-grid');
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    $("#parameterValueAddAlert").click();
+                                },
+                                complete: function (jqXHR, textStatus) {
+                                    $('#addParameterValue').attr('disabled', false);
+                                }
+                            });
+                        });
+                    });
+                </script>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="AddSqlParameterValueModel.Value" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="AddSqlParameterValueModel.Value" />
+                        <span asp-validation-for="AddSqlParameterValueModel.Value"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-9 col-md-offset-3">
+                        <button type="button" id="addParameterValue" class="btn btn-primary">@T("Admin.NopStation.SqlManager.SqlParameters.Values.Button.AddNew")</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card-body">
+            @T("Admin.NopStation.SqlManager.SqlParameters.Values.SaveBeforeEdit")
+        </div>
+    }
+</div>
+
+<nop-alert asp-alert-id="addParameterValueAlert" asp-alert-message="@T("Admin.NopStation.SqlManager.SqlParameters.Values.Alert.AddNew")" />
+<nop-alert asp-alert-id="parameterValueAddAlert" asp-alert-message="@T("Admin.NopStation.SqlManager.SqlParameters.Values.Alert.ValueAdd")" />

@@ -1,0 +1,51 @@
+﻿@model int
+@{
+    NopHtml.AddCssFileParts($"{QuoteCartDefaults.OUTPUT_PATH}/Contents/styles/styles.css", excludeFromBundle: true);
+}
+<li id="quotecartlink">
+    <a href="@Url.RouteUrl("QuoteCart.Cart")" class="ico-quotecart">
+        <span class="cart-label">@Html.Raw(T("NopStation.Plugin.Misc.QuoteCart.Cart.Flyout", "<span id=\"qcartqty\" class=\"q-cart-qty\">" + Model + "</span>"))</span>
+    </a>
+    <script asp-location="Footer">
+        var QuoteCart = {
+            cartUrl: '@Url.RouteUrl("QuoteCart.Cart")',
+            cartTotal: '@Model',
+            addToCart_productbox(productId, quantity = 1, attributeXml = '') {
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.RouteUrl("QuoteCart.AddQuote")',
+                    data: {
+                        productId: productId,
+                        quantity: quantity,
+                        attributeXml: attributeXml
+                    },
+                    success: function (response) {
+                        if (response.redirect) {
+                            window.location.href = response.redirect; // Redirect to the specified URL
+                        } else {
+                            $("#qcartqty").html(`${response.itemTotal}`);
+                            displayBarNotification("@T("NopStation.Plugin.Misc.QuoteCart.Cart.Added", Url.RouteUrl("QuoteCart.Cart"))", 'success', 3500);
+                        }
+                    },
+                    error: function (response) {
+                        displayBarNotification(response?.responseJSON?.message || '@T("NopStation.Plugin.Misc.QuoteCart.Cart.FailToAdd")', 'error', 3500);
+                    }
+                });
+            },
+            addToCart_details(addtocarturl, formselector) {
+                $.ajax({
+                    type: "POST",
+                    url: addtocarturl,
+                    data: $(formselector).serialize(),
+                    success: function (response) {
+                        $("#qcartqty").html(`${response.itemTotal}`);
+                        displayBarNotification("@T("NopStation.Plugin.Misc.QuoteCart.Cart.Added", Url.RouteUrl("QuoteCart.Cart"))", 'success', 3500);
+                    },
+                    error: function (response) {
+                        displayBarNotification(response?.responseJSON?.message || '@T("NopStation.Plugin.Misc.QuoteCart.Cart.FailToAdd")', 'error', 3500);
+                    }
+                });
+            },
+        };
+    </script>
+</li>

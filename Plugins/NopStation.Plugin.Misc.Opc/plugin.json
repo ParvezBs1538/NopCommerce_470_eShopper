@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station One Page Checkout",
+  "SystemName": "NopStation.Plugin.Misc.Opc",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 2,
+  "FileName": "NopStation.Plugin.Misc.Opc.dll",
+  "Description": "This plugin allows to checkout in one page.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Sql Manager",
+  "SystemName": "NopStation.Plugin.Misc.SqlManager",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Misc.SqlManager.dll",
+  "Description": "This plugin allows to view/create SQL reports.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

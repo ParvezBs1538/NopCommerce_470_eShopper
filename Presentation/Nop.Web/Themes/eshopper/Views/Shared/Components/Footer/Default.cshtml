@@ -1,0 +1,253 @@
+﻿@model FooterModel
+@using Nop.Core
+@using Nop.Core.Domain.Tax
+@inject IWorkContext workContext;
+
+<footer id="footer" class="footer">
+
+    <div class="footer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="companyinfo">
+                        <h2><span>e</span>-shopper</h2>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,sed do eiusmod tempor</p>
+                    </div>
+                </div>
+                <div class="col-sm-7">
+                    <div class="col-sm-3">
+                        <div class="video-gallery text-center">
+                            <a href="#">
+                                <div class="iframe-img">
+                                    <img src="/Themes/eshopper/Content/images/home/iframe1.png" alt="">
+                                </div>
+                                <div class="overlay-icon">
+                                    <i class="fa fa-play-circle-o"></i>
+                                </div>
+                            </a>
+                            <p>Circle of Hands</p>
+                            <h2>24 DEC 2014</h2>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="video-gallery text-center">
+                            <a href="#">
+                                <div class="iframe-img">
+                                    <img src="/Themes/eshopper/Content/images/home/iframe2.png" alt="">
+                                </div>
+                                <div class="overlay-icon">
+                                    <i class="fa fa-play-circle-o"></i>
+                                </div>
+                            </a>
+                            <p>Circle of Hands</p>
+                            <h2>24 DEC 2014</h2>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="video-gallery text-center">
+                            <a href="#">
+                                <div class="iframe-img">
+                                    <img src="/Themes/eshopper/Content/images/home/iframe3.png" alt="">
+                                </div>
+                                <div class="overlay-icon">
+                                    <i class="fa fa-play-circle-o"></i>
+                                </div>
+                            </a>
+                            <p>Circle of Hands</p>
+                            <h2>24 DEC 2014</h2>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="video-gallery text-center">
+                            <a href="#">
+                                <div class="iframe-img">
+                                    <img src="/Themes/eshopper/Content/images/home/iframe4.png" alt="">
+                                </div>
+                                <div class="overlay-icon">
+                                    <i class="fa fa-play-circle-o"></i>
+                                </div>
+                            </a>
+                            <p>Circle of Hands</p>
+                            <h2>24 DEC 2014</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="address">
+                        <img src="/Themes/eshopper/Content/images/home/map.png" alt="">
+                        <p>505 S Atlantic Ave Virginia Beach, VA(Virginia)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container first-footer footer-widget">
+        <div class="row ">
+            <div class="col-sm-3 col-xs-12">
+                <div class="single-widget footer-block">
+                    <h2 class="header-title">@T("Footer.Information")</h2>
+                    <ul class="nav nav-pills nav-stacked">
+                        @if (Model.SitemapEnabled)
+                        {
+                            <li><a href="@Url.RouteUrl("Sitemap")">@T("Sitemap")</a></li>
+                        }
+                        @foreach (var topic in Model.Topics.Where(x => x.IncludeInFooterColumn1).ToList())
+                        {
+                            <li><a href="@Url.RouteUrl("Topic", new { SeName = topic.SeName })">@topic.Name</a></li>
+                        }
+                        <li><a href="@Url.RouteUrl("ContactUs")">@T("ContactUs")</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-sm-3 col-xs-12">
+                <div class="single-widget footer-block">
+                    <h2 class="header-title">@T("Footer.CustomerService")</h2>
+                    <ul class="nav nav-pills nav-stacked">
+                        <li><a href="@Url.RouteUrl("ProductSearch")">@T("Search")</a> </li>
+                        @if (Model.NewsEnabled)
+                        {
+                            <li><a href="@Url.RouteUrl("NewsArchive")">@T("News")</a></li>
+                        }
+                        @if (Model.BlogEnabled)
+                        {
+                            <li><a href="@Url.RouteUrl("Blog")">@T("Blog")</a></li>
+                        }
+                        @if (Model.ForumEnabled)
+                        {
+                            <li><a href="@Url.RouteUrl("Boards")">@T("Forum.Forums")</a></li>
+                        }
+                        @if (Model.RecentlyViewedProductsEnabled)
+                        {
+                            <li><a href="@Url.RouteUrl("RecentlyViewedProducts")">@T("Products.RecentlyViewedProducts")</a></li>
+                        }
+                        @if (Model.CompareProductsEnabled)
+                        {
+                            <li><a href="@Url.RouteUrl("CompareProducts")">@T("Products.Compare.List")</a></li>
+                        }
+                        @if (Model.NewProductsEnabled)
+                        {
+                            <li><a href="@Url.RouteUrl("NewProducts")">@T("Products.NewProducts")</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="col-sm-3 col-xs-12">
+                <div class="single-widget footer-block">
+                    <h2 class="header-title">@T("Footer.MyAccount")</h2>
+                    <ul class="nav nav-pills nav-stacked">
+                        <li><a href="@Url.RouteUrl("CustomerInfo")" class="account">@T("Account.MyAccount")</a></li>
+
+                        @if (Model.AllowCustomersToApplyForVendorAccount)
+                        {
+                            <li><a href="@Url.RouteUrl("ApplyVendorAccount")">@T("Vendors.ApplyAccount")</a></li>
+                        }
+                        @if (Model.ShoppingCartEnabled)
+                        {
+                            <li><a href="@Url.RouteUrl("ShoppingCart")" class="ico-cart">@T("ShoppingCart")</a></li>
+                        }
+                        @if (Model.WishlistEnabled)
+                        {
+                            <li><a href="@Url.RouteUrl("Wishlist")" class="ico-wishlist">@T("Wishlist")</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-sm-3 col-xs-12 getintouch">
+                <div class="single-widget footer-block">
+                    <h2 >@T("Newsletter.Title")</h2>
+                    @await Component.InvokeAsync("NewsletterBox")
+
+                    <div class="social-icons">
+                        @*<div class="title">
+                                <strong>@T("Footer.FollowUs")</strong>
+                            </div>*@
+                        @await Component.InvokeAsync("SocialButtons")
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="copyrights footer-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4 text-left">
+                    Powered by <a href="http://www.nopcommerce.com/">nopCommerce</a> <a href="http://www.brainstation-23.com/">
+                        Brainstation
+                    </a>
+                    @*Would you like to remove the "Powered by nopCommerce" link in the bottom of the footer?
+                        Find more info here http://www.nopcommerce.com/copyrightremoval.aspx*@
+                </div>
+                <div class="col-sm-4 text-center">
+                    @T("Content.CopyrightNotice", DateTime.Now.Year.ToString(), Model.StoreName)
+                </div>
+                <div class="col-sm-4 text-right">
+                    Designed by Themeum & Brain Station-23
+                </div>
+                <div class="col-xs-12">
+                    @if (Model.DisplayTaxShippingInfoFooter)
+                    {
+                        var inclTax = await workContext.GetTaxDisplayTypeAsync() == TaxDisplayType.IncludingTax;
+                        <div class="footer-tax-shipping text-center">
+                            @T(inclTax ? "Footer.TaxShipping.InclTax" : "Footer.TaxShipping.ExclTax", Url.RouteTopicUrl("shippinginfo"))
+                        </div>
+                    }
+                    <div class="text-center">
+                        @await Component.InvokeAsync("StoreThemeSelector")
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @await Component.InvokeAsync("Widget", new { widgetZone = "footer" })
+    </div>
+</footer>
+
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $('.single-widget.footer-block h2.header-title').on('click', function () {
+           
+            var e = window, a = 'inner';
+            if (!('innerWidth' in window)) {
+                a = 'client';
+                e = document.documentElement || document.body;
+            }
+            var result = { width: e[a + 'Width'], height: e[a + 'Height'] };
+            if (result.width < 769) {
+                $(this).siblings('ul').slideToggle('slow');
+            }
+        });
+    });
+</script>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $('.collaps-filter h2').on('click', function () {
+            var e = window, a = 'inner';
+            if (!('innerWidth' in window)) {
+                a = 'client';
+                e = document.documentElement || document.body;
+            }
+            var result = { width: e[a + 'Width'], height: e[a + 'Height'] };
+            if (result.width < 1001) {
+                $(this).siblings('.filter-content').slideToggle('slow');
+            }
+        });
+        $(".single-widget.footer-block h2.header-title").click(function(){
+          $(this).toggleClass("expanded");
+        });
+    });
+</script>
+<nop-antiforgery-token/>

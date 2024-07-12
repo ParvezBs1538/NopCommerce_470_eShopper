@@ -1,0 +1,143 @@
+﻿@using NopStation.Plugin.Misc.QuoteCart.Domain
+@using Nop.Services
+@model QuoteRequestDetailsModel
+
+<div class="card-body">
+    <div class="card card-default">
+        <div class="card-body">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="Id" />
+                </div>
+                <div class="col-md-9">
+                    <div class="form-text-row">@Model.Id</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="CreatedOnUtc" />
+                </div>
+                <div class="col-md-9">
+                    <div class="form-text-row">@Model.CreatedOnUtc</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <strong>
+                        <nop-label asp-for="RequestStatus" />
+                    </strong>
+                </div>
+                <div class="col-md-9">
+                    <div class="input-group input-group-short">
+                        <div class="input-group-text">
+                            <strong class="form-text-row">@Model.RequestStatus</strong>
+                        </div>
+                        <div class="input-group-btn">
+                            @if (Model.CanCancelRequest)
+                            {
+                                <button type="submit" name="cancelrequest" id="cancelrequest" class="btn bg-red" style="margin-right: 3px;">
+                                    @T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.RequestStatus.Cancel")
+                                </button>
+                                <nop-action-confirmation asp-button-id="cancelrequest" />
+                            }
+                            <button type="submit" name="btnChangeRequestStatus" onclick="toggleChangeRequestStatus(true);return false;" id="btnChangeRequestStatus" class="btn btn-primary">
+                                @T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.RequestStatus.Change")
+                            </button>
+                            <div id="pnlChangeRequestStatus" style="margin-top: 3px;">
+                                <nop-select asp-for="RequestStatusId" asp-items="@await (((RequestStatus)Model.RequestStatusId).ToSelectListAsync())" />
+                                <button type="submit" name="btnSaveRequestStatus" id="btnSaveRequestStatus" class="btn btn-primary" style="margin-left: 3px">
+                                    @T("Admin.Common.Save")
+                                </button>
+                                <nop-action-confirmation asp-button-id="btnSaveRequestStatus" />
+                                <button type="submit" name="btnCancelRequestStatus" onclick="toggleChangeRequestStatus(false);return false;" id="btnCancelRequestStatus" class="btn bg-teal" style="margin-left: 3px">
+                                    @T("Admin.Common.Cancel")
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card card-default">
+        <div class="card-body">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="CustomerModel.FullName" />
+                </div>
+                <div class="col-md-9">
+                    <div class="form-text-row">@Model.CustomerModel.FullName</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="CustomerModel.Email" />
+                </div>
+                <div class="col-md-9">
+                    <div class="form-text-row">@Model.CustomerModel.Email</div>
+                </div>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.CustomerModel.Phone))
+            {
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="CustomerModel.Phone" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-text-row">@Model.CustomerModel.Phone</div>
+                    </div>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.CustomerModel.Gender))
+            {
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="CustomerModel.Gender" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-text-row">@Model.CustomerModel.Gender</div>
+                    </div>
+                </div>
+            }
+            @if (Model.CustomerModel.DateOfBirth.HasValue)
+            {
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="CustomerModel.DateOfBirth" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-text-row">@Html.DisplayFor(x => x.CustomerModel.DateOfBirth)</div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="card card-default">
+        <div class="card-body">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="StoreName" />
+                </div>
+                <div class="col-md-9">
+                    <div class="form-text-row">@Model.StoreName</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="RequestGuid" />
+                </div>
+                <div class="col-md-9">
+                    <div class="form-text-row">@Model.RequestGuid</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="CustomerModel.LastIpAddress" />
+                </div>
+                <div class="col-md-9">
+                    <div class="form-text-row">@Model.CustomerModel.LastIpAddress</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+﻿@model ProductOverviewModel
+@using Nop.Core
+@using Nop.Core.Domain.Catalog
+@using Nop.Core.Domain.Orders
+@using Nop.Core.Domain.Tax
+@inject CatalogSettings catalogSettings
+@inject IWorkContext workContext
+@{ //prepare "Add to cart" AJAX link
+
+    var addtocartlink = "";
+    var shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart;
+    var quantity = 1;
+
+    addtocartlink = Url.RouteUrl("AddProductToCartCheckout-Catalog", new { productId = Model.Id, shoppingCartTypeId = shoppingCartTypeId, quantity = quantity });
+
+}
+@if (!Model.ProductPrice.DisableBuyButton)
+{
+    var buyNowText = T("NopStation.Opc.Buttons.BuyNow").Text;
+    <button type="button" class="button-2 product-box-add-to-cart-button-checkout" onclick="BuyNow.addproducttocartcheckout_catalog('@addtocartlink');return false;">@(buyNowText)</button>
+}

@@ -1,0 +1,62 @@
+﻿@model FooterComponentModel
+
+@{ 
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/Plugins/NopStation.Plugin.Widgets.ProgressiveWebApp/Contents/js/notification.js");
+}
+
+<script>
+    var vapidPublicKey = '@Model.PublicKey';
+    var checkPushManagerSubscription = @Model.CheckPushManagerSubscription.ToString().ToLower();
+</script>
+
+<style>
+    .allow-push-notification-bar {
+        display: none;
+        position: fixed;
+        top: 0;
+        z-index: 1050;
+        width: 320px;
+        height: auto;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 2px rgb(0 0 0 / 15%);
+        background-color: #fff;
+        padding: 20px;
+        text-align: center;
+        right: 0;
+    }
+
+        .allow-push-notification-bar button {
+            min-width: 60px;
+            margin: 5px 0 10px;
+            border: none;
+            background-color: #4ab2f1;
+            padding: 8px 12px;
+            font-size: 14px;
+            color: #fff;
+        }
+</style>
+
+<div id="allow-push-notification-bar" class="allow-push-notification-bar">
+    <div class="content">
+        <div class="text">
+            @T("NopStation.PWA.AllowPushNotifications")
+        </div>
+        <div class="buttons-more">
+            <button type="button" class="ok-button button-1" id="allow-push-notification">
+                @T("NopStation.PWA.AllowPushNotifications.Ok")
+            </button>
+            <button type="button" class="ok-button button-1" id="close-push-notification">
+                @T("NopStation.PWA.AllowPushNotifications.No")
+            </button>
+        </div>
+    </div>
+</div>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $('#close-push-notification').click(function () {
+            $('#allow-push-notification-bar').hide();
+            sessionStorage.setItem("hide-push-notification-bar", "true");
+        });
+    })
+</script>

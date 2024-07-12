@@ -1,0 +1,14 @@
+﻿@model RecommendationModel
+@if (Model.Products.Count > 0)
+{
+    <div class="item-grid" id="recommendation-@(Model.Id)">
+        @foreach (var item in Model.Products)
+        {
+            <div class="item-box">
+                @await Html.PartialAsync("_ProductBox", item)
+            </div>
+        }
+    </div>
+}
+
+@NopHtml.GenerateInlineScripts(ResourceLocation.Footer)

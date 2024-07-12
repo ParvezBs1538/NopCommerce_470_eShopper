@@ -1,0 +1,121 @@
+﻿@model AnnouncementModel
+@using Nop.Web.Extensions
+@using NopStation.Plugin.Widgets.Announcement.Domains
+
+@{
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.Announcement/Contents/css/styles.css", string.Empty);
+    var cssClass = Model.AllowCustomersToMinimize && Model.AnnouncementBarMinimized ? "announcement-minimized" : "announcement-open"; 
+}
+
+@if (Model.AnnouncementItems.Any())
+{
+    if (Model.DisplayType == DisplayType.Slide)
+    {
+        <div class="announcement-wrapper">
+             <marquee class="announcement-bar @cssClass" direction="@Html.GetUIDirection(!await Html.ShouldUseRtlThemeAsync())">
+                @foreach (var item in Model.AnnouncementItems)
+                {
+                    <span class="announcement-item">@Html.Raw(item.Title) <span class="separator">@Model.ItemSeparator</span></span>
+                    if (!string.IsNullOrWhiteSpace(item.Description))
+                    {
+                        <div class="announcement-description description-slide">
+                            @Html.Raw(item.Description)
+                        </div>
+                    }
+                }
+            </marquee>
+            @if (Model.AllowCustomersToClose)
+            {
+                <button type="button" class="icon icon-close" id="announcement-close"></button>
+            }
+    
+            @if (Model.AllowCustomersToMinimize)
+            {
+                <button type="button" class="icon icon-flex-down-caret" id="announcement-minimize"></button>
+            }
+        </div>
+       
+    }
+    else
+    {
+        <div class="announcement-wrapper  announcement-swiper @cssClass" direction="@Html.GetUIDirection(!await Html.ShouldUseRtlThemeAsync())">
+            
+            <div class="swiper">
+                <div class="announcement-bar swiper-wrapper"> 
+                    @foreach (var item in Model.AnnouncementItems)
+                    {
+                        <div class="swiper-slide">
+                            <span class="announcement-item">@Html.Raw(item.Title) <span class="separator">@Model.ItemSeparator</span></span>
+                            @if (!string.IsNullOrWhiteSpace(item.Description))
+                            {
+                                <div class="announcement-description description-fade">
+                                    @Html.Raw(item.Description)
+                                </div>
+                            }
+                        </div>
+                    
+                    }
+                </div>
+            </div>
+            @if (Model.AllowCustomersToClose)
+            {
+                <button type="button" class="icon icon-close" id="announcement-close">X</button>
+            }
+    
+            @if (Model.AllowCustomersToMinimize)
+            {
+                <button type="button" class="icon icon-flex-down-caret" id="announcement-minimize"></button>
+            }
+        </div>
+    }
+
+    if (!Model.AllowCustomersToClose && !Model.AllowCustomersToMinimize)
+    {
+        return;
+    }
+
+    
+    
+    <script asp-location="Footer">
+        $(document).ready(function() {
+            @if (Model.AllowCustomersToClose)
+            {
+               <text>
+            $('#announcement-close').click(function() {
+                updateAnnouncementSession('@Url.RouteUrl("AnnouncementClose")');
+                $('.announcement-wrapper').remove();
+            })
+               </text>
+            }
+    
+            @if (Model.AllowCustomersToMinimize)
+            {
+               <text>
+            $('#announcement-minimize').click(function() {
+                updateAnnouncementSession('@Url.RouteUrl("AnnouncementMinimize")');
+                $('.announcement-wrapper').addClass('announcement-minimized');
+                $('.announcement-wrapper').removeClass('announcement-open');
+            })
+               </text>
+            }
+            var swiper = new Swiper(".announcement-swiper", {
+              direction: "vertical",
+              
+            });
+        })
+
+        function updateAnnouncementSession(url) { 
+            $.ajax({
+                cache: false,
+                type: 'POST',
+                url: url,
+                success: function (response) {
+                    
+                },
+                error: function() {
+
+                }
+            });
+        }
+    </script>
+}

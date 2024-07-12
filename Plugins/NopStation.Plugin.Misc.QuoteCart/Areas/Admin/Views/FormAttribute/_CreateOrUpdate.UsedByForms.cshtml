@@ -1,0 +1,39 @@
+﻿@model FormAttributeModel
+
+@if (Model.Id > 0)
+{
+    <div class="card-body">
+        <p>
+            @T("Admin.NopStation.Plugin.Misc.QuoteCart.FormAttributes.UsedByForms.Hint")
+        </p>
+        @await Html.PartialAsync("Table", new DataTablesModel
+        {
+            Name = "used-by-forms-grid",
+            UrlRead = new DataUrl("UsedByForms", "FormAttribute", new RouteValueDictionary { [nameof(Model.FormAttributeFormSearchModel.FormAttributeId)] = Model.FormAttributeFormSearchModel.FormAttributeId }),
+            Length = Model.FormAttributeFormSearchModel.PageSize,
+            LengthMenu = Model.FormAttributeFormSearchModel.AvailablePageSizes,
+            ColumnCollection =
+            [
+                new ColumnProperty(nameof(FormAttributeFormModel.QuoteFormName))
+                {
+                    Title = T("Admin.NopStation.Plugin.Misc.QuoteCart.FormAttributes.UsedByForms.Form").Text,
+                    Width = "400"
+                },
+                new ColumnProperty(nameof(FormAttributeFormModel.Active))
+                {
+                    Title = T("Admin.NopStation.Plugin.Misc.QuoteCart.FormAttributes.UsedByForms.Published").Text,
+                    Width = "100",
+                    ClassName =  NopColumnClassDefaults.CenterAll,
+                    Render = new RenderBoolean()
+                },
+                new ColumnProperty(nameof(FormAttributeFormModel.Id))
+                {
+                    Title = T("Admin.Common.View").Text,
+                    Width = "100",
+                    ClassName =  NopColumnClassDefaults.Button,
+                    Render = new RenderButtonView(new DataUrl("~/Admin/QuoteForm/Edit/"))
+                }
+            ]
+        })
+    </div>
+}

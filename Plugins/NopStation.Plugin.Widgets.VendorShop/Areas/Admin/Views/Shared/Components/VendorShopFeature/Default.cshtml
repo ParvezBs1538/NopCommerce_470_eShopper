@@ -1,0 +1,40 @@
+﻿@model VendorFeatureMappingModel
+@inject IWorkContext workContext
+@{
+    var customer = await workContext.GetCurrentCustomerAsync();
+    const string hideVendorShopBlockAttributeName = "Vendor.HideVendorShopBlock";
+    var hideVendorShopBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideVendorShopBlockAttributeName);
+}
+
+<nop-card asp-name="vendor-shop-feature" asp-icon="fas fa-th-list" asp-title="@T("Admin.NopStation.VendorShop.VendorFeature.Title")" asp-hide-block-attribute-name="@hideVendorShopBlockAttributeName" asp-hide="@hideVendorShopBlock" asp-advanced="true">
+    <div class="card-body">
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="@Model.VendorShopEnable" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="@Model.VendorShopEnable" />
+                <span asp-validation-for="@Model.VendorShopEnable"></span>
+                <input type="hidden" id="IsVendorShopEnable" name="IsVendorShopEnable" value="false">
+                <script asp-location="Footer">
+                    $(document).ready(function () {
+                        function updateHiddenInputValue() {
+                            if ($("#@Html.IdFor(model => model.VendorShopEnable)").prop("checked")) {
+                                $("#IsVendorShopEnable").val("true");
+                            } else {
+                                $("#IsVendorShopEnable").val("false"); // Corrected ID here
+                            }
+                        }
+
+                        updateHiddenInputValue();
+
+                        $("#@Html.IdFor(model => model.VendorShopEnable)").change(function () {
+                            updateHiddenInputValue();
+                        });
+                    });
+                </script>
+
+            </div>
+        </div>
+    </div>
+</nop-card>

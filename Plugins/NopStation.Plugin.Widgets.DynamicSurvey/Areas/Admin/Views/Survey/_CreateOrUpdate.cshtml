@@ -1,0 +1,52 @@
+﻿@model SurveyModel
+
+@{
+    const string hideInfoBlockAttributeName = "SurveyPage.HideInfoBlock";
+    var customer = await workContext.GetCurrentCustomerAsync();
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideInfoBlockAttributeName);
+    
+    const string hideEmailBlockAttributeName = "SurveyPage.HideEmailBlock";
+    var hideEmailBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideEmailBlockAttributeName, defaultValue: true);
+
+    const string hideSurveyAttributesBlockAttributeName = "SurveyPage.HideSurveyAttributesBlock";
+    var hideSurveyAttributesBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideSurveyAttributesBlockAttributeName, defaultValue: true);
+
+    const string hideSeoBlockAttributeName = "SurveyPage.HideSEOBlock";
+    var hideSeoBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideSeoBlockAttributeName, defaultValue: true);
+    
+    const string hideSubmissionsBlockAttributeName = "SurveyPage.HideSubmissionsBlock";
+    var hideSubmissionsBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideSubmissionsBlockAttributeName, defaultValue: true);
+
+    const string hideWidgetZonesBlockAttributeName = "SurveyPage.HideWidgetZonesBlock";
+    var hideWidgetZonesBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideWidgetZonesBlockAttributeName, defaultValue: true);
+
+    const string hideSchedulesBlockAttributeName = "SurveyPage.HideSchedulesBlock";
+    var hideSchedulesBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideSchedulesBlockAttributeName, defaultValue: true);
+
+    const string hideCustomerConditionsBlockAttributeName = "SurveyPage.HideCustomerConditionsBlock";
+    var hideCustomerConditionsBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideCustomerConditionsBlockAttributeName, defaultValue: true);
+}
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <nop-cards id="survey-cards">
+                <nop-card asp-name="survey-info" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.DynamicSurvey.Surveys.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</nop-card>
+                <nop-card asp-name="survey-survey-email" asp-icon="fas fa-envelope" asp-title="@T("Admin.NopStation.DynamicSurvey.Surveys.Email")" asp-hide-block-attribute-name="@hideEmailBlockAttributeName" asp-hide="@hideEmailBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Email", Model)</nop-card>
+                <nop-card asp-name="survey-survey-attributes" asp-icon="fas fa-paperclip" asp-title="@T("Admin.NopStation.DynamicSurvey.Surveys.SurveyAttributes")" asp-hide-block-attribute-name="@hideSurveyAttributesBlockAttributeName" asp-hide="@hideSurveyAttributesBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.SurveyAttributes", Model)</nop-card>
+                <nop-card asp-name="survey-seo" asp-icon="fas fa-search-plus" asp-title="@T("Admin.Common.SEO")" asp-hide-block-attribute-name="@hideSeoBlockAttributeName" asp-hide="@hideSeoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Seo", Model)</nop-card>
+                <nop-card asp-name="survey-widgetzones" asp-icon="far fa-window-maximize" asp-title="@T("Admin.NopStation.WidgetManager.Common.WidgetZones")" asp-hide-block-attribute-name="@hideWidgetZonesBlockAttributeName" asp-hide="@hideWidgetZonesBlock" asp-advanced="false">@await Html.PartialAsync("WidgetZoneMappings", Model)</nop-card>
+                <nop-card asp-name="survey-schedules" asp-icon="far fa-clock" asp-title="@T("Admin.NopStation.WidgetManager.Common.Schedules")" asp-hide-block-attribute-name="@hideSchedulesBlockAttributeName" asp-hide="@hideSchedulesBlock" asp-advanced="false">@await Html.PartialAsync("ScheduleMappings", Model)</nop-card>
+                <nop-card asp-name="survey-customers" asp-icon="fa fa-check" asp-title="@T("Admin.NopStation.WidgetManager.Common.CustomerConditions")" asp-hide-block-attribute-name="@hideCustomerConditionsBlockAttributeName" asp-hide="@hideCustomerConditionsBlock" asp-advanced="false">@await Html.PartialAsync("CustomerConditionMappings", Model)</nop-card>
+                
+                @if (Model.Id > 0)
+                { 
+                    <nop-card asp-name="survey-submissions" asp-icon="fa fa-paper-plane" asp-title="@T("Admin.NopStation.DynamicSurvey.Surveys.Submissions")" asp-hide-block-attribute-name="@hideSubmissionsBlockAttributeName" asp-hide="@hideSubmissionsBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Submissions", Model)</nop-card>
+                }
+            </nop-cards>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Store Locator",
+  "SystemName": "NopStation.Plugin.Widgets.StoreLocator",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.StoreLocator.dll",
+  "Description": "This plugin allows to show store locations.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

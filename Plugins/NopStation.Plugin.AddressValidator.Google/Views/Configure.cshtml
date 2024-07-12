@@ -1,0 +1,134 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("GoogleAddressValidator.Configuration");
+    ViewBag.PageTitle = T("Admin.NopStation.GoogleAddressValidator.Configuration").Text;
+}
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.ValidatePhoneNumber)").change(togglePhoneNumberRegex);
+
+        togglePhoneNumberRegex();
+    });
+
+    function togglePhoneNumberRegex() {
+        if ($('#@Html.IdFor(model => model.ValidatePhoneNumber)').is(':checked')) {
+            $('#pnlRestrictedCountry').show();
+        } else {
+            $('#pnlRestrictedCountry').hide();
+        }
+    }
+</script>
+
+<form asp-controller="GoogleAddressValidator" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.GoogleAddressValidator.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnablePlugin_OverrideForStore" asp-input="EnablePlugin" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnablePlugin" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnablePlugin" />
+                                    <span asp-validation-for="EnablePlugin"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="GoogleApiKey_OverrideForStore" asp-input="GoogleApiKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="GoogleApiKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="GoogleApiKey" />
+                                    <span asp-validation-for="GoogleApiKey"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ValidatePhoneNumber_OverrideForStore" asp-input="ValidatePhoneNumber" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ValidatePhoneNumber" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ValidatePhoneNumber" />
+                                    <span asp-validation-for="ValidatePhoneNumber"></span>
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="ValidatePhoneNumber">
+                                <div class="form-group row" id="pnlRestrictedCountry">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="PhoneNumberRegex_OverrideForStore" asp-input="PhoneNumberRegex" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="PhoneNumberRegex" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="PhoneNumberRegex" />
+                                        <span asp-validation-for="PhoneNumberRegex"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="StreetNumberAttributeId_OverrideForStore" asp-input="StreetNumberAttributeId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="StreetNumberAttributeId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="StreetNumberAttributeId" asp-items="Model.AvailableAddressAttributes" />
+                                    <span asp-validation-for="StreetNumberAttributeId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="StreetNameAttributeId_OverrideForStore" asp-input="StreetNameAttributeId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="StreetNameAttributeId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="StreetNameAttributeId" asp-items="Model.AvailableAddressAttributes" />
+                                    <span asp-validation-for="StreetNameAttributeId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="PlotNumberAttributeId_OverrideForStore" asp-input="PlotNumberAttributeId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="PlotNumberAttributeId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="PlotNumberAttributeId" asp-items="Model.AvailableAddressAttributes" />
+                                    <span asp-validation-for="PlotNumberAttributeId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableLog_OverrideForStore" asp-input="GoogleApiKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableLog" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableLog" />
+                                    <span asp-validation-for="EnableLog"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

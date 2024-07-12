@@ -1,0 +1,107 @@
+@model GroupNotificationModel
+@inject NopStation.Plugin.Widgets.ProgressiveWebApp.ProgressiveWebAppSettings pushNopSettings
+@inject Nop.Services.Media.IPictureService pictureService
+
+<style>
+    .no-padding {
+        padding: 0;
+    }
+</style>
+
+<div class="cards-group">
+    <div class="card card-default">
+        <div class="card-body">
+            <div class="box-container" style="overflow:hidden; border: 1px solid #eeefff; max-width: 400px; width:100%; margin:auto">
+                @{
+                    var defaultIconUrl = await pictureService.GetPictureUrlAsync(pushNopSettings.DefaultIconId, 100);
+                    var iconUrl = await pictureService.GetPictureUrlAsync(Model.IconId, 100);
+                }
+                <div class="col-sm-12 no-padding" id="notification-image-container" style="overflow: hidden;">
+                    <img class="notification-image" id="notification-image" src="@await pictureService.GetPictureUrlAsync(Model.ImageId, 600)" style="width:100%" />
+                </div>
+                <div class="col-sm-12 no-padding" style="background-color: #454545">
+                    <div class="col-sm-2" style="padding: 12px">
+                        <img id="notification-icon" src="@iconUrl" style="width:100%" />
+                    </div>
+                    <div class="col-sm-10" style="padding: 10px; color: white">
+                        <h3 id="notification-title" style="margin: 0 0 5px; font-size: 20px; max-height: 43px; overflow: hidden;">@Model.Title</h3>
+                        <p id="notification-body" style="font-size: 15px; max-height: 76px; overflow: hidden; line-height: 19px;">@Model.Body</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var iconUrl = '@iconUrl';
+    var defaultIconUrl = '@defaultIconUrl';
+
+    MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+    var trackChange = function (element) {
+        var observer = new MutationObserver(function (mutations, observer) {
+            if (mutations[0].attributeName == "value") {
+                $(element).trigger("change");
+            }
+        });
+        observer.observe(element, {
+            attributes: true
+        });
+    }
+
+    trackChange($('#@Html.IdFor(model => model.Body)')[0]);
+    trackChange($('#@Html.IdFor(model => model.Title)')[0]);
+    trackChange($('#@Html.IdFor(model => model.ImageId)')[0]);
+    trackChange($('#@Html.IdFor(model => model.IconId)')[0]);
+
+    $(function () {
+        checkImageRatio();
+        $('#@Html.IdFor(model => model.Body)').on('change', function (e) {
+            $('#notification-body').text($(this).val());
+        });
+        $('#@Html.IdFor(model => model.Title)').on('change', function (e) {
+            $('#notification-title').text($(this).val());
+        });
+        $('#@Html.IdFor(model => model.ImageId)').on('change', function (e) {
+            setImage($(this).val(), 400, '#notification-image');
+            checkImageRatio();
+        });
+        $('#@Html.IdFor(model => model.IconId)').on('change', function (e) {
+            setImage($(this).val(), 100, '#notification-icon');
+            checkImageRatio();
+        });
+    });
+
+    function setImage(imageId, size, selector) {
+        console.log(imageId);
+        var data = {};
+        data.imageId = imageId;
+        data.imageSize = size;
+
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("GetImageUrlAsync", "PushNopGroupNotification")",
+            data: addAntiForgeryToken(data),
+            dataType: 'json',
+            success: function (result) {
+                $(selector).attr('src', result.url)
+            }
+        });
+    }
+
+    function toggleViewAsIcon() {
+        if ($('#@Html.IdFor(model => model.UseDefaultIcon)').is(':checked')) {
+            $('#notification-icon').attr('src', defaultIconUrl);
+        } else {
+            $('#notification-icon').attr('src', iconUrl);
+        }
+    }
+
+    function checkImageRatio() {
+        var width = $('#notification-image-container').width();
+        $('#notification-image-container').css('max-height', width * .5);
+        $('#notification-icon').css('height', $('#notification-icon').width());
+    }
+</script>
+

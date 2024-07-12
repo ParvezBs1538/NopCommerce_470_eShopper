@@ -1,0 +1,107 @@
+﻿@model FilterProductAttributesModel
+@inject AjaxFilterSettings ajaxFilterSettings
+
+@using System.Text;
+@using NopStation.Plugin.Misc.AjaxFilter.Domains;
+@using NopStation.Plugin.Misc.AjaxFilter.Domains.Enums
+@using NopStation.Plugin.Misc.AjaxFilter.Models;
+@using Nop.Web.Framework.UI;
+@using System.Text.RegularExpressions
+
+<script>
+
+    $(".collaspe-attribute").accordion({
+        collapsible: (((`@(ajaxFilterSettings.CloseProductAttributeFilterByDefualt)`).toLowerCase()) == "true" ? true : false),
+        active: ((`@(ajaxFilterSettings.CloseProductAttributeFilterByDefualt)`).toLowerCase()) == "true" ? true : false
+    });
+
+</script>
+
+@if (Model.ProductVariantAttributes.Count > 0)
+{
+    <div id="attribute-filter-section">
+        @{
+            int j = 0;
+        }
+        @foreach (var attributes in Model.ProductVariantAttributes)
+        {
+            <div class="filter-section collaspe-attribute Name-@(attributes.Id)" data-id="@(attributes.Id) collaspe-attribute">
+                <div class="title">
+                    <h5 class="mb-0 collapsed ajaxfilter-title"
+                data-toggle="collapse"
+                data-parent="#ProductVariantAttributes"
+                data-target="#ProductVariantAttributes"
+                aria-expanded="true"
+                aria-controls="collapseOne">
+                        @attributes.Name
+                    </h5>
+                </div>
+
+                <div class="listbox collapse show" id="ProductVariantAttributes" aria-labelledby="ProductVariantAttributes">
+                    <div class="ajaxfilter-section">
+                        @if (Model.CheckOrDropdowns == FiltersUI.UseCheckboxes)
+                        {
+                            var attributeOptions = attributes.ProductVariantAttributesOptions;
+                            attributes.ProductVariantAttributesOptions = attributes.ProductVariantAttributesOptions.DistinctBy(s => s.Name).ToList();
+
+                            <ul class="itemsThree">
+                                @for (int i = 0; i < attributes.ProductVariantAttributesOptions.OrderBy(spo => spo.Name).Count(); i++)
+                                {
+                                    var item = attributes.ProductVariantAttributesOptions.DistinctBy(s => s.Name).OrderBy(pva => pva.Name).ElementAt(i);
+
+                                    var count = attributeOptions.Where(s => s.Name == item.Name).Count();
+
+
+                                    if (!string.IsNullOrEmpty(item.ColorSquaresRgb))
+                                    {
+                                        <li class="color itemThree" data-id="@item.Name">
+                                            <input class="Name-@(item.Name.Replace(" ", "-").Replace(".", "-").Replace("/", "-")) d-none" type="checkbox" name="attributesModel][ProductVariantAttributes][@j][ProductVariantAttributesOptions][@i][Name" value="@item.Name" id="attributesModel_ProductVariantAttributesOptions_@(Regex.Replace(item.Name, "[^a-zA-Z0-9_]+", "-"))_@(i)_Id"
+                               @(item.CheckedState == CheckedState.Checked ? "Checked" : "")
+                               @(item.CheckedState == CheckedState.Disabled ? "Disabled" : "")
+                               @(item.CheckedState == CheckedState.CheckedDisabled ? "Disabled Checked" : "")
+                               onchange="AjaxFilter.setFilter('a-@(attributes.Id)'), AjaxFilterChildren.resetFilters(), AjaxFilterChildren.listenToCheckBox(this, 'Name-@(item.Name.Replace(" ", "-").Replace(".", "-").Replace("/", "-"))', '@item.Name')" />
+                                            <label class="pl-3" for="attributesModel_ProductVariantAttributesOptions_@(item.Name)_@(i)_Id" data-color="@item.ColorSquaresRgb">
+                                                <span class="color-box" style="background-color: @item.ColorSquaresRgb;"></span>
+                                                <span class="d-none">
+                                                    @item.Name @if (ajaxFilterSettings.EnableProductCount)
+                                                    {
+                                                        <span>( @count )</span>
+                                                    }
+                                                </span>
+                                            </label>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li data-id="@item.Name">
+                                            <input class="Name-@(item.Name.Replace(" ", "-").Replace(".", "-").Replace("/", "-")) d-none"
+                               type="checkbox"
+                               name="attributesModel][ProductVariantAttributes][@j][ProductVariantAttributesOptions][@i][Name"
+                               value="@item.Name"
+                               data-option-id="@attributes.Id"
+                               data-option-name="@item.Name"
+                               id="attributesModel_ProductVariantAttributesOptions_@(item.Name.Replace(" ", "_").Replace(".", "_").Replace("/", "_"))_@(i)_Id"
+                               @(item.CheckedState == CheckedState.Checked ? "Checked" : "")
+                               @(item.CheckedState == CheckedState.Disabled ? "Disabled" : "")
+                               @(item.CheckedState == CheckedState.CheckedDisabled ? "Disabled Checked" : "")
+                               onchange="AjaxFilter.setFilter(this, 'productattr'), AjaxFilterChildren.resetFilters(), AjaxFilterChildren.listenToCheckBox(this, 'Name-@(item.Name.Replace(" ", "-").Replace(".", "-").Replace("/", "-"))', '@item.Name')" />
+                                            <label for="attributesModel_ProductVariantAttributesOptions_@(item.Name)_@(i)_Id">
+                                                <span class="square @(item.CheckedState == CheckedState.Checked ? "active" : "") Name-@(item.Name.Replace(" ", "-").Replace(".", "-").Replace("/", "-"))" style="background-color: #fff" id="square_specyficationModel_SpecificationAttributes_@(item)_@(i)_Id"></span>
+                                                <i>@item.Name</i> @if (ajaxFilterSettings.EnableProductCount)
+                                                {
+                                                    <span class="count">(@count)</span>
+                                                }
+                                            </label>
+                                        </li>
+
+                                    }
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+            </div>
+            j++;
+        }
+    </div>
+}

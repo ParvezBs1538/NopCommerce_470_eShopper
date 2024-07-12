@@ -1,0 +1,188 @@
+@model WebApiQueuedNotificationModel
+
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.SendImmediately)").click(sendImmediately);
+        sendImmediately();
+    });
+
+    function sendImmediately() {
+        if ($('#@Html.IdFor(model => model.SendImmediately)').is(':checked'))
+            $('#pnl-send-date').hide();
+        else
+            $('#pnl-send-date').show();
+    }
+</script>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <input type="hidden" asp-for="Id">
+
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="CustomerName" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">
+                                    @if (Model.CustomerId > 0)
+                                    {
+                                        <a asp-controller="Customer" asp-action="Edit" asp-route-id="@Model.CustomerId">@Model.CustomerName - @T("Admin.Common.View")</a>
+                                    }
+                                    else
+                                    {
+                                        <span>@Model.CustomerName</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="StoreName" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">
+                                    @if (Model.StoreId > 0)
+                                    {
+                                        <a asp-controller="Store" asp-action="Edit" asp-route-id="@Model.StoreId">@Model.StoreName - @T("Admin.Common.View")</a>
+                                    }
+                                    else
+                                    {
+                                        <span>@Model.StoreName</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="Title" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.Title</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="Body" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Html.Raw(Model.Body)</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="DeviceTypeStr" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.DeviceTypeStr</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="SubscriptionId" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-div asp-for="SubscriptionId" asp-check-access="true" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="ActionTypeStr" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.ActionTypeStr</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="ActionValue" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.ActionValue</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="ImageUrl" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">
+                                    @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+                                    {
+                                        <img src="@Model.ImageUrl" style="max-height: 80px" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="SendImmediately" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.SendImmediately</div>
+                            </div>
+                        </div>
+
+                        @if (!Model.SendImmediately)
+                        {
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="DontSendBeforeDate" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Model.DontSendBeforeDate</div>
+                                </div>
+                            </div>
+                        }
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="SentTries" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.SentTries</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="SentOn" />
+                            </div>
+                            <div class="col-md-9">
+                                @if (Model.SentOn.HasValue)
+                                {
+                                    <div class="form-text-row">@Model.SentOn</div> 
+                                }
+                                else
+                                {
+                                    <div class="form-text-row">@T("Admin.NopStation.WebApiNotification.QueuedPushNotifications.Fields.SentOn.NotSent")</div>
+                                }
+                            </div>
+                        </div>
+
+                        @if (!string.IsNullOrWhiteSpace(Model.ErrorLog))
+                        {
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="ErrorLog" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Html.Raw(Model.ErrorLog.Replace(Environment.NewLine, "<br />"))</div>
+                                </div>
+                            </div>
+                        }
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="CreatedOn" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.CreatedOn</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

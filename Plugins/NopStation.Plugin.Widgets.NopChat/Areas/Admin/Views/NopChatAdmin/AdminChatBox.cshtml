@@ -1,0 +1,787 @@
+﻿@model NopChatMessageModel
+@{
+    Layout = "_AdminLayout";
+    NopHtml.AppendCssFileParts($"~/lib_npm/overlayscrollbars/css/OverlayScrollbars.min.css", string.Empty);
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/lib_npm/overlayscrollbars/js/jquery.overlayScrollbars.min.js");
+}
+
+<style>
+
+    .get-previous-msg button {
+        background: #4ECCFB;
+        border: 0;
+        color: white;
+        padding: 3px 20px;
+        border: none;
+        border-radius: 20px;
+        margin-top: 2%;
+    }
+
+    .get-previous-msg {
+        text-align: center !important;
+    }
+
+    .nop-chat-wrapper {
+        text-align: right;
+    }
+
+    .nop-chat {
+        background: #FFFFFF;
+        text-align: left;
+        padding: 10px;
+    }
+
+
+        .nop-chat .title {
+            background: #F1F3F4;
+            padding: 10px 15px;
+        }
+
+        .nop-chat .chat-logo {
+            display: inline-block;
+            width: 50%;
+        }
+
+        .nop-chat .buttons {
+            display: inline-block;
+            width: 50%;
+            text-align: right;
+            margin: 5px 0;
+            vertical-align: top;
+        }
+
+            .nop-chat .buttons button {
+                height: 25px;
+                width: 25px;
+                align-items: center;
+                text-align: center;
+                border: 1.5px solid #130F26;
+                border-radius: 8px;
+                margin-left: 5px;
+                background: #F1F3F4;
+                color: #130F26;
+            }
+
+
+        .nop-chat .chat-body {
+            height: 500px;
+            margin-bottom: 20px;
+        }
+
+        .nop-chat .contact-list {
+            display: inline-block;
+            width: 30%;
+            border-right: 1px solid #E5E5E5;
+            vertical-align: top;
+            height: 100%;
+        }
+
+            .nop-chat .contact-list .contact {
+                box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+                border-bottom: 1px solid #E5E5E5;
+                padding: 5px 10px;
+            }
+
+                .nop-chat .contact-list .contact.unread {
+                    background: #F5F5F5 url('/Plugins/NopStation.Plugin.Widgets.NopChat/Contents/Images/message-icon.png') 95% no-repeat;
+                }
+
+            .nop-chat .contact-list .contact-picture {
+                display: inline-block;
+                width: 10%;
+                padding: 10px;
+            }
+
+                .nop-chat .contact-list .contact-picture .picture,
+                .nop-chat .chat-box .message-picture .picture {
+                    border-radius: 100%;
+                    overflow: hidden;
+                    position: relative;
+                }
+
+                    .nop-chat .contact-list .contact-picture .picture:before,
+                    .nop-chat .chat-box .message-picture .picture:before {
+                        content: "";
+                        display: block;
+                        padding-top: 100%;
+                    }
+
+                    .nop-chat .contact-list .contact-picture .picture img,
+                    .nop-chat .chat-box .message-picture .picture img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                    }
+
+            .nop-chat .contact-list .contact-body {
+                display: inline-block;
+                width: 60%;
+                vertical-align: top;
+                font-style: normal;
+                font-size: 15px;
+                line-height: 18px;
+                text-transform: capitalize;
+                color: #83898C;
+                margin-top: 15px;
+            }
+
+                .nop-chat .contact-list .contact-body .name {
+                    font-weight: bold;
+                }
+
+            .nop-chat .contact-list .contact.unread .contact-body .name {
+                color: #00A0DB;
+            }
+
+            .nop-chat .contact-list .contact-body .message-preview {
+                height: 20px;
+                overflow: hidden;
+            }
+
+        .nop-chat .chat-box {
+            display: inline-block;
+            width: 68%;
+            height: 100%;
+            position: relative;
+        }
+
+            .nop-chat .chat-box .messages {
+                height: 85%;
+            }
+
+                .nop-chat .chat-box .messages .message {
+                    width: 83%;
+                    float: left;
+                }
+
+                    .nop-chat .chat-box .messages .message.self {
+                        margin: 0 0 0 auto;
+                        float: right;
+                    }
+
+            .nop-chat .chat-box .message-picture {
+                display: inline-block;
+                width: 15%;
+                padding: 15px;
+            }
+
+            .nop-chat .chat-box .messages .message.self .message-picture {
+                float: right;
+            }
+
+            .nop-chat .chat-box .message-content {
+                display: inline-block;
+                max-width: 80%;
+                vertical-align: top;
+                margin-top: 15px;
+            }
+
+            .nop-chat .chat-box .messages .message.self .message-content {
+                float: right;
+            }
+
+
+            .nop-chat .chat-box .message-content .text {
+                padding: 15px;
+                background: #39BFF0;
+                color: #FFF;
+                box-shadow: 0px 4px 10px rgba(78, 204, 251, 0.25);
+                border-radius: 0px 5px 5px 20px;
+                margin-bottom: 10px;
+                word-break: break-all;
+            }
+
+            .nop-chat .chat-box .messages .message.self .message-content {
+                text-align: right;
+            }
+
+                .nop-chat .chat-box .messages .message.self .message-content .text {
+                    background: #162356;
+                    box-shadow: 0px 4px 10px rgba(22, 35, 86, 0.2);
+                    border-radius: 5px 0 5px 20px;
+                    word-break: break-all;
+                    white-space: pre-wrap;
+                }
+
+            .nop-chat .chat-box .message-content .time-stamp {
+                font-style: normal;
+                font-weight: normal;
+                font-size: 13px;
+                line-height: 16px;
+                letter-spacing: 0.03em;
+                text-transform: lowercase;
+                color: #A8A9B4;
+            }
+
+            .nop-chat .chat-box .text-box {
+                height: 15%;
+                width: 100%;
+                background: #f5f5f5;
+                border-radius: 0 0 10px 0;
+                position: absolute;
+                bottom: 0;
+            }
+
+                .nop-chat .chat-box .text-box textarea {
+                    width: 100%;
+                    display: inline-block;
+                    height: 100%;
+                    background: #F5F5F5;
+                    border: none;
+                    padding: 15px 96px 15px 15px;
+                    outline: none;
+                    resize: none;
+                }
+
+
+                .nop-chat .chat-box .text-box .send-button {
+                    text-align: right;
+                    width: 10%;
+                    position: absolute;
+                    display: inline-block;
+                    right: 2%;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
+
+                    .nop-chat .chat-box .text-box .send-button button {
+                        background: #4ECCFB;
+                        box-shadow: 0px 4px 10px rgba(78, 204, 251, 0.25);
+                        border-radius: 5px;
+                        min-width: 75px;
+                        height: 35px;
+                        border: none;
+                        color: #FFF;
+                    }
+
+    .active_chat {
+        background: #d3d3d3;
+    }
+
+
+    .empty {
+        text-align: center;
+        padding: 20px;
+    }
+
+    .e-details {
+        padding: 2px;
+    }
+
+    .e-info {
+        padding: 2px;
+        font-weight: 700;
+    }
+
+    .e-picture {
+        max-height: 100px;
+        margin-top: 10px;
+    }
+
+    .loader,
+    .loader:before,
+    .loader:after {
+        background: #4eccfb;
+        -webkit-animation: load1 1s infinite ease-in-out;
+        animation: load1 1s infinite ease-in-out;
+        width: 1em;
+        height: 4em;
+    }
+
+    .loader {
+        color: #4eccfb;
+        text-indent: -9999em;
+        margin: 88px auto;
+        position: relative;
+        font-size: 11px;
+        -webkit-transform: translateZ(0);
+        -ms-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-animation-delay: -0.16s;
+        animation-delay: -0.16s;
+    }
+
+        .loader:before,
+        .loader:after {
+            position: absolute;
+            top: 0;
+            content: '';
+        }
+
+        .loader:before {
+            left: -1.5em;
+            -webkit-animation-delay: -0.32s;
+            animation-delay: -0.32s;
+        }
+
+        .loader:after {
+            left: 1.5em;
+        }
+
+    .chat-container {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .empty-inbox {
+        padding-top: 5%;
+        text-align: center;
+        display: none;
+    }
+
+        .empty-inbox img {
+            max-width: 30%;
+        }
+
+    @@-webkit-keyframes load1 {
+        0%, 80%, 100% {
+            box-shadow: 0 0;
+            height: 4em;
+        }
+
+        40% {
+            box-shadow: 0 -2em;
+            height: 5em;
+        }
+    }
+
+    @@keyframes load1 {
+        0%, 80%, 100% {
+            box-shadow: 0 0;
+            height: 4em;
+        }
+
+        40% {
+            box-shadow: 0 -2em;
+            height: 5em;
+        }
+    }
+
+
+    .os-host-overflow > .os-padding {
+        margin-bottom: 15px;
+    }
+
+    .os-scrollbar.os-scrollbar-horizontal {
+        display: none;
+    }
+</style>
+
+<div class="nop-chat-wrapper">
+    <div class="nop-chat">
+        <div class="title">
+            <div class="chat-logo">
+                <img id="mainAvater" src="~/Plugins/NopStation.Plugin.Widgets.NopChat/Contents/Images/nopchat-logo.png" alt="Nop Chat">
+            </div>
+        </div>
+        <div class="chat-body">
+            <div class="contact-list">
+            </div>
+            <div class="chat-box">
+                <input type="hidden" id="hdCustomerId" />
+                <div class="chat-container">
+                    <div id="msg-history-loader" class="loader"></div>
+                    <div class="empty-inbox">
+                        <img src="~/Plugins/NopStation.Plugin.Widgets.NopChat/Contents/Images/user-chatting.gif" alt="Nop Chat">
+                    </div>
+                    <div class="messages" id="msg_history">
+                    </div>
+                </div>
+                <div class="text-box">
+                    <textarea type="text" id="txtText" placeholder="Write a message..." autocomplete="off" autofocus></textarea>
+                    <div class="send-button">
+                        <button type="button" onclick="SendMessage()">Send</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script asp-location="Footer" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.3/jquery.timeago.js"></script>
+<script src="~/Plugins/NopStation.Plugin.Widgets.NopChat/Scripts/signalr.js"></script>
+
+<script asp-location="Footer">
+
+    var VendorId = @Model.VendorId;
+    var VendorCustomerId = @Model.VendorCustomerId;
+    var contactList = JSON.parse('@Html.Raw(Json.Serialize(Model.ContactList))');
+    var chatHistoryGlobal = [];
+
+
+    $(document).ready(function () {
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl('/nopChatHub')
+            .build();
+
+        connection.serverTimeoutInMilliseconds = 100000; // 100 second
+
+        connection.on('NewMessagesHub', res => {
+            console.log(res);
+            appenedReceivedMessage(res.message);
+        });
+
+        function start() {
+            connection.start()
+                .then(function () {
+                    console.log("Connected");
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    setTimeout(function () {
+                        start();
+                    }, 10000);
+                });
+        }
+
+        connection.onclose(function () {
+            //start();
+            console.log("SignalR connection clossed.");
+        });
+
+        start();
+
+        //******************SignalR End************************
+        applyOverLayScrollBars();
+
+        renderContactList(contactList);
+
+        if (contactList.length) {
+            GetChatHistory(contactList[0].Id, true);
+            $(".contact").first().addClass("active_chat");
+            $(".empty").hide();
+            $(".empty-inbox").css("display", "none");
+            updateScroll(true);
+        } else {
+
+            setTimeout(function () {
+                $(".empty-inbox").show();
+            }, 2000);
+            hideInboxLoader();
+        }
+
+        $(document).delegate('.contact', 'click', function (e) {
+            e.preventDefault();
+            $(".empty-inbox").css("display", "none");
+            var chatHistory;
+            customerId = parseInt($(this).attr("data-id"));
+            vendorId = @Model.VendorId;
+            chatHistory = chatHistoryGlobal["contact_" + customerId];
+            activateContact(customerId);
+            if (chatHistory != null) {
+                renderChatBox(chatHistory);
+            }
+            else {
+                GetChatHistory(customerId);
+            }
+            removeNewMessageIndication(customerId);
+        });
+
+        InitLoadMore();
+
+        $('#txtText').keydown(function (event) {
+            if (event.keyCode == 13 && !event.shiftKey) {
+                SendMessage();
+                return false;
+            }
+        });
+    });
+
+    function renderContactList(contactList) {
+        var html = `<div class="empty-contact">
+                            <div class="empty">
+                                <div class="e-info">Inbox Empty</div>
+                                <div class="e-details">Customer messages will appear here</div>
+                                <div class="e-picture"><img style="max-width: 50%;" src="/Plugins/NopStation.Plugin.Widgets.NopChat/Contents/Images/inbox.png" /></div>
+                            </div>
+                        </div>`;
+
+        $.each(contactList, function (index, value) {
+            html += prepareContactHtml(value);
+        });
+        $(".contact-list").html(html);
+    }
+
+    function prepareContactHtml(value) {
+        var html = `<div class="contact" style="cursor: pointer;" id="contact_${value.Id}" data-pageIndex="0" data-id="${value.Id}">
+                                <div class="contact-picture">
+                                    <div class="picture">
+                                        <img src="${value.AvatarURL}" />
+                                    </div>
+                                </div>
+                                <div class="contact-body">
+                                    <div class="name">${value.Name}<span id="chatNotification_${value.Id}" /></div>
+                                </div>
+                            </div>`;
+        return html;
+    }
+
+    function applyOverLayScrollBars() {
+        $('.nop-chat .contact-list').overlayScrollbars({});
+        $('.nop-chat .messages').overlayScrollbars({});
+    }
+
+    function GetPreviousMessage() {
+        var customerId = parseInt($("#hdCustomerId").val());
+        GetChatHistory(customerId);
+    }
+
+    function GetChatHistory(customerId, scrollToBottom = false) {
+        showInboxLoader();
+        var pageIndex = parseInt($("#contact_" + customerId).attr("data-pageIndex"));
+        var postData = {
+            customerId: customerId,
+            vendorId: VendorId,
+            pageIndex: pageIndex,
+            pageSize: 5
+        };
+        var postLink = "@(Url.Action("GetChatHistoryPaged", "NopChat"))";
+        postLink = postLink.replace("/Admin/NopChat/GetChatHistory", "/NopChat/GetChatHistory");
+
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: postLink,
+            data: postData,
+            success: function (data) {
+                var prevMessage = chatHistoryGlobal["contact_" + customerId];
+                if (prevMessage) {
+                    chatHistoryGlobal["contact_" + customerId] = data.Result.concat(prevMessage);
+                } else {
+                    chatHistoryGlobal["contact_" + customerId] = data.Result;
+                }
+
+                if (pageIndex == 0) {
+                    renderChatBox(data.Result, false);
+                }
+                else {
+                    renderChatBox(data.Result, true);
+                }
+                $("#contact_" + customerId).attr("data-pageIndex", pageIndex + 1);
+                $("#hdCustomerId").val(customerId);
+                hideInboxLoader();
+                if (scrollToBottom) {
+                    updateScroll();
+                }
+            },
+            error: function (request, status, error) {
+                console.log(error);
+                hideInboxLoader();
+            }
+        });
+    }
+
+    function renderChatBox(data, toBePrepend) {
+        var messageListHtml = "";
+        $.each(data, function (index, value) {
+            if (value.IsVendorResponse == false) {
+                messageListHtml += prepareReceivedMessage(value);
+            }
+            else {
+                messageListHtml += prepareSentMessage(value);
+            }
+        });
+
+        if (toBePrepend == true) {
+            $("#msg_history .os-content").prepend(messageListHtml);
+        }
+        else {
+            $("#msg_history .os-content").html(messageListHtml);
+        }
+    }
+
+    function prepareReceivedMessage(value) {
+        var messageListHtml = "";
+        messageListHtml += '<div class="message">';
+        messageListHtml += '<div class="message-picture">';
+        messageListHtml += '<div class="picture">';
+        messageListHtml += '<img src="' + value.CustomerAvatar + '" />';
+        messageListHtml += '</div>';
+        messageListHtml += '</div>';
+        messageListHtml += '<div class="message-content">';
+        messageListHtml += '<div class="text">' + value.Text + '</div>';
+        messageListHtml += '<div class="time-stamp">' + formatDateTime(value.DateCreated) + '</div>';
+        messageListHtml += '</div>';
+        messageListHtml += '</div>';
+
+        return messageListHtml;
+    }
+
+    function prepareSentMessage(value) {
+        var messageListHtml = "";
+        messageListHtml += '<div class="message self">';
+        messageListHtml += '<div class="message-picture">';
+        messageListHtml += '<div class="picture">';
+        messageListHtml += '<img src="' + value.VendorAvatar + '" />';
+        messageListHtml += '</div>';
+        messageListHtml += '</div>';
+        messageListHtml += '<div class="message-content">';
+        messageListHtml += '<div class="text">' + value.Text + '</div>';
+        messageListHtml += '<div class="time-stamp">' + formatDateTime(value.DateCreated) + '</div>';
+        messageListHtml += '</div>';
+        messageListHtml += '</div>';
+
+        return messageListHtml;
+    }
+
+    function formatDateTime(date) {
+        return $.timeago(date)
+    }
+
+    function isEmpty(str) {
+        return (!str || str.length === 0);
+    }
+
+    function SendMessage() {
+        var text = $("#txtText").val();
+        if (!isEmpty(text)) {
+            var customerId = $("#hdCustomerId").val();
+            if (!(customerId > 0)) {
+                console.log(customerId);
+                alert("Customer not selected");
+                return false;
+            }
+            var postData = {
+                Text: text,
+                CustomerId: customerId,
+                VendorId: VendorId,
+                VendorCustomerId: VendorCustomerId,
+                IsVendorResponse: true
+
+            };
+            console.log(postData);
+
+            var postLink = "@(Url.Action("SendMessage", "NopChat"))";
+            postLink = postLink.replace("/Admin/NopChat/SendMessage", "/NopChat/SendMessage");
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: postLink,
+                data: postData,
+                success: function (data) {
+                    if (data.Result == true) {
+                        $("#txtText").val("");
+                        $("#contact_" + customerId).trigger("click");
+                        updateScroll();
+                    }
+                    else {
+                        alert("Message could not be sent!");
+                        updateScroll();
+                    }
+                },
+                error: function (request, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+    }
+
+    function activateContact(customerId) {
+        $("#hdCustomerId").val(customerId);
+        $(".contact").removeClass("active_chat");
+        $("#contact_" + customerId).addClass("active_chat");
+    }
+
+    function appenedReceivedMessage(message) {
+        var customerId = $("#hdCustomerId").val();
+        console.log("c : " + customerId + " & v : " + VendorId);
+        var newMessage = {
+            Text: message.text,
+            DateCreated: message.dateCreated,
+            CustomerId: message.customerId,
+            CustomerName: message.customerName,
+            VendorId: message.vendorId,
+            VendorName: message.vendorName,
+            IsChecked: message.isChecked,
+            IsVendorResponse: message.isVendorResponse,
+            CustomerAvatar: message.customerAvatar,
+            VendorAvatar: message.vendorAvatar,
+        };
+
+        var ContactId = message.customerId;
+        if (customerId == message.customerId) {
+            var messageListHtml = prepareReceivedMessage(newMessage);
+            $("#msg_history .os-content").append(messageListHtml);
+        }
+
+        var isListed = isListedContact(ContactId);
+        if (isListed == true) {
+            if (chatHistoryGlobal["contact_" + ContactId] != null) {
+                chatHistoryGlobal["contact_" + ContactId].push(newMessage);
+            }
+        }
+        else {
+            var newContact = {
+                Id: ContactId,
+                Name: message.customerName,
+                LastMesageDate: "",
+                NumberOfMessage: 0,
+                AvatarURL: message.customerAvatar
+            }
+            var newMessageList = [];
+            newMessageList.push(newMessage);
+            chatHistoryGlobal["contact_" + ContactId] = newMessageList;
+            contactList.push(newContact);
+            renderContactList(contactList);
+        }
+        $(".empty-contact").hide();
+        indicateNewMessage(ContactId);
+        updateScroll();
+    }
+
+    function appenedSentMessage(message) {
+        var messageListHtml = prepareSentMessage(message);
+        $("#msg_history .os-content").append(messageListHtml);
+    }
+
+    function isListedContact(contactId) {
+        var id = $("#contact_" + contactId).attr("data-id");
+        if (id != null)
+            return true;
+
+        return false;
+    }
+
+    function indicateNewMessage(ContactId) {
+        $("#contact_" + ContactId).addClass('unread');
+    }
+
+    function removeNewMessageIndication(ContactId) {
+        $("#contact_" + ContactId).removeClass('unread');
+    }
+
+    function InitLoadMore() {
+        $(".os-viewport").scroll(function () {
+            if ($(this).scrollTop() === 0) {
+                GetPreviousMessage();
+            }
+        });
+    }
+
+    function updateScroll(strict = false) {
+        console.log("SA");
+        if (strict) {
+            $(".os-viewport").animate({ scrollTop: $(document).height() }, 1000);
+        } else {
+            var currentScroll = $('.os-viewport')[1].scrollTop;
+            if (currentScroll >= 100) {
+                $(".os-viewport").animate({ scrollTop: $('.os-viewport')[1].scrollHeight }, 1000);
+            }
+        }
+    }
+
+    function showInboxLoader() {
+        $("#msg-history-loader").show();
+    }
+
+    function hideInboxLoader() {
+        setTimeout(function () {
+            $("#msg-history-loader").hide();
+        }, 500);
+    }
+</script>

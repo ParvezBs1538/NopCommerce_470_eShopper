@@ -1,0 +1,167 @@
+﻿@model ConfigurationModel
+@using NopStation.Plugin.Widgets.QuickView.Areas.Admin.Models
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("QuickView.Configuration");
+
+    ViewBag.PageTitle = T("Admin.NopStation.QuickView.Configuration").Text;
+}
+
+<form asp-controller="QuickView" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.QuickView.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="ShowAlsoPurchasedProducts_OverrideForStore" asp-input="ShowAlsoPurchasedProducts" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowAlsoPurchasedProducts" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="ShowAlsoPurchasedProducts" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="ShowRelatedProducts_OverrideForStore" asp-input="ShowRelatedProducts" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowRelatedProducts" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="ShowRelatedProducts" />
+                                </div>
+                            </div>
+                            @if (Model.PictureZoomPluginInstalled)
+                            {
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <nop-override-store-checkbox asp-for="EnablePictureZoom_OverrideForStore" asp-input="EnablePictureZoom" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="EnablePictureZoom" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="EnablePictureZoom" />
+                                    </div>
+                                </div>
+                            }
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="ShowShortDescription_OverrideForStore" asp-input="ShowShortDescription" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowShortDescription" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="ShowShortDescription" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="ShowFullDescription_OverrideForStore" asp-input="ShowFullDescription" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowFullDescription" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="ShowFullDescription" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="ShowAddToWishlistButton_OverrideForStore" asp-input="ShowAddToWishlistButton" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowAddToWishlistButton" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="ShowAddToWishlistButton" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="ShowCompareProductsButton_OverrideForStore" asp-input="ShowCompareProductsButton" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowCompareProductsButton" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="ShowCompareProductsButton" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="ShowProductEmailAFriendButton_OverrideForStore" asp-input="ShowProductEmailAFriendButton" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowProductEmailAFriendButton" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="ShowProductEmailAFriendButton" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="ShowProductReviewOverview_OverrideForStore" asp-input="ShowProductReviewOverview" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowProductReviewOverview" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="ShowProductReviewOverview" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="ShowProductManufacturers_OverrideForStore" asp-input="ShowProductManufacturers" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowProductManufacturers" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="ShowProductManufacturers" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="ShowAvailability_OverrideForStore" asp-input="ShowAvailability" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowAvailability" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="ShowAvailability" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="ShowDeliveryInfo_OverrideForStore" asp-input="ShowDeliveryInfo" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowDeliveryInfo" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="ShowDeliveryInfo" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="ShowProductSpecifications_OverrideForStore" asp-input="ShowProductSpecifications" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowProductSpecifications" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="ShowProductSpecifications" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <nop-override-store-checkbox asp-for="ShowProductTags_OverrideForStore" asp-input="ShowProductTags" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowProductTags" />
+                                </div>
+                                <div class="col-md-8">
+                                    <nop-editor asp-for="ShowProductTags" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

@@ -1,0 +1,147 @@
+﻿.header-upper {
+  z-index: 15;
+}
+
+#announcement-minimize {
+  position: absolute;
+  top: 100%;
+  left: 20%;
+  transform: translateY(-40%);
+  z-index: 10;
+  background: #4ab2f1;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  height: 20px;
+  width: 20px;
+  padding: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.announcement-wrapper .swiper {
+  padding: 4px;
+}
+
+.announcement-minimized .swiper {
+  height: 0 !important;
+}
+
+.announcement-minimized #announcement-minimize {
+  transform: translateY(-40%) rotate(-180deg);
+}
+
+.announcement-minimized #announcement-close {
+  display: none;
+}
+
+#announcement-close {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: 10;
+  width: 50px;
+  border: none;
+  cursor: pointer;
+  background: #4ab2f1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  color: #fff;
+}
+
+@media (max-width: 992px) {
+  #announcement-close {
+    width: 30px;
+    font-size: 10px;
+  }
+}
+
+#announcement-slider .swiper-slide {
+  text-align: center;
+  padding: 5px;
+  background: #4ab2f1;
+  color: #fff;
+}
+
+#announcement-slider .announcement-toggle {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  vertical-align: top;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+@media (max-width: 992px) {
+  #announcement-slider .announcement-toggle {
+    margin-right: 4px;
+  }
+}
+
+#announcement-slider a {
+  color: #fff;
+  font-weight: bold;
+}
+
+#announcement-slider .announcement-item {
+  white-space: nowrap;
+}
+
+@media (max-width: 992px) {
+  #announcement-slider .announcement-item {
+    text-align: right;
+    display: block;
+    font-size: 11px;
+    padding: 0 10px;
+  }
+}
+
+#announcement-slider .announcement-item .announcement-title {
+  display: inline-block;
+  max-width: calc(100vw - 70px);
+  overflow: hidden;
+  text-align: right;
+}
+
+.announcement-description {
+  position: fixed;
+  max-height: 0;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  transition: all 0.3s;
+  visibility: hidden;
+  width: 100%;
+  color: #000;
+  padding: 60px 15px;
+}
+
+  .announcement-description .announcement-description-close {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: none;
+    border: 1px solid #010101;
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+  }
+
+.announcement-bar {
+  position: relative;
+  background: #4ab2f1;
+}
+
+.announcement-description.show {
+  display: block;
+  background: #fff;
+  opacity: 1;
+  visibility: visible;
+  max-height: 100vh;
+  z-index: 100;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}

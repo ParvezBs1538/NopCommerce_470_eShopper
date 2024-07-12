@@ -1,0 +1,86 @@
+﻿@model DHLServiceSearchModel
+
+@using NopStation.Plugin.Shipping.DHL.Areas.Admin.Models
+@using Nop.Web.Framework.Models.DataTables
+
+@{
+    Layout = "_AdminLayout";
+    //page title 
+    ViewBag.PageTitle = T("Admin.NopStation.DHL.Services.List").Text; //list
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("DHL.ServiceList");
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.DHL.Services.List")
+    </h1>
+    <div class="float-right">
+        <a asp-controller="DHL" asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus-square"></i>
+            @T("Admin.Common.AddNew")
+        </a>
+    </div>
+</div>
+
+<section class="content">
+<div class="container-fluid">
+    <div class="form-horizontal">
+        <div class="cards-group">
+            <div class="card card-default">
+                <div class="card-body">
+                    @await Html.PartialAsync("Table", new DataTablesModel
+                    {
+                        Name = "services-grid",
+                        UrlRead = new DataUrl("ServiceList", "DHL", null),
+                        UrlUpdate = new DataUrl("UpdateDHLService", "DHL", null),
+                        UrlDelete = new DataUrl("DeleteDHLService", "DHL", null),
+                        Length = Model.PageSize,
+                        LengthMenu = Model.AvailablePageSizes,
+                        ColumnCollection = new List<ColumnProperty>
+                        {
+                            new ColumnProperty(nameof(DHLServiceModel.ServiceName))
+                            {
+                                Title = T("Admin.NopStation.DHL.Services.Fields.ServiceName").Text,
+                                Width = "400",
+                                Editable = true,
+                                EditType = EditType.String
+                            },
+                            new ColumnProperty(nameof(DHLServiceModel.GlobalProductCode))
+                            {
+                                Title = T("Admin.NopStation.DHL.Services.Fields.GlobalProductCode").Text,
+                                Width = "200",
+                                Editable = true,
+                                EditType = EditType.String
+                            },
+                            new ColumnProperty(nameof(DHLServiceModel.IsActive))
+                            {
+                                Title = T("Admin.NopStation.DHL.Services.Fields.IsActive").Text,
+                                Width = "100",
+                                Editable = true,
+                                EditType = EditType.Checkbox,
+                                ClassName = NopColumnClassDefaults.CenterAll,
+                                Render = new RenderBoolean()
+                            },
+                            new ColumnProperty(nameof(DHLServiceModel.Id))
+                            {
+                                Title = T("Admin.Common.Edit").Text,
+                                Width = "100",
+                                ClassName =  NopColumnClassDefaults.Button,
+                                Render = new RenderButtonsInlineEdit()
+                            },
+                            new ColumnProperty(nameof(DHLServiceModel.Id))
+                            {
+                                Title = T("Admin.Common.Delete").Text,
+                                Width = "100",
+                                Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                                ClassName =  NopColumnClassDefaults.Button
+                            }
+                        }
+                    })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>

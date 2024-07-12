@@ -1,0 +1,26 @@
+@model SqlParameterModel
+
+@{
+    const string hideInfoBlockAttributeName = "SqlParameterPage.HideInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideInfoBlockAttributeName);
+
+    const string hideValuesBlockAttributeName = "SqlParameterPage.HideValuesBlock";
+    var hideValuesBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideValuesBlockAttributeName, defaultValue: true);
+}
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <nop-cards id="sqlparameter-panels">
+                <nop-card asp-name="sqlparameter-info" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.SqlManager.SqlParameters.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock">@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</nop-card>
+                @if (!(Model.IsDateType || Model.IsTextInputItem))
+                {
+                    <nop-card asp-name="sqlparameter-requirements" asp-icon="fa fa-list" asp-title="@T("Admin.NopStation.SqlManager.SqlParameters.Values")" asp-hide-block-attribute-name="@hideValuesBlockAttributeName" asp-hide="@hideValuesBlock">@await Html.PartialAsync("_CreateOrUpdate.Values", Model)</nop-card>
+                }
+            </nop-cards>
+        </div>
+    </div>
+</section>

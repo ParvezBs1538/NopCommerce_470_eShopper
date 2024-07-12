@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Clarity",
+  "SystemName": "NopStation.Plugin.Widgets.Clarity",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.Clarity.dll",
+  "Description": "This plugin allows you to connect with Clarity.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

@@ -1,0 +1,142 @@
+﻿@using Nop.Core
+@using System.Globalization
+@model CssModel
+@inject IWorkContext workContext
+
+@{
+    var supportRtl = (await workContext.GetWorkingLanguageAsync()).Rtl;
+    if (supportRtl)
+    {
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.ProductBadge/Contents/css/styles.rtl.css", string.Empty);
+    }
+    else
+    {
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.ProductBadge/Contents/css/styles.css", string.Empty);
+    }
+    System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = new System.Globalization.CultureInfo("en-US");
+}
+
+<style>
+    :root {
+        /*Common CSS starts*/
+
+        --badge-small-overview-width: @(Model.Overview.Small.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-medium-overview-width: @(Model.Overview.Medium.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-large-overview-width: @(Model.Overview.Large.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-small-details-width: @(Model.Details.Small.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-medium-details-width: @(Model.Details.Medium.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-large-details-width: @(Model.Details.Large.Width.ToString("N2", new CultureInfo("en-US")))px;
+        /*Common CSS ends*/
+        /*Heart CSS starts*/
+
+        --heart-container-small-overview-width: @(Model.Overview.Small.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --heart-container-small-overview-height: @((Model.Overview.Small.Width * .66m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-small-overview-left: @((Model.Overview.Small.Width * .51m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-small-overview-width: @((Model.Overview.Small.Width / 1.83m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-small-overview-height: @((Model.Overview.Small.Width * 1.6m / 1.83m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-small-overview-border-radius: @((Model.Overview.Small.Width / 1.83m).ToString("N2", new CultureInfo("en-US")))px @((Model.Overview.Small.Width / 1.83m).ToString("N2", new CultureInfo("en-US")))px 0 0;
+        --heart-bottom-small-overview-left: -@((Model.Overview.Small.Width * .03m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-ribbon-text-small-overview-width: @((Model.Overview.Small.Width * .8m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-container-medium-overview-width: @(Model.Overview.Medium.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-heart-medium-overview-height: @((Model.Overview.Medium.Width * .66m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-medium-overview-left: @((Model.Overview.Medium.Width * .51m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-medium-overview-width: @((Model.Overview.Medium.Width / 1.83m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-medium-overview-height: @((Model.Overview.Medium.Width * 1.6m / 1.83m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-medium-overview-border-radius: @((Model.Overview.Medium.Width / 1.83m).ToString("N2", new CultureInfo("en-US")))px @((Model.Overview.Medium.Width / 1.83m).ToString("N2", new CultureInfo("en-US")))px 0 0;
+        --heart-bottom-medium-overview-left: -@((Model.Overview.Medium.Width * .03m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-ribbon-text-medium-overview-width: @((Model.Overview.Medium.Width * .8m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-container-large-overview-width: @(Model.Overview.Large.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-heart-large-overview-height: @((Model.Overview.Large.Width * .66m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-large-overview-left: @((Model.Overview.Large.Width * .51m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-large-overview-width: @((Model.Overview.Large.Width / 1.83m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-large-overview-height: @((Model.Overview.Large.Width * 1.6m / 1.83m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-large-overview-border-radius: @((Model.Overview.Large.Width / 1.83m).ToString("N2", new CultureInfo("en-US")))px @((Model.Overview.Large.Width / 1.83m).ToString("N2", new CultureInfo("en-US")))px 0 0;
+        --heart-bottom-large-overview-left: -@((Model.Overview.Large.Width * .03m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-ribbon-text-large-overview-width: @((Model.Overview.Large.Width * .8m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-container-small-details-width: @(Model.Details.Small.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-heart-small-details-height: @((Model.Details.Small.Width * .66m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-small-details-left: @((Model.Details.Small.Width * .51m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-small-details-width: @((Model.Details.Small.Width / 1.83m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-small-details-height: @((Model.Details.Small.Width * 1.6m / 1.83m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-small-details-border-radius: @((Model.Details.Small.Width / 1.83m).ToString("N2", new CultureInfo("en-US")))px @((Model.Details.Small.Width / 1.83m).ToString("N2", new CultureInfo("en-US")))px 0 0;
+        --heart-bottom-small-details-left: -@((Model.Details.Small.Width * .03m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-ribbon-text-small-details-width: @((Model.Details.Small.Width * .8m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-container-medium-details-width: @(Model.Details.Medium.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --heart-container-medium-details-height: @((Model.Details.Medium.Width * .66m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-medium-details-left: @((Model.Details.Medium.Width * .51m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-medium-details-width: @((Model.Details.Medium.Width / 1.83m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-medium-details-height: @((Model.Details.Medium.Width * 1.6m / 1.83m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-medium-details-border-radius: @((Model.Details.Medium.Width / 1.83m).ToString("N2", new CultureInfo("en-US")))px @((Model.Details.Medium.Width / 1.83m).ToString("N2", new CultureInfo("en-US")))px 0 0;
+        --heart-bottom-medium-details-left: -@((Model.Details.Medium.Width * .03m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-ribbon-text-medium-details-width: @((Model.Details.Medium.Width * .8m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-container-large-details-width: @(Model.Details.Large.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-heart-large-details-height: @((Model.Details.Large.Width * .66m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-large-details-left: @((Model.Details.Large.Width * .51m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-large-details-width: @((Model.Details.Large.Width / 1.83m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-large-details-height: @((Model.Details.Large.Width * 1.6m / 1.83m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-large-details-border-radius: @((Model.Details.Large.Width / 1.83m).ToString("N2", new CultureInfo("en-US")))px @((Model.Details.Large.Width / 1.83m).ToString("N2", new CultureInfo("en-US")))px 0 0;
+        --heart-bottom-large-details-left: -@((Model.Details.Large.Width * .03m).ToString("N2", new CultureInfo("en-US")))px;
+        --heart-ribbon-text-large-details-width: @((Model.Details.Large.Width * .8m).ToString("N2", new CultureInfo("en-US")))px;
+        /*Heart CSS ends*/
+        /*Pentagon CSS starts*/
+
+        --badge-pentagon-top-small-overview-height: @(Model.Overview.Small.PentagonHeight.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-pentagon-top-medium-overview-height: @(Model.Overview.Medium.PentagonHeight.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-pentagon-top-large-overview-height: @(Model.Overview.Large.PentagonHeight.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-pentagon-top-small-details-height: @(Model.Details.Small.PentagonHeight.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-pentagon-top-medium-details-height: @(Model.Details.Medium.PentagonHeight.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-pentagon-top-large-details-height: @(Model.Details.Large.PentagonHeight.ToString("N2", new CultureInfo("en-US")))px;
+        /*Pentagon CSS ends*/
+        /*Diamond Shield CSS starts*/
+
+        --badge-diamondshield-top-small-overview-border: @((Model.Overview.Small.Width / 2).ToString("N2", new CultureInfo("en-US")))px solid transparent;
+        --badge-diamondshield-top-small-overview-border-bottom: @((Model.Overview.Small.Width * .25m).ToString("N2", new CultureInfo("en-US")))px solid;
+        --badge-diamondshield-top-medium-overview-border: @((Model.Overview.Medium.Width / 2).ToString("N2", new CultureInfo("en-US")))px solid transparent;
+        --badge-diamondshield-top-medium-overview-border-bottom: @((Model.Overview.Medium.Width * .25m).ToString("N2", new CultureInfo("en-US")))px solid;
+        --badge-diamondshield-top-large-overview-border: @((Model.Overview.Large.Width / 2).ToString("N2", new CultureInfo("en-US")))px solid transparent;
+        --badge-diamondshield-top-large-overview-border-bottom: @((Model.Overview.Large.Width * .25m).ToString("N2", new CultureInfo("en-US")))px solid;
+        --badge-diamondshield-bottom-small-overview-border: @((Model.Overview.Small.Width / 2).ToString("N2", new CultureInfo("en-US")))px solid transparent;
+        --badge-diamondshield-bottom-small-overview-border-top: @((Model.Overview.Small.Width * .75m).ToString("N2", new CultureInfo("en-US")))px solid;
+        --badge-diamondshield-bottom-medium-overview-border: @((Model.Overview.Medium.Width / 2).ToString("N2", new CultureInfo("en-US")))px solid transparent;
+        --badge-diamondshield-bottom-medium-overview-border-top: @((Model.Overview.Medium.Width * .75m).ToString("N2", new CultureInfo("en-US")))px solid;
+        --badge-diamondshield-bottom-large-overview-border: @((Model.Overview.Large.Width / 2).ToString("N2", new CultureInfo("en-US")))px solid transparent;
+        --badge-diamondshield-bottom-large-overview-border-top: @((Model.Overview.Large.Width * .75m).ToString("N2", new CultureInfo("en-US")))px solid;
+        --badge-diamondshield-top-small-details-border: @((Model.Details.Small.Width / 2).ToString("N2", new CultureInfo("en-US")))px solid transparent;
+        --badge-diamondshield-top-small-details-border-bottom: @((Model.Details.Small.Width * .25m).ToString("N2", new CultureInfo("en-US")))px solid;
+        --badge-diamondshield-top-medium-details-border: @((Model.Details.Medium.Width / 2).ToString("N2", new CultureInfo("en-US")))px solid transparent;
+        --badge-diamondshield-top-medium-details-border-bottom: @((Model.Details.Medium.Width * .25m).ToString("N2", new CultureInfo("en-US")))px solid;
+        --badge-diamondshield-top-large-details-border: @((Model.Details.Large.Width / 2).ToString("N2", new CultureInfo("en-US")))px solid transparent;
+        --badge-diamondshield-top-large-details-border-bottom: @((Model.Details.Large.Width * .25m).ToString("N2", new CultureInfo("en-US")))px solid;
+        --badge-diamondshield-bottom-small-details-border: @((Model.Details.Small.Width / 2).ToString("N2", new CultureInfo("en-US")))px solid transparent;
+        --badge-diamondshield-bottom-small-details-border-top: @((Model.Details.Small.Width * .75m).ToString("N2", new CultureInfo("en-US")))px solid;
+        --badge-diamondshield-bottom-medium-details-border: @((Model.Details.Medium.Width / 2).ToString("N2", new CultureInfo("en-US")))px solid transparent;
+        --badge-diamondshield-bottom-medium-details-border-top: @((Model.Details.Medium.Width * .75m).ToString("N2", new CultureInfo("en-US")))px solid;
+        --badge-diamondshield-bottom-large-details-border: @((Model.Details.Large.Width / 2).ToString("N2", new CultureInfo("en-US")))px solid transparent;
+        --badge-diamondshield-bottom-large-details-border-top: @((Model.Details.Large.Width * .75m).ToString("N2", new CultureInfo("en-US")))px solid;
+        /*Diamond Shield CSS ends*/
+        /*Point Burst CSS starts*/
+
+        --badge-pointburst-small-overview-height: @(Model.Overview.Small.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-pointburst-medium-overview-height: @(Model.Overview.Medium.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-pointburst-large-overview-height: @(Model.Overview.Large.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-pointburst-small-details-height: @(Model.Details.Small.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-pointburst-medium-details-height: @(Model.Details.Medium.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-pointburst-large-details-height: @(Model.Details.Large.Width.ToString("N2", new CultureInfo("en-US")))px;
+        /*Point Burst CSS ends*/
+        /*Talk Bubble CSS starts*/
+
+        --badge-talkbubble-small-overview-width: @(Model.Overview.Small.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-talkbubble-medium-overview-width: @(Model.Overview.Medium.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-talkbubble-large-overview-width: @(Model.Overview.Large.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-talkbubble-small-details-width: @(Model.Details.Small.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-talkbubble-medium-details-width: @(Model.Details.Medium.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-talkbubble-large-details-width: @(Model.Details.Large.Width.ToString("N2", new CultureInfo("en-US")))px;
+        --badge-talkbubble-small-overview-height: @((Model.Overview.Small.Width * .7m).ToString("N2", new CultureInfo("en-US")))px;
+        --badge-talkbubble-medium-overview-height: @((Model.Overview.Medium.Width * .7m).ToString("N2", new CultureInfo("en-US")))px;
+        --badge-talkbubble-large-overview-height: @((Model.Overview.Large.Width * .7m).ToString("N2", new CultureInfo("en-US")))px;
+        --badge-talkbubble-small-details-height: @((Model.Details.Small.Width * .7m).ToString("N2", new CultureInfo("en-US")))px;
+        --badge-talkbubble-medium-details-height: @((Model.Details.Medium.Width * .7m).ToString("N2", new CultureInfo("en-US")))px;
+        --badge-talkbubble-large-details-height: @((Model.Details.Large.Width * .7m).ToString("N2", new CultureInfo("en-US")))px;
+        /*Talk Bubble CSS ends*/
+    }
+</style>

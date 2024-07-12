@@ -1,0 +1,12 @@
+﻿@model ProductDetailsModel.AddToCartModel
+@using Nop.Core
+@using Nop.Core.Domain.Catalog
+@using Nop.Core.Domain.Orders
+@using Nop.Core.Domain.Tax
+@inject CatalogSettings catalogSettings
+@inject IWorkContext workContext
+@if (!Model.DisableBuyButton)
+{
+    var buyNowText = T("NopStation.Opc.Buttons.BuyNow").Text;
+    <button type="button" id="add-to-cart-checkout-button-@Model.ProductId" class="button-1 add-to-cart-checkout-button" data-productid="@Model.ProductId" onclick="BuyNow.addproducttocartcheckout_details('@Url.RouteUrl("AddProductToCartCheckout-Details", new {productId = Model.ProductId, shoppingCartTypeId = (int) ShoppingCartType.ShoppingCart})', '#product-details-form');return false;">@buyNowText</button>
+}

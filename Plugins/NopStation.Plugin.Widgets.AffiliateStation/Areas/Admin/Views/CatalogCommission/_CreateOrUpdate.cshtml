@@ -1,0 +1,77 @@
+@model CatalogCommissionModel
+
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.UsePercentage)").click(toggleUsePercentage);
+
+        toggleUsePercentage();
+    });
+
+    function toggleUsePercentage() {
+        if ($('#@Html.IdFor(model => model.UsePercentage)').is(':checked')) {
+            $('#pnlCommissionPercentage').show();
+            $('#pnlCommissionAmount').hide();
+        } else {
+            $('#pnlCommissionPercentage').hide();
+            $('#pnlCommissionAmount').show();
+        }
+    }
+</script>
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+<input asp-for="EntityName" type="hidden" />
+<input asp-for="EntityId" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="Name" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">
+                                    <a asp-controller="@Model.EntityName" asp-action="Edit" asp-route-id="@Model.EntityId">@Model.Name - @T("Admin.Common.View")</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="UsePercentage" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="UsePercentage" />
+                                <span asp-validation-for="UsePercentage"></span>
+                            </div>
+                        </div>
+                        <nop-nested-setting asp-for="UsePercentage">
+                            <div class="form-group row" id="pnlCommissionPercentage">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="CommissionPercentage" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="CommissionPercentage" />
+                                    <span asp-validation-for="CommissionPercentage"></span>
+                                </div>
+                            </div>
+                        </nop-nested-setting>
+
+                        <div class="form-group row" id="pnlCommissionAmount">
+                            <div class="col-md-3">
+                                <nop-label asp-for="CommissionAmount" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="CommissionAmount" asp-postfix="@Model.PrimaryStoreCurrencyCode" />
+                                <span asp-validation-for="CommissionAmount"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

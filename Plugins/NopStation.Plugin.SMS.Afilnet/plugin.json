@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Afilnet Sms",
+  "SystemName": "NopStation.Plugin.SMS.Afilne",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.SMS.Afilnet.dll",
+  "Description": "This plugin allows to send SMS on multiple events using Afilnet gateway.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

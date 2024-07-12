@@ -1,0 +1,254 @@
+﻿
+
+.ui-accordion .ui-accordion-content {
+  padding: 1em 1.2em !important;
+}
+
+.searchText {
+  margin-bottom: 5px;
+}
+
+.filter-section {
+  margin-top: 12px;
+  background: #FFFFFF;
+  border: 1px solid #EFEFEF;
+  box-shadow: 3px 2px 5px rgba(228, 231, 234, 0.5);
+  border-radius: 5px;
+}
+
+.filter-result-count {
+  font-size: 18px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.filter-section .title {
+  background-color: white;
+  border: none;
+}
+
+.filter-section .listbox {
+  padding: 0em 1.2em !important;
+}
+
+.ajaxfilter-title {
+  font-weight: bold;
+  color: #444;
+  background-color: white;
+  font-size: 15px
+}
+
+  .ajaxfilter-title i.fa-undo {
+    font-size: 13px;
+    float: right;
+    margin-right: 20px;
+    line-height: 15px;
+    color: #124395;
+    display: none;
+  }
+
+  .ajaxfilter-title i,
+  .block-manufacturer-navigation i.fa-angle-down,
+  .block-category-navigation i.fa-angle-down,
+  .block-recently-viewed-products i.fa-angle-down,
+  .block-popular-tags i.fa-angle-down {
+    color: #b8b8b8;
+  }
+
+    .ajaxfilter-title i.fa-angle-down {
+      display: none;
+    }
+
+.ajaxfilter-price-range-section {
+  font-size: 18px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.ajaxfilter-price-range {
+  font-size: 18px;
+  display: flex;
+  margin-top: 5px;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+
+.ajaxfilter-price-section {
+  display: flex;
+  flex-direction: column;
+}
+
+#slider-range {
+  margin: 8px auto 8px;
+  max-width: calc(100% - 30px);
+}
+
+.ajaxfilter-clear-price {
+  margin-top: 8px;
+}
+
+.man-filter-section .title {
+  background-color: white;
+  border: none;
+}
+
+#price-current-min {
+  width: 60px;
+  border: 1px solid #cccccc;
+  text-align: center;
+  float: left;
+  font-size: 14px;
+  height: 24px;
+}
+
+#price-current-max {
+  width: 60px;
+  border: 1px solid #cccccc;
+  text-align: center;
+  float: right;
+  font-size: 14px;
+  height: 24px;
+}
+
+
+.selected-filter-list-box ul li {
+  background: #f0f0f0;
+  padding: 10px 14px;
+  display: inline-block;
+  font-size: 13px;
+  color: #222;
+  font-weight: bold;
+  margin-top: 6px;
+  margin-right: 4px;
+  margin-bottom: 3px;
+  line-height: 15px;
+}
+
+.floated-icon {
+  width: 20px;
+  background-color: blue;
+}
+
+.count-clear {
+  display: flex;
+  justify-content: space-between;
+}
+
+.clear-filter-all {
+  color: #4ab2f1;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.clear-filter-rating {
+  color: #4ab2f1;
+  cursor: pointer;
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+
+.applied-title {
+  margin-top: 20px;
+}
+
+
+.min115 {
+}
+
+.min180 {
+  min-height: 180px !important;
+}
+
+li:has(> a.showControl) {
+  margin-top: 5px !important;
+  color: #4ab2f1 !important;
+  cursor: pointer;
+}
+
+
+.showControl {
+  color: #4ab2f1 !important;
+}
+
+li[class^='showControl'] {
+  margin-top: 5px;
+  color: #4ab2f1;
+  cursor: pointer;
+}
+
+.filter-section .ui-icon.ui-accordion-header-icon {
+  background: none;
+  margin: 0;
+  text-indent: 0;
+  height: auto;
+  width: auto;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #000;
+}
+
+  .filter-section .ui-icon.ui-accordion-header-icon::before {
+    content: "-";
+    display: inline-block;
+    font-size: 24px;
+  }
+
+.filter-section .ui-icon.ui-icon-triangle-1-e::before {
+  content: "+";
+}
+
+.filter-section .listbox li {
+  position: relative;
+  padding-right: 30px;
+  margin-bottom: 6px;
+}
+
+  .filter-section .listbox li i {
+    font-style: normal;
+  }
+
+  .filter-section .listbox li .count {
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #999;
+  }
+
+.ProductRating-section .productsec label {
+  border-bottom: 1px solid #ddd9d9;
+  display: block;
+}
+
+.nop-ajax-filters {
+  padding-bottom: 15px;
+}
+
+.ui-widget-content {
+  border: none;
+}
+
+.filter-section .listbox.ui-accordion-content-active::before, .filter-section .listbox.ui-accordion-content-active::after {
+  content: '';
+  display: block;
+  height: 1em;
+}
+
+#PriceyNavigation {
+  overflow: hidden !important;
+}
+
+  #PriceyNavigation::after {
+    content: '';
+    display: block;
+    height: 2em;
+  }
+.selected-filter-list-box span.ajaxfilter-selectedclose {
+  cursor: pointer;
+  padding-left: 8px;
+  color: #d60000;
+}

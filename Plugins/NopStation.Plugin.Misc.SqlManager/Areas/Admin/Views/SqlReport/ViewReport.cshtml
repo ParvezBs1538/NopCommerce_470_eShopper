@@ -1,0 +1,212 @@
+﻿@model SqlReportModel
+
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.SqlManager.SqlReports.ViewReport").Text + " - " + Model.Name;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("ViewSqlReports");
+
+    //dom
+    var buttonsPanel = "<'col-lg-1 col-xs-12'<'float-lg-right text-center data-tables-refresh'B>>";
+    var infoPanel = "<'col-lg-3 col-xs-12'<'float-lg-right text-center'i>>";
+
+    var dom = "<'row'<'col-md-12't>>" +
+              "<'row margin-t-5'" +
+                "<'col-lg-5 col-xs-12'<'float-lg-left'p>>" +
+                "<'col-lg-3 col-xs-12'<'text-center'l>>" +
+                infoPanel +
+                buttonsPanel +
+              ">";
+}
+
+<form asp-controller="SqlReport" asp-action="ExportReport" method="post" id="form-sqlreport">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.SqlManager.SqlReports.ViewReport") - @Model.Name
+            <small>
+                <i class="fas fa-arrow-circle-left"></i>
+                <a asp-action="ViewList">@T("Admin.NopStation.SqlManager.SqlReports.BackToList")</a>
+            </small>
+        </h1>
+        <div class="float-right">
+            <button type="button" name="btn-generate-report" class="btn btn-primary" id="btn-generate-report">
+                <i class="fa fa-chart-line"></i>
+                @T("Admin.NopStation.SqlManager.SqlReports.Generate")
+            </button>
+            <button type="submit" name="exportexcel" class="btn btn-success">
+                <i class="fa fa-download"></i>
+                @T("Admin.NopStation.SqlManager.SqlReports.Export")
+            </button>
+        </div>
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <input type="hidden" asp-for="Id" />
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="Name" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Model.Name</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="Description" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Model.Description</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="Query" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Model.Query</div>
+                                </div>
+                            </div>
+
+                            @if (Model.SqlReportFilterOptions.Any())
+                            {
+                                <div class="card card-default">
+                                    <div class="card-header">
+                                        @T("Admin.NopStation.SqlManager.SqlReports.Select.ParameterValues")
+                                    </div>
+                                    <div class="card-body">
+                                        @foreach (var filter in Model.SqlReportFilterOptions)
+                                        {
+                                            var order = filter.Order > 1 ? $"({filter.Order})" : "";
+                                            <div class="form-group row">
+                                                <div class="col-md-3">
+                                                    <div class="label-wrapper">
+                                                        <label class="control-label col-form-label" for="@(filter.SystemName)_@(filter.Order)">@filter.Name @order</label>
+                                                        <div title="" data-toggle="tooltip" class="ico-help" data-original-title="@filter.Name @order"><i class="fas fa-question-circle"></i></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    @if (filter.IsDateItem)
+                                                    {
+                                                        <input name="filterItem_@(filter.SystemName + "_" + filter.Order)" id="@(filter.SystemName + "_" + filter.Order)" />
+                                                        <script>$("#@(filter.SystemName + "_" + filter.Order)").kendoDatePicker();</script>
+                                                    }
+                                                    else if (filter.IsTextInputItem)
+                                                    {
+                                                        <input type="text" name="filterItem_@(filter.SystemName + "_" + filter.Order)" id="@(filter.SystemName + "_" + filter.Order)" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <select class="form-control" asp-items="@filter.AvailableValues" name="filterItem_@(filter.SystemName + "_" + filter.Order)" id="@(filter.SystemName + "_" + filter.Order)"></select>
+                                                        @if (filter.IsListItem)
+                                                        {
+                                                            <script>
+                                                                $(document).ready(function () {
+                                                                    $("#@(filter.SystemName + "_" + filter.Order)").kendoMultiSelect({
+                                                                        select: function (e) {
+                                                                            var current = this.value();
+
+                                                                            if (this.dataSource.view()[e.item.index()].value === "0") {
+                                                                                this.value("");
+                                                                            }
+                                                                            else if (current.indexOf("0") !== -1) {
+                                                                                current = $.grep(current, function (value) {
+                                                                                    return value !== "0";
+                                                                                });
+
+                                                                                this.value(current);
+                                                                            }
+                                                                        },
+                                                                        change: function (e) {
+                                                                            if (this.value().length === 0)
+                                                                                this.value(["0"]);
+                                                                        }
+                                                                    }).data("kendoMultiSelect");
+                                                                });
+                                                            </script>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="card card-default sub-card" id="view-report-container" style="display: none;">
+                        <div class="card-header">
+                            <i class="fa fa-table"></i>
+                            @T("Admin.NopStation.SqlManager.SqlReports.Viewer")
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="result" class="table table-bordered">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+<nop-alert asp-alert-id="queryRunFailed" />
+<nop-alert asp-alert-id="queryResultReturned" />
+<script>
+    (function () {
+        var dataTable;
+        function loadDataToGrid(data, columns) {
+            dataTable = $('#result').DataTable({
+                dom: '@JavaScriptEncoder.Default.Encode(dom)',
+                data: data,
+                columns: columns,
+                ordering: true,
+                searching: false,
+                language: @await Html.PartialAsync("_GridLocalization"),
+                buttons: []
+            });
+            $('#result').css("width", "100% !important");
+        }
+
+        // on generate report click.
+        $('#btn-generate-report').on('click', function () {
+            if (dataTable != null)
+                $('#result').DataTable().clear().destroy();
+
+            $('#view-report-container').hide();
+            var postData = $('#form-sqlreport').serialize();
+            addAntiForgeryToken(postData);
+            $.ajax({
+                url: "@Html.Raw(Url.Action("ViewReport", "SqlReport", new { id = Model.Id }))",
+                type: 'POST',
+                data: postData,
+                success: function (response) {
+                    if (response.result && response.result.length > 0) {
+
+                        let cols = Object.keys(response.result[0]).map((value) => {
+                            return { 'title': value }
+                        });
+                        let data = response.result.map((value) => {
+                            return Object.values(value);
+                        });
+                        loadDataToGrid(data, cols);
+                        $('#view-report-container').show();
+                    }else {
+                        //alert(response.message);
+                        $('#queryResultReturned-info').html(response.Message);
+                         $('#queryResultReturned').click();
+                    }
+                },
+                error: function (msg) {
+                    $('#view-report-container').hide();
+                }
+            });
+        });
+    }());
+</script>

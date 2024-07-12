@@ -1,0 +1,144 @@
+﻿@model AffiliateCustomerModel
+
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.OverrideCatalogCommission)").change(toggleOverrideCatalogCommission);
+        $("#@Html.IdFor(model => model.UsePercentage)").click(toggleUsePercentage);
+
+        toggleOverrideCatalogCommission();
+        toggleUsePercentage();
+
+        $('#btnAffiliateCustomerSave').click(function () {
+            var data = {};
+            data.AffiliateId = @(Model.AffiliateId);
+            data.ApplyStatusId = $('#@Html.IdFor(x => x.ApplyStatusId)').val();
+            data.CommissionAmount = $('#@Html.IdFor(x => x.CommissionAmount)').val();
+            data.CommissionPercentage = $('#@Html.IdFor(x => x.CommissionPercentage)').val();
+            data.OverrideCatalogCommission = $('#@Html.IdFor(x => x.OverrideCatalogCommission)').is(':checked');
+            data.UsePercentage = $('#@Html.IdFor(x => x.UsePercentage)').is(':checked');
+            addAntiForgeryToken(data);
+
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("SaveDetails", "AffiliateCustomer")",
+                data: data,
+                dataType: 'json',
+                success: function (result) {
+                    if (result.Message) {
+                        alert(result.Message)
+                    }
+                }
+            });
+        });
+    });
+
+    function toggleOverrideCatalogCommission() {
+        if ($('#@Html.IdFor(model => model.OverrideCatalogCommission)').is(':checked')) {
+            $('#pnlOverrideCatalogCommission').show();
+        } else {
+            $('#pnlOverrideCatalogCommission').hide();
+        }
+    }
+
+    function toggleUsePercentage() {
+        if ($('#@Html.IdFor(model => model.UsePercentage)').is(':checked')) {
+            $('#pnlCommissionPercentage').show();
+            $('#pnlCommissionAmount').hide();
+        } else {
+            $('#pnlCommissionPercentage').hide();
+            $('#pnlCommissionAmount').show();
+        }
+    }
+</script>
+
+@{
+    const string hideAffiliateCustomerBlockAttributeName = "AffiliatePage.HideAffiliateCustomerBlock";
+    var hideAffiliateCustomerBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideAffiliateCustomerBlockAttributeName);
+}
+
+<nop-card asp-name="affiliate-customers" asp-icon="fas fa-user" asp-title="@T("Admin.NopStation.AffiliateStation.Affiliates.Customer")" asp-hide-block-attribute-name="@hideAffiliateCustomerBlockAttributeName" asp-hide="@hideAffiliateCustomerBlock">
+    <div class="card-body">
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="CustomerId" />
+            </div>
+            <div class="col-md-9">
+                <div class="form-text-row" title="@Model.CustomerFullName">
+                    <a href="@Url.Action("Edit", "Customer", new { id = Model.CustomerId })">@Model.CustomerEmail</a>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="ApplyStatusId" />
+            </div>
+            <div class="col-md-9">
+                <nop-select asp-for="ApplyStatusId" asp-items="@Model.AvailableApplyStatuses" />
+                <span asp-validation-for="ApplyStatusId"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="OverrideCatalogCommission" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="OverrideCatalogCommission" />
+                <span asp-validation-for="OverrideCatalogCommission"></span>
+            </div>
+        </div>
+        <nop-nested-setting asp-for="OverrideCatalogCommission">
+            <div id="pnlOverrideCatalogCommission">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="UsePercentage" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="UsePercentage" />
+                        <span asp-validation-for="UsePercentage"></span>
+                    </div>
+                </div>
+                <div class="form-group row" id="pnlCommissionAmount">
+                    <div class="col-md-3">
+                        <nop-label asp-for="CommissionAmount" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="CommissionAmount" asp-postfix="@Model.PrimaryStoreCurrencyCode" />
+                        <span asp-validation-for="CommissionAmount"></span>
+                    </div>
+                </div>
+                <div class="form-group row" id="pnlCommissionPercentage">
+                    <div class="col-md-3">
+                        <nop-label asp-for="CommissionPercentage" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="CommissionPercentage" />
+                        <span asp-validation-for="CommissionPercentage"></span>
+                    </div>
+                </div>
+            </div>
+        </nop-nested-setting>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="CreatedOn" />
+            </div>
+            <div class="col-md-9">
+                <div class="form-text-row">@Model.CreatedOn</div>
+                <span asp-validation-for="CreatedOn"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-9">
+                <button type="button" id="btnAffiliateCustomerSave" class="btn btn-primary">
+                    <i class="far fa-save"></i>
+                    @T("Admin.Common.Save")
+                </button>
+                <a asp-action="List" asp-controller="AffiliateCustomer" class="btn btn-default">
+                    <i class="fa fa-arrow-circle-left"></i>
+                    @T("Admin.NopStation.AffiliateStation.AffiliateCustomers.BackToList")
+                </a>
+            </div>
+        </div>
+    </div>
+</nop-card>

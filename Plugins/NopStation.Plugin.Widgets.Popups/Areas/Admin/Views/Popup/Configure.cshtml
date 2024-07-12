@@ -1,0 +1,176 @@
+﻿@model ConfigurationModel
+
+@{
+    NopHtml.SetActiveMenuItemSystemName("Popup.Configuration");
+    ViewBag.PageTitle = T("Admin.NopStation.Popups.Configuration").Text;
+}
+
+<form asp-controller="Popup" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Popups.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableNewsletterPopup_OverrideForStore" asp-input="EnableNewsletterPopup" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableNewsletterPopup" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableNewsletterPopup" />
+                                </div>
+                            </div>
+                            @(await Html.LocalizedEditorAsync<ConfigurationModel, ConfigurationModel.ConfigurationLocalizedModel>("plugin-settings-localized",
+                            @<div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="NewsletterPopupTitle_OverrideForStore" asp-input="@Model.Locales[item].NewsletterPopupTitle" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="@Model.Locales[item].NewsletterPopupTitle" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="@Model.Locales[item].NewsletterPopupTitle" />
+                                        <span asp-validation-for="@Model.Locales[item].NewsletterPopupTitle"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="NewsletterPopupDesctiption_OverrideForStore" asp-input="@Model.Locales[item].NewsletterPopupDesctiption" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="@Model.Locales[item].NewsletterPopupDesctiption" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="@Model.Locales[item].NewsletterPopupDesctiption" asp-template="RichEditor" />
+                                        <span asp-validation-for="@Model.Locales[item].NewsletterPopupDesctiption"></span>
+                                    </div>
+                                </div>
+                                <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+                            </div>
+                            ,
+                            @<div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="NewsletterPopupTitle_OverrideForStore" asp-input="NewsletterPopupTitle" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="NewsletterPopupTitle" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="NewsletterPopupTitle" />
+                                        <span asp-validation-for="NewsletterPopupTitle"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="NewsletterPopupDesctiption_OverrideForStore" asp-input="NewsletterPopupDesctiption" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="NewsletterPopupDesctiption" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="NewsletterPopupDesctiption" asp-template="RichEditor" />
+                                        <span asp-validation-for="NewsletterPopupDesctiption"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            ,
+                            //localizable settings per store (overridden store settings) are not supported yet
+                            true
+                            ))
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="BackgroundPictureId_OverrideForStore" asp-input="BackgroundPictureId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="BackgroundPictureId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="BackgroundPictureId" />
+                                    <span asp-validation-for="BackgroundPictureId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <nop-override-store-checkbox asp-for="RedirectUrl_OverrideForStore" asp-input="RedirectUrl" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="RedirectUrl" />
+                                </div>
+                                <div class="col-sm-9">
+                                    <nop-editor asp-for="RedirectUrl" />
+                                    <span asp-validation-for="RedirectUrl"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="PopupOpenerSelector_OverrideForStore" asp-input="PopupOpenerSelector" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="PopupOpenerSelector" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="PopupOpenerSelector"/>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="OpenPopupOnLoadPage" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="OpenPopupOnLoadPage" />
+                                    <span asp-validation-for="OpenPopupOnLoadPage"></span>
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="OpenPopupOnLoadPage">
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="DelayTime" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="DelayTime" asp-postfix="ms" />
+                                        <span asp-validation-for="DelayTime"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="AllowCustomerToSelectDoNotShowThisPopupAgain" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="AllowCustomerToSelectDoNotShowThisPopupAgain" />
+                                        <span asp-validation-for="AllowCustomerToSelectDoNotShowThisPopupAgain"></span>
+                                    </div>
+                                </div>
+                                <nop-nested-setting asp-for="AllowCustomerToSelectDoNotShowThisPopupAgain">
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-label asp-for="PreSelectedDoNotShowThisPopupAgain" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="PreSelectedDoNotShowThisPopupAgain" />
+                                            <span asp-validation-for="PreSelectedDoNotShowThisPopupAgain"></span>
+                                        </div>
+                                    </div>
+                                </nop-nested-setting>
+                            </nop-nested-setting>
+    
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ShowOnHomePageOnly_OverrideForStore" asp-input="ShowOnHomePageOnly" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ShowOnHomePageOnly" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ShowOnHomePageOnly" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+

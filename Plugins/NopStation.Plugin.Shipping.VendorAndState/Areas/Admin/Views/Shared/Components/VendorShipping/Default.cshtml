@@ -1,0 +1,8 @@
+﻿@model VendorShippingModel
+
+@{
+    const string hideVendorShippingBlockAttributeName = "VendorShippingPage.HideVendorShippingBlock";
+    var hideVendorShippingBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideVendorShippingBlockAttributeName);
+}
+
+<nop-card asp-name="vendor-Shippings" asp-icon="fas fa-truck" asp-title="@T("Admin.NopStation.ShippingByVendor.Vendor.Tab.Shippings")" asp-hide-block-attribute-name="@hideVendorShippingBlockAttributeName" asp-hide="@hideVendorShippingBlock" asp-advanced="true">@await Html.PartialAsync("_Shippings.cshtml", Model)</nop-card>

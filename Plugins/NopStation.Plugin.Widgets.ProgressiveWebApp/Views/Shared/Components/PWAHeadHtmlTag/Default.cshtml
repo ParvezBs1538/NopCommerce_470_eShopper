@@ -1,0 +1,3 @@
+﻿@inject Nop.Core.IStoreContext storeContext
+
+<link rel="manifest" href="~/manifest_@((await storeContext.GetCurrentStoreAsync()).Id.ToString("000000")).json" />

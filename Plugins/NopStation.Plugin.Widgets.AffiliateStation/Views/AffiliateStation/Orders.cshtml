@@ -1,0 +1,120 @@
+﻿@using Nop.Core
+@inject Nop.Core.IWebHelper webHelper
+@model AffiliatedOrderModel
+
+@{
+    Layout = "_ColumnsTwo";
+
+    //title
+    NopHtml.AddTitleParts(T("NopStation.AffiliateStation.PageTitle.AffiliatedOrders").Text);
+    //page class
+    NopHtml.AppendPageCssClassParts("html-account-page");
+    NopHtml.AppendPageCssClassParts("html-affiliated-orders-page");
+}
+
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = -1 })
+}
+<style>
+    .commission-fields {
+        padding: 0 12px;
+    }
+
+        .commission-fields span {
+            font-weight: bold
+        }
+
+    #affiliated-order-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+        #affiliated-order-table td, #affiliated-order-table th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #affiliated-order-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #affiliated-order-table tr:hover {
+            background-color: #ddd;
+        }
+
+        #affiliated-order-table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4ab2f1;
+            color: white;
+        }
+</style>
+
+<div class="page account-page customer-info-page">
+    <div class="page-title">
+        <h1>@T("Account.MyAccount") - @T("NopStation.AffiliateStation.Account.AffiliatedOrders")</h1>
+    </div>
+    <div class="page-body">
+        <div class="fieldset">
+            <div class="title">
+                <strong>@T("NopStation.AffiliateStation.Account.CommissionSummarry")</strong>
+            </div>
+            <div class="commission-fields">
+                <span>@T("NopStation.AffiliateStation.Account.TotalCommission")</span> - @(Model.TotalCommission).
+                <span>@T("NopStation.AffiliateStation.Account.PaidCommission")</span> - @(Model.PaidCommission).
+                <span>@T("NopStation.AffiliateStation.Account.PayableCommission")</span> - @(Model.PayableCommission).
+            </div>
+        </div>
+        @if (Model.Orders.Any())
+        {
+            <div class="fieldset">
+                <div class="title">
+                    <strong>@T("NopStation.AffiliateStation.Account.OrderList")</strong>
+                </div>
+                <div class="commission-fields">
+
+                    <table id="affiliated-order-table">
+                        <thead>
+                            <tr>
+                                <th>@T("NopStation.AffiliateStation.Account.OrderList.OrderId")</th>
+                                <th>@T("NopStation.AffiliateStation.Account.OrderList.OrderStatus")</th>
+                                <th>@T("NopStation.AffiliateStation.Account.OrderList.PaymentStatus")</th>
+                                <th>@T("NopStation.AffiliateStation.Account.OrderList.CommissionStatus")</th>
+                                <th>@T("NopStation.AffiliateStation.Account.OrderList.CommissionPaidOn")</th>
+                                <th>@T("NopStation.AffiliateStation.Account.OrderList.TotalCommissionAmount")</th>
+                                <th>@T("NopStation.AffiliateStation.Account.OrderList.PaidCommissionAmount")</th>
+                                <th>@T("NopStation.AffiliateStation.Account.OrderList.CreatedOn")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model.Orders)
+                            {
+                                <tr>
+                                    <td>@order.OrderId</td>
+                                    <td>@order.OrderStatus</td>
+                                    <td>@order.PaymentStatus</td>
+                                    <td>@order.CommissionStatus</td>
+                                    <td>@(order.CommissionPaidOn.HasValue ? order.CommissionPaidOn.Value.ToString("dd MMM, yyyy hh:mm tt") : "")</td>
+                                    <td>@order.TotalCommissionAmount</td>
+                                    <td>@order.PaidCommissionAmount</td>
+                                    <td>@order.CreatedOn.ToString("dd MMM, yyyy hh:mm tt")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        @{
+            var pager = Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber");
+        }
+        @if (!(await pager.IsEmpty()))
+        {
+            <div class="pager">
+                @pager
+            </div>
+        }
+    </div>
+</div>

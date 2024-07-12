@@ -1,0 +1,109 @@
+﻿@model SmartCarouselPictureModel
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+<input asp-for="CarouselId" type="hidden" />
+
+@if (ViewBag.RefreshPage == true)
+{
+    <script>
+        try {window.opener.document.forms['@(Context.Request.Query["formId"])'].@(Context.Request.Query["btnId"]).click();}
+        catch (e){}
+        window.close();
+    </script>
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default card-popup card-popup">
+                        <div class="card-body">
+                            @(await Html.LocalizedEditorAsync<SmartCarouselPictureModel, SmartCarouselPictureLocalizedModel>("smartcarouselpicture-localized",
+                                    @<div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-3">
+                                                <nop-label asp-for="@Model.Locales[item].Label" />
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <nop-editor asp-for="@Model.Locales[item].Label" />
+                                                <span asp-validation-for="@Model.Locales[item].Label"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-3">
+                                                <nop-label asp-for="@Model.Locales[item].RedirectUrl" />
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <nop-editor asp-for="@Model.Locales[item].RedirectUrl" />
+                                                <span asp-validation-for="@Model.Locales[item].RedirectUrl"></span>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+                                    </div>
+          ,
+                                                    @<div>
+                                                        <div class="form-group row">
+                                                            <div class="col-sm-3">
+                                                                <nop-label asp-for="Label" />
+                                                            </div>
+                                                            <div class="col-sm-9">
+                                                                <nop-editor asp-for="Label" asp-required="true" />
+                                                                <span asp-validation-for="Label"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <div class="col-sm-3">
+                                                                <nop-label asp-for="RedirectUrl" />
+                                                            </div>
+                                                            <div class="col-sm-9">
+                                                                <nop-editor asp-for="RedirectUrl" />
+                                                                <span asp-validation-for="RedirectUrl"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                          ))
+                            <div class="form-group row" id="group-price-adjustment">
+                                <div class="col-sm-3">
+                                    <nop-label asp-for="PictureId" />
+                                </div>
+                                <div class="col-sm-9">
+                                    <nop-editor asp-for="PictureId" />
+                                    <span asp-validation-for="PictureId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <nop-label asp-for="OverrideAltAttribute" />
+                                </div>
+                                <div class="col-sm-9">
+                                    <nop-editor asp-for="OverrideAltAttribute" />
+                                    <span asp-validation-for="OverrideAltAttribute"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <nop-label asp-for="OverrideTitleAttribute" />
+                                </div>
+                                <div class="col-sm-9">
+                                    <nop-editor asp-for="OverrideTitleAttribute" />
+                                    <span asp-validation-for="OverrideTitleAttribute"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <nop-label asp-for="DisplayOrder" />
+                                </div>
+                                <div class="col-sm-9">
+                                    <nop-editor asp-for="DisplayOrder" />
+                                    <span asp-validation-for="DisplayOrder"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

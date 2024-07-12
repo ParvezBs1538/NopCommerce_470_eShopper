@@ -1,0 +1,82 @@
+@model SliderModel
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="PictureId" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="PictureId" />
+                                <span asp-validation-for="PictureId"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="ActiveStartDate" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="ActiveStartDate" />
+                                <span asp-validation-for="ActiveStartDate"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="ActiveEndDate" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="ActiveEndDate" />
+                                <span asp-validation-for="ActiveEndDate"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="SliderTypeId" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-select asp-for="SliderTypeId" asp-items="Model.AvailableSliderTypes" />
+                                <span asp-validation-for="SliderTypeId"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="EntityId" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="EntityId" />
+                                <span asp-validation-for="EntityId"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="DisplayOrder" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="DisplayOrder" />
+                                <span asp-validation-for="DisplayOrder"></span>
+                            </div>
+                        </div>
+                        @if (Model.Id > 0)
+                        {
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="CreatedOn" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Model.CreatedOn</div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

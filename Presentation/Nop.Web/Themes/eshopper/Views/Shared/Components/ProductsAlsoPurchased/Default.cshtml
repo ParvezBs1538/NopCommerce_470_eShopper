@@ -1,0 +1,69 @@
+﻿@model IList<ProductOverviewModel>
+
+@using Nop.Web.Models.Catalog;
+@if (Model.Count > 0)
+{<div class="product-grid home-page-product-grid">
+     <div class="mid-content-title">
+         <h2 class="title text-center">@T("Products.AlsoPurchased")</h2>
+         
+     </div>
+
+     <div id="carousel-example-generic-purchased-product" class="carousel slide" data-ride="carousel">
+         <!-- Indicators -->
+         <!-- Wrapper for slides -->
+         <div class="carousel-inner">
+             @{
+                 var pg_i = 0;
+             }
+             @foreach (var item in Model)
+             {
+                 if (pg_i == 0)
+                 {
+                     @:<div class="item active">
+                         @:<div class="row box-products">
+                         }
+                         else if (pg_i % 3 == 0)
+                         {
+                             @:<div class="item">
+                                 @:<div class="row box-products">
+                                 }
+
+                                 <div class="col-md-4">
+                                     <div class="offer offer-default silde-show-offer pull-text-center">
+                                         @await Html.PartialAsync("_ProductBox", item)
+                                     </div>
+                                 </div>
+
+
+                                 if (pg_i % 3 == 2)
+                                 {
+                                 @:</div>
+                             @:</div>
+                         }
+                         pg_i++;
+                     }
+             @if (pg_i % 3 != 0)
+             {
+             @:</div>
+         @:</div>
+     }
+
+         </div>
+         @if (Model.Count > 3)
+         {
+                 <a class="left recommended-item-control" href="#carousel-example-generic-purchased-product" data-slide="prev">
+                     <i class="fa fa-angle-left"></i>
+                 </a>
+                 <a class="right recommended-item-control" href="#carousel-example-generic-purchased-product" data-slide="next">
+                     <i class="fa fa-angle-right"></i>
+                 </a>
+             
+         }
+
+
+     </div>
+ </div>
+
+
+
+}

@@ -1,0 +1,129 @@
+﻿@model OrderDeliverySlotSearchModel
+@{ 
+    const string hideSearchBlockAttributeName = "DeliverySchedulerOrders.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+
+    NopHtml.SetActiveMenuItemSystemName("DeliveryScheduler.OrderList");
+    ViewBag.PageTitle = T("Admin.NopStation.DeliveryScheduler.OrderDeliverySlots.List").Text;
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.DeliveryScheduler.OrderDeliverySlots.List")
+    </h1>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fas fa-search" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                        </div>
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchStartDate" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchStartDate" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchEndTime" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchEndTime" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-7">
+                                    <div class="form-group row">
+                                        <div class="col-md-5">
+                                            <nop-label asp-for="SearchShippingMethodId" />
+                                        </div>
+                                        <div class="col-md-7">
+                                            <nop-select asp-for="SearchShippingMethodId" asp-items="Model.AvailableShippingMethods" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-5">
+                                            <nop-label asp-for="SearchDeliverySlotId" />
+                                        </div>
+                                        <div class="col-md-7">
+                                            <nop-select asp-for="SearchDeliverySlotId" asp-items="Model.AvailableDeliverySlots" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="text-center col-12">
+                                    <button type="button" id="search-slider" class="btn btn-primary btn-search">
+                                        <i class="fas fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "nopstation-slider-grid",
+                            UrlRead = new DataUrl("List", "OrderDeliverySlot", null),
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            SearchButtonId = "search-slider",
+                            Filters = new List<FilterParameter>
+                            {
+                                new FilterParameter(nameof(Model.SearchShippingMethodId)),
+                                new FilterParameter(nameof(Model.SearchDeliverySlotId)),
+                                new FilterParameter(nameof(Model.SearchStartDate)),
+                                new FilterParameter(nameof(Model.SearchEndTime))
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(OrderDeliverySlotModel.DeliverySlot))
+                                {
+                                    Title = T("Admin.NopStation.DeliveryScheduler.OrderDeliverySlots.Fields.DeliverySlot").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(OrderDeliverySlotModel.ShippingMethod))
+                                {
+                                    Title = T("Admin.NopStation.DeliveryScheduler.OrderDeliverySlots.Fields.ShippingMethod").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(OrderDeliverySlotModel.DeliveryDate))
+                                {
+                                    Title = T("Admin.NopStation.DeliveryScheduler.OrderDeliverySlots.Fields.DeliveryDate").Text,
+                                    Width = "100",
+                                    Render = new RenderDate()
+                                },
+                                 new ColumnProperty(nameof(OrderDeliverySlotModel.Id))
+                                {
+                                    Title = T("Admin.Common.Edit").Text,
+                                    Width = "100",
+                                    ClassName = NopColumnClassDefaults.Button,
+                                    Render = new RenderButtonEdit(new DataUrl("~/Admin/Order/Edit"))
+                                }
+                            }
+                        })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

@@ -1,0 +1,63 @@
+.bluesnaps-getway {
+  display: none;
+}
+
+.helper-text {
+  color: #e93143;
+  font-size: 12px;
+  margin-top: 5px;
+  height: 12px;
+  display: block;
+}
+
+.helper-text-green {
+  color: green;
+}
+
+.hosted-field-focus {
+  border: 1px solid #66afe9;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+}
+
+.hosted-field-invalid {
+  border: 1px solid #e93143;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(233,49,67, 0.8);
+}
+
+.hosted-field-valid {
+  border: 1px solid #14ba57;
+}
+
+.card-number {
+  height: 40px;
+}
+
+.card-number-holder {
+  position: relative;
+}
+
+.card-number-box {
+  height: 40px;
+  border: solid 1px #ccc;
+}
+
+.exp-date-box {
+  height: 40px;
+  border: solid 1px #ccc;
+}
+
+.cvv-box {
+  height: 40px;
+  border: solid 1px #ccc;
+}
+
+#card-logo {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.label-text {
+  vertical-align: top;
+  line-height: 39px;
+}

@@ -1,0 +1,45 @@
+﻿@model TopMenuModel.CategoryLineModel
+@{
+    //subcategories
+    var subCategories = Model.ResponsiveMobileMenu ?
+        //responsive (all categories)
+        Model.Category.SubCategories :
+        //standard design (only categories with "IncludeInTopMenu")
+        Model.Category.SubCategories.Where(x => x.IncludeInTopMenu).ToList();
+
+
+    if (subCategories.Count > 0)
+    {
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="">
+                @Model.Category.Name
+                <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu sub-menu">
+                @foreach (var subCategory in subCategories)
+                {
+                    var categoryLineModel = new TopMenuModel.CategoryLineModel
+                    {
+                        Category = subCategory,
+                        Level = Model.Level + 1,
+                        ResponsiveMobileMenu = Model.ResponsiveMobileMenu
+                    };
+                    @await Html.PartialAsync("_CategoryLine.TopMenu", categoryLineModel)
+                }
+            </ul>
+        </li>
+    }
+    else
+    {
+        <li>
+            <a href="@Url.RouteUrl("Category", new { SeName = Model.Category.SeName })">
+                @Model.Category.Name
+                @if (Model.Category.NumberOfProducts.HasValue)
+                {
+                    <text> </text>@T("Categories.TotalProducts", Model.Category.NumberOfProducts.Value)
+                }
+            </a>
+        </li>
+    }
+}
+

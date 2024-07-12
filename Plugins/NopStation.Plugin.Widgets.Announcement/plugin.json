@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Announcement",
+  "SystemName": "NopStation.Plugin.Widgets.Announcement",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.Announcement.dll",
+  "Description": "This plugin allows to push announcement notice as HTML content anywhere in public site.",
+  "DependsOnSystemNames": [ "NopStation.Core", "NopStation.Plugin.Misc.WidgetManager" ]
+}

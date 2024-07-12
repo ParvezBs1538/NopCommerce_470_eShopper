@@ -1,0 +1,73 @@
+﻿@model StoreLocationDetailsModel
+
+@{
+    ViewBag.PageTitle = T("NopStation.StoreLocator.StoreLocations.Title").Text;
+    Layout = "_ColumnsOne";
+
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.StoreLocator/Content/css/styles.css", string.Empty);
+}
+
+<div class="page-body">
+    <div class="store-div store">
+        <div class="gallery">
+            <div class="picture">
+                <a href="@Model.Pictures[0].FullSizeImageUrl" title="@Model.Pictures[0].Title" id="main-product-img-lightbox-anchor-@Model.Id">
+                    <img alt="@Model.Pictures[0].AlternateText" src="@Model.Pictures[0].ImageUrl" title="@Model.Pictures[0].Title" id="main-product-img-@Model.Id" />
+                </a>
+            </div>
+            @if (Model.Pictures.Count > 1)
+            {
+                <div class="picture-thumbs">
+                    @foreach (var picture in Model.Pictures)
+                    {
+                        <div class="thumb-item">
+                            <img src="@picture.ThumbImageUrl" alt="@picture.AlternateText" title="@picture.Title" data-defaultsize="@picture.ImageUrl" data-fullsize="@picture.FullSizeImageUrl" />
+                        </div>
+                    }
+                </div>
+                <script asp-location="Footer">
+                    $(document).ready(function () {
+                        $('.thumb-item img').on('click',
+                            function () {
+                                $('#main-product-img-@Model.Id').attr('src', $(this).attr('data-defaultsize'));
+                                $('#main-product-img-@Model.Id').attr('title', $(this).attr('title'));
+                                $('#main-product-img-@Model.Id').attr('alt', $(this).attr('alt'));
+                                $('#main-product-img-lightbox-anchor-@Model.Id')
+                                    .attr('href', $(this).attr('data-fullsize'));
+                                $('#main-product-img-lightbox-anchor-@Model.Id').attr('title', $(this).attr('title'));
+                            });
+                    });
+                </script>
+            }
+        </div>
+        <div class="store-details">
+            <div class="store-name">
+                <label class="marker-link" style="cursor:pointer">@Model.Name</label>
+            </div>
+            <div class="full-address">
+                <span>@Model.FullAddress@Model.FormattedAddress</span>
+            </div>
+            <div class="opening-hours">
+                <span>@Html.Raw(@Model.OpeningHours)</span>
+            </div>
+            <div class="contact-number">
+                <a href="tel:@Model.PhoneNumber">@Model.PhoneNumber</a>
+            </div>
+            <div class="email-address">
+                <a href="mailto:@Model.Email">@Model.Email</a>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.FullDescription))
+            {
+                <div class="full-description" Modelprop="description">
+                    @Html.Raw(Model.FullDescription)
+                </div>
+            }
+            <div class="store-btn-container">
+                @if (!string.IsNullOrEmpty(Model.GoogleMapLocation))
+                {
+                    <a class="btn-store-map" target="_blank" href="@Model.GoogleMapLocation"><i class="fa fa-map-marker"></i> @T("NopStation.StoreLocator.StoreLocations.ShowInMap")</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

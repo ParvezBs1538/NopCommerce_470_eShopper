@@ -1,0 +1,27 @@
+﻿@model MegaMenuModel
+
+@{
+    var customer = await workContext.GetCurrentCustomerAsync();
+    const string hideInfoBlockAttributeName = "SmartMegaMenuPage.HideInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideInfoBlockAttributeName);
+
+    const string hideItemsBlockAttributeName = "SmartMegaMenuPage.HideItemsBlock";
+    var hideItemsBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideItemsBlockAttributeName);
+
+    const string hideWidgetZonesBlockAttributeName = "SmartMegaMenuPage.HideWidgetZonesBlock";
+    var hideWidgetZonesBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideWidgetZonesBlockAttributeName);
+}
+
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <nop-cards id="menu-panels">
+                <nop-card asp-name="megamenu-info" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.SmartMegaMenu.MegaMenus.Tab.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</nop-card>
+                <nop-card asp-name="megamenu-items" asp-icon="fa fa-th-list" asp-title="@T("Admin.NopStation.SmartMegaMenu.MegaMenus.Tab.MenuItems")" asp-hide-block-attribute-name="@hideItemsBlockAttributeName" asp-hide="@hideItemsBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.MenuItems", Model)</nop-card>
+                <nop-card asp-name="megamenu-wm-widgetzones" asp-icon="far fa-window-maximize" asp-title="@T("Admin.NopStation.WidgetManager.Common.WidgetZones")" asp-hide-block-attribute-name="@hideWidgetZonesBlockAttributeName" asp-hide="@hideWidgetZonesBlock" asp-advanced="false">@await Html.PartialAsync("WidgetZoneMappings", Model)</nop-card>
+            </nop-cards>
+        </div>
+    </div>
+</section>

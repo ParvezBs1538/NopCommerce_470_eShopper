@@ -1,0 +1,260 @@
+﻿@model PopupModel
+@using NopStation.Plugin.Widgets.Popups.Domains
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.ColumnTypeId)").change(toggleColumnType);
+        $("#@Html.IdFor(model => model.Column1ContentTypeId)").change(toggleColumn1ContentTypeId);
+        $("#@Html.IdFor(model => model.Column2ContentTypeId)").change(toggleColumn2ContentTypeId);
+
+        toggleColumnType();
+        toggleColumn1ContentTypeId();
+        toggleColumn2ContentTypeId();
+    });
+
+    function toggleColumnType() {
+        var selectedColumnTypeId = $("#@Html.IdFor(model => model.ColumnTypeId)").val();
+        if (selectedColumnTypeId == @(((int) ColumnType.DoubleColumn).ToString())) {
+            $('#pnlColumn2').show();
+        } else {
+            $('#pnlColumn2').hide();
+        }
+    }
+    
+    function toggleColumn1ContentTypeId() {
+        var selectedColumn1ContentTypeId = $("#@Html.IdFor(model => model.Column1ContentTypeId)").val();
+        if (selectedColumn1ContentTypeId == @(((int) ContentType.Text).ToString())) {
+            $('.pnlColumn1DesktopPictureId').hide();
+            $('.pnlColumn1MobilePictureId').hide();
+            $('.pnlColumn1PopupUrl').hide();
+            $('.pnlColumn1Text').show();
+        } else {
+            $('.pnlColumn1DesktopPictureId').show();
+            $('.pnlColumn1MobilePictureId').show();
+            $('.pnlColumn1PopupUrl').show();
+            $('.pnlColumn1Text').hide();
+        }
+    }
+    
+    function toggleColumn2ContentTypeId() {
+        var selectedColumn2ContentTypeId = $("#@Html.IdFor(model => model.Column2ContentTypeId)").val();
+        if (selectedColumn2ContentTypeId == @(((int) ContentType.Text).ToString())) {
+            $('.pnlColumn2DesktopPictureId').hide();
+            $('.pnlColumn2MobilePictureId').hide();
+            $('.pnlColumn2PopupUrl').hide();
+            $('.pnlColumn2Text').show();
+        } else {
+            $('.pnlColumn2DesktopPictureId').show();
+            $('.pnlColumn2MobilePictureId').show();
+            $('.pnlColumn2PopupUrl').show();
+            $('.pnlColumn2Text').hide();
+        }
+    }
+    
+</script>
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ColumnTypeId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="ColumnTypeId" asp-items="@Model.AvailableColumnTypes" />
+            <span asp-validation-for="ColumnTypeId"></span>
+        </div>
+    </div>
+    
+    <div class="card card-default">
+        <div class="card-header">
+            @T("Admin.NopStation.Popups.Popups.Column1")
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="Column1ContentTypeId" />
+                </div>
+                <div class="col-md-9">
+                    <nop-select asp-for="Column1ContentTypeId" asp-items="@Model.AvailableContentTypes" />
+                    <span asp-validation-for="Column1ContentTypeId"></span>
+                </div>
+            </div>
+            
+            @(await Html.LocalizedEditorAsync<PopupModel, PopupLocalizedModel>("popup-column1-localized",
+                                    @<div>
+                                        <div class="form-group row pnlColumn1DesktopPictureId">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="@Model.Locales[item].Column1DesktopPictureId" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="@Model.Locales[item].Column1DesktopPictureId" asp-template="Picture" />
+                                                <span asp-validation-for="@Model.Locales[item].Column1DesktopPictureId"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row pnlColumn1MobilePictureId">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="@Model.Locales[item].Column1MobilePictureId" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="@Model.Locales[item].Column1MobilePictureId" asp-template="Picture" />
+                                                <span asp-validation-for="@Model.Locales[item].Column1MobilePictureId"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row pnlColumn1PopupUrl">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="@Model.Locales[item].Column1PopupUrl" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="@Model.Locales[item].Column1PopupUrl" />
+                                                <span asp-validation-for="@Model.Locales[item].Column1PopupUrl"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row pnlColumn1Text">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="@Model.Locales[item].Column1Text" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="@Model.Locales[item].Column1Text" asp-template="RichEditor" />
+                                                <span asp-validation-for="@Model.Locales[item].Column1Text"></span>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+                                    </div>
+                ,@<div>
+                                        <div class="form-group row pnlColumn1DesktopPictureId">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="Column1DesktopPictureId" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="Column1DesktopPictureId" />
+                                                <span asp-validation-for="Column1DesktopPictureId"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row pnlColumn1MobilePictureId">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="Column1MobilePictureId" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="Column1MobilePictureId" />
+                                                <span asp-validation-for="Column1MobilePictureId"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row pnlColumn1PopupUrl">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="Column1PopupUrl" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="Column1PopupUrl" />
+                                                <span asp-validation-for="Column1PopupUrl"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row pnlColumn1Text">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="Column1Text" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="Column1Text" asp-template="RichEditor" />
+                                                <span asp-validation-for="Column1Text"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+            ))
+        </div>
+    </div>
+    
+    <div class="card card-default" id="pnlColumn2">
+        <div class="card-header">
+            @T("Admin.NopStation.Popups.Popups.Column2")
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="Column2ContentTypeId" />
+                </div>
+                <div class="col-md-9">
+                    <nop-select asp-for="Column2ContentTypeId" asp-items="@Model.AvailableContentTypes" />
+                    <span asp-validation-for="Column2ContentTypeId"></span>
+                </div>
+            </div>
+            
+            @(await Html.LocalizedEditorAsync<PopupModel, PopupLocalizedModel>("popup-column2-localized",
+                                    @<div>
+                                        <div class="form-group row pnlColumn2DesktopPictureId">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="@Model.Locales[item].Column2DesktopPictureId" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="@Model.Locales[item].Column2DesktopPictureId" asp-template="Picture" />
+                                                <span asp-validation-for="@Model.Locales[item].Column2DesktopPictureId"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row pnlColumn2MobilePictureId">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="@Model.Locales[item].Column2MobilePictureId" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="@Model.Locales[item].Column2MobilePictureId" asp-template="Picture" />
+                                                <span asp-validation-for="@Model.Locales[item].Column2MobilePictureId"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row pnlColumn2PopupUrl">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="@Model.Locales[item].Column2PopupUrl" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="@Model.Locales[item].Column2PopupUrl" />
+                                                <span asp-validation-for="@Model.Locales[item].Column2PopupUrl"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row pnlColumn2Text">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="@Model.Locales[item].Column2Text" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="@Model.Locales[item].Column2Text" asp-template="RichEditor" />
+                                                <span asp-validation-for="@Model.Locales[item].Column2Text"></span>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+                                    </div>
+                ,@<div>
+                                        <div class="form-group row pnlColumn2DesktopPictureId">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="Column2DesktopPictureId" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="Column2DesktopPictureId" />
+                                                <span asp-validation-for="Column2DesktopPictureId"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row pnlColumn2MobilePictureId">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="Column2MobilePictureId" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="Column2MobilePictureId" />
+                                                <span asp-validation-for="Column2MobilePictureId"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row pnlColumn2PopupUrl">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="Column2PopupUrl" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="Column2PopupUrl" />
+                                                <span asp-validation-for="Column2PopupUrl"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row pnlColumn2Text">
+                                            <div class="col-md-3">
+                                                <nop-label asp-for="Column2Text" />
+                                            </div>
+                                            <div class="col-md-9">
+                                                <nop-editor asp-for="Column2Text" asp-template="RichEditor" />
+                                                <span asp-validation-for="Column2Text"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+            ))
+        </div>
+    </div>
+</div>

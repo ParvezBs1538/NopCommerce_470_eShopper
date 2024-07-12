@@ -1,0 +1,187 @@
+﻿@model UploadProductModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.AlgoliaSearch.UploadProduct.Title").Text;
+    NopHtml.SetActiveMenuItemSystemName("AlgoliaSearch.UploadProducts");
+    var customerGuid = (await workContext.GetCurrentCustomerAsync()).CustomerGuid;
+}
+
+<script src="~/Plugins/NopStation.Plugin.Misc.AlgoliaSearch/Areas/Admin/Contents/js/signalr.js"></script>
+
+<style>
+    #bind-progress, #upload-progress {
+        width: 100%;
+        background-color: #ddd;
+        display: none;
+    }
+
+    #bind-bar, #upload-bar {
+        width: 0%;
+        height: 10px;
+        background-color: #009FFF;
+    }
+
+    #upload-msg, #bind-msg {
+        display: none;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        var connection = new signalR.HubConnectionBuilder()
+                .withUrl('/uploadproducts')
+                .build();
+
+        connection.on('dataSent', res => {
+            if (res.customerGuid == '@customerGuid') {
+                if (res.status == 100) {
+                    $('#bind-msg').hide();
+                    $('#bind-progress').hide();
+                    $('#ajaxBusy').hide();
+
+                    $('#upload-msg').show();
+                    $('#upload-progress').show();
+                    $('#upload-msg').html(res.uploadedProducts + ' of ' + res.totalProducts + ' product(s) uploaded (failed ' + res.failed + ')');
+                    $('#upload-bar').css('width', res.uploadedProducts / res.totalProducts * 100 + '%');
+                }
+                else if (res.status == 10) {
+                    $('#bind-msg').show();
+                    $('#bind-progress').show();
+                    $('#bind-msg').html('Listing product model to Algolia (' + res.binding + ' of ' + res.currentPageProducts + ' product(s)) (page ' + res.currentPage + ' of ' + res.totalPages + ' page(s))');
+                    $('#bind-bar').css('width', res.binding / res.currentPageProducts * 100 + '%');
+
+                    $('#upload-msg').show();
+                    $('#upload-progress').show();
+                    $('#upload-msg').html(res.uploadedProducts + ' of ' + res.totalProducts + ' product(s) uploaded (failed ' + res.failed + ')');
+                    $('#upload-bar').css('width', res.uploadedProducts / res.totalProducts * 100 + '%');
+                }
+                else if (res.status == 110) {
+                    $('#bind-msg').show();
+                    $('#bind-progress').show();
+                    $('#bind-msg').html('Preparing Algolia product model (' + res.binding + ' of ' + res.currentPageProducts + ' product(s)) (page ' + res.currentPage + ' of ' + res.totalPages + ' page(s))');
+                    $('#bind-bar').css('width', res.binding / res.currentPageProducts * 100 + '%');
+
+                    $('#upload-msg').show();
+                    $('#upload-progress').show();
+                    $('#upload-msg').html(res.uploadedProducts + ' of ' + res.totalProducts + ' product(s) uploaded (failed ' + res.failed + ')');
+                    $('#upload-bar').css('width', res.uploadedProducts / res.totalProducts * 100 + '%');
+                }
+                else if (res.status == -1) {
+                    $('#bind-msg').show();
+                    $('#bind-progress').show();
+                    $('#bind-msg').html(res.message);
+                    $('#bind-bar').css('width', res.binding / res.currentPageProducts * 100 + '%');
+
+                    $('#upload-msg').show();
+                    $('#upload-progress').show();
+                    $('#upload-msg').html(res.uploadedProducts + ' of ' + res.totalProducts + ' product(s) uploaded (failed ' + res.failed + ')');
+                    $('#upload-bar').css('width', res.uploadedProducts / res.totalProducts * 100 + '%');
+                }
+                else if (res.status == -10) {
+                    $('#bind-msg').show();
+                    $('#bind-progress').show();
+                    $('#bind-msg').html(res.message);
+                    $('#bind-bar').css('width', '0%');
+                }
+            }
+        });
+
+        function start() {
+            connection.start().catch(function (err) {
+                setTimeout(function () {
+                    start();
+                }, 10000);
+            });
+        }
+
+        connection.onclose(function () {
+            start();
+        });
+
+        start();
+
+        $("#upload-button").click(function () {
+            var data = {};
+            data.FromId = $("#@Html.IdFor(x=> x.FromId)").val();
+            data.ToId = $("#@Html.IdFor(x=> x.ToId)").val();
+            addAntiForgeryToken(data);
+
+            $('#bind-msg').show();
+            $('#bind-progress').show();
+
+            $('#upload-msg').show();
+            $('#upload-progress').show();
+            $('#bind-msg').html('Products fetching from database...');
+
+            $.ajax({
+                url: "@Url.Action("UploadProduct", "AlgoliaSearch")",
+                type: "POST",
+                dataType: 'json',
+                data: data,
+                success: function (result) {
+                    console.log(result);
+                    if (result.Message != '') {
+                        $('#upload-msg').html(result.Message);
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+<form asp-controller="AlgoliaSearch" asp-action="UploadProduct" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.AlgoliaSearch.UploadProduct.Title")
+        </h1>
+        <div class="float-right">
+            <button type="button" name="save" class="btn btn-primary" id="upload-button">
+                <i class="fa fa-upload"></i>
+                @T("Admin.NopStation.AlgoliaSearch.UploadProduct.Upload")
+            </button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="FromId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="FromId" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="ToId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ToId" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-9 offset-md-3">
+                                    <span id="bind-msg"></span>
+                                    <div id="bind-progress">
+                                        <div id="bind-bar"></div>
+                                    </div>
+
+                                    <span id="upload-msg"></span>
+                                    <div id="upload-progress">
+                                        <div id="upload-bar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

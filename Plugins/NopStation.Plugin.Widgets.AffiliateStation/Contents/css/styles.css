@@ -1,0 +1,14 @@
+﻿.affiliate-account-warning {
+  text-align: center;
+  color: #FF9900;
+  font-size: 13px;
+  width: 100%;
+}
+
+.copy-btn {
+  padding: 10px;
+  display: inline-block;
+  position: absolute;
+  margin-left: -1px;
+  border: 1px solid #999;
+}

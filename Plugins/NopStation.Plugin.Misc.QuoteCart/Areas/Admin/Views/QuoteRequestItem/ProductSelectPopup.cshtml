@@ -1,0 +1,136 @@
+﻿@using Nop.Web.Areas.Admin.Models.Catalog
+@model ProductSearchModel
+
+@{
+    Layout = "_AdminPopupLayout";
+
+    //page title
+    ViewBag.PageTitle = T("Admin.Catalog.Categories.Products.AddNew").Text;
+}
+
+@if (ViewBag.RefreshPage == true)
+{
+    <script>
+        try {
+            const newUrl = new URL(window.opener.location.href);
+            newUrl.searchParams.set('productId', '@ViewBag.ProductId');
+            window.opener.location = newUrl;
+        }
+        catch {}
+        window.close();
+    </script>
+}
+else
+{
+    <form asp-controller="QuoteRequestItem" asp-action="ProductSelectPopup"
+          method="post"
+          asp-route-fieldId="@Context.Request.Query["fieldId"]"
+          id="entityForm"
+          asp-route-skuFieldId="@Context.Request.Query["skuFieldId"]">
+        <div class="content-header clearfix">
+            <h1 class="float-left">
+                @T("Admin.Catalog.Categories.Products.AddNew")
+            </h1>
+            <div class="float-right">
+                &nbsp;
+            </div>
+        </div>
+         <section class="content">
+            <div class="container-fluid">
+                <div class="form-horizontal">
+                    <div class="cards-group">
+                        <div class="card card-default card-search card-popup">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group row">
+                                            <div class="col-sm-5">
+                                                <nop-label asp-for="SearchProductName" />
+                                            </div>
+                                            <div class="col-sm-7">
+                                                <nop-editor asp-for="SearchProductName" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" @(Model.AvailableCategories.SelectionIsNotPossible() ? Html.Raw("style=\"display:none\"") : null)>
+                                            <div class="col-sm-5">
+                                                <nop-label asp-for="SearchCategoryId" />
+                                            </div>
+                                            <div class="col-sm-7">
+                                                <nop-select asp-for="SearchCategoryId" asp-items="Model.AvailableCategories" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group row" @(Model.AvailableStores.SelectionIsNotPossible() ? Html.Raw("style=\"display:none\"") : null)>
+                                            <div class="col-sm-5">
+                                                <nop-label asp-for="SearchStoreId" />
+                                            </div>
+                                            <div class="col-sm-7">
+                                                <nop-select asp-for="SearchStoreId" asp-items="Model.AvailableStores" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" @(Model.AvailableManufacturers.SelectionIsNotPossible() ? Html.Raw("style=\"display:none\"") : null)>
+                                            <div class="col-sm-5">
+                                                <nop-label asp-for="SearchManufacturerId" />
+                                            </div>
+                                            <div class="col-sm-7">
+                                                <nop-select asp-for="SearchManufacturerId" asp-items="Model.AvailableManufacturers" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <button type="button" id="search-products" class="btn btn-primary btn-search">
+                                            <i class="fas fa-search"></i>
+                                            @T("Admin.Common.Search")
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card card-default">
+                            <div class="card-body">
+                                @await Html.PartialAsync("Table", new DataTablesModel
+                                {
+                                    Name = "products-grid",
+                                    UrlRead = new DataUrl("ProductAddPopupList", "QuoteCart", null),
+                                    SearchButtonId = "search-products",
+                                    Length = Model.PageSize,
+                                    LengthMenu = Model.AvailablePageSizes,
+                                    Filters = 
+                                    [
+                                        new FilterParameter(nameof(Model.SearchProductName)),
+                                        new FilterParameter(nameof(Model.SearchCategoryId)),
+                                        new FilterParameter(nameof(Model.SearchManufacturerId)),
+                                        new FilterParameter(nameof(Model.SearchStoreId))
+                                    ],
+                                    ColumnCollection = 
+                                    [
+                                        new ColumnProperty(nameof(ProductModel.Id))
+                                        {
+                                            Render = new RenderCustom("renderSelectedIds"),
+                                            ClassName = NopColumnClassDefaults.CenterAll,
+                                            Width = "50",
+                                            Title = T("Admin.Common.Select").Text
+                                        },
+                                        new ColumnProperty(nameof(ProductModel.Name))
+                                        {
+                                            Title = T("Admin.Catalog.Products.Fields.Name").Text
+                                        }
+                                    ]
+                                })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
+    <script>
+        function renderSelectedIds(id, mode, row) {
+            return `<button type="submit" name="SelectedProductId" value="${id}" class="btn btn-default" id="product_${id}">@T("Admin.Common.Select")</button>`
+        }
+    </script>
+}

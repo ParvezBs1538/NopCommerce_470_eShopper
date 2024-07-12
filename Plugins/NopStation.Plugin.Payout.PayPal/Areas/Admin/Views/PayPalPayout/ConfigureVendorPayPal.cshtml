@@ -1,0 +1,59 @@
+﻿@model NopStation.Plugin.Payout.PayPal.Areas.Admin.Models.VendorPayPalConfigurationModel
+@{
+    Layout = "";
+}
+<script>
+    $(document).ready(function () {
+        $('#savevendorpaypalconfiguration@(Model.VendorId)').click(function () {
+            var vendorId = @Model.VendorId;
+            var paypalEmail = $("#@Html.IdFor(model => model.PayPalEmail)").val();
+            var postData = {
+                VendorId: vendorId,
+                PayPalEmail: paypalEmail
+            };
+            addAntiForgeryToken(postData);
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@(Url.Action("ConfigureVendorPayPal", "PayPalPayout"))",
+                data: postData,
+                success: function (data, textStatus, jqXHR) {
+                    var $alertInfoEl = $("#savevendorpaypalConfigurationAlert-info");
+                    let response = jqXHR.responseJSON;
+                    if (response instanceof Object && response.hasOwnProperty('Errors')) {
+                        var errorMessages = '';
+                        $.each(response.Errors, function (i, error) {
+                            errorMessages += error;
+                            if (response.Errors.length - 1 != i)
+                                errorMessages += '</br>';
+                        });
+                        $alertInfoEl.html(errorMessages);
+                        $("#savevendorpaypalConfigurationAlert").click();
+                        return;
+                    }
+                    $alertInfoEl.html('@T("NopStation.Plugin.Payout.PayPal.Configuration.Saved")');
+                    $("#savevendorpaypalConfigurationAlert").click();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    var $alertInfoEl = $("#savevendorpaypalConfigurationAlert-info");
+                    $alertInfoEl.html('@T("NopStation.Plugin.Payout.PayPal.Configuration.FailedToSave")');
+                    $("#savevendorpaypalConfigurationAlert").click();
+                }
+            });
+        });
+    });
+</script>
+<div class="form-group row">
+    <div class="col-md-3 paypalemail-label-col">
+        <nop-label asp-for="PayPalEmail" />
+    </div>
+    <div class="col-md-9 paypalemail-data-col">
+        <div class="paypalemail-data-input">
+            <nop-editor asp-for="PayPalEmail" />
+        </div>
+        <div class="paypalemail-data-buttons">
+            <button type="button" id="savevendorpaypalconfiguration@(Model.VendorId)" class="btn btn-primary">@T("NopStation.Plugin.Payout.PayPal.Configuration.Save")</button>
+        </div>
+    </div>
+</div>
+<nop-alert asp-alert-id="savevendorpaypalConfigurationAlert" />

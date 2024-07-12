@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station All In One Contact Us",
+  "SystemName": "NopStation.Plugin.Widgets.AllInOneContactUs",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.AllInOneContactUs.dll",
+  "Description": "This plugin allows store owner to enable multiple contact us features.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

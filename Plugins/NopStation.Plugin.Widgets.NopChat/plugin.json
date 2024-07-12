@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop Station",
+  "FriendlyName": "NopChat",
+  "SystemName": "NopStation.Plugin.Widgets.NopChat",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Team NopStation",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.NopChat.dll",
+  "Description": "Chat with vendors",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

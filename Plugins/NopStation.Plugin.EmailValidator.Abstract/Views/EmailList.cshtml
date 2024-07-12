@@ -1,0 +1,234 @@
+﻿@model AbstractEmailSearchModel
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.AbstractEmailValidator.AbstractEmails.List").Text;
+
+    NopHtml.SetActiveMenuItemSystemName("AbstractEmailValidator.Emails");
+}
+
+@{
+    const string hideSearchBlockAttributeName = "AbstractEmails.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<form asp-controller="AbstractEmailValidator" asp-action="EmailList" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.AbstractEmailValidator.AbstractEmails.List")
+        </h1>
+        <div class="float-right">
+            <button type="button" id="delete-selected" name="delete-selected" class="btn btn-danger">
+                <i class="far fa-trash-alt"></i>
+                @T("Admin.NopStation.AbstractEmailValidator.AbstractEmails.DeleteSelected")
+            </button>
+            <nop-action-confirmation asp-button-id="delete-selected" />
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default card-search">
+                        <div class="card-body">
+                            <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                                <div class="search-text">@T("Admin.Common.Search")</div>
+                                <div class="icon-search"><i class="fas fa-search" aria-hidden="true"></i></div>
+                                <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                            </div>
+
+                            <div class="search-body @(hideSearchBlock ? "closed" : "")">
+
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="SearchEmail" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="SearchEmail" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="SearchDeliverability" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="SearchDeliverability" asp-items="Model.AvailableDeliverabilityItems" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="SearchCreatedFrom" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="SearchCreatedFrom" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="SearchCreatedTo" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="SearchCreatedTo" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="SearchFreeId" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="SearchFreeId" asp-items="@Model.AvailableBooleanItems" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="SearchRoleAccountId" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="SearchRoleAccountId" asp-items="@Model.AvailableBooleanItems" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="SearchDisposableId" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="SearchDisposableId" asp-items="@Model.AvailableBooleanItems" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="text-center col-12">
+                                        <button type="button" id="search-abstractemail" class="btn btn-primary btn-search">
+                                            <i class="fas fa-search"></i>
+                                            @T("Admin.Common.Search")
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-default">
+                        <div class="card-body">
+                            @await Html.PartialAsync("Table", new DataTablesModel
+                            {
+                                Name = "abstractemails-grid",
+                                UrlRead = new DataUrl("EmailList", "AbstractEmailValidator", null),
+                                UrlDelete = new DataUrl("DeleteEmail", "AbstractEmailValidator", null),
+                                SearchButtonId = "search-abstractemail",
+                                Length = Model.PageSize,
+                                LengthMenu = Model.AvailablePageSizes,
+                                Filters = new List<FilterParameter>
+                                {
+                                    new FilterParameter(nameof(Model.SearchDeliverability)),
+                                    new FilterParameter(nameof(Model.SearchCreatedFrom)),
+                                    new FilterParameter(nameof(Model.SearchCreatedTo)),
+                                    new FilterParameter(nameof(Model.SearchEmail)),
+                                    new FilterParameter(nameof(Model.SearchFreeId)),
+                                    new FilterParameter(nameof(Model.SearchRoleAccountId)),
+                                    new FilterParameter(nameof(Model.SearchDisposableId))
+                                },
+                                ColumnCollection = new List<ColumnProperty>
+                                {
+                                    new ColumnProperty(nameof(AbstractEmailModel.Id))
+                                    {
+                                        IsMasterCheckBox = true,
+                                        Render = new RenderCheckBox("checkbox_log"),
+                                        ClassName =  NopColumnClassDefaults.CenterAll,
+                                        Width = "50"
+                                    },
+                                    new ColumnProperty(nameof(AbstractEmailModel.Email))
+                                    {
+                                        Title = T("Admin.NopStation.AbstractEmailValidator.AbstractEmails.Fields.Email").Text,
+                                        Width = "100"
+                                    },
+                                    new ColumnProperty(nameof(AbstractEmailModel.QualityScore))
+                                    {
+                                        Title = T("Admin.NopStation.AbstractEmailValidator.AbstractEmails.Fields.QualityScore").Text,
+                                        Width = "50"
+                                    },
+                                    new ColumnProperty(nameof(AbstractEmailModel.Deliverability))
+                                    {
+                                        Title = T("Admin.NopStation.AbstractEmailValidator.AbstractEmails.Fields.Deliverability").Text,
+                                        Width = "50"
+                                    },
+                                    new ColumnProperty(nameof(AbstractEmailModel.IsDisposable))
+                                    {
+                                        Title = T("Admin.NopStation.AbstractEmailValidator.AbstractEmails.Fields.IsDisposable").Text,
+                                        Width = "50",
+                                        Render = new RenderBoolean(),
+                                        ClassName = NopColumnClassDefaults.CenterAll
+                                    },
+                                    new ColumnProperty(nameof(AbstractEmailModel.IsFree))
+                                    {
+                                        Title = T("Admin.NopStation.AbstractEmailValidator.AbstractEmails.Fields.IsFree").Text,
+                                        Width = "50",
+                                        Render = new RenderBoolean(),
+                                        ClassName = NopColumnClassDefaults.CenterAll
+                                    },
+                                    new ColumnProperty(nameof(AbstractEmailModel.IsRoleAccount))
+                                    {
+                                        Title = T("Admin.NopStation.AbstractEmailValidator.AbstractEmails.Fields.IsRoleAccount").Text,
+                                        Width = "50",
+                                        Render = new RenderBoolean(),
+                                        ClassName = NopColumnClassDefaults.CenterAll
+                                    },
+                                    new ColumnProperty(nameof(AbstractEmailModel.UpdatedOn))
+                                    {
+                                        Title = T("Admin.NopStation.AbstractEmailValidator.AbstractEmails.Fields.UpdatedOn").Text,
+                                        Width = "100",
+                                        Render = new RenderDate()
+                                    },
+                                    new ColumnProperty(nameof(AbstractEmailModel.Id))
+                                    {
+                                        Title = T("Admin.Common.Delete").Text,
+                                        Width = "100",
+                                        Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                                        ClassName = NopColumnClassDefaults.Button
+                                    }
+                                }
+                            })
+
+                            <script>
+                                $(document).ready(function() {
+                                    //"delete selected" button
+                                    $("#delete-selected-action-confirmation-submit-button").bind("click", function () {
+                                        var postData = {
+                                            selectedIds: selectedIds
+                                        };
+                                        addAntiForgeryToken(postData);
+                                        $.ajax({
+                                            cache: false,
+                                            type: "POST",
+                                            url: "@(Url.Action("DeleteSelected", "AbstractEmailValidator"))",
+                                            data: postData,
+                                            traditional: true,
+                                            error: function (jqXHR, textStatus, errorThrown) {
+                                                showAlert('deleteSelectedFailed', errorThrown);
+                                            },
+                                            complete: function (jqXHR, textStatus) {
+                                                if (jqXHR.status === 204)
+                                                {
+                                                    showAlert('nothingSelectedAlert', '@T("Admin.Common.Alert.NothingSelected")');
+                                                    return;
+                                                }
+                                                updateTable('#log-grid');
+                                            }
+                                        });
+                                        $('#delete-selected-action-confirmation').modal('toggle');
+                                        return false;
+                                    });
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

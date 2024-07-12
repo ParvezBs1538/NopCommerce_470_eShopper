@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Flutterwave",
+  "SystemName": "NopStation.Plugin.Payments.Flutterwave",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Jaber Kibria",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.Flutterwave.dll",
+  "Description": "This plugin enables Flutterwave gateway payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

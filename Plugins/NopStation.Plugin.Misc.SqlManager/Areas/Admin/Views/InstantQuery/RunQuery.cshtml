@@ -1,0 +1,155 @@
+﻿@model SqlQueryModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.SqlManager.Menu.InstantQuery").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("RunQuery");
+    var buttonsPanel = "<'col-lg-1 col-xs-12'<'float-lg-right text-center data-tables-refresh'B>>";
+    var infoPanel = "<'col-lg-3 col-xs-12'<'float-lg-right text-center'i>>";
+
+    var dom = "<'row'<'col-md-12't>>" +
+              "<'row margin-t-5'" +
+                "<'col-lg-5 col-xs-12'<'float-lg-left'p>>" +
+                "<'col-lg-3 col-xs-12'<'text-center'l>>" +
+                infoPanel +
+                buttonsPanel +
+              ">";
+}
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.SqlManager.Menu.InstantQuery")
+    </h1>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+
+                    <div class="card-body">
+                        <form asp-controller="InstantQuery" asp-action="RunQuery" method="post">
+                            <div class="form-group row">
+                                <div class="col-sm-2">
+                                    <nop-label asp-for="SQLQuery" />
+                                </div>
+                                <div class="col-sm-10">
+                                    <nop-textarea asp-for="SQLQuery" asp-required="true" />
+                                    <span asp-validation-for="SQLQuery"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-9 offset-md-2">
+                                    <button type="button" id="nosqlqueryrun" class="btn btn-primary">
+                                        <i class="fa fa-chart-line"></i>
+                                        @T("Admin.NopStation.SqlManager.InstantQuery.Run")
+                                    </button>
+                                </div>
+                            </div>
+
+                            <nop-action-confirmation asp-button-id="nosqlqueryrun" />
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card card-default" id="view-result-container" style="display: none;">
+                    <div class="card-header">
+                        <i class="fa fa-table"></i>
+                        @T("Admin.NopStation.SqlManager.SqlReports.Viewer")
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="result" class="table table-bordered">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<nop-alert asp-alert-id="queryRunFailed" />
+<nop-alert asp-alert-id="queryResultReturned" />
+<script>
+    (function () {
+        var dataTable;
+        function loadDataToGrid(data, columns) {
+            dataTable = $('#result').DataTable({
+                dom: '@JavaScriptEncoder.Default.Encode(dom)',
+                data: data,
+                destroy: true,
+                columns: columns,
+                ordering: false,
+                searching: false,
+                language: @await Html.PartialAsync("_GridLocalization"),
+                buttons: []
+            });
+        }
+
+        $(document).ready(function () {
+
+            $('#nosqlqueryrun-action-confirmation-submit-button').bind('click', function () {
+
+                var sqlQuery = $("#@Html.IdFor(model => model.SQLQuery)").val();
+                var postData = {
+                    SQLQuery: sqlQuery
+                };
+                addAntiForgeryToken(postData);
+
+                $.ajax({
+
+                    type: "POST",
+                    url: "@(Url.Action("RunQuery", "InstantQuery"))",
+                    data: postData,
+                    success: function (response) {
+                        console.log(response);
+                        if (response.Result) {
+                            console.log(response);
+                            if (response.outputlist.length > 0) {
+                                let cols = Object.keys(response.outputlist[0]).map((value) => {
+                                    return { 'title': value }
+                                });
+                                let data = response.outputlist.map((value) => {
+                                    return Object.values(value);
+                                });
+                                console.log(response.outputlist.length > 0);
+                                loadDataToGrid(data, cols);
+                                $('#view-result-container').show();
+                                if (response.rowreturned > 0) {
+                                    $('#queryResultReturned-info').html(response.rowreturned + " Rows affected");
+                                    $('#queryResultReturned').click();
+                                }
+
+                            } else if (response.rowreturned > 0) {
+                                $('#queryResultReturned-info').html(response.rowreturned + " Rows affected");
+                                $('#queryResultReturned').click();
+                            } else if (response.outputlist.length == 0 && response.Result == true) {
+                                $('#queryResultReturned-info').html("No Result");
+                                $('#queryResultReturned').click();
+                            } else {
+                                $('#queryRunFailed-action-alert-title').text("Error").css('color', 'red');
+                                $('#queryRunFailed-info').html(response.message);
+                                $('#queryRunFailed').click();
+
+                            }
+                        } else {
+                            display_nop_error(response);
+                        }
+
+                    },
+                    error: function (msg) {
+                        $('#view-report-container').hide();
+
+                    }
+                });
+                $('#nosqlqueryrun-action-confirmation').modal('toggle');
+                return false;
+            });
+        });
+    }());
+</script>

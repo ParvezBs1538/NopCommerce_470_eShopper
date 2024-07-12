@@ -1,0 +1,101 @@
+﻿@model CarouselModel
+@inject SmartCarouselSettings smartCarouselSettings
+
+@{
+    var guid = Guid.NewGuid().ToString().Replace('-', '_');
+}
+
+@if (Model.Products.Count > 0)
+{
+    <div class="swiper carousel" id="ocarousel-@(guid)">
+        <div class="swiper-wrapper item-grid" dir="@Html.GetUIDirection(!await Html.ShouldUseRtlThemeAsync())">
+            @foreach (var item in Model.Products)
+            {
+                <div class="item-box swiper-slide">
+                    @await Html.PartialAsync("_ProductBox", item)
+                </div>
+            }
+        </div>
+        @if (Model.Pagination)
+        {
+            <div class="swiper-pagination"></div>
+        }
+        @if (Model.Navigation)
+        {
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        }
+    </div>
+
+    <script asp-location="Footer">
+        $(document).ready(function () {
+            var carousel@(guid) = new Swiper("#ocarousel-@(guid)", {
+                observer: true,
+                observeParents: true,
+                breakpoints: {
+                    0: {
+                        slidesPerView: 1
+                    },
+                    480: {
+                        slidesPerView: 2,
+                        spaceBetween: 12
+                    },
+                    1024: {
+                        slidesPerView: 4,
+                        spaceBetween: 12
+                    }
+                },
+                lazy: @Model.LazyLoad.ToString().ToLower(),
+                loop: @Model.Loop.ToString().ToLower(),
+                centeredSlides: @Model.Center.ToString().ToLower(),
+                initialSlide: @Model.StartPosition,
+        @if (Model.AutoPlay)
+        {
+            <text>
+                    autoplay: {
+                    delay: @Model.AutoPlayTimeout,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: @Model.AutoPlayHoverPause.ToString().ToLower(),
+                },
+            </text>
+        }
+        @if (Model.KeyboardControl)
+        {
+            <text>
+                    keyboard: {
+                    enabled: true,
+                    onlyInViewport: @Model.KeyboardControlOnlyInViewport.ToString().ToLower(),
+                    pageUpDown: false
+                },
+            </text>
+        }
+        @if (Model.Pagination)
+        {
+            <text>
+                    pagination: {
+                    el: "#ocarousel-@(guid) .swiper-pagination",
+                    type: "@(Model.PaginationType.ToString().ToLower())",
+                    dynamicBullets: @Model.PaginationDynamicBullets.ToString().ToLower(),
+                    dynamicMainBullets: @Model.PaginationDynamicMainBullets,
+                    clickable: @Model.PaginationClickable.ToString().ToLower()
+                                },
+            </text>
+        }
+        @if (Model.Navigation)
+        {
+            <text>
+                    navigation: {
+                    nextEl: "#ocarousel-@(guid) .swiper-button-next",
+                    prevEl: "#ocarousel-@(guid) .swiper-button-prev",
+                },
+            </text>
+        }
+                });
+            });
+    </script>
+}
+
+@if (smartCarouselSettings.EnableAjaxLoad)
+{
+    @NopHtml.GenerateInlineScripts(ResourceLocation.Footer)
+}

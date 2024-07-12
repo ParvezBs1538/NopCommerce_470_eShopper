@@ -1,0 +1,82 @@
+@model RedxAreaModel
+
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.Redx.RedxAreas.EditArea").Text;
+
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("Redx.AreaList");
+}
+
+<form asp-controller="RedxArea" asp-action="Edit" method="post">
+    <input asp-for="RedxAreaId" type="hidden" />
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Redx.RedxAreas.EditArea")
+            <small>
+                <i class="fa fa-arrow-circle-left"></i>
+                <a asp-action="List">@T("Admin.NopStation.Redx.RedxAreas.BackToList")</a>
+            </small>
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+            <button type="submit" name="save-continue" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.SaveContinue")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div asp-validation-summary="All"></div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="Name" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="Name" asp-required="true" />
+                                    <span asp-validation-for="Name"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="PostCode" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="PostCode" asp-required="true" />
+                                    <span asp-validation-for="PostCode"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="DistrictName" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="DistrictName" />
+                                    <span asp-validation-for="DistrictName"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="StateProvinceId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="StateProvinceId" asp-items="@Model.AvailableStateProvinces" />
+                                    <span asp-validation-for="StateProvinceId"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

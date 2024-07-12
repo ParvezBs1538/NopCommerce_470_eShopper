@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station DMS",
+  "SystemName": "NopStation.Plugin.Widgets.DMS",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.DMS.dll",
+  "Description": "This plugin enables delivery management system.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

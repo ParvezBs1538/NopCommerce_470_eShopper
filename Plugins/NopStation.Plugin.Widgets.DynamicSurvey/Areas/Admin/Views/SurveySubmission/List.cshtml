@@ -1,0 +1,215 @@
+﻿@model SurveySubmissionSearchModel
+
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.DynamicSurvey.Surveys.Submissions").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("Surveys submissions");
+}
+
+@{
+    const string hideSearchBlockAttributeName = "SurveySubmissionListPage.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+    <form asp-controller="SurveySubmission" asp-action="List" method="post">
+        <div class="content-header clearfix">
+            <h1 class="float-left">
+            @T("Admin.NopStation.DynamicSurvey.Surveys.Submissions")
+            </h1>
+            <div class="float-right">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-success">
+                        <i class="fas fa-download"></i>
+                        @T("Admin.Common.Export")
+                    </button>
+                    <button type="button" class="btn btn-success dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
+                        <span class="sr-only">&nbsp;</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li class="dropdown-item">
+                            <button asp-action="ExportExcel" type="submit" name="exportexcel-all">
+                                <i class="far fa-file-excel"></i>
+                                @T("Admin.Common.ExportToExcel.All")
+                            </button>
+                        </li>
+                        <li class="dropdown-item">
+                        <button type="submit" asp-action="ExportExcelSelected" id="exportexcel-selected">
+                                <i class="far fa-file-excel"></i>
+                                @T("Admin.Common.ExportToExcel.Selected")
+                            </button>
+                        </li>
+                </ul>
+                </div>
+                <div class="btn-group">
+                    <button type="button" id="delete-selected" class="btn btn-danger">
+                        <i class="far fa-trash-alt"></i>
+                        @T("Admin.Common.Delete.Selected")
+                    </button>
+                </div>
+                <nop-action-confirmation asp-button-id="delete-selected" />
+            </div>
+        </div>
+
+      <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                      <div class="card card-default card-search">
+                        <div class="card-body">
+                            <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                                <div class="search-text">@T("Admin.Common.Search")</div>
+                                <div class="icon-search"><i class="fas fa-search" aria-hidden="true"></i></div>
+                                <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                            </div>
+
+                            <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="SurveyId" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="SurveyId" asp-items="@Model.AvailableSurveys" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="SearchCustomerEmail" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="SearchCustomerEmail" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="DateStart" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="DateStart" asp-template="DateNullable" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="DateEnd" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="DateEnd" asp-template="DateNullable" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="text-center col-12">
+                                        <button type="button" id="search-survey-submissions" class="btn btn-primary btn-search">
+                                            <i class="fas fa-search"></i>
+                                            @T("Admin.Common.Search")
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                      <div class="card card-default">
+                          <div class="card-body">
+                              @await Html.PartialAsync("Table", new DataTablesModel
+                         {
+                             Name = "survey-submissions-grid",
+                             UrlRead = new DataUrl("List", "SurveySubmission", null),
+                             UrlDelete = new DataUrl("DeleteSelected", "SurveySubmission", null),
+                             SearchButtonId = "search-survey-submissions",
+                             Length = Model.PageSize,
+                             LengthMenu = Model.AvailablePageSizes,
+                             Filters = new List<FilterParameter>
+                             {
+                                new FilterParameter(nameof(Model.SurveyId)),
+                                new FilterParameter(nameof(Model.DateStart)),
+                                new FilterParameter(nameof(Model.DateEnd)),
+                                new FilterParameter(nameof(Model.SearchCustomerEmail)),
+                             },
+                             ColumnCollection = new List<ColumnProperty>
+                                  {
+                                      new ColumnProperty(nameof(SurveySubmissionModel.Id))
+                                      {
+                                          IsMasterCheckBox = true,
+                                          ClassName =  NopColumnClassDefaults.CenterAll,
+                                          Render = new RenderCheckBox("selectedIds"),
+                                          Width = "40"
+                                      },
+                                      new ColumnProperty(nameof(SurveySubmissionModel.CustomerEmail))
+                                      {
+                                          Title = T("Admin.NopStation.DynamicSurvey.SurveySubmissions.Fields.CustomerEmail").Text,
+                                          Width = "150"
+                                      },                                      
+                                      new ColumnProperty(nameof(SurveySubmissionModel.CreatedOn))
+                                      {
+                                          Title = T("Admin.NopStation.DynamicSurvey.SurveySubmissions.Fields.CreatedOn").Text,
+                                          Width = "80",
+                                          ClassName = NopColumnClassDefaults.CenterAll,
+                                          Render = new RenderDate()
+                                      },                                 
+                                      new ColumnProperty(nameof(SurveySubmissionModel.AttributeDescription))
+                                      {
+                                          Title = T("Admin.NopStation.DynamicSurvey.SurveySubmissions.Fields.Attribute").Text,
+                                          Render = new RenderCustom("renderAttributes"),
+                                          Width = "200"
+                                      },
+                                      new ColumnProperty(nameof(SurveyModel.Id))
+                                      {
+                                          Title = T("Admin.Common.Edit").Text,
+                                          Width = "80",
+                                          ClassName =  NopColumnClassDefaults.Button,
+                                          Render = new RenderButtonView(new DataUrl("Details"))
+                                      }
+                                  }
+                         })
+
+                              <script>
+                                $(document).ready(function () {
+                                    $('#delete-selected-action-confirmation-submit-button').bind('click', function () {
+                                        var postData = {
+                                            selectedIds: selectedIds
+                                        };
+                                        addAntiForgeryToken(postData);
+                                        $.ajax({
+                                            cache: false,
+                                            type: "POST",
+                                            url: "@(Url.Action("DeleteSelected", "SurveySubmission"))",
+                                            data: postData,
+                                            error: function (jqXHR, textStatus, errorThrown) {
+                                                showAlert('deleteSelectedFailed', errorThrown);
+                                            },
+                                            complete: function (jqXHR, textStatus) {
+                                                if (jqXHR.status === 204)
+                                                {
+                                                    showAlert('nothingSelectedAlert', '@T("Admin.Common.Alert.NothingSelected")');
+                                                    return;
+                                                }
+                                                    updateTable('#survey-submissions-grid');
+                                            }
+                                        });
+                                        $('#delete-selected-action-confirmation').modal('toggle');
+                                        return false;
+                                    });
+                                });
+
+                                
+                                function renderAttributes(val) {
+                                    var items = val.split('<br />');
+                                    return items.length > 3 ? items.slice(0, 3).join('<br />') + ' ...' : val;
+                                }
+
+                              </script>
+                              <nop-alert asp-alert-id="deleteSelectedFailed" />
+                              <nop-alert asp-alert-id="nothingSelectedAlert" />
+                          </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+      </section>
+</form>

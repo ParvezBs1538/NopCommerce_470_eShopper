@@ -1,0 +1,164 @@
+﻿@model ConfigurationModel
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="AllowCategoryFilter_OverrideForStore" asp-input="AllowCategoryFilter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="AllowCategoryFilter" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="AllowCategoryFilter" />
+            <span asp-validation-for="AllowCategoryFilter"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="AllowCategoryFilter">
+        <div class="form-group row" id="pnlMaximumCategoriesShowInFilter">
+            <div class="col-md-4">
+                <nop-override-store-checkbox asp-for="MaximumCategoriesShowInFilter_OverrideForStore" asp-input="MaximumCategoriesShowInFilter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="MaximumCategoriesShowInFilter" />
+            </div>
+            <div class="col-md-8">
+                <nop-editor asp-for="MaximumCategoriesShowInFilter" />
+                <span asp-validation-for="MaximumCategoriesShowInFilter"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="AllowVendorFilter_OverrideForStore" asp-input="AllowVendorFilter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="AllowVendorFilter" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="AllowVendorFilter" />
+            <span asp-validation-for="AllowVendorFilter"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="AllowVendorFilter">
+        <div class="form-group row" id="pnlMaximumVendorsShowInFilter">
+            <div class="col-md-4">
+                <nop-override-store-checkbox asp-for="MaximumVendorsShowInFilter_OverrideForStore" asp-input="MaximumVendorsShowInFilter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="MaximumVendorsShowInFilter" />
+            </div>
+            <div class="col-md-8">
+                <nop-editor asp-for="MaximumVendorsShowInFilter" />
+                <span asp-validation-for="MaximumVendorsShowInFilter"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="AllowManufacturerFilter_OverrideForStore" asp-input="AllowManufacturerFilter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="AllowManufacturerFilter" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="AllowManufacturerFilter" />
+            <span asp-validation-for="AllowManufacturerFilter"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="AllowManufacturerFilter">
+        <div class="form-group row" id="pnlMaximumManufacturersShowInFilter">
+            <div class="col-md-4">
+                <nop-override-store-checkbox asp-for="MaximumManufacturersShowInFilter_OverrideForStore" asp-input="MaximumManufacturersShowInFilter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="MaximumManufacturersShowInFilter" />
+            </div>
+            <div class="col-md-8">
+                <nop-editor asp-for="MaximumManufacturersShowInFilter" />
+                <span asp-validation-for="MaximumManufacturersShowInFilter"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="AllowSpecificationFilter_OverrideForStore" asp-input="AllowSpecificationFilter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="AllowSpecificationFilter" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="AllowSpecificationFilter" />
+            <span asp-validation-for="AllowSpecificationFilter"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="AllowSpecificationFilter">
+        <div class="form-group row" id="pnlMaximumSpecificationsShowInFilter">
+            <div class="col-md-4">
+                <nop-override-store-checkbox asp-for="MaximumSpecificationsShowInFilter_OverrideForStore" asp-input="MaximumSpecificationsShowInFilter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="MaximumSpecificationsShowInFilter" />
+            </div>
+            <div class="col-md-8">
+                <nop-editor asp-for="MaximumSpecificationsShowInFilter" />
+                <span asp-validation-for="MaximumSpecificationsShowInFilter"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+    @*<div class="form-group row">
+        <div class="col-md-4">
+            <nop-label asp-for="AllowAttributeFilter" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="AllowAttributeFilter" />
+            <span asp-validation-for="AllowAttributeFilter"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="AllowAttributeFilter">
+        <div class="form-group row" id="pnlMaximumAttributesShowInFilter">
+            <div class="col-md-4">
+                <nop-label asp-for="MaximumAttributesShowInFilter" />
+            </div>
+            <div class="col-md-8">
+                <nop-editor asp-for="MaximumAttributesShowInFilter" />
+                <span asp-validation-for="MaximumAttributesShowInFilter"></span>
+            </div>
+        </div>
+    </nop-nested-setting>*@
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="AllowProductSorting_OverrideForStore" asp-input="AllowProductSorting" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="AllowProductSorting" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="AllowProductSorting" />
+            <span asp-validation-for="AllowProductSorting"></span>
+        </div>
+    </div>
+    <nop-nested-setting asp-for="AllowProductSorting">
+        <div class="form-group row" id="pnlAllowedSortingOptions">
+            <div class="col-md-4">
+                <nop-override-store-checkbox asp-for="AllowedSortingOptions_OverrideForStore" asp-input="AllowedSortingOptions" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="AllowedSortingOptions" />
+            </div>
+            <div class="col-md-8">
+                <nop-select asp-for="AllowedSortingOptions" asp-items="Model.AvailableSortOptions" asp-multiple="true" />
+                <span asp-validation-for="AllowedSortingOptions"></span>
+            </div>
+        </div>
+    </nop-nested-setting>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="AllowPriceRangeFilter_OverrideForStore" asp-input="AllowPriceRangeFilter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="AllowPriceRangeFilter" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="AllowPriceRangeFilter" />
+            <span asp-validation-for="AllowPriceRangeFilter"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="AllowRatingFilter_OverrideForStore" asp-input="AllowRatingFilter" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="AllowRatingFilter" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="AllowRatingFilter" />
+            <span asp-validation-for="AllowRatingFilter"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            <nop-override-store-checkbox asp-for="ShowProductsCount_OverrideForStore" asp-input="ShowProductsCount" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="ShowProductsCount" />
+        </div>
+        <div class="col-md-8">
+            <nop-editor asp-for="ShowProductsCount" />
+            <span asp-validation-for="ShowProductsCount"></span>
+        </div>
+    </div>
+</div>

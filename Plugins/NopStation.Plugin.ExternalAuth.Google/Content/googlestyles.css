@@ -1,0 +1,8 @@
+﻿.google-singin-btn {
+    display: inline-block;
+    width: 280px;
+    height: 43px;
+    background-image: url('images/google_logo.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}

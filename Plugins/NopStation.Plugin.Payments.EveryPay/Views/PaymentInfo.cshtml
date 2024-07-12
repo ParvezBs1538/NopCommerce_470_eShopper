@@ -1,0 +1,57 @@
+﻿@model NopStation.Plugin.Payments.EveryPay.Models.PaymentInfoModel
+
+<input id="token" type="hidden" asp-for="Token" />
+<input id="uuid" type="hidden" asp-for="Uuid" />
+
+<div style="margin: auto; width: 50%;">
+    <img id="everypay-loader" style="height: 50%; width: 50%" src="@Url.Content("~/Plugins/NopStation.Plugin.Payments.EveryPay/Content/loading.gif")">
+</div>
+
+<div style="margin: auto; width: 50%;">
+    <div id="pay-form"></div>
+</div>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $('.payment-info-next-step-button').hide();
+        function handleResponse(r) {
+            if (r.onLoad) {
+                $('#everypay-loader').hide();
+                clearInterval(myVar);
+            }
+
+            if (r.response === 'success') {
+                $("#token").val(r.token);
+                $("#uuid").val(r.uuid);
+                $('.payment-info-next-step-button').trigger("click");
+            } else if (r.response == 'error') {
+                alert(r.msg.message);
+            }
+        }
+
+        var model =  @Html.Raw(Json.Serialize(Model));
+        var payload =@Model.Installments.Length> 0 ? {
+            pk: '@Model.ApiKey',
+            amount: @Model.Amount,
+            installments: model['Installments'],
+            buttonOptions: {
+                text: '@T("NopStation.EveryPay.Button.Pay")'
+            }
+        } : {
+                pk: '@Model.ApiKey',
+                amount: @Model.Amount,
+                buttonOptions: {
+                    text: '@T("NopStation.EveryPay.Button.Pay")'
+                }
+            };
+        var myVar = setInterval(everypayLoader, 500);
+        function everypayLoader() {
+            everypay.payform(payload, handleResponse);
+        }
+    });
+</script>
+
+@if (orderSettings.OnePageCheckoutEnabled)
+{
+    @NopHtml.GenerateInlineScripts(ResourceLocation.Footer)
+}

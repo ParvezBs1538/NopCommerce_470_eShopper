@@ -1,0 +1,63 @@
+﻿@model ConfigurationModel
+
+ <div class="card-body">
+                            
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="EnableRecommendedForYou_OverrideForStore" asp-input="EnableRecommendedForYou" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="EnableRecommendedForYou" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableRecommendedForYou" />
+            <span asp-validation-for="EnableRecommendedForYou"></span>
+        </div>
+    </div>
+
+    <nop-nested-setting asp-for="EnableRecommendedForYou">
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="RecommendedForYouARN_OverrideForStore" asp-input="RecommendedForYouARN" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="RecommendedForYouARN" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="RecommendedForYouARN" />
+                <span asp-validation-for="RecommendedForYouARN"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="RecommendedForYouWidgetZoneId_OverrideForStore" asp-input="RecommendedForYouWidgetZoneId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="RecommendedForYouWidgetZoneId" />
+            </div>
+            <div class="col-md-9">
+                <nop-select asp-for="RecommendedForYouWidgetZoneId" asp-items="@Model.AvailableWidgetZones" />
+                <span asp-validation-for="RecommendedForYouWidgetZoneId"></span>
+            </div>
+        </div> 
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="RecommendedForYouNumberOfItems_OverrideForStore" asp-input="RecommendedForYouNumberOfItems" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="RecommendedForYouNumberOfItems" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="RecommendedForYouNumberOfItems" />
+                <span asp-validation-for="RecommendedForYouNumberOfItems"></span>
+            </div>
+        </div> 
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="RecommendedForYouAllowForGuestCustomer_OverrideForStore" asp-input="RecommendedForYouAllowForGuestCustomer" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="RecommendedForYouAllowForGuestCustomer" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="RecommendedForYouAllowForGuestCustomer" />
+                <span asp-validation-for="RecommendedForYouAllowForGuestCustomer"></span>
+            </div>
+        </div> 
+        
+    </nop-nested-setting>
+</div> 

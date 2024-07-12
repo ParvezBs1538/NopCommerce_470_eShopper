@@ -1,0 +1,144 @@
+﻿@using System.Globalization;
+@model ConfigurationModel
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("WidgetsAbandonedCarts.Configuration");
+
+    ViewBag.PageTitle = T("Plugins.Widgets.AbandonedCarts.Menu.Configuration").Text;
+}
+
+@await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+<form asp-controller="WidgetsAbandonedCarts" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Plugins.Widgets.AbandonedCarts.Menu.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="IsEnabled_OverrideForStore" asp-input="IsEnabled" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="IsEnabled" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="IsEnabled" />
+                                    <span asp-validation-for="IsEnabled"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="AbandonmentCutOffTime_OverrideForStore" asp-input="AbandonmentCutOffTime" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="AbandonmentCutOffTime" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AbandonmentCutOffTime" />
+                                    <span asp-validation-for="AbandonmentCutOffTime"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="NotificationSendingCondition_OverrideForStore" asp-input="NotificationSendingConditionId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="NotificationSendingConditionId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="NotificationSendingConditionId" asp-items="@await (((AbandonedType)Model.NotificationSendingConditionId).ToSelectListAsync())" />
+                                    <span asp-validation-for="NotificationSendingConditionId"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="IsEnabledFirstNotification_OverrideForStore" asp-input="IsEnabledFirstNotification" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="IsEnabledFirstNotification" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="IsEnabledFirstNotification" />
+                                    <span asp-validation-for="IsEnabledFirstNotification"></span>
+                                </div>
+                            </div>
+
+                            <nop-nested-setting asp-for="IsEnabledFirstNotification">
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="DurationAfterFirstAbandonment_OverrideForStore" asp-input="DurationAfterFirstAbandonment" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="DurationAfterFirstAbandonment" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="DurationAfterFirstAbandonment" />
+                                        <span asp-validation-for="DurationAfterFirstAbandonment"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="IsEnabledSecondNotification_OverrideForStore" asp-input="IsEnabledSecondNotification" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="IsEnabledSecondNotification" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="IsEnabledSecondNotification" />
+                                        <span asp-validation-for="IsEnabledSecondNotification"></span>
+                                    </div>
+                                </div>
+
+                                <nop-nested-setting asp-for="IsEnabledSecondNotification">
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-override-store-checkbox asp-for="DurationAfterSecondAbandonment_OverrideForStore" asp-input="DurationAfterSecondAbandonment" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="DurationAfterSecondAbandonment" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="DurationAfterSecondAbandonment" />
+                                            <span asp-validation-for="DurationAfterSecondAbandonment"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-3">
+                                            <nop-override-store-checkbox asp-for="DontSendSameDay_OverrideForStore" asp-input="DontSendSameDay" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                            <nop-label asp-for="DontSendSameDay" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="DontSendSameDay" />
+                                            <span asp-validation-for="DontSendSameDay"></span>
+                                        </div>
+                                    </div>
+                                </nop-nested-setting>
+                            </nop-nested-setting>
+
+                            <div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="CustomerOnlineCutoffTime_OverrideForStore" asp-input="CustomerOnlineCutoffTime" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="CustomerOnlineCutoffTime" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="CustomerOnlineCutoffTime" />
+                                        <span asp-validation-for="CustomerOnlineCutoffTime"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

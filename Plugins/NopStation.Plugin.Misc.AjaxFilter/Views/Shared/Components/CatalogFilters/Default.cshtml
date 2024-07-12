@@ -1,0 +1,50 @@
+﻿@using Nop.Web.Framework.UI;
+@using Nop.Core.Infrastructure;
+
+@{
+    NopHtml.AddCssFileParts("~/Plugins/NopStation.Plugin.Misc.AjaxFilter/Contents/jquery-ui.min.css");
+    NopHtml.AddCssFileParts("~/Plugins/NopStation.Plugin.Misc.AjaxFilter/Contents/style.css");
+    NopHtml.AddCssFileParts("~/Plugins/NopStation.Plugin.Misc.AjaxFilter/Contents/css/rating.css");
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/Plugins/NopStation.Plugin.Misc.AjaxFilter/Contents/ajaxfilter.manager.js");
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/Plugins/NopStation.Plugin.Misc.AjaxFilter/Contents/ajax.filterchildren.js");
+    NopHtml.AppendScriptParts(ResourceLocation.Footer,"~/Plugins/NopStation.Plugin.Misc.AjaxFilter/Contents/rating.js");
+}
+
+<div class="nop-ajax-filters">
+    <div class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+</div>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $('.product-filters').hide();
+
+        if ($(".product-grid").not(".featured-product-grid").length) {
+            $("<div class='ajax-products'></div>").insertBefore('.products-wrapper');
+            $('.products-wrapper').appendTo('.ajax-products');
+        }
+        if ($(".product-list").not(".featured-product-grid").length) {
+            $("<div class='ajax-products'></div>").insertBefore('.products-wrapper');
+            $('.products-wrapper').appendTo('.ajax-products');
+        }
+        $('.pager').appendTo('.ajax-products');
+
+        AjaxFilter.init('@Url.RouteUrl("AjaxFilterReloadFilters")');
+
+        $.ajax({
+            method: "POST",
+            url: '@Url.RouteUrl("AjaxFilterLoadFilters")',
+            success: function (response) {
+                $(".nop-ajax-filters").html(response.update_section.html);
+                if(response.update_section.reload == true)
+                {
+                    AjaxFilter.setInitialFilterParameters();
+                    AjaxFilter.setFilter(this, 'reload');
+                }
+            },
+        });
+    });
+</script>

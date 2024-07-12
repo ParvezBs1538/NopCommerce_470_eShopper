@@ -1,0 +1,119 @@
+@model DeliverySlotModel
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div asp-validation-summary="All"></div>
+            <input asp-for="Id" type="hidden" />
+
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        @(await Html.LocalizedEditorAsync<DeliverySlotModel, DeliverySlotLocalizedModel>("deliveryslot-localized",
+                            @<div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="@Model.Locales[item].TimeSlot" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="@Model.Locales[item].TimeSlot" />
+                                        <span asp-validation-for="@Model.Locales[item].TimeSlot"></span>
+                                    </div>
+                                </div>
+                                <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+                            </div>
+                            ,
+                            @<div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="TimeSlot" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="TimeSlot" asp-required="true" />
+                                        <span asp-validation-for="TimeSlot"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="DisplayOrder" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="DisplayOrder" />
+                                <span asp-validation-for="DisplayOrder"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="Active" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="Active" />
+                                <span asp-validation-for="Active"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="SelectedShippingMethodIds" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-select asp-for="SelectedShippingMethodIds" asp-items="Model.AvailableShippingMethods" asp-multiple="true" />
+                                <span asp-validation-for="SelectedShippingMethodIds"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="SelectedStoreIds" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <nop-select asp-for="SelectedStoreIds" asp-items="Model.AvailableStores" asp-multiple="true" />
+                                        <script>
+                                            $(document).ready(function() {
+                                                var storesIdsInput = $('#@Html.IdFor(model => model.SelectedStoreIds)').data("kendoMultiSelect");
+                                                storesIdsInput.setOptions({
+                                                    autoClose: false,
+                                                    filter: "contains"
+                                                });
+
+                                                @if (Model.AvailableStores.Count == 0)
+                                                {
+                                                    <text>
+                                                        storesIdsInput.setOptions({
+                                                            enable: false,
+                                                            placeholder: 'No stores available'
+                                                        });
+                                                        storesIdsInput._placeholder();
+                                                        storesIdsInput._enable();
+                                                    </text>
+                                                }
+                                            });
+                                        </script>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @await Component.InvokeAsync("MultistoreDisabledWarning")
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (Model.Id > 0)
+                        {
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="CreatedOn" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-div asp-for="CreatedOn" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+﻿
+.chat-with-vendor-panel {
+  display: block;
+  float: left;
+}
+
+  .chat-with-vendor-panel::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+
+.nopchatButton {
+  border: none;
+  background-color: #8FDEE4;
+  padding: 10px 25px;
+  text-align: center;
+  font-size: 15px;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+  .nopchatButton:hover,
+  .nopchatButton:focus {
+    background-color: #8ABFE6;
+  }
+
+
+.chat-with-vendor-button {
+  margin: 0 1px;
+  border: none;
+  padding: 3px 30px 3px 22px;
+  font-size: 13px;
+  color: #fff;
+  text-transform: uppercase;
+  max-width: 88%;
+  background: #4ab2f1 url('/Plugins/NopStation.Plugin.Widgets.NopChat/Contents/Images/chat-icon.png') center no-repeat;
+  background-position: right 5px center;
+}
+
+.get-previous-msg {
+  text-align: center;
+  padding-top: 2%;
+}
+
+  .get-previous-msg button {
+    background: #4ECCFB;
+    border: 0;
+    color: white;
+    padding: 1%;
+    border: none;
+    border-radius: 20px;
+  }
+
+
+@media (max-width: 1000px) {
+  .chat-with-vendor-panel {
+    display: block;
+    float: none;
+    margin: 5px auto;
+  }
+
+  .chat-with-vendor-button {
+    padding: 10px 35px 10px 15px;
+  }
+}
+
+
+.product-details-chat {
+  background: #4ab2f1 url(/Plugins/NopStation.Plugin.Widgets.NopChat/Contents/Images/chat-icon.png) !important;
+  background-repeat: no-repeat !important;
+  color: white !important;
+  margin-top: 6px;
+  padding: 4px 14px 8px 42px;
+  font-size: 12px !important;
+  background-position: 4% !important;
+  padding-left: 46px !important;
+}

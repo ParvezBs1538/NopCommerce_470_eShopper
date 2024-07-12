@@ -1,0 +1,29 @@
+﻿@inject Nop.Core.IWorkContext workContext
+@{
+    var supportRtl = (await workContext.GetWorkingLanguageAsync()).Rtl;
+    <script  asp-exclude-from-bundle="true" asp-location="Footer" src= "~/Plugins/NopStation.Plugin.Widgets.AnywhereSlider/Content/js/owl.carousel.min.js" ></script>
+    <script  asp-exclude-from-bundle="true" asp-location="Footer" src= "~/Plugins/NopStation.Plugin.Widgets.AnywhereSlider/Content/js/nopstation.anywhereslider.js" ></script>
+
+    if (supportRtl)
+    {
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.AnywhereSlider/Content/css/rtl/owl.theme.green.min.css", string.Empty);
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.AnywhereSlider/Content/css/rtl/owl.carousel.css", string.Empty);
+    }
+    else
+    {
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.AnywhereSlider/Content/css/owl.theme.green.min.css", string.Empty);
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.AnywhereSlider/Content/css/owl.carousel.css", string.Empty);
+    }
+
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.AnywhereSlider/Content/css/styles.css", string.Empty);
+}
+
+<script asp-location="Footer" asp-exclude-from-bundle="true">
+    var sliderdata = {};
+    sliderdata.AnywereSliderFailure = '@T("NopStation.AnywhereSlider.LoadingFailed")';
+
+    $(document).ready(function () {
+        AnywereSlider.init('@Url.RouteUrl("AnywhereSlider")', '.slider-container', '.v .loader', sliderdata);
+    });
+</script>
+

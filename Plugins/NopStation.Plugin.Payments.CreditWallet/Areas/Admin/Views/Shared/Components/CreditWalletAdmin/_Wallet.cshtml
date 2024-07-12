@@ -1,0 +1,108 @@
+﻿@model WalletModel
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Active" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Active" />
+            <span asp-validation-for="Active"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="CreditLimit" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="CreditLimit" asp-items="@Model.CurrencyCode" />
+            <span asp-validation-for="CreditLimit"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="CurrencyId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="CurrencyId" asp-items="@Model.AvailableCurrencies" />
+            <span asp-validation-for="CurrencyId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="WarnUserForCreditBelow" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="WarnUserForCreditBelow" asp-items="@Model.CurrencyCode" />
+            <span asp-validation-for="WarnUserForCreditBelow"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="AllowOverspend" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="AllowOverspend" />
+            <span asp-validation-for="AllowOverspend"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="AvailableCredit" />
+        </div>
+        <div class="col-md-9">
+            <div class="form-text-row">@Model.AvailableCredit</div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="CreditUsed" />
+        </div>
+        <div class="col-md-9">
+            <div class="form-text-row">@Model.CreditUsed</div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="col-md-9 offset-md-3">
+            <button type="submit" id="addCreditDetails" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#addCreditDetails').click(function () {
+            $('#addCreditDetails').attr('disabled', true);
+            var postData = {
+                WalletCustomerId: @Model.WalletCustomerId,
+                CreditLimit: $("#@Html.IdFor(model => model.CreditLimit)").val(),
+                Active: $("#@Html.IdFor(model => model.Active)").is(':checked'),
+                CurrencyId: $("#@Html.IdFor(model => model.CurrencyId)").val(),
+                WarnUserForCreditBelow: $("#@Html.IdFor(model => model.WarnUserForCreditBelow)").val(),
+                AllowOverspend: $("#@Html.IdFor(model => model.AllowOverspend)").is(':checked'),
+            };
+            addAntiForgeryToken(postData);
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@(Url.Action("CreateOrUpdate", "Wallet"))",
+                data: postData,
+                success: function (data, textStatus, jqXHR) {
+                    if (data.success) {
+                        $('#activities-grid').DataTable().ajax.reload();
+                        alert(data.message);
+                    } else {
+                        alert(data.errors.join('\n'))
+                    }
+                },
+                complete: function (jqXHR, textStatus) {
+                    $('#addCreditDetails').attr('disabled', false);
+                }
+            });
+        });
+    })
+</script>

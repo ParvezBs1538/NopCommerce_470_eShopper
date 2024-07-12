@@ -1,0 +1,153 @@
+﻿@model SEOExpertConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.SEOExpert.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("SEOExpert.Configuration");
+}
+
+<form asp-controller="SEOExpert" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.SEOExpert.Configuration")
+        </h1>
+        <div class="float-right">
+            @*<button asp-action="GenerateForAll" type="submit" name="generate-for-all" class="btn btn-primary">
+            <i class="far fa-solid fa-gears"></i>
+            @T("Admin.NopStation.SEOExpert.GenerateForAll")
+            </button>*@
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="OpenAIApiKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="OpenAIApiKey" />
+                                    <span asp-validation-for="OpenAIApiKey"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="Endpoint" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="Endpoint" />
+                                    <span asp-validation-for="Endpoint"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="ModelName" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Model.ModelName</div>
+                                </div>
+                            </div>
+
+                            @*<div class="form-group row">
+                            <div class="col-md-3">
+                            <nop-label asp-for="RequireAdminApproval" />
+                            </div>
+                            <div class="col-md-9">
+                            <nop-editor-check asp-for="RequireAdminApproval" />
+                            <span asp-validation-for="RequireAdminApproval"></span>
+                            </div>
+                            </div>*@
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="EnableListGeneration" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <nop-editor asp-for="EnableListGeneration" />
+                                            <span asp-validation-for="EnableListGeneration"></span>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <div class="callout bg-gray-light no-margin">
+                                                @T("Admin.NopStation.Plugin.Widgets.SEOExpert.Configuration.Fields.EnableListGeneration.Warnings.Notification")
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="AdditionalInfoWithName" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AdditionalInfoWithName" />
+                                    <span asp-validation-for="AdditionalInfoWithName"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="AdditionalInfoWithShortDescription" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AdditionalInfoWithShortDescription" />
+                                    <span asp-validation-for="AdditionalInfoWithShortDescription"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="AdditionalInfoWithFullDescription" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="AdditionalInfoWithFullDescription" />
+                                    <span asp-validation-for="AdditionalInfoWithFullDescription"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="RegenerateConditionIds" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="RegenerateConditionIds" asp-items="Model.AvailableRegenerateConditions" asp-multiple="true" />
+                                    <span asp-validation-for="RegenerateConditionIds"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="Temperature" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <nop-editor asp-for="Temperature" />
+                                            <span asp-validation-for="Temperature"></span>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <div class="callout bg-gray-light no-margin">
+                                                @T("Admin.NopStation.Plugin.Widgets.SEOExpert.Configuration.Fields.Temperature.Warnings.Notification")
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

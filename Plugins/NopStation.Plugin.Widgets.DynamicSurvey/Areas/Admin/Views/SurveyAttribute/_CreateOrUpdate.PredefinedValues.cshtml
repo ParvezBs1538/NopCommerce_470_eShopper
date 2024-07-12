@@ -1,0 +1,82 @@
+﻿@model SurveyAttributeModel
+
+@if (Model.Id > 0)
+{
+    <div class="card-body">
+        <p>
+            @T("Admin.NopStation.DynamicSurvey.SurveyAttributes.PredefinedValues.Hint")
+        </p>
+        @await Html.PartialAsync("Table", new DataTablesModel
+        {
+            Name = "surveyattributevalues-grid",
+            UrlRead = new DataUrl("PredefinedSurveyAttributeValueList", "SurveyAttribute", new RouteValueDictionary { [nameof(Model.PredefinedSurveyAttributeValueSearchModel.SurveyAttributeId)] = Model.PredefinedSurveyAttributeValueSearchModel.SurveyAttributeId }),
+            UrlDelete = new DataUrl("PredefinedSurveyAttributeValueDelete", "SurveyAttribute", null),
+            Length = Model.PredefinedSurveyAttributeValueSearchModel.PageSize,
+            LengthMenu = Model.PredefinedSurveyAttributeValueSearchModel.AvailablePageSizes,
+            ColumnCollection = new List<ColumnProperty>
+            {
+                new ColumnProperty(nameof(PredefinedSurveyAttributeValueModel.Name))
+                {
+                    Title = T("Admin.NopStation.DynamicSurvey.SurveyAttributes.PredefinedValues.Fields.Name").Text,
+                    Width = "200"
+                },
+                new ColumnProperty(nameof(PredefinedSurveyAttributeValueModel.IsPreSelected))
+                {
+                    Title = T("Admin.NopStation.DynamicSurvey.SurveyAttributes.PredefinedValues.Fields.IsPreSelected").Text,
+                    Width = "100",
+                    ClassName = NopColumnClassDefaults.CenterAll,
+                    Render = new RenderBoolean()
+                },
+                new ColumnProperty(nameof(PredefinedSurveyAttributeValueModel.DisplayOrder))
+                {
+                    Title = T("Admin.NopStation.DynamicSurvey.SurveyAttributes.PredefinedValues.Fields.DisplayOrder").Text,
+                    Width = "100",
+                    ClassName = NopColumnClassDefaults.CenterAll
+                },
+                new ColumnProperty(nameof(PredefinedSurveyAttributeValueModel.Id))
+                {
+                    Title = T("Admin.Common.Edit").Text,
+                    Width = "100",
+                    ClassName =  NopColumnClassDefaults.Button,
+                    Render = new RenderCustom("renderColumnEdit")
+                },
+                new ColumnProperty(nameof(PredefinedSurveyAttributeValueModel.Id))
+                {
+                    Title = T("Admin.Common.Delete").Text,
+                    Width = "100",
+                    Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                    ClassName =  NopColumnClassDefaults.Button
+                }
+            }
+        })
+    
+        <script>
+            function renderColumnEdit(data, type, row, meta) {
+                return '<button onclick=\"javascript:OpenWindow(\'@Url.Content("~/Admin/SurveyAttribute/PredefinedSurveyAttributeValueEditPopup/")' + data + '?btnId=btnRefresh&formId=surveyattribute-form\', 800, 750, true); return false;\" class="btn btn-default"><i class="fas fa-pencil-alt"></i>@T("Admin.Common.Edit").Text</button>';
+            }
+        </script>
+    </div>
+    <div class="card-footer">
+        <button type="submit" id="btnAddNewValue" onclick="javascript:OpenWindow('@(Url.Action("PredefinedSurveyAttributeValueCreatePopup", "SurveyAttribute", new { surveyAttributeId = Model.Id, btnId = "btnRefresh", formId = "surveyattribute-form" }))', 800, 550, true); return false;" class="btn btn-primary">
+            @T("Admin.NopStation.DynamicSurvey.SurveyAttributes.PredefinedValues.AddNew")
+        </button>
+        <button type="submit" id="btnRefresh" style="display: none"></button>
+        <script>
+            $(document).ready(function () {
+                $('#btnRefresh').click(function () {
+                    //refresh grid
+                    updateTable('#surveyattributevalues-grid');
+
+                    //return false to don't reload a page
+                    return false;
+                });
+            });
+        </script>
+    </div>
+}
+else
+{
+    <div class="card-body">
+        @T("Admin.NopStation.DynamicSurvey.SurveyAttributes.PredefinedValues.SaveBeforeEdit")
+    </div>
+}

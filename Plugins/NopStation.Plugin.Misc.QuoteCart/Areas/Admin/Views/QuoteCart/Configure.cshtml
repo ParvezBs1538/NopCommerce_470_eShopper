@@ -1,0 +1,145 @@
+﻿@using Nop.Web.Areas.Admin.Models.Catalog
+@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("QuoteCart.Configuration");
+    ViewBag.PageTitle = T("Admin.NopStation.Plugin.Misc.QuoteCart.Configuration").Text;
+    
+    const string hideCommonBlockAttributeName = "QuoteCart.Configuration.HideCommonBlock";
+    var customer = await workContext.GetCurrentCustomerAsync();
+    var hideCommonBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideCommonBlockAttributeName);
+
+    const string hideWhitelistedProductsBlockAttributeName = "QuoteCart.Configuration.HideWhitelistedProductsBlock";
+    var hideWhitelistedProductsBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideWhitelistedProductsBlockAttributeName);
+
+    const string hideWhitelistedCategoriesBlockAttributeName = "QuoteCart.Configuration.HideWhitelistedProductsBlock";
+    var hideWhitelistedCategoriesBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideWhitelistedCategoriesBlockAttributeName);
+
+    const string hideCustomersBlockAttributeName = "QuoteCart.Configuration.HideCustomersBlock";
+    var hideCustomersBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideCustomersBlockAttributeName);
+}
+
+<script asp-location="Footer">
+    function toggleNestedSettings() {
+        if ($('#@Html.IdFor(m => m.EnableWhitelist)').is(':checked')) {
+            $('.whitelist-pnl').showElement();
+        }
+        else {
+            $('.whitelist-panel').hideElement();
+        }
+    }
+    $('#@Html.IdFor(m => m.EnableWhitelist)').change(toggleNestedSettings);
+    $(toggleNestedSettings);
+</script>
+
+<form asp-controller="QuoteCart" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Plugin.Misc.QuoteCart.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="fa fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="form-horizontal">
+            <div asp-validation-summary="All"></div>
+            @await Component.InvokeAsync("StoreScopeConfiguration")
+            <nop-cards id="quotecart-config-cards">
+                <nop-card asp-name="quotecart-config-common" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.Plugin.Misc.QuoteCart.Configuration.BlockTitle.Common")" asp-hide-block-attribute-name="@hideCommonBlockAttributeName" asp-hide="@hideCommonBlock" asp-advanced="false">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="EnableQuoteCart_OverrideForStore" asp-input="EnableQuoteCart" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="EnableQuoteCart" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="EnableQuoteCart" />
+                                <span asp-validation-for="EnableQuoteCart"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="ClearCartAfterSubmission_OverrideForStore" asp-input="ClearCartAfterSubmission" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="ClearCartAfterSubmission" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="ClearCartAfterSubmission" />
+                                <span asp-validation-for="ClearCartAfterSubmission"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="SelectedCustomerRoleIds_OverrideForStore" asp-input="SelectedCustomerRoleIds" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="SelectedCustomerRoleIds" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-select asp-for="SelectedCustomerRoleIds" asp-items="@Model.AvailableCustomerRoles" asp-multiple="true" />
+                                <span asp-validation-for="SelectedCustomerRoleIds"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="EnableWhitelist_OverrideForStore" asp-input="EnableWhitelist" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="EnableWhitelist" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="EnableWhitelist" />
+                                <span asp-validation-for="EnableWhitelist"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="MaxQuoteItemCount_OverrideForStore" asp-input="MaxQuoteItemCount" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="MaxQuoteItemCount" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="MaxQuoteItemCount" />
+                                <span asp-validation-for="MaxQuoteItemCount"></span>
+                            </div>
+                        </div>
+                    </div>
+                </nop-card>
+                <nop-card class="whitelist-pnl" asp-name="quotecart-config-whitelisted-products" asp-icon="fas fa-th-list" asp-title="@T("Admin.NopStation.Plugin.Misc.QuoteCart.Configuration.BlockTitle.WhitelistedProducts")" asp-hide-block-attribute-name="@hideWhitelistedProductsBlockAttributeName" asp-hide="@hideWhitelistedProductsBlock" asp-advanced="false">
+                    @await Html.PartialAsync("_Configure.WhitelistedProducts", Model)
+                </nop-card>
+                <nop-card class="whitelist-pnl" asp-name="quotecart-config-whitelisted-categories" asp-icon="fas fa-th-list" asp-title="@T("Admin.NopStation.Plugin.Misc.QuoteCart.Configuration.BlockTitle.WhitelistedCategories")" asp-hide-block-attribute-name="@hideWhitelistedCategoriesBlockAttributeName" asp-hide="@hideWhitelistedCategoriesBlock" asp-advanced="false">
+                    @await Html.PartialAsync("_Configure.WhitelistedCategories", Model)
+                </nop-card>
+                <nop-card class="whitelist-pnl" asp-name="quotecart-config-whitelisted-manufacturers" asp-icon="fas fa-th-list" asp-title="@T("Admin.NopStation.Plugin.Misc.QuoteCart.Configuration.BlockTitle.WhitelistedManufacturers")" asp-hide-block-attribute-name="@hideWhitelistedCategoriesBlockAttributeName" asp-hide="@hideWhitelistedCategoriesBlock" asp-advanced="false">
+                    @await Html.PartialAsync("_Configure.WhitelistedManufacturers", Model)
+                </nop-card>
+                <nop-card class="whitelist-pnl" asp-name="quotecart-config-whitelisted-vendors" asp-icon="fas fa-th-list" asp-title="@T("Admin.NopStation.Plugin.Misc.QuoteCart.Configuration.BlockTitle.WhitelistedVendors")" asp-hide-block-attribute-name="@hideWhitelistedCategoriesBlockAttributeName" asp-hide="@hideWhitelistedCategoriesBlock" asp-advanced="false">
+                    @await Html.PartialAsync("_Configure.WhitelistedVendors", Model)
+                </nop-card>
+            </nop-cards>
+        </div>
+    </section>
+</form>
+<script asp-location="Footer">
+    $(function() {
+        $('[data-nested]').each(function() {
+            if ($('#' + $(this).attr('data-nested')).is(':checked')) {
+                $(this).show();
+            }
+            else {
+                $(this).hide();
+            }
+        });
+        new Set([...$('[data-nested]')].map(x => $(x).attr('data-nested'))).forEach(elId => {
+            $('#' + elId).change(function() {
+                if ($(this).is(':checked')) {
+                    $(`[data-nested='${elId}']`).show();
+                }
+                else {
+                    $(`[data-nested='${elId}']`).hide();
+                }
+            });
+        });
+    });
+</script>

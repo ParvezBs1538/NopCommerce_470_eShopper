@@ -1,0 +1,14 @@
+.cloud-zoom-thumb-container {
+  margin-top: 10px;
+  text-align: left;
+}
+
+.cloud-zoom-thumb {
+  display: inline-block;
+  border: 1px solid #BBBB8E;
+  margin-right: 10px;
+}
+
+.imgForMobile {
+  display: none;
+}

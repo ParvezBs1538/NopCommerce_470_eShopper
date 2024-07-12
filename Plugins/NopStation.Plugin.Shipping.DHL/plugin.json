@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "DHL",
+  "SystemName": "NopStation.Plugin.Shipping.DHL",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Shipping.DHL.dll",
+  "Description": "This plugin allows you to ship with DHL.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

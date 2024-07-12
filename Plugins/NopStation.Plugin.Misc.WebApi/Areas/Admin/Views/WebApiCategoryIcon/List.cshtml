@@ -1,0 +1,110 @@
+﻿@model CategoryIconSearchModel
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.WebApi.CategoryIcons.List").Text;
+
+    NopHtml.SetActiveMenuItemSystemName("WebApiCategoryIcon");
+}
+
+@{
+    const string hideSearchBlockAttributeName = "WebApiCategoryIcon.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<form asp-controller="WebApiCategoryIcon" asp-action="List" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.WebApi.CategoryIcons.List")
+        </h1>
+    </div>
+    
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default card-search">
+                        <div class="card-body">
+                            <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                                <div class="search-text">@T("Admin.Common.Search")</div>
+                                <div class="icon-search"><i class="fa fa-search" aria-hidden="true"></i></div>
+                                <div class="icon-collapse"><i class="fa fa-angle-down" aria-hidden="true"></i></div>
+                            </div>
+
+                            <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <nop-label asp-for="SearchCategoryName" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="SearchCategoryName" />
+                                    </div>
+                                </div>
+                                <div class="form-group row" @(Model.HideStoresList ? Html.Raw("style=\"display:none\"") : null)>
+                                    <div class="col-md-4">
+                                        <nop-label asp-for="SearchStoreId" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="SearchStoreId" asp-items="Model.AvailableStores" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-8 offset-md-4">
+                                        <button type="button" id="search-slider" class="btn btn-primary btn-search">
+                                            <i class="fa fa-search"></i>
+                                            @T("Admin.Common.Search")
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-default">
+                        <div class="card-body">
+                            @await Html.PartialAsync("Table", new DataTablesModel
+                            {
+                                Name = "slider-grid",
+                                UrlRead = new DataUrl("GetList", "WebApiCategoryIcon", null),
+                                SearchButtonId = "search-slider",
+                                Length = Model.PageSize,
+                                LengthMenu = Model.AvailablePageSizes,
+                                Filters = new List<FilterParameter>
+                                {
+                                    new FilterParameter(nameof(Model.SearchCategoryName)),
+                                    new FilterParameter(nameof(Model.SearchStoreId))
+                                },
+                                ColumnCollection = new List<ColumnProperty>
+                                {
+                                    new ColumnProperty(nameof(CategoryIconModel.CategoryBannerUrl))
+                                    {
+                                        Title = T("Admin.NopStation.WebApi.CategoryIcons.Fields.CategoryBanner").Text,
+                                        Render = new RenderPicture(),
+                                        Width = "100"
+                                    },
+                                    new ColumnProperty(nameof(CategoryIconModel.CategoryName))
+                                    {
+                                        Title = T("Admin.NopStation.WebApi.CategoryIcons.Fields.Category").Text,
+                                        Width = "200",
+                                        Render = new RenderCustom("renderCategory")
+                                    },
+                                    new ColumnProperty(nameof(CategoryIconModel.CategoryId))
+                                    {
+                                        Title = T("Admin.Common.Edit").Text,
+                                        Width = "100",
+                                        ClassName =  NopColumnClassDefaults.Button,
+                                        Render = new RenderButtonEdit(new DataUrl("Edit?categoryId=", true))
+                                    }
+                                }
+                            })
+
+                            <script>
+                                function renderCategory(data, type, row, meta) {
+                                    return '<a href="/Admin/Category/Edit/' + row.CategoryId + '">' + data + '</a>'
+                                }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

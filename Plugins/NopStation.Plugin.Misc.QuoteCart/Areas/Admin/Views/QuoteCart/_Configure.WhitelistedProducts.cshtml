@@ -1,0 +1,56 @@
+﻿@using Nop.Web.Areas.Admin.Models.Catalog
+@model ConfigurationModel
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="WhitelistAllProducts_OverrideForStore" asp-input="WhitelistAllProducts" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="WhitelistAllProducts" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="WhitelistAllProducts" />
+            <span asp-validation-for="WhitelistAllProducts"></span>
+        </div>
+    </div>
+    @await Html.PartialAsync("Table", new DataTablesModel
+    {
+        Name = "products-grid",
+        UrlRead = new DataUrl(Url.Action("ProductList", "QuoteCart"), null),
+        UrlDelete = new DataUrl("ProductDelete", "QuoteCart", null),
+        Length = Model.WhitelistedProductSearchModel.PageSize,
+        LengthMenu = Model.WhitelistedProductSearchModel.AvailablePageSizes,
+        ColumnCollection = 
+        [
+            new ColumnProperty(nameof(ProductModel.Name))
+            {
+                Title = T("Admin.Catalog.Categories.Products.Fields.Product").Text
+            },
+            new ColumnProperty(nameof(ProductModel.Id))
+            {
+                Title = T("Admin.Common.Delete").Text,
+                Width = "100",
+                Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                ClassName = NopColumnClassDefaults.Button
+            }
+        ]
+    })
+</div>
+<div class="card-footer">
+    <button type="submit" id="btnAddNewProduct"
+            onclick="javascript:OpenWindow('@(Url.Action("ProductAddPopup", "QuoteCart", new { btnId = "btnRefreshProducts", formId = "addProductsform" }))', 800, 800, true); return false;"
+            class="btn btn-primary">
+        @T("Admin.Catalog.Categories.Products.AddNew")
+    </button>
+    <button type="submit" id="btnRefreshProducts" style="display: none"></button>
+    <script>
+        $(function () {
+            $('#btnRefreshProducts').click(function () {
+                //refresh grid
+                updateTable('#products-grid');
+
+                //return false to don't reload a page
+                return false;
+            });
+        });
+    </script>
+</div>

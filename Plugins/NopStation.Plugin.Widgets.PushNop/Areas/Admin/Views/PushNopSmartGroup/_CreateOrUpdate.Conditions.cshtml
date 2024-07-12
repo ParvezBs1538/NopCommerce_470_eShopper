@@ -1,0 +1,65 @@
+@using Microsoft.AspNetCore.Routing
+@model SmartGroupModel
+<div class="cards-group">
+    <div class="card card-default">
+        @if (Model.Id > 0)
+        {
+            <div class="card-body">
+                <div class="sub-card">
+                    @await Html.PartialAsync("Table", new DataTablesModel
+                    {
+                        Name = "smartgroupcondition-grid",
+                        UrlRead = new DataUrl("ConditionList", "PushNopSmartGroup", new RouteValueDictionary { [nameof(Model.SmartGroupConditionSearchModel.SmartGroupConditionId)] = Model.SmartGroupConditionSearchModel.SmartGroupConditionId }),
+                        Length = Model.SmartGroupConditionSearchModel.PageSize,
+                        LengthMenu = Model.SmartGroupConditionSearchModel.AvailablePageSizes,
+                        ColumnCollection = new List<ColumnProperty>
+                        {
+                            new ColumnProperty(nameof(SmartGroupConditionModel.ConditionColumnTypeStr))
+                            {
+                                Title = T("Admin.NopStation.PushNop.SmartGroupConditions.Fields.ConditionColumnType").Text,
+                                Width = "200"
+                            },
+                            new ColumnProperty(nameof(SmartGroupConditionModel.ConditionTypeStr))
+                            {
+                                Title = T("Admin.NopStation.PushNop.SmartGroupConditions.Fields.ConditionType").Text,
+                                Width = "200"
+                            },
+                            new ColumnProperty(nameof(SmartGroupConditionModel.ValueString))
+                            {
+                                Title = T("Admin.NopStation.PushNop.SmartGroupConditions.Fields.Value").Text,
+                                Width = "200",
+                                Editable = true,
+                                EditType = EditType.String
+                            },
+                            new ColumnProperty(nameof(SmartGroupConditionModel.LogicTypeStr))
+                            {
+                                Title = T("Admin.NopStation.PushNop.SmartGroupConditions.Fields.LogicType").Text,
+                                Width = "200"
+                            },
+                            new ColumnProperty(nameof(SmartGroupConditionModel.Id))
+                            {
+                                Title = T("Admin.Common.Edit").Text,
+                                Width = "200",
+                                ClassName = NopColumnClassDefaults.Button,
+                                Render = new RenderButtonEdit(new DataUrl("~/Admin/PushNopSmartGroup/EditCondition/"))
+                            }
+                        }
+                    })
+                </div>
+            </div>
+            <div class="card-footer">
+                <a asp-controller="PushNopSmartGroup" asp-action="CreateCondition" asp-route-smartGroupId="@Model.Id" class="btn btn-primary">
+                    @T("Admin.NopStation.PushNop.SmartGroupConditions.Combinations.AddNew")
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="card-body">
+                @T("Admin.NopStation.PushNop.SmartGroups.Conditions.SaveBeforeEdit")
+            </div>
+        }
+    </div>
+</div>
+
+

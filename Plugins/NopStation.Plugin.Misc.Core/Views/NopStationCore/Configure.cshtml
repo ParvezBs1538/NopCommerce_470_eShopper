@@ -1,0 +1,73 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("NopStationCore.Configure");
+
+    ViewBag.PageTitle = T("Admin.NopStation.Core.Configuration").Text;
+}
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.RestrictMainMenuByCustomerRoles)").change(toggleRestrictMainMenuByCustomerRoles);
+
+        toggleRestrictMainMenuByCustomerRoles();
+    });
+
+    function toggleRestrictMainMenuByCustomerRoles() {
+        if ($('#@Html.IdFor(model => model.RestrictMainMenuByCustomerRoles)').is(':checked')) {
+            $('#pnlAllowedCustomerRoleIds').show();
+        } else {
+            $('#pnlAllowedCustomerRoleIds').hide();
+        }
+    }
+</script>
+
+<form asp-controller="NopStationCore" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Core.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="RestrictMainMenuByCustomerRoles_OverrideForStore" asp-input="RestrictMainMenuByCustomerRoles" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="RestrictMainMenuByCustomerRoles" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="RestrictMainMenuByCustomerRoles" />
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="RestrictMainMenuByCustomerRoles">
+                                <div class="form-group row" id="pnlAllowedCustomerRoleIds">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="AllowedCustomerRoleIds" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-select asp-for="AllowedCustomerRoleIds" asp-items="Model.AvailableCustomerRoles" asp-multiple="true" />
+                                        <span asp-validation-for="AllowedCustomerRoleIds"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

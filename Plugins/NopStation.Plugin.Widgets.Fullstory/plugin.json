@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Fullstory",
+  "SystemName": "NopStation.Plugin.Widgets.Fullstory",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team, Jaber Kibria",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Widgets.Fullstory.dll",
+  "Description": "This plugin allows you to connect with Fullstory.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

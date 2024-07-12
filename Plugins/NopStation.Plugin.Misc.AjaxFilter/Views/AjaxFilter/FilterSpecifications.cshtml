@@ -1,0 +1,217 @@
+﻿@model FilterSpecificationsModel
+@using System.Text;
+@using NopStation.Plugin.Misc.AjaxFilter.Domains;
+@using NopStation.Plugin.Misc.AjaxFilter.Domains.Enums
+@using NopStation.Plugin.Misc.AjaxFilter.Models;
+@using Nop.Web.Framework.UI;
+
+@{
+    var maxSpecificationToDisplay = Model.MaxDisplayForSpecificationAttributes;
+}
+
+<script>
+    AjaxFilter.specificationAttributeOptionKeyPair = {};
+    function initializer(specId, checkedState) {
+
+        if (checkedState == "Checked") {
+            AjaxFilter.specificationAttributeOptionKeyPair[specId] != undefined ? AjaxFilter.specificationAttributeOptionKeyPair[specId]++ : AjaxFilter.specificationAttributeOptionKeyPair[specId] = 1;
+        }
+    }
+</script>
+
+@if (Model.SpecificationAttributes != null && Model.SpecificationAttributes.Count > 0)
+{
+    <div id="specification-filter-section">
+        <div class="specification-section">
+            @{
+                int j = 0;
+            }
+
+            @foreach (var specificationFilterGroup in Model.SpecificationAttributes)
+            {
+                <script>
+                    $("#collaspe-" + @(specificationFilterGroup.Id)).accordion({
+                        collapsible: (((`@(specificationFilterGroup.CloseSpecificationAttributeByDefault)`).toLowerCase()) == "true" ? true : false),
+                        active: (((`@(specificationFilterGroup.CloseSpecificationAttributeByDefault)`).toLowerCase()) == "true" ? true : false)
+                    });
+                </script>
+
+                <div class="filter-section s-@(specificationFilterGroup.Id)" data-id="@(specificationFilterGroup.Id)" id="collaspe-@(specificationFilterGroup.Id)">
+                    <div class="title">
+                        <h5 class="mb-0 collapsed ajaxfilter-title"
+                    data-toggle="collapse"
+                    data-parent="#specificationNavigation"
+                    data-target="#specificationNavigation"
+                    aria-expanded="true"
+                    aria-controls="collapseOne">
+                            @(!string.IsNullOrEmpty(specificationFilterGroup.AlternateName) ? specificationFilterGroup.AlternateName : specificationFilterGroup.Name)
+                            <i class="fa fa-angle-down rotate-icon float-right"></i>
+                            <span id="@specificationFilterGroup.Id"
+                          class="reset-specification-filter"
+                          data-specification-id="@specificationFilterGroup.Id"
+                          onclick="AjaxFilter.resetSpecificationFilter(this, @specificationFilterGroup.Id,true)">
+                                <i class="fa fa-undo floated-icon @(specificationFilterGroup.SpecificationAttributeOptions.Any(x => x.CheckedState == CheckedState.Checked)?"":"d-none")"></i>
+                            </span>
+                        </h5>
+                    </div>
+
+                    @{
+                        var specificationAttribute = specificationFilterGroup.SpecificationAttributeOptions.ToList();
+
+                        var attributeCount = specificationAttribute.Count;
+
+                        var displayCount = Math.Min(attributeCount, specificationFilterGroup.MaxDisplayForSpecifiation);
+
+                        var isViewMoreNeed = attributeCount > specificationFilterGroup.MaxDisplayForSpecifiation;
+
+                        var noViewMoreCss = isViewMoreNeed ? "" : "margin-bottom: 0;";
+                    }
+
+                    <div class="listbox collapse show" style="@noViewMoreCss" id="specificationNavigation" aria-labelledby="specificationNavigation">
+                        @if (Model.EnableSearchForSpecificationAttribute)
+                        {
+                            <div class="d-flex">
+                                <input type="text" class="searchText" id="search-@specificationFilterGroup.Id" placeholder="Search" />
+                                <a class="searchBox" data-specification-id="@specificationFilterGroup.Id">
+                                    <i class="fa fa-search floated-icon"></i>
+                                </a>
+                            </div>
+                            <script>
+                                $(document).ready(function () {
+                                    $("#search-@specificationFilterGroup.Id").keyup(function () {
+                                        var filter = $(this).val();
+                                        $("#specid-@specificationFilterGroup.Id li").each(function () {
+                                            if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+                                                $(this).hide();
+                                            } else {
+                                                $(this).show()
+                                            }
+                                        });
+
+                                        $('.showControl-specid-@specificationFilterGroup.Id').text('Show less');
+                                    });
+                                });
+                            </script>
+                        }
+                        <div class="ajaxfilter-section">
+                            @if (Model.CheckOrDropdowns == FiltersUI.UseCheckboxes)
+                            {
+                                <ul id="specid-@specificationFilterGroup.Id" class="itemsThree @specificationFilterGroup.Name">
+                                    @{
+                                        var position = 0;
+                                        for (; position < displayCount; position++)
+                                        {
+                                            var specificationFilterItem = specificationAttribute.ElementAt(position);
+                                            string color = "";
+                                            <li class="item" data-id="@specificationFilterItem.Id">
+                                                <input class="@specificationFilterItem.Id @color d-none"
+                                       type="checkbox"
+                                       data-option-id="@specificationFilterItem.Id"
+                                       data-option-name="@specificationFilterItem.Name"
+                                       value="@specificationFilterItem.Id" id="specificationModel_SpecificationAttributes_@(specificationFilterGroup.Id)_@(position)_Id"
+                                       @(specificationFilterItem.CheckedState == CheckedState.Checked ? "Checked" : "")
+                                       @(specificationFilterItem.CheckedState == CheckedState.Disabled ? "Disabled" : "")
+                                       @(specificationFilterItem.CheckedState == CheckedState.CheckedDisabled ? "Disabled Checked" : "")
+                                       onclick="AjaxFilter.setFilter(this, 'specs');" />
+                                                <label for="specificationModel_SpecificationAttributes_@(specificationFilterGroup.Id)_@(position)_Id">
+                                                    @if (!String.IsNullOrEmpty(specificationFilterItem.ColorSquaresRgb))
+                                                    {
+                                                        <span class="square  @(specificationFilterItem.CheckedState == CheckedState.Checked ? "active" : "")
+                                                                                      @specificationFilterItem.Id"
+                                          style="background-color: @specificationFilterItem.ColorSquaresRgb"
+                                          id="square_specificationModel_SpecificationAttributes_@(specificationFilterGroup.Id)_@(position)_Id"></span>
+                                                        color = "regular-checkbox";
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="square @(specificationFilterItem.CheckedState == CheckedState.Checked ? "active" : "")
+                                                                                      @specificationFilterItem.Id"
+                                          style="background-color: #fff"
+                                          id="square_specificationModel_SpecificationAttributes_@(specificationFilterGroup.Id)_@(position)_Id"></span>
+                                                    }
+                                                    <i>@specificationFilterItem.Name </i>
+
+                                                    @if (Model.ShowProductCountInFilter && !specificationFilterGroup.HideProductCount)
+                                                    {
+                                                        <span> (@specificationFilterItem.Count)</span>
+                                                    }
+                                                </label>
+                                                <script>
+                                                    initializer(@specificationFilterGroup.Id, `@specificationFilterItem.CheckedState`);
+                                                </script>
+                                            </li>
+                                        }
+
+                                        if (attributeCount > specificationFilterGroup.MaxDisplayForSpecifiation)
+                                        {
+
+                                            for (; position < attributeCount; position++)
+                                            {
+                                                var specificationFilterItem = specificationAttribute.ElementAt(position);
+                                                string color = "";
+                                                <li class="item specid-@specificationFilterGroup.Id" data-id="@specificationFilterItem.Id" hidden>
+                                                    <input class="@specificationFilterItem.Id @color d-none"
+                                       type="checkbox"
+                                       data-option-id="@specificationFilterItem.Id"
+                                       data-option-name="@specificationFilterItem.Name"
+                                       value="@specificationFilterItem.Id" id="specificationModel_SpecificationAttributes_@(specificationFilterGroup.Id)_@(position)_Id"
+                                       @(specificationFilterItem.CheckedState == CheckedState.Checked ? "Checked" : "")
+                                       @(specificationFilterItem.CheckedState == CheckedState.Disabled ? "Disabled" : "")
+                                       @(specificationFilterItem.CheckedState == CheckedState.CheckedDisabled ? "Disabled Checked" : "")
+                                       onclick="AjaxFilter.setFilter(this, 'specs');" />
+                                                    <label for="specificationModel_SpecificationAttributes_@(specificationFilterGroup.Id)_@(position)_Id">
+                                                        @if (!String.IsNullOrEmpty(specificationFilterItem.ColorSquaresRgb))
+                                                        {
+                                                            <span class="square  @(specificationFilterItem.CheckedState == CheckedState.Checked ? "active" : "")
+                                                                                          @specificationFilterItem.Id"
+                                          style="background-color: @specificationFilterItem.ColorSquaresRgb"
+                                          id="square_specificationModel_SpecificationAttributes_@(specificationFilterGroup.Id)_@(position)_Id"></span>
+                                                            color = "regular-checkbox";
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="square @(specificationFilterItem.CheckedState == CheckedState.Checked ? "active" : "")
+                                                                                          @specificationFilterItem.Id"
+                                          style="background-color: #fff"
+                                          id="square_specificationModel_SpecificationAttributes_@(specificationFilterGroup.Id)_@(position)_Id"></span>
+                                                        }
+                                                        <i>@specificationFilterItem.Name </i>
+
+                                                        @if (Model.ShowProductCountInFilter && !specificationFilterGroup.HideProductCount)
+                                                        {
+                                                            <span> (@specificationFilterItem.Count)</span>
+                                                        }
+                                                    </label>
+                                                    <script>
+                                                        initializer(@specificationFilterGroup.Id, `@specificationFilterItem.CheckedState`);
+                                                    </script>
+                                                </li>
+                                            }
+                                            <li class="showControl-specid-@specificationFilterGroup.Id" onclick="AjaxFilterChildren.viewMoreSpecs('specid-@specificationFilterGroup.Id')">Show more</li>
+                                        }
+                                    }
+                                </ul>
+                            }
+                            else if (Model.CheckOrDropdowns == FiltersUI.UseDropdowns)
+                            {
+                                <select name="SpecificationModel][SpecificationAttributes][@j][SpecificationAttributeOptions][0][Id"
+                            id="specificationModel_SpecificationAttributes_@(j)_Id"
+                            onchange="AjaxFilter.setFilter('s-@(specificationFilterGroup.Id)'), AjaxFilterChildren.listenToSelect('specificationModel_SpecificationAttributes_@(j)_Id')">
+                                    <option value="" selected="selected">@(specificationFilterGroup.SpecificationAttributeOptions.Where(x => x.CheckedState != CheckedState.Disabled).Count() > 0 ? T("NopStation.Plugin.Misc.AjaxFilter.Filters.All") : T("NopStation.Plugin.Misc.AjaxFilter.Filters.Empty"))</option>
+                                    @foreach (var specificationFilterItem in specificationFilterGroup.SpecificationAttributeOptions.Where(x => x.CheckedState != CheckedState.Disabled).OrderBy(pva => pva.Name))
+                                    {
+                                        <option value="@specificationFilterItem.Id" selected=@(specificationFilterItem.CheckedState == CheckedState.Checked || specificationFilterItem.CheckedState == CheckedState.CheckedDisabled ? "selected" : "" )>
+                                            @specificationFilterItem.Name
+                                        </option>
+                                    }
+                                </select>
+                            }
+                        </div>
+                    </div>
+                </div>
+                j++;
+            }
+        </div>
+    </div>
+}
+

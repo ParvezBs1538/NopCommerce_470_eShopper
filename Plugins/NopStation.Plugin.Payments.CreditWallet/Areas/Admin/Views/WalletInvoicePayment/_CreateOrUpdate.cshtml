@@ -1,0 +1,85 @@
+@model InvoicePaymentModel
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+<input asp-for="FromCustomerPage" type="hidden" />
+<input asp-for="WalletCustomerId" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="WalletCustomerName" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">
+                                    <a asp-controller="Customer" asp-action="Edit" asp-route-id="@Model.WalletCustomerId">@Model.WalletCustomerEmail</a>
+                                </div>
+                                <input asp-for="WalletCustomerName" type="hidden" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="Amount" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="Amount" asp-postfix="@Model.CurrencyCode" />
+                                <span asp-validation-for="Amount"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="PaymentDate" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="PaymentDate" />
+                                <span asp-validation-for="PaymentDate"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="InvoiceReference" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="InvoiceReference" />
+                                <span asp-validation-for="InvoiceReference"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="Note" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-textarea asp-for="Note"></nop-textarea>
+                                <span asp-validation-for="Note"></span>
+                            </div>
+                        </div>
+                        @if (Model.Id > 0)
+                        {    
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="CreatedByCustomerId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Model.CreatedByCustomer</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="UpdatedByCustomerId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Model.UpdatedByCustomer</div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Shipping country based discount rules",
+  "SystemName": "NopStation.Plugin.DiscountRules.ShippingCountry",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.DiscountRules.ShippingCountry.dll",
+  "Description": "This plugin allows you to configure discounts for specific shipping country.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

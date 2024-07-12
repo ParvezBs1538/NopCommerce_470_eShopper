@@ -1,0 +1,68 @@
+﻿@model CategorySEOTemplateModel
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+
+<div class="card-body">
+    @await Html.PartialAsync("Table", new DataTablesModel
+    {
+        Name = "nopstation-category-seo-template-mapping-grid",
+        UrlRead = new DataUrl("CategorySEOTemplateMappingList", "CategorySEOTemplate", new RouteValueDictionary { [nameof(CategoryCategorySEOTemplateMappingSearchModel.CategorySEOTemplateId)] = Model.Id }),
+        UrlDelete = new DataUrl("CategorySEOTemplateMappingDelete", "CategorySEOTemplate", null),
+        //PrimaryKeyColumn = nameof(CategoryCategorySEOTemplateMappingModel.Id),
+        Length = Model.CategoryCategorySEOTemplateMappingSearchModel.PageSize,
+        LengthMenu = Model.CategoryCategorySEOTemplateMappingSearchModel.AvailablePageSizes,
+        ColumnCollection = new List<ColumnProperty>
+        {
+            //new ColumnProperty(nameof(CategoryCategorySEOTemplateMappingModel.Id))
+            //{
+            //    Width = "50"
+            //},
+            new ColumnProperty(nameof(CategoryCategorySEOTemplateMappingModel.CategoryName))
+            {
+                Title = T("Admin.NopStation.Plugin.Misc.AdvancedSEO.CategoryCategorySEOTemplateMapping.Fields.Category").Text,
+            },
+            new ColumnProperty(nameof(CategoryCategorySEOTemplateMappingModel.CategoryName))
+            {
+                Title = T("Admin.Common.View").Text,
+                Width = "100",
+                Render = new RenderCustom("renderCategoryViewBtn")
+            },
+            new ColumnProperty(nameof(CategoryCategorySEOTemplateMappingModel.Id))
+            {
+                Title = T("Admin.Common.Delete").Text,
+                Width = "100",
+                ClassName =  NopColumnClassDefaults.Button,
+                Render = new RenderButtonRemove(T("Admin.Common.Delete").Text)
+            }
+        }
+    })
+    <div class="card-footer mt-2">
+        <button type="button" id="add-new-categories-to-mapping" class="btn btn-primary">@T("Admin.Common.AddNew")</button>
+    </div>
+
+    <input type="submit" id="btncategorymappedrelode" style="display: none" />
+
+    <script>
+        function renderCategoryViewBtn(data, type, row, meta) {
+            return '<a href="/Admin/Category/Edit/' + row.CategoryId + '">' + "@T("Admin.Common.View")" + '</a>'
+        }
+
+        $(document).ready(function() {
+            $('#add-new-categories-to-mapping').click(function () {
+                var categorySEOTemplateId = $("#@Html.IdFor(model => model.Id)").val();
+                javascript: OpenWindow('/Admin/CategorySEOTemplate/CategoryAddPopup?categorySEOTemplateId=' + categorySEOTemplateId + '&btnId=btncategorymappedrelode&formId=EditCategorySEOTemplate', 800, 800, true);
+                return false;
+            })
+
+            $('#btncategorymappedrelode').click(function () {
+                //refresh grid
+                updateTable('#nopstation-category-seo-template-mapping-grid');
+
+                //return false to don't reload a page
+                return false;
+            });
+        });
+    </script>
+</div>

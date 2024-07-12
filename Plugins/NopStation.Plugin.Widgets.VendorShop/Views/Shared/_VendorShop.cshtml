@@ -1,0 +1,79 @@
+﻿@{
+    Layout = "_Root";
+}
+@{
+    //current category ID
+    var currentVendorId = 0;
+    if (Url.ActionContext.RouteData.Values["controller"].ToString().Equals("CatalogExtension", StringComparison.InvariantCultureIgnoreCase) &&
+        Url.ActionContext.RouteData.Values["action"].ToString().Equals("Vendor", StringComparison.InvariantCultureIgnoreCase))
+    {
+        currentVendorId = Convert.ToInt32(Url.ActionContext.RouteData.Values["vendorId"].ToString());
+    }
+}
+<script asp-location="Footer">
+    $(function () {
+        $("#vendor-shop-tabs").tabs({
+            activate: function (event, ui) {
+                var tabId = ui.newPanel.attr("id");
+                window.location.hash = tabId;
+                $('html, body').animate({ scrollTop: $('#vendor-shop-tabs').offset().top }, 'slow');
+            }
+        });
+        if (window.location.hash) {
+            var hash = window.location.hash.substring(1);
+            // Iterate through tab elements and find the one with a matching ID
+            $("#vendor-shop-tabs ul li a").each(function (index, element) {
+                if ($(element).attr("href") === window.location.hash) {
+                    $("#vendor-shop-tabs").tabs("option", "active", index);
+                    $('html, body').animate({ scrollTop: $('#vendor-shop-tabs').offset().top }, 'slow');
+                    return false; // Exit the loop once a match is found
+                }
+            });
+        }
+    });
+</script>
+
+
+<div class="vendor-shop-master-wraper">
+    @await RenderSectionAsync("VendorContactUs", false)
+    @await RenderSectionAsync("VendorPageVendorInfo", false)
+
+    <div id="vendor-shop-tabs">
+        <ul>
+            <li><a href="#vendor-shop-homepage">@T("NopStation.VendorShop.VendorHomePage")</a></li>
+            <li><a href="#vendor-shop-catalog">@T("NopStation.VendorShop.VendorCatalogPage")</a></li>
+            <li><a href="#vendor-shop-profile">@T("NopStation.VendorShop.VendorProfilePage")</a></li>
+        </ul>
+        <div id="vendor-shop-homepage">
+            @if (IsSectionDefined("VendorHomePage"))
+            {
+                @await RenderSectionAsync("VendorHomePage", false)
+            }
+        </div>
+        <div id="vendor-shop-catalog">
+            <div class="side-2">
+                @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = VendorShopWidgetZones.LeftSideColumnBefore })
+                @if (IsSectionDefined("VendorPageCatalogFilters"))
+                {
+                    @await Component.InvokeAsync(typeof(CategoryFilterViewComponent), new { currentVendorId = currentVendorId})
+
+                    @await RenderSectionAsync("VendorPageCatalogFilters", false)
+                }
+
+            </div>
+            <div class="center-2">
+                @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = VendorShopWidgetZones.MainColumnBefore })
+                @RenderBody()
+                @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = VendorShopWidgetZones.MainColumnAfter })
+            </div>
+        </div>
+        <div id="vendor-shop-profile">
+            @if (IsSectionDefined("VendorProfilePage"))
+            {
+                @await RenderSectionAsync("VendorProfilePage", false)
+            }
+        </div>
+    </div>
+
+</div>
+

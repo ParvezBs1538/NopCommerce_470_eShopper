@@ -1,0 +1,18 @@
+﻿@model CourierShipmentsModel
+
+@foreach (var shipment in Model.CourierShipments)
+{
+    <div class="section shipment-item">
+        <div class="title">
+            <strong>@T("NopStation.DMS.Account.Shipments.ShipmentNumber"): @shipment.ShipmentId</strong>
+        </div>
+        <ul class="info">
+            <li>@T("NopStation.DMS.Account.Shipments.CustomOrderNumber"): <span class="shipment-orderid">@shipment.CustomOrderNumber</span></li>
+            <li>@T("NopStation.DMS.Account.Shipments.CourierShipmentStatus"): <span class="shipment-status">@shipment.CourierShipmentStatus</span></li>
+            <li>@T("NopStation.DMS.Account.Shipments.UpdatedOn"): <span class="shipment-date">@shipment.UpdatedOn.ToString()</span></li>
+        </ul>
+        <div class="buttons">
+            <button type="button" class="button-2 order-details-button" onclick="setLocation('@Url.RouteUrl("DMSShipmentDetails", new { shipmentId = shipment.ShipmentId })')">@T("NopStation.DMS.Account.Shipments.ShipmentDetails")</button>
+        </div>
+    </div>
+}

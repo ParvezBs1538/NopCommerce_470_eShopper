@@ -1,0 +1,75 @@
+﻿@model SpecialDeliveryCapacitySearchModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.DeliveryScheduler.SpecialDeliveryCapacities.List").Text;
+
+    NopHtml.SetActiveMenuItemSystemName("DeliveryScheduler.SpecialDeliveryCapacities");
+}
+
+<form asp-controller="SpecialDeliveryCapacity" asp-action="List" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.DeliveryScheduler.SpecialDeliveryCapacities.List")
+        </h1>
+        <div class="float-right">
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus-square"></i>
+                @T("Admin.Common.AddNew")
+            </a>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            @await Html.PartialAsync("Table", new DataTablesModel
+                            {
+                                Name = "deliveryslot-grid",
+                                UrlRead = new DataUrl("List", "SpecialDeliveryCapacity", null),
+                                SearchButtonId = "search-specialdeliverycapacity",
+                                Length = Model.PageSize,
+                                LengthMenu = Model.AvailablePageSizes,
+                                Filters = new List<FilterParameter>
+                                {
+                                },
+                                ColumnCollection = new List<ColumnProperty>
+                                {
+                                    new ColumnProperty(nameof(SpecialDeliveryCapacityModel.SpecialDateStr))
+                                    {
+                                        Title = T("Admin.NopStation.DeliveryScheduler.SpecialDeliveryCapacities.Fields.SpecialDate").Text,
+                                        Width = "100"
+                                    },
+                                    new ColumnProperty(nameof(SpecialDeliveryCapacityModel.DeliverySlot))
+                                    {
+                                        Title = T("Admin.NopStation.DeliveryScheduler.SpecialDeliveryCapacities.Fields.DeliverySlot").Text,
+                                        Width = "100"
+                                    },
+                                    new ColumnProperty(nameof(SpecialDeliveryCapacityModel.Capacity))
+                                    {
+                                        Title = T("Admin.NopStation.DeliveryScheduler.SpecialDeliveryCapacities.Fields.Capacity").Text,
+                                        Width = "50"
+                                    },
+                                    new ColumnProperty(nameof(SpecialDeliveryCapacityModel.MappedStoreNames))
+                                    {
+                                        Title = T("Admin.NopStation.DeliveryScheduler.SpecialDeliveryCapacities.Fields.MappedStoreNames").Text,
+                                        Width = "150"
+                                    },
+                                    new ColumnProperty(nameof(DeliverySlotModel.Id))
+                                    {
+                                        Title = T("Admin.Common.Edit").Text,
+                                        Width = "80",
+                                        ClassName =  NopColumnClassDefaults.Button,
+                                        Render = new RenderButtonEdit(new DataUrl("Edit"))
+                                    }
+                                }
+                            })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

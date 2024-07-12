@@ -1,0 +1,142 @@
+﻿@model ForumTopicPageModel
+@using Nop.Web.Extensions;
+@using Nop.Web.Models.Boards;
+@using Nop.Web.Models.Common;
+@using Nop.Services.Localization
+@inject ILocalizationService localizationService
+@{
+    Layout = "_ColumnsOne";
+
+    NopHtml.AddTitleParts(Model.Subject);
+}
+<script type="text/javascript" asp-location="Footer">
+    function handleTopicWatch(context) {
+        $('#watch-topic-top').text(context.Text);
+        $('#watch-topic-bottom').text(context.Text);
+    }
+</script>
+
+
+<div class=" upper">
+    @{
+        var pager = await Html.PagerAsync(new PagerModel(localizationService)
+        {
+            PageSize = Model.PostsPageSize,
+            TotalRecords = Model.PostsTotalRecords,
+            PageIndex = Model.PostsPageIndex,
+            ShowTotalSummary = false,
+            RouteActionName = "TopicSlugPaged",
+            UseRouteLinks = true,
+            RouteValues = new SlugRouteValues { Id = Model.Id, Slug = Model.SeName }
+        });
+    }
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.BoardsTopicTop, additionalData = Model })
+    @if (!string.IsNullOrEmpty(await pager.RenderHtmlContentAsync()))
+    {
+        <div class="pager upper">
+            @pager
+        </div>
+    }
+</div>
+
+
+
+
+<div class="container forum-group-search-div">
+    <div class="row">
+        <div class="col-md-9">
+            @await Component.InvokeAsync("ForumBreadcrumb", new { forumTopicId = Model.Id })
+        </div>
+
+        <div class="col-md-3">
+            @await Html.PartialAsync("_SearchBox")
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="features_items">
+                <!--features_items-->
+                <h2 class="title text-center">@Model.Subject</h2>
+                <div class="custom-page-box-border-less-div pull-text-right">
+                    @if (Model.IsCustomerAllowedToEditTopic)
+                    {
+                        <a class="btn btn-primary" href="@Url.RouteUrl("TopicEdit", new { id = Model.Id })"><i class="fa fa-edit"></i>&nbsp; @T("Forum.EditTopic")</a>
+                    }
+                    @if (Model.IsCustomerAllowedToDeleteTopic)
+                    {
+                        <a class="btn btn-primary" href="@Url.RouteUrl("TopicDelete", new { id = Model.Id })" onclick="@(String.Format(" return confirm('{0}');", T("common.areyousure").Text))">
+                            <i class="fa fa fa-trash-o"></i>&nbsp; @T("Forum.DeleteTopic")
+                        </a>
+                    }
+                    @if (Model.IsCustomerAllowedToMoveTopic)
+                    {
+                        <a class="btn btn-primary" href="@Url.RouteUrl("TopicMove", new { id = Model.Id })"><i class="fa fa-mail-forward"></i>&nbsp; @T("Forum.MoveTopic")</a>
+                    }
+                    <a class="btn btn-primary" href="@Url.RouteUrl("PostCreate", new { id = Model.Id })"><i class="fa fa fa-reply"></i>&nbsp; @T("Forum.Reply")</a>
+                    @if (Model.IsCustomerAllowedToSubscribe)
+                    {
+                        <a class="btn btn-primary" href="#" id="watch-topic-top"><i class="fa fa-eye"></i>&nbsp; @Model.WatchTopicText</a>
+                        <script type="text/javascript" asp-location="Footer">
+                            $(function () {
+                                $('#watch-topic-top').click(function () {
+                                    $.ajax({
+                                        cache: false,
+                                        type: 'POST',
+                                        url: '@Url.RouteUrl("TopicWatch", new { id = Model.Id })',
+                                        dataType: 'json',
+                                        success: function (data) {
+                                            $('#watch-topic-top').text(data.Text);
+                                        },
+                                        error: function (xhr, ajaxOptions, thrownError) {
+                                            alert('Failed to watch');
+                                        }
+                                    });
+                                });
+                            });
+                        </script>
+                    }
+                </div>
+
+                <div class="custom-page-box-div">
+                    <div class="posts">
+                        @foreach (var post in @Model.ForumPostModels)
+                        {
+                            await Html.RenderPartialAsync("_ForumPost", post);
+                            <legend></legend>
+
+                        }
+                    </div>
+                    <div class="topic-options alignright">
+                        <a class="btn btn-primary" href="@Url.RouteUrl("PostCreate", new { id = Model.Id })"><i class="fa fa fa-reply"></i>&nbsp; @T("Forum.Reply")</a>
+                    </div>
+                    <div class="pagination-area">
+                        <div class="pagination">
+                            @pager
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+

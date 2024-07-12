@@ -1,0 +1,232 @@
+﻿.quote-add {
+  margin-top: 2px;
+}
+
+.quote-add-btn {
+  width: 100% !important;
+}
+
+.quote-add {
+  margin-top: 2px;
+}
+
+.quote-add-btn {
+  width: 100% !important;
+}
+
+
+.html-quote-request-page textarea {
+  min-height: 80px;
+}
+
+.html-quote-request-page .card {
+  padding: 15px 25px;
+  margin-bottom: 8px;
+  max-width: 60%;
+  margin-left: 2px;
+  position: relative;
+}
+
+  .html-quote-request-page .card::after {
+    content: "";
+    position: absolute;
+    border: 10px solid;
+    top: 0;
+    border-bottom-color: transparent;
+  }
+
+  .html-quote-request-page .card.card-right::after {
+    border-color: #4ab2f1 transparent transparent #4ab2f1;
+    right: -8px;
+  }
+
+  .html-quote-request-page .card.card-left::after {
+    border-color: #f0f0f0 #f0f0f0 transparent transparent;
+    left: -8px;
+  }
+
+  .html-quote-request-page .card.card-left {
+    align-self: start;
+    text-align: left;
+    background-color: #f0f0f0;
+    color: #333;
+  }
+
+  .html-quote-request-page .card.card-right {
+    align-self: end;
+    text-align: right;
+    background-color: #4ab2f1;
+    color: #dcf2ff;
+  }
+
+    .html-quote-request-page .card.card-right h5 {
+      color: #fff;
+      margin-bottom: 7px;
+    }
+
+  .html-quote-request-page .card.card-left h5 {
+    color: #333;
+    margin-bottom: 7px;
+  }
+
+.html-quote-request-page .messages {
+  overflow-y: scroll;
+  padding: 15px 10px;
+  max-height: 450px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.html-quote-request-page .user-posted-image {
+    max-width: 100%;
+}
+
+.customer-response {
+  position: sticky;
+  bottom: 5px;
+  background-color: #fff;
+}
+
+  .customer-response .bb-code-editor-wrapper {
+    max-width: 400px;
+    margin: 20px auto;
+    background-color: #ddd;
+    padding: 10px;
+  }
+
+  .customer-response textarea {
+    display: block;
+    margin: auto;
+  }
+
+  .customer-response .fieldset {
+    margin: 0 0 15px;
+  }
+
+  .customer-response .form-fields {
+    padding: 5px;
+  }
+
+#sendResponse {
+  align-self: flex-end;
+  width: 100px;
+}
+
+
+.message-send-button {
+  border: none;
+  display: block;
+  background-color: #4ab2f1;
+  padding: 10px 15px;
+  text-align: center;
+  color: #fff;
+  text-transform: uppercase;
+  margin: 4px auto;
+}
+
+.mb-2 {
+  margin-bottom: 2px;
+}
+
+
+.quote-title {
+  margin-top: 2%;
+  margin-bottom: 1%;
+}
+
+.conversation-start {
+  margin-bottom: 1%;
+}
+
+.submit-quote {
+  display: flex;
+  justify-content: center;
+}
+
+  .submit-quote button {
+    display: inline-block;
+    min-width: 180px;
+    margin: 5px;
+    border: none;
+    padding: 10px 20px;
+    font-size: 15px;
+    color: #fff;
+    background-color: #4ab2f1;
+  }
+
+.quote-submit-btn {
+  background-color: #4ab2f1;
+  padding: 10px 20px;
+  color: #fff;
+  font-size: 15px;
+  border: none;
+  margin: 5px;
+  display: inline-block;
+}
+
+  .quote-submit-btn:hover, .quote-submit-btn:focus {
+    background-color: #248ece;
+  }
+
+
+.download-quote-attachment {
+  font-weight: normal;
+  color: #4ab2f1;
+}
+
+.qq-download-url {
+  display: inline-block;
+}
+
+  .qq-download-url a, .remove-download-button {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #4ab2f1;
+    color: #fff;
+    margin: 3px 0;
+  }
+
+  .qq-download-url + div {
+    display: inline-block;
+    margin-left: 2px;
+  }
+
+.form-attribute-fileupload {
+  display: inline-block;
+}
+
+.qq-upload-button-selector {
+  margin-bottom: 2px;
+  display: inline-block;
+}
+
+.qq-uploader {
+  display: inline-block;
+}
+
+.color-square {
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+}
+
+.add-to-cart-panel:has(.details-add-to-qcart-button) {
+  display: inline-flex;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+
+.html-quote-request-page .customer-response .bb-code-editor-wrapper {
+  margin: 0 auto;
+  padding: 5px 10px;
+}
+
+@media (min-width: 768px) {
+  .product-list .quote-add {
+    display: inline-block;
+    width: 235px;
+  }
+}

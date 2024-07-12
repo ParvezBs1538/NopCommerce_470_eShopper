@@ -1,0 +1,319 @@
+@model AbandonedCartSearchModel
+@{
+    Layout = "_AdminLayout";
+    //page title
+    ViewBag.PageTitle = "Abandoned Carts";
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("WidgetsAbandonedCarts.List");
+}
+@{
+    const string hideSearchBlockAttributeName = "AbandonmentListPage.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        Abandoned Carts
+    </h1>
+</div>
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fas fa-search" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                        </div>
+
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchEmail" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchEmail" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchFirstName" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchFirstName" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="SearchLastName" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="SearchLastName" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="StatusId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-select asp-for="StatusId" asp-items="@await (((AbandonedStatus)Model.StatusId).ToSelectListAsync())" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-7">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="StartDate" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="StartDate" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="EndDate" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="EndDate" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="ProductId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="search-product-name" autocomplete="off" class="form-control" />
+                                            <span id="search-product-friendly-name"></span>
+                                            <button type="button" id="search-product-clear" class="btn bg-gray" style="display: none; margin-top: 5px;">@T("Admin.Common.Clear")</button>
+                                            <input asp-for="ProductId" autocomplete="off" style="display: none;" />
+                                            <script>
+                                                $(document).ready(function () {
+                                                    $('#search-product-name').autocomplete({
+                                                        delay: 500,
+                                                        minLength: 3,
+                                                        source: '@Url.Action("SearchAutoComplete", "SearchComplete")',
+                                                        select: function (event, ui) {
+                                                            $('#@Html.IdFor(model => model.ProductId)').val(ui.item.productid);
+                                                            $('#search-product-friendly-name').text(ui.item.label);
+
+                                                            $('#search-product-clear').show();
+                                                            return false;
+                                                        }
+                                                    });
+
+                                                    //remove button
+                                                    $('#search-product-clear').click(function () {
+                                                        $('#@Html.IdFor(model => model.ProductId)').val('0');
+                                                        $('#search-product-friendly-name').text('');
+                                                        $('#search-product-clear').hide();
+                                                        return false;
+                                                    });
+                                                });
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="text-center col-12">
+                                    <button type="button" id="search-Abandonment" class="btn btn-primary btn-search">
+                                        <i class="fas fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-default">
+                <div class="card-body">
+                    @*<nop-doc-reference asp-string-resource="@T("Admin.Documentation.Reference.ShoppingCartsAndWishlists", Docs.ShoppingCartsAndWishlists + Utm.OnAdmin)" />*@
+
+                    @await Html.PartialAsync("Table", new DataTablesModel
+                    {
+                        Name = "Abandonment-grid",
+                        UrlRead = new DataUrl("List", "WidgetsAbandonedCarts", null),
+                        SearchButtonId = "search-Abandonment",
+                        PrimaryKeyColumn = nameof(CustomerAbandonmentInfoModel.CustomerId),
+                        Length = Model.PageSize,
+                        LengthMenu = Model.AvailablePageSizes,
+                        Filters = new List<FilterParameter>
+                        {
+                            new FilterParameter(nameof(Model.SearchEmail)),
+                            new FilterParameter(nameof(Model.SearchFirstName)),
+                            new FilterParameter(nameof(Model.SearchLastName)),
+                            new FilterParameter(nameof(Model.StatusId)),
+                            new FilterParameter(nameof(Model.StartDate), typeof(DateTime?)),
+                            new FilterParameter(nameof(Model.EndDate), typeof(DateTime?)),
+                            new FilterParameter(nameof(Model.ProductId))
+                        },
+                        ColumnCollection = new List<ColumnProperty>
+                        {
+                            new ColumnProperty(null)
+                            {
+                                Render = new RenderChildCaret(),
+                                Width = "5",
+                                Searchable = false,
+                                ClassName =  NopColumnClassDefaults.ChildControl
+                            },
+                            new ColumnProperty(nameof(CustomerAbandonmentInfoModel.CustomerName))
+                            {
+                                Title = T("Plugins.Widgets.AbandonedCarts.Fields.Customer").Text,
+                                Render = new RenderLink(new DataUrl("~/Admin/Customer/Edit/", nameof(CustomerAbandonmentInfoModel.CustomerId)))
+                            },
+                            new ColumnProperty(nameof(CustomerAbandonmentInfoModel.StatusName))
+                            {
+                                Title = T("Plugins.Widgets.AbandonedCarts.Fields.SubscriptionStatus").Text,
+                                Width = "150",
+                                Render = new RenderCustom("renderColumnSubscriptionStatus"),
+                                ClassName =  NopColumnClassDefaults.CenterAll
+                            },
+                            new ColumnProperty(nameof(CustomerAbandonmentInfoModel.NotificationSentFrequency))
+                            {
+                                Title = T("Plugins.Widgets.AbandonedCarts.Fields.NotificationSentFrequency").Text,
+                                Width = "250",
+                                ClassName =  NopColumnClassDefaults.CenterAll
+                            },
+                            new ColumnProperty(nameof(CustomerAbandonmentInfoModel.TotalItems))
+                            {
+                                Title = T("Plugins.Widgets.AbandonedCarts.Fields.TotalItems").Text,
+                                Width = "150"
+                            }
+                        },
+                        ChildTable = new DataTablesModel
+                        {
+                            Name = "products-grid",
+                            UrlRead = new DataUrl("ListDetails", "WidgetsAbandonedCarts", null),
+                            IsChildTable = true,
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            Filters = new List<FilterParameter>
+                            {
+                                new FilterParameter(nameof(Model.CustomerId), nameof(Model.CustomerId), true),
+                                new FilterParameter(nameof(Model.SearchEmail)),
+                                new FilterParameter(nameof(Model.SearchFirstName)),
+                                new FilterParameter(nameof(Model.SearchLastName)),
+                                new FilterParameter(nameof(Model.StatusId)),
+                                new FilterParameter(nameof(Model.StartDate), typeof(DateTime?)),
+                                new FilterParameter(nameof(Model.EndDate), typeof(DateTime?)),
+                                new FilterParameter(nameof(Model.ProductId))
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(AbandonmentListViewModel.ProductName))
+                                {
+                                    Title = T("Plugins.Widgets.AbandonedCarts.Fields.Product").Text,
+                                    Width = "400",
+                                    Render = new RenderCustom("renderProductName")
+                                },
+                                new ColumnProperty(nameof(AbandonmentListViewModel.Quantity))
+                                {
+                                    Title = T("Plugins.Widgets.AbandonedCarts.Fields.Quantity").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(AbandonmentListViewModel.UnitPrice))
+                                {
+                                    Title = T("Plugins.Widgets.AbandonedCarts.Fields.UnitPrice").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(AbandonmentListViewModel.TotalPrice))
+                                {
+                                    Title = T("Plugins.Widgets.AbandonedCarts.Fields.TotalPrice").Text,
+                                    Width = "100"
+                                },
+                                new ColumnProperty(nameof(AbandonmentListViewModel.StatusName))
+                                {
+                                    Title = T("Plugins.Widgets.AbandonedCarts.Fields.Status").Text,
+                                    Width = "100",
+                                    ClassName =  NopColumnClassDefaults.CenterAll,
+                                    Render = new RenderCustom("renderColumnStatus")
+                                },
+                                new ColumnProperty(nameof(AbandonmentListViewModel.StatusChangedOn))
+                                {
+                                    Title = T("Plugins.Widgets.AbandonedCarts.Fields.StatusChangedOn").Text,
+                                    Width = "120",
+                                    ClassName = NopColumnClassDefaults.CenterAll,
+                                    Render = new RenderDate()
+                                },
+                                new ColumnProperty(nameof(AbandonmentListViewModel.FirstNotificationSentOn))
+                                {
+                                    Title = T("Plugins.Widgets.AbandonedCarts.Fields.FirstNotificationSentOn").Text,
+                                    Width = "120",
+                                    ClassName = NopColumnClassDefaults.CenterAll,
+                                    Render = new RenderDate()
+                                },
+                                new ColumnProperty(nameof(AbandonmentListViewModel.SecondNotificationSentOn))
+                                {
+                                    Title = T("Plugins.Widgets.AbandonedCarts.Fields.SecondNotificationSentOn").Text,
+                                    Width = "140",
+                                    ClassName = NopColumnClassDefaults.CenterAll,
+                                    Render = new RenderDate(),
+                                },
+                                new ColumnProperty(nameof(AbandonmentListViewModel.Id))
+                                {
+                                    Title = T("Admin.Common.View").Text,
+                                    Width = "100",
+                                    ClassName =  NopColumnClassDefaults.Button,
+                                    Render = new RenderButtonView(new DataUrl("Edit"))
+                                }
+                            }
+                        }
+                    })
+                </div>
+                <script>
+                    function renderProductName(data, type, row, meta) {
+                        var link = '@Url.Content("~/Admin/Product/Edit/")' + row.ProductId;
+                        var div = "";
+        
+                        if (row.AttributeInfo && row.AttributeInfo.length > 0)
+                            div = "<div>" + row.AttributeInfo + "</div>";
+
+                        return '<a href="' + link + '">' + data + '</a>'+div;
+                    }
+
+                    function renderColumnSubscriptionStatus(data, type, row, meta) {
+                        var color;
+                        switch (row.StatusId) {
+                            case 0:
+                                color = 'green';
+                                break;
+                            case 1:
+                                color = 'yellow';
+                                break;
+                        }
+                        return '<span class="grid-report-item ' + color + '">' + data + '</span >';
+                    }
+                    function renderColumnStatus(data, type, row, meta) {
+                        var color;
+                        switch (row.StatusId) {
+                            case 1:
+                                color = 'blue';
+                                break;
+                            case 2:
+                                color = 'yellow';
+                                break;
+                            case 3:
+                                color = 'green';
+                                break;
+                            case 4:
+                                color = 'red';
+                                break;
+                        }
+                        return '<span class="grid-report-item ' + color + '">' + data + '</span >';
+                    }
+
+                </script>
+            </div>
+        </div>
+    </div>
+</section>
+

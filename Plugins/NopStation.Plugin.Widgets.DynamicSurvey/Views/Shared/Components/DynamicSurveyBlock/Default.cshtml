@@ -1,0 +1,76 @@
+﻿@model SurveyModel
+
+@{
+    //page class
+    NopHtml.AppendPageCssClassParts("html-survey-page");
+    NopHtml.AddCssFileParts($"{DynamicSurveyDefaults.OutputPath}/Themes/DefaultClean/contents/styles.css", string.Empty);
+
+    var attributeUid = $"surveyattributes_{Guid.NewGuid().ToString().Replace("-", "").Substring(0, 6)}";
+}
+
+<div class="page survey-page">
+    <div class="page-title">
+        <h1>@Model.Name</h1>
+    </div>
+    <div class="page-body">
+        <div id="result-@Model.Id" class="result @attributeUid"></div>
+        <div id="error-@Model.Id" class="errors @attributeUid"></div>
+        <form id="DynamicSurvey-@Model.Id" class="@attributeUid">
+            @Html.AntiForgeryToken()
+            <div class="fieldset">
+                @if (!string.IsNullOrEmpty(Model.Description))
+                {
+                    <div class="title">
+                        <strong>@Html.Raw(Model.Description)</strong>
+                    </div>
+                }
+
+                <div class="form-fields">
+                    <div id="error-@Model.Id" class="error message-error">
+                    </div>
+                    @{
+                        var viewData = new ViewDataDictionary(ViewData);
+                        viewData["DynamicSurvey_UID"] = attributeUid;
+                    }
+                    @await Html.PartialAsync("_SurveyAttributes", Model, viewData)
+                    @if (Model.DisplayCaptcha)
+                    {
+                        <nop-captcha />
+                    }
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="button" id="survey-button-@Model.Id" name="send-email" class="button-1 survey-button">@T("NopStation.DynamicSurvey.Surveys.SubmitButton")</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $(".@attributeUid #survey-button-@Model.Id")
+            .click(function () {
+                var inputData = new FormData(document.querySelector(".@attributeUid#DynamicSurvey-@Model.Id"))
+
+                $.ajax({
+                    cache: false,
+                    url: "@Url.Action("SurveyPost", "Survey")?surveyId=@Model.Id",
+                    type: "POST",
+                    data: inputData,
+                    processData: false,
+                    contentType: false,
+                    error: function (error) {
+                        $(".@attributeUid#error-@Model.Id").html(`<span>${error.message}</span>`);
+                    },
+                    success: function (data) {
+                        if (data.Result) {
+                            $(".@attributeUid#DynamicSurvey-@Model.Id").hide();
+                            $(".@attributeUid#result-@Model.Id").html(`<span>${data.Errors.join('<br />')}</span>`);
+                        }
+                        else {
+                            $(".@attributeUid#error-@Model.Id").html(`<span>${data.Errors.join('<br />')}</span>`);
+                        }
+                    }
+                });
+            });
+    });
+</script>

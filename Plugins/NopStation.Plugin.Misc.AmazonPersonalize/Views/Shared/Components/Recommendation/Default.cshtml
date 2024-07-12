@@ -1,0 +1,16 @@
+﻿@model RecommendationListModel
+
+@foreach (var recommendation in Model.Recommendations)
+{
+    <div class="product-grid recommendation-grid">
+        <div class="title">
+            <strong>@recommendation.Title</strong>
+        </div>
+
+        <div class="recommendation-container recommendation-product" data-recommendationid="@recommendation.Id" data-viewedproductId="@recommendation.ProductId">
+            <div class="loader">
+                <img src="@Url.Content("~/Plugins/NopStation.Plugin.Misc.AmazonPersonalize/Contents/images/loader.gif")" />
+            </div>
+        </div>
+    </div>
+}

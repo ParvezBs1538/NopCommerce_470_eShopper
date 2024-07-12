@@ -1,0 +1,57 @@
+﻿@model ConfigurationModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.WebApi.Configuration.Title").Text;
+
+    NopHtml.SetActiveMenuItemSystemName("WebApi.Configuration");
+}
+
+@{
+    const string hideColorSettingsBlockAttributeName = "WebApiSettingsPage.HideColorSettingsBlock";
+    var hideColorSettingsBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideColorSettingsBlockAttributeName);
+
+    const string hideCommonBlockAttributeName = "WebApiSettingsPage.HideCommonBlock";
+    var hideCommonBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideCommonBlockAttributeName);
+
+    const string hideSecurityBlockAttributeName = "WebApiSettingsPage.HideSecurityBlock";
+    var hideSecurityBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSecurityBlockAttributeName);
+
+    const string hideAppSettingsBlockAttributeName = "WebApiSettingsPage.HideAppSettingsBlock";
+    var hideAppSettingsBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideAppSettingsBlockAttributeName);
+
+    const string hideResourcesBlockAttributeName = "WebApiSettingsPage.HideResourcesBlock";
+    var hideResourcesBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideResourcesBlockAttributeName);
+}
+
+<form asp-controller="WebApi" asp-action="Configure" method="post" id="webapi-config-form">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.WebApi.Configuration.Title")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="form-horizontal">
+                    @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                    <div asp-validation-summary="All"></div>
+
+                    <nop-cards id="webapisettings-panels">
+                        <nop-card asp-name="webapisettings-colorsettings" asp-icon="fa fa-paint-brush" asp-title="@T("Admin.NopStation.WebApi.Configuration.BlockTitle.ColorSettings")" asp-hide-block-attribute-name="@hideColorSettingsBlockAttributeName" asp-hide="@hideColorSettingsBlock" asp-advanced="false">@await Html.PartialAsync("_Configure.ColorSettings", Model)</nop-card>
+                        <nop-card asp-name="webapisettings-common" asp-icon="fa fa-info" asp-title="@T("Admin.NopStation.WebApi.Configuration.BlockTitle.Common")" asp-hide-block-attribute-name="@hideCommonBlockAttributeName" asp-hide="@hideCommonBlock" asp-advanced="false">@await Html.PartialAsync("_Configure.Common", Model)</nop-card>
+                        <nop-card asp-name="webapisettings-security" asp-icon="fa fa-lock" asp-title="@T("Admin.NopStation.WebApi.Configuration.BlockTitle.Security")" asp-hide-block-attribute-name="@hideSecurityBlockAttributeName" asp-hide="@hideSecurityBlock" asp-advanced="true">@await Html.PartialAsync("_Configure.Security", Model)</nop-card>
+                        <nop-card asp-name="webapisettings-appsettings" asp-icon="fa fa-mobile" asp-title="@T("Admin.NopStation.WebApi.Configuration.BlockTitle.AppSettings")" asp-hide-block-attribute-name="@hideAppSettingsBlockAttributeName" asp-hide="@hideAppSettingsBlock" asp-advanced="true">@await Html.PartialAsync("_Configure.AppSettings", Model)</nop-card>
+                        <nop-card asp-name="webapisettings-resources" asp-icon="fa fa-database" asp-title="@T("Admin.NopStation.WebApi.Configuration.BlockTitle.Resources")" asp-hide-block-attribute-name="@hideResourcesBlockAttributeName" asp-hide="@hideResourcesBlock" asp-advanced="true">@await Html.PartialAsync("_Configure.Resources", Model)</nop-card>
+                    </nop-cards>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

@@ -1,0 +1,131 @@
+﻿@model NopStation.Plugin.Misc.AjaxFilter.Models.FilterPriceRangeModel
+@using Nop.Web.Framework.UI;
+@using Nop.Core.Infrastructure;
+@inject AjaxFilterSettings ajaxFilterSettings
+
+<style>
+    .clear-filter {
+        color: #4ab2f1;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+
+    $(".collaspe-price").accordion({
+        collapsible: (((`@(ajaxFilterSettings.ClosePriceRangeFilterByDefualt)`).toLowerCase()) == "true" ? true : false),
+        active: ((`@(ajaxFilterSettings.ClosePriceRangeFilterByDefualt)`).toLowerCase()) == "true" ? true : false
+    });
+
+</script>
+
+<div id="price-filter-section">
+    @{
+        var minPrice = Model.MinPrice.ToString("F0");
+        var maxPrice = Model.MaxPrice.ToString("F0");
+        var currentMinPrice = Model.CurrentMinPrice.ToString("F0");
+        var currentMaxPrice = Model.CurrentMaxPrice.ToString("F0");
+
+        <script>
+
+            $(function () {
+                $("#slider-range").slider({
+                    range: true,
+                    min: @(minPrice),
+                    max: @(maxPrice),
+                    values: [@(currentMinPrice), @(currentMaxPrice)],
+
+                    slide: function (event, ui) {
+                        var currentMin = ui.values[0];
+                        var currentMax = ui.values[1];
+                        $("#price-current-min").val(currentMin);
+                        $("#price-current-max").val(currentMax);
+                    },
+                    create: function (event, ui) {
+                        if ((@(minPrice) == @(currentMinPrice) && @(maxPrice) == @(currentMaxPrice))) {
+                            AjaxFilterChildren.resetFiltersOnPrice();
+                        }
+                    },
+                    stop: function (event, ui) {
+                        var currentMin = ui.values[0];
+                        var currentMax = ui.values[1];
+                        if (@(minPrice) == currentMin && @(maxPrice) == currentMax) {
+                            AjaxFilterChildren.resetFiltersOnPrice();
+                        }
+                        else {
+                            $(".clearAllfilters").show();
+                        }
+                        AjaxFilter.setFilter(this, 'p');
+                    }
+                });
+
+                $("#price-current-min").val(@(currentMinPrice));
+
+                $("#price-current-max").val(@(currentMaxPrice));
+
+                $('.ajaxfilter-clear-price').click(function (e) {
+                    $("#price-current-min").val(@(minPrice));
+                    $("#price-current-max").val(@(maxPrice));
+                    $("#slider-range").slider("values", 0, @(minPrice));
+                    $("#slider-range").slider("values", 1, @(maxPrice));
+                    AjaxFilter.setFilter(this, 'p');
+                    AjaxFilterChildren.resetFiltersOnPrice();
+                });
+
+                $("#price-current-min").change(function () {
+                    $("#slider-range").slider('values', 0, $(this).val());
+                    AjaxFilter.setFilter(this, 'p');
+                });
+
+                $("#price-current-max").change(function () {
+                    $("#slider-range").slider('values', 1, $(this).val());
+                    AjaxFilter.setFilter(this, 'p');
+                });
+            });
+
+
+
+        </script>
+
+        <div class="filter-section collaspe-price">
+            <div class="title" id="headingPrice">
+                <h5 class="mb-0 collapsed ajaxfilter-title" data-toggle="collapse" data-parent="#accordionEx" data-target="#PriceyNavigation" aria-expanded="true" aria-controls="collapseOne">
+                    @T("NopStation.Plugin.Misc.AjaxFilter.Filters.PriceRange") 
+                </h5>
+            </div>
+            <div class="listbox min115 collapse show" id="PriceyNavigation" aria-labelledby="headingPrice">
+                <div class="clear"></div>
+                <div class="ajaxfilter-section">
+                    <input type="hidden" value="@Model.CurrencySymbol" id="currency-symbol" name="FilterPriceModel][CurrencySymbol" />
+                    <div class="ajaxfilter-price-range-section clearfix">
+                        <div class="price-min float-left">
+                            <span class="price-range-min" id="price-current-min_text"> @String.Concat(Model.MinPrice.ToString("F0")) @Model.CurrencySymbol </span>
+                        </div>
+
+                        <div class="price-max float-right">
+                            <span class="price-range-max" id="price-current-max_text"> @String.Concat(Model.MaxPrice.ToString("F0")) @Model.CurrencySymbol </span>
+                        </div>
+                    </div>
+
+                    <div id="slider-range">
+                        <input type="hidden" value="@minPrice" id="min-price" />
+                        <input type="hidden" value="@maxPrice" id="max-price" />
+                    </div>
+
+
+                    <div class="ajaxfilter-price-section">
+                        <div class="ajaxfilter-price-range">
+                            <input type="text" value="@currentMinPrice"
+                                   id="price-current-min" name="FilterPriceModel][CurrentMinPrice" />
+                            <input type="text" value="@currentMaxPrice"
+                                   id="price-current-max" name="FilterPriceModel][CurrentMaxPrice" />
+                            <input type="hidden" value="@minPrice" name="FilterPriceModel][MinPrice" />
+                            <input type="hidden" value="@maxPrice" name="FilterPriceModel][MaxPrice" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

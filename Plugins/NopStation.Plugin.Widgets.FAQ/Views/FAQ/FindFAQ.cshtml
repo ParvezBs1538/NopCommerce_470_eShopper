@@ -1,0 +1,120 @@
+﻿@model FAQModel
+
+@{
+    Layout = "_ColumnsOne";
+    //title
+    NopHtml.AddTitleParts(T("PageTitle.NopStation.FAQ").Text);
+    //page class
+    NopHtml.AppendPageCssClassParts("html-faq-page");
+
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.FAQ/Contents/css/styles.css", string.Empty);
+}
+
+<div class="page-title">
+    <h1>@T("Account.NopStation.FAQ")</h1>
+</div>
+
+@foreach (var category in Model.Categories)
+{
+    var items = Model.Items.Where(x => x.MappedCategoryIds.Contains(category.Id)).ToList();
+    if (items.Count() == 0)
+    {
+        continue;
+    }
+
+    <div class="faq-category" id="faq-category-@category.Id">
+        <div class="faq-category-header">
+            <h1>@category.Name</h1>
+        </div>
+        <div class="faq-category-description">
+            @Html.Raw(category.Description)
+        </div>
+        <div class="faq-items">
+            @foreach (var item in items)
+            {
+                <div class="faq-item">
+                    <div class="item-header">
+                        <h1>@item.Question</h1>
+                    </div>
+                    <div class="item-description" style="display:none">
+                        <div class="item-answer">
+                            @Html.Raw(item.Answer)
+                        </div>
+
+                        @if (!string.IsNullOrWhiteSpace(item.Permalink))
+                        {
+                            <div class="item-permalink">
+                                <a href="@item.Permalink">Permalink</a>
+                            </div>
+                        }
+
+                        @if (item.Tags.Any())
+                        {
+                            <div class="item-tags">
+                                @foreach (var tag in item.Tags)
+                                {
+                                    <a href="@Url.RouteUrl("", new { tagId = tag.Id })">@tag.Name</a>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@{
+    var otherItems = Model.Items.Where(x => x.MappedCategoryIds.Count == 0).ToList();
+    if (otherItems.Any())
+    {
+        <div class="faq-category" id="faq-category-0">
+            <div class="faq-category-header">
+                <h1>@T("NopStation.FAQ.Others")</h1>
+            </div>
+
+            <div class="faq-items">
+                @foreach (var item in otherItems)
+                {
+                    <div class="faq-item">
+                        <div class="item-header">
+                            <h1>@item.Question</h1>
+                        </div>
+                        <div class="item-description" style="display:none">
+                            <div class="item-answer">
+                                @Html.Raw(item.Answer)
+                            </div>
+
+                            @if (!string.IsNullOrWhiteSpace(item.Permalink))
+                            {
+                                <div class="item-permalink">
+                                    <a href="@item.Permalink">Permalink</a>
+                                </div>
+                            }
+
+                            @if (item.Tags.Any())
+                            {
+                                <div class="item-tags">
+                                    @foreach (var tag in item.Tags)
+                                    {
+                                        <a href="@Url.RouteUrl("NopStationFAQ", new { tagId = tag.Id })">@tag.Name</a>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+}
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $('.faq-item .item-header').on('click', function () {
+            $(this).toggleClass('active');
+            $(this).siblings('.item-description').slideToggle('slow');
+        });
+    });
+</script>
+@NopHtml.GenerateInlineScripts(ResourceLocation.Footer)

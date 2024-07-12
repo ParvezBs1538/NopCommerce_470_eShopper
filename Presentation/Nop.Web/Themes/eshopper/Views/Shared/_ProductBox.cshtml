@@ -1,0 +1,247 @@
+﻿@model ProductOverviewModel
+
+@using Nop.Core
+@using Nop.Core.Domain.Catalog
+@using Nop.Core.Domain.Orders
+@using Nop.Core.Domain.Tax
+
+@inject CatalogSettings catalogSettings
+@inject IWorkContext workContext
+
+@{
+    //prepare "Add to cart" AJAX link
+    var addtocartlink = "";
+    var shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart;
+    var quantity = 1;
+    if (Model.ProductPrice.ForceRedirectionAfterAddingToCart)
+    {
+        addtocartlink = Url.RouteUrl("AddProductToCart-Catalog", new { productId = Model.Id, shoppingCartTypeId = shoppingCartTypeId, quantity = quantity, forceredirection = Model.ProductPrice.ForceRedirectionAfterAddingToCart });
+    }
+    else
+    {
+        addtocartlink = Url.RouteUrl("AddProductToCart-Catalog", new { productId = Model.Id, shoppingCartTypeId = shoppingCartTypeId, quantity = quantity });
+    }
+
+    var addtowishlistlink = Url.RouteUrl("AddProductToCart-Catalog", new { productId = Model.Id, shoppingCartTypeId = (int)ShoppingCartType.Wishlist, quantity = quantity });
+    var addtocomparelink = Url.RouteUrl("AddProductToCompare", new { productId = Model.Id });
+
+    var picture = Model.PictureModels.FirstOrDefault();
+}
+
+<div class="product-image-wrapper" data-productid="@Model.Id">
+    <div class="single-products box-product">
+        <div class="productinfo text-center">
+            <div class="product-img-wrapper">
+                <img alt="@picture?.AlternateText" src="@picture?.ImageUrl" title="@picture?.Title" />
+            </div>
+            <h2>
+                @if (!String.IsNullOrEmpty(Model.ProductPrice.OldPrice) || Model.ProductPrice.DisplayTaxShippingInfo)
+                {
+                    <div class="prices">
+                        <span class="price actual-price">@Model.ProductPrice.Price</span>
+                        @if (!String.IsNullOrEmpty(Model.ProductPrice.OldPrice))
+                        {
+                            <span class="price old-price">@Model.ProductPrice.OldPrice</span>
+                        }
+                    </div>
+
+                }
+                else
+                {
+                    <div class="new-prices">
+                        <span class="price actual-price">@Model.ProductPrice.Price</span>
+                    </div>
+                }
+            </h2>
+            <p class="product-name">
+                <a class="product-name-a" href="@Url.RouteUrl("Product", new
+                {
+                    SeName = Model.SeName
+                })">@Model.Name</a>
+            </p>
+
+            @if (Model.ReviewOverviewModel.AllowCustomerReviews)
+            {
+
+                double ratingNumber = 0;
+                int fullStar = 0;
+                double fractionNumber = 0;
+                int fractionStar = 0;
+                int emptyStar = 0;
+
+                if (Model.ReviewOverviewModel.TotalReviews != 0)
+                {
+                    ratingNumber = ((Model.ReviewOverviewModel.RatingSum * 100.0) / Model.ReviewOverviewModel.TotalReviews) / 100.0;
+                }
+                fullStar = (int)ratingNumber;
+                fractionNumber = ratingNumber - fullStar;
+
+                if (fractionNumber > 0.75)
+                {
+                    fullStar++;
+                }
+                else if (fractionNumber > 0.25 && fractionStar < 0.75)
+                {
+                    fractionStar++;
+                }
+                else if (fractionNumber > 0 && fractionNumber < 0.25)
+                {
+                    emptyStar++;
+                }
+
+                emptyStar += (5 - fullStar - fractionStar);
+
+                <div class="rating-div show-on-list">
+
+
+                    @for (int i = 0; i < fullStar; i++)
+                    {
+                        <i class="fa fa-star"></i>
+
+                    }
+                    @for (int i = 0; i < fractionStar; i++)
+                    {
+                        <i class="fa fa-star-half-full"></i>
+
+                    }
+                    @for (int i = 0; i < emptyStar; i++)
+                    {
+                        <i class="fa fa-star-o"></i>
+
+                    }
+                </div>
+            }
+
+            <p class="show-on-list">
+                @if (!String.IsNullOrEmpty(Model.ShortDescription))
+                {
+                    @Model.ShortDescription
+                }
+
+            </p>
+
+            @if (!Model.ProductPrice.DisableBuyButton)
+            {
+                <p>
+                    <a onclick="AjaxCart.addproducttocart_catalog('@addtocartlink'); return false;" class="add-to-cart btn"><i class="fa fa-shopping-cart"></i> @(Model.ProductPrice.AvailableForPreOrder ? T("ShoppingCart.PreOrder") : T("ShoppingCart.AddToCart"))</a>
+                </p>
+
+            }
+
+        </div>
+
+        <div class="product-overlay">
+            <div class="overlay-content">
+                <h4>
+                    <a href="@(Url.RouteUrl<Product>(new { SeName = Model.SeName }))">@Model.Name</a>
+                </h4>
+
+                                                    @if (!String.IsNullOrEmpty(Model.ProductPrice.OldPrice) || Model.ProductPrice.DisplayTaxShippingInfo)
+                                                    {
+                                                        <h2>
+                                                            <div class="prices">
+                                                                <span class="price actual-price">@Model.ProductPrice.Price</span>
+                                                                @if (!String.IsNullOrEmpty(Model.ProductPrice.OldPrice))
+                                                                {
+                                                                    <span class="price old-price">@Model.ProductPrice.OldPrice</span>
+                                                                }
+
+
+
+                                                            </div>
+                                                        </h2>
+                                                        @*if (Model.ProductPrice.DisplayTaxShippingInfo)
+                                                            {
+                                                                var inclTax = EngineContext.Current.Resolve<IWorkContext>().TaxDisplayType == TaxDisplayType.IncludingTax;
+                                                                //tax info is already included in the price (incl/excl tax). that's why we display only shipping info here
+                                                                //of course, you can modify appropriate locales to include VAT info there
+                                                                <div class="tax-shipping-info">
+                                                                    @T(inclTax ? "Products.Price.TaxShipping.InclTax" : "Products.Price.TaxShipping.ExclTax", Url.RouteUrl("Topic", new { SeName = Html.GetTopicSeName("shippinginfo") }))
+                                                                </div>
+
+                                                            }*@
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <h2>
+                                                            <div class="new-prices">
+
+                                                                <span class="price actual-price">@Model.ProductPrice.Price</span>
+                                                            </div>
+                                                        </h2>
+
+                                                    }
+
+
+                                                    @if (Model.ReviewOverviewModel.AllowCustomerReviews)
+                                                    {
+
+                                                        double ratingNumber = 0;
+                                                        int fullStar = 0;
+                                                        double fractionNumber = 0;
+                                                        int fractionStar = 0;
+                                                        int emptyStar = 0;
+
+                                                        if (Model.ReviewOverviewModel.TotalReviews != 0)
+                                                        {
+                                                            ratingNumber = ((Model.ReviewOverviewModel.RatingSum * 100.0) / Model.ReviewOverviewModel.TotalReviews) / 100.0;
+                                                        }
+                                                        fullStar = (int)ratingNumber;
+                                                        fractionNumber = ratingNumber - fullStar;
+
+                                                        if (fractionNumber > 0.75)
+                                                        {
+                                                            fullStar++;
+                                                        }
+                                                        else if (fractionNumber > 0.25 && fractionStar < 0.75)
+                                                        {
+                                                            fractionStar++;
+                                                        }
+                                                        else if (fractionNumber > 0 && fractionNumber < 0.25)
+                                                        {
+                                                            emptyStar++;
+                                                        }
+
+                                                        emptyStar += (5 - fullStar - fractionStar);
+
+                                                        <div class="rating-div">
+
+
+                                                            @for (int i = 0; i < fullStar; i++)
+                                                            {
+                                                                <i class="fa fa-star"></i>
+
+                                                            }
+                                                            @for (int i = 0; i < fractionStar; i++)
+                                                            {
+                                                                <i class="fa fa-star-half-full"></i>
+
+                                                            }
+                                                            @for (int i = 0; i < emptyStar; i++)
+                                                            {
+                                                                <i class="fa fa-star-o"></i>
+
+                                                            }
+                                                        </div>
+
+                                                    }
+
+                                                    <p>
+                                                        @if (!String.IsNullOrEmpty(Model.ShortDescription))
+                                                        {
+                                                            @Model.ShortDescription
+                                                        }
+
+                                                    </p>
+
+                                                    @if (!Model.ProductPrice.DisableBuyButton)
+                                                    {
+                                                        <a onclick="AjaxCart.addproducttocart_catalog('@addtocartlink'); return false;" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i> @(Model.ProductPrice.AvailableForPreOrder ? T("ShoppingCart.PreOrder") : T("ShoppingCart.AddToCart"))</a>
+
+                                                    }
+                                                </div>
+                                            </div>
+    </div>
+
+</div>

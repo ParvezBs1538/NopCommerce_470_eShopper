@@ -1,0 +1,121 @@
+﻿@model QuoteFormModel
+
+<div class="card-body">
+    <input type="hidden" id="Id" value="@Model.Id" />
+    @(await Html.LocalizedEditorAsync<QuoteFormModel, QuoteFormLocalizedModel>("form-info-localized",
+        @<div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.Locales[item].Title" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="@Model.Locales[item].Title" />
+                    <span asp-validation-for="@Model.Locales[item].Title"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.Locales[item].Info" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="@Model.Locales[item].Info" />
+                    <span asp-validation-for="@Model.Locales[item].Info"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.Locales[item].SubmitButtonText" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="@Model.Locales[item].SubmitButtonText" />
+                    <span asp-validation-for="@Model.Locales[item].SubmitButtonText"></span>
+                </div>
+            </div>
+            <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+        </div>
+    ,@<div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="Title" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="Title" asp-required="true" />
+                    <span asp-validation-for="Title"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="Info" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="Info" />
+                    <span asp-validation-for="Info"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="SubmitButtonText" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="SubmitButtonText" />
+                    <span asp-validation-for="SubmitButtonText"></span>
+                </div>
+            </div>
+        </div>))
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DisplayOrder" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DisplayOrder" />
+            <span asp-validation-for="DisplayOrder"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SelectedStoreIds" />
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-4">
+                    <nop-select asp-for="SelectedStoreIds" asp-items="Model.AvailableStores" asp-multiple="true" />
+                </div>
+                <div class="col-md-8">
+                    @await Component.InvokeAsync("MultistoreDisabledWarning")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Active" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Active" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SendEmailToCustomer" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="SendEmailToCustomer" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SendEmailToStoreOwner" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="SendEmailToStoreOwner" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DefaultEmailAccountId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="DefaultEmailAccountId" asp-items="Model.AvailableEmailAccounts" />
+        </div>
+    </div>
+</div>

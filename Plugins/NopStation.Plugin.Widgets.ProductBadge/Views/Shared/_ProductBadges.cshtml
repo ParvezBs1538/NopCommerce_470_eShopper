@@ -1,0 +1,158 @@
+﻿@model BadgeInfoModel
+@using NopStation.Plugin.Widgets.ProductBadge.Domains
+@using System.Drawing
+@inject ProductBadgeSettings productBadgeSettings
+
+@{
+    var wdthCountLeft = 0;
+    var wdthCountRight = 0;
+    var topPosition = 10;
+    var widthLeft = 0;
+    var widthRight = 0;
+}
+
+@foreach (var badge in Model.Badges)
+{
+    var sizeClass = $"{badge.Size.ToString().ToLower()}-{(Model.DetailsPage ? "details" : "overview")}-badge";
+    var positionClass = badge.PositionType == PositionType.Left ? "badge-left" : "badge-right";
+
+    var wdth = badge.Size.ToString().ToLower() == "small"
+                ? productBadgeSettings.SmallBadgeWidth
+                : badge.Size.ToString().ToLower() == "large"
+                ? productBadgeSettings.LargeBadgeWidth
+                : productBadgeSettings.MediumBadgeWidth;
+
+
+    @if (Model.DetailsPage)
+    {
+        wdth = (int)((100 + productBadgeSettings.IncreaseWidthInDetailsPageByPercentage) / 100 * wdth);
+    }
+    topPosition = (badge.PositionType == PositionType.Left)
+                    ? (10 + (wdthCountLeft++ * 5) + widthLeft)
+                    : (10 + (wdthCountRight++ * 5) + widthRight);
+    @if (badge.ShapeType == ShapeType.Ribbon)
+    {
+        @if (badge.PositionType == PositionType.Left)
+        {
+            widthLeft -= (int)(wdth / 3) * 2;
+        }
+        else
+        {
+            widthRight -= (int)(wdth / 3) * 2;
+        }
+    }
+    @if (badge.ShapeType == ShapeType.DiamondShield)
+    {
+        topPosition -= (int)(wdth * .5);
+    }
+
+    @if (badge.PositionType == PositionType.Left)
+    {
+        widthLeft += wdth;
+    }
+    else
+    {
+        widthRight += wdth;
+    }
+
+    <div class="badge-wrapper @sizeClass @positionClass" style="top: @($"{topPosition}px")">
+        @if (badge.ContentType == ContentType.Picture)
+        {
+            <img src="@badge.PictureUrl" />
+        }
+        else
+        {
+            var bgcss = $"background-color: {badge.BackgroundColor};";
+            var clrcss = $"color: {badge.FontColor};";
+
+            switch (badge.ShapeType)
+            {
+                case ShapeType.Circle:
+                    {
+                        <div class="badge badge-circle" style="@bgcss @clrcss">
+                            <span class="circle-ribbon-text">@Html.Raw(badge.Text)</span>
+                        </div>
+                        break;
+                    }
+                case ShapeType.Heart:
+                    {
+                        <div class="badge badge-heart" style="@clrcss">
+                            <div class="heart-top" style="@bgcss"></div>
+                            <div class="heart-middle"></div>
+                            <div class="heart-bottom" style="@bgcss"></div>
+                            <span class="heart-ribbon-text">@Html.Raw(badge.Text)</span>
+                        </div>
+                        break;
+                    }
+                case ShapeType.Pentagon:
+                    {
+                        <div class="badge badge-pentagon" style="@clrcss">
+                            <div class="pentagon-top" style="@bgcss"></div>
+                            <div class="pentagon-bottom"></div>
+                            <span class="pentagon-ribbon-text">@Html.Raw(badge.Text)</span>
+                        </div>
+                        break;
+                    }
+                case ShapeType.Hexagon:
+                    {
+                        <div class="badge badge-hexagon" style="@bgcss @clrcss">
+                            <span class="hexagon-ribbon-text">@Html.Raw(badge.Text)</span>
+                        </div>
+                        break;
+                    }
+                case ShapeType.Octagon:
+                    {
+                        <div class="badge badge-octagon" style="@bgcss @clrcss">
+                            <span class="octagon-ribbon-text">@Html.Raw(badge.Text)</span>
+                        </div>
+                        break;
+                    }
+                case ShapeType.PointBurst:
+                    {
+                        <div class="badge badge-pointburst" style="@clrcss">
+                            <div class="pointburst-top" style="background-color: @(badge.BackgroundColor)"></div>
+                            <div class="pointburst-middle" style="background-color: @(badge.BackgroundColor)"></div>
+                            <div class="pointburst-middle-2" style="background-color: @(badge.BackgroundColor)"></div>
+                            <div class="pointburst-middle-3" style="background-color: @(badge.BackgroundColor)"></div>
+                            <div class="pointburst-bottom" style="background-color: @(badge.BackgroundColor)"></div>
+                            <span class="pointburst-ribbon-text">@Html.Raw(badge.Text)</span>
+                        </div>
+                        break;
+                    }
+                case ShapeType.Ribbon:
+                    {
+                        <div class="badge badge-ribbon" style="@bgcss @clrcss">
+                            <span class="ribbon-text">@Html.Raw(badge.Text)</span>
+                        </div>
+                        break;
+                    }
+                case ShapeType.DiamondShield:
+                    {
+                        <div class="badge badge-diamondshield" style="@clrcss">
+                            <div class="diamondshield-top" style="border-bottom-color: @(badge.BackgroundColor)"></div>
+                            <div class="diamondshield-bottom" style="border-top-color: @(badge.BackgroundColor)"></div>
+                            <span class="diamondshield-ribbon-text">@Html.Raw(badge.Text)</span>
+                        </div>
+                        break;
+                    }
+                case ShapeType.Square:
+                    {
+                        <div class="badge badge-square" style="@bgcss @clrcss">
+                            <span class="square-ribbon-text">@Html.Raw(badge.Text)</span>
+                        </div>
+                        break;
+                    }
+                case ShapeType.TalkBubble:
+                    {
+                        <div class="badge badge-talkbubble" style="@bgcss @clrcss">
+                            <div class="talkbubble-bottom" style="border-top-color: @(badge.BackgroundColor)"></div>
+                            <span class="talkbubble-text">@Html.Raw(badge.Text)</span>
+                        </div>
+                        break;
+                    }
+                default:
+                    break;
+            }
+        }
+    </div>
+}

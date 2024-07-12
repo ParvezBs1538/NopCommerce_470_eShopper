@@ -1,0 +1,60 @@
+﻿@model SurveyModel
+
+@{
+    Layout = "_ColumnsOne";
+
+    //title
+    NopHtml.AddTitleParts(Model.Name);
+    //meta
+    NopHtml.AddMetaDescriptionParts(Model.MetaDescription);
+    NopHtml.AddMetaKeywordParts(Model.MetaKeywords);
+
+    //page class
+    NopHtml.AppendPageCssClassParts("html-survey-page");
+    NopHtml.AddCssFileParts($"{DynamicSurveyDefaults.OutputPath}/Themes/DefaultClean/contents/styles.css", string.Empty);
+
+    var attributeUid = $"surveyattributes_{Guid.NewGuid().ToString().Replace("-", "").Substring(0, 6)}";
+}
+
+<div class="page survey-page">
+    <div class="page-title">
+        <h1>@Model.Name</h1>
+    </div>
+    <div class="page-body">
+        @if (Model.SuccessfullySent)
+        {
+            <div class="result">
+                @Model.Result
+            </div>
+        }
+        else
+        {
+            <form asp-route="DynamicSurvey" method="post" asp-route-id="@Model.Id" class="@attributeUid" id="DynamicSurvey-@Model.Id">
+                <div class="fieldset">
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        <div class="title">
+                            <strong>@Html.Raw(Model.Description)</strong>
+                        </div>
+                    }
+
+                    <div class="form-fields">
+                        <div asp-validation-summary="ModelOnly" class="message-error"></div>
+                        @{
+                            var viewData = new ViewDataDictionary(ViewData);
+                            viewData["DynamicSurvey_UID"] = attributeUid;
+                        }
+                        @await Html.PartialAsync("_SurveyAttributes", Model, viewData)
+                        @if (Model.DisplayCaptcha)
+                        {
+                            <nop-captcha />
+                        }
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button type="submit" name="send-email" class="button-1 survey-button">@T("NopStation.DynamicSurvey.Surveys.SubmitButton")</button>
+                </div>
+            </form>
+        }
+    </div>
+</div>

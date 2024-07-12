@@ -1,0 +1,29 @@
+@model AnnouncementItemModel
+
+@{
+    var customer = await workContext.GetCurrentCustomerAsync();
+    const string hideInfoBlockAttributeName = "AnnouncementPage.HideInfoBlock";
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideInfoBlockAttributeName);
+
+    const string hideSchedulesBlockAttributeName = "AnnouncementPage.HideSchedulesBlock";
+    var hideSchedulesBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideSchedulesBlockAttributeName);
+
+    const string hideCustomerConditionsBlockAttributeName = "AnnouncementPage.HideCustomerConditionsBlock";
+    var hideCustomerConditionsBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideCustomerConditionsBlockAttributeName);
+}
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <nop-cards id="announcement-cards">
+                <nop-card asp-name="announcement-info" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.Announcement.AnnouncementItems.Tab.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</nop-card>
+                
+                <nop-card asp-name="announcement-wm-schedules" asp-icon="far fa-clock" asp-title="@T("Admin.NopStation.WidgetManager.Common.Schedules")" asp-hide-block-attribute-name="@hideSchedulesBlockAttributeName" asp-hide="@hideSchedulesBlock" asp-advanced="true">@await Html.PartialAsync("ScheduleMappings", Model)</nop-card>
+                <nop-card asp-name="announcement-wm-customers" asp-icon="fa fa-check" asp-title="@T("Admin.NopStation.WidgetManager.Common.CustomerConditions")" asp-hide-block-attribute-name="@hideCustomerConditionsBlockAttributeName" asp-hide="@hideCustomerConditionsBlock" asp-advanced="true">@await Html.PartialAsync("CustomerConditionMappings", Model)</nop-card>
+            </nop-cards>
+        </div>
+    </div>
+</section>

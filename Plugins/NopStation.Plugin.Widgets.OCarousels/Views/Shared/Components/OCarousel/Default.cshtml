@@ -1,0 +1,22 @@
+﻿@model OCarouselListModel
+
+@foreach (var carousel in Model.OCarousels)
+{
+    var carouselType = carousel.CarouselType.ToString().ToLower();
+    var bg = carousel.ShowBackgroundPicture ? $"style=background:url('{carousel.BackgroundPictureUrl}') no-repeat center;" : "";
+
+    <div class="ocarousel-grid @Html.Raw(carousel.ShowBackgroundPicture? "carousel-grid-background" : "")" @bg>
+        @if (carousel.DisplayTitle)
+        {
+            <div class="title">
+                <strong>@carousel.Title</strong>
+            </div>
+        }
+
+        <div class="carousel-container carousel-@carouselType" data-carouselid="@carousel.Id">
+            <div class="loader">
+                <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+            </div>
+        </div>
+    </div>
+}

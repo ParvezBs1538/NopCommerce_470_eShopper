@@ -1,0 +1,104 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("ByteplantAddressValidator.Configuration");
+    ViewBag.PageTitle = T("Admin.NopStation.ByteplantAddressValidator.Configuration").Text;
+}
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.ValidatePhoneNumber)").change(togglePhoneNumberRegex);
+
+        togglePhoneNumberRegex();
+    });
+
+    function togglePhoneNumberRegex() {
+        if ($('#@Html.IdFor(model => model.ValidatePhoneNumber)').is(':checked')) {
+            $('#pnlRestrictedCountry').show();
+        } else {
+            $('#pnlRestrictedCountry').hide();
+        }
+    }
+</script>
+
+<form asp-controller="ByteplantAddressValidator" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.ByteplantAddressValidator.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnablePlugin_OverrideForStore" asp-input="EnablePlugin" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnablePlugin" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnablePlugin" />
+                                    <span asp-validation-for="EnablePlugin"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ByteplantApiKey_OverrideForStore" asp-input="ByteplantApiKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ByteplantApiKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ByteplantApiKey" />
+                                    <span asp-validation-for="ByteplantApiKey"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ValidatePhoneNumber_OverrideForStore" asp-input="ValidatePhoneNumber" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ValidatePhoneNumber" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="ValidatePhoneNumber" />
+                                    <span asp-validation-for="ValidatePhoneNumber"></span>
+                                </div>
+                            </div>
+                            <nop-nested-setting asp-for="ValidatePhoneNumber">
+                                <div class="form-group row" id="pnlRestrictedCountry">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="PhoneNumberRegex_OverrideForStore" asp-input="PhoneNumberRegex" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="PhoneNumberRegex" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="PhoneNumberRegex" />
+                                        <span asp-validation-for="PhoneNumberRegex"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableLog_OverrideForStore" asp-input="ByteplantApiKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableLog" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableLog" />
+                                    <span asp-validation-for="EnableLog"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

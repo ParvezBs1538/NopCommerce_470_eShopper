@@ -1,0 +1,188 @@
+﻿@model ConfigurationModel
+
+<div class="card-body">
+    <div class="cards-group">
+        <div class="card card-search">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="LocaleResourceSearchModel.SearchResourceName" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="LocaleResourceSearchModel.SearchResourceName" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="LocaleResourceSearchModel.SearchResourceValue" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="LocaleResourceSearchModel.SearchResourceValue" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="SearchLanguageId" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-select asp-for="LocaleResourceSearchModel.LanguageId" asp-items="Model.AvailableLanguages" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-7 offset-md-5">
+                        <button type="button" id="search-resources" class="btn btn-primary btn-search">
+                            <i class="fa fa-search"></i>
+                            @T("Admin.Common.Search")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-default">
+            <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                    {
+                        Name = "resources-grid",
+                        UrlRead = new DataUrl("Resources", "WebApi", null),
+                        UrlUpdate = new DataUrl("ResourceUpdate", "WebApi", null),
+                        UrlDelete = new DataUrl("ResourceDelete", "WebApi", null),
+                        SearchButtonId = "search-resources",
+                        Length = Model.LocaleResourceSearchModel.PageSize,
+                        LengthMenu = Model.LocaleResourceSearchModel.AvailablePageSizes,
+                        Filters = new List<FilterParameter>
+                        {
+                            new FilterParameter(nameof(Model.LocaleResourceSearchModel.LanguageId), nameof(LocaleResourceSearchModel)),
+                            new FilterParameter(nameof(Model.LocaleResourceSearchModel.SearchResourceName), nameof(LocaleResourceSearchModel)),
+                            new FilterParameter(nameof(Model.LocaleResourceSearchModel.SearchResourceValue), nameof(LocaleResourceSearchModel))
+                        },
+                        ColumnCollection = new List<ColumnProperty>
+                        {
+                            new ColumnProperty(nameof(LocaleResourceModel.ResourceName))
+                            {
+                                Title = T("Admin.Configuration.Languages.Resources.Fields.Name").Text,
+                                Width = "300",
+                                Editable = true,
+                                EditType = EditType.String
+                            },
+                            new ColumnProperty(nameof(LocaleResourceModel.ResourceValue))
+                            {
+                                Title = T("Admin.Configuration.Languages.Resources.Fields.Value").Text,
+                                Width = "300",
+                                Editable = true,
+                                EditType = EditType.String
+                            },
+                            new ColumnProperty(nameof(LocaleResourceModel.CombinedId))
+                            {
+                                Title = T("Admin.Common.Edit").Text,
+                                Width = "100",
+                                ClassName =  NopColumnClassDefaults.Button,
+                                Render = new RenderButtonsInlineEdit()
+                            },
+                            new ColumnProperty(nameof(LocaleResourceModel.Id))
+                            {
+                                Title = T("Admin.Common.Delete").Text,
+                                Width = "100",
+                                ClassName =  NopColumnClassDefaults.Button,
+                                Render = new RenderButtonRemove(T("Admin.Common.Delete").Text)
+                            }
+                        }
+                    })
+                <div class="card-footer mt-2">
+                    <button type="button" id="addFromExistingResources" class="btn btn-primary">@T("Admin.NopStation.WebApi.Resources.AddFromExistingRecords")</button>
+                </div>
+                <input type="submit" id="btnStringResources" style="display: none" />
+                <script>
+                    $(document).ready(function () {
+                        $('#addFromExistingResources').click(function () {
+                            var languageId = $("#@Html.IdFor(model => model.LocaleResourceSearchModel.LanguageId)").val();
+                            javascript: OpenWindow('/Admin/WebApi/ExistingResourceAddPopup?languageId=' + languageId + '&btnId=btnStringResources&formId=webapi-config-form', 800, 800, true);
+                            return false;
+                        })
+
+                        $('#btnStringResources').click(function () {
+                            //refresh grid
+                            updateTable('#resources-grid');
+
+                            //return false to don't reload a page
+                            return false;
+                        });
+                    });
+                </script>
+            </div>
+            <div class="card card-default no-margin">
+                <div class="card-header">
+                    @T("Admin.Common.AddNewRecord")
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="LocaleResourceSearchModel.AddResourceString.ResourceName" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="LocaleResourceSearchModel.AddResourceString.ResourceName" />
+                            <span asp-validation-for="LocaleResourceSearchModel.AddResourceString.ResourceName"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="LocaleResourceSearchModel.AddResourceString.ResourceValue" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="LocaleResourceSearchModel.AddResourceString.ResourceValue" />
+                            <span asp-validation-for="LocaleResourceSearchModel.AddResourceString.ResourceValue"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-9 offset-md-3">
+                            <button type="button" id="addResourceString" class="btn btn-primary">@T("Admin.Common.AddNewRecord")</button>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $('#addResourceString').click(function () {
+                            $('#addResourceString').attr('disabled', true);
+                            var postData = {
+                                LanguageId: $("#@Html.IdFor(model => model.LocaleResourceSearchModel.LanguageId)").val(),
+                                ResourceName: $("#@Html.IdFor(model => model.LocaleResourceSearchModel.AddResourceString.ResourceName)").val(),
+                                ResourceValue: $("#@Html.IdFor(model => model.LocaleResourceSearchModel.AddResourceString.ResourceValue)").val()
+                            };
+                            addAntiForgeryToken(postData);
+
+                            $.ajax({
+                                cache: false,
+                                type: "POST",
+                                url: "@Html.Raw(Url.Action("ResourceAdd", "WebApi"))",
+                                data: postData,
+                                success: function (data, textStatus, jqXHR) {
+                                    if (data.Result) {
+                                        //reload grid
+                                        updateTable('#resources-grid');
+
+                                        //clear input value
+                                        $("#@Html.IdFor(model => model.LocaleResourceSearchModel.AddResourceString.ResourceName)").val('');
+                                        $("#@Html.IdFor(model => model.LocaleResourceSearchModel.AddResourceString.ResourceValue)").val('');
+                                    } else {
+                                        //display errors if returned
+                                        display_nop_error(data);
+                                    }
+                                },
+                                complete: function (jqXHR, textStatus) {
+                                    $('#addResourceString').attr('disabled', false);
+                                }
+                            });
+                        });
+                    });
+                </script>
+            </div>
+
+        </div>
+    </div>
+</div>

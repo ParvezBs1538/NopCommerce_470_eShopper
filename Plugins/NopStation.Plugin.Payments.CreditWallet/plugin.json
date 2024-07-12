@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Credit Payment",
+  "SystemName": "NopStation.Plugin.Payments.CreditWallet",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.CreditWallet.dll",
+  "Description": "This plugin enables customer credit payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

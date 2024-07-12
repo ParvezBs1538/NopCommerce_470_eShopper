@@ -1,0 +1,247 @@
+﻿@model NopStation.Plugin.Payments.Quickstream.Models.PaymentInfoViewModel
+@{
+    Layout = "";
+}
+<style type="text/css" rel="stylesheet">
+    .payment-quickstream-accept-logo li {
+        display: inline-block;
+        margin-right: 5px;
+        min-width: 75px;
+        margin-bottom: 5px;
+    }
+
+        .payment-quickstream-accept-logo li img {
+            width: 60px;
+        }
+
+    .payment-quickstream-accept-card-container {
+        display: block;
+        text-align: center;
+        padding-bottom: 30px;
+    }
+
+    .payment-quickstream-accept-cards-info {
+        margin-bottom: 5px;
+    }
+
+    .payment-quickstream-accept-card-container label,
+    .payment-quickstream-accept-card-container label + * {
+        margin-right: 30px;
+        padding-bottom: 30px;
+    }
+
+    .payment-quickstream-accept-cards-icon {
+        border-left: 1px solid #8080804a;
+        padding-left: 10px;
+    }
+
+    #credit-card {
+        width: 100%;
+    }
+
+    .payment-quickstream-accept-logo {
+        max-width: 250px;
+    }
+
+    /*hover sugestion*/
+    .hover-img-box {
+        position: relative;
+        margin-right: 10px;
+    }
+
+    #box {
+        display: none;
+        position: absolute;
+        left: 100%;
+        top: -24px;
+    }
+
+        #box img {
+            max-width: 300px;
+        }
+
+    .hover-img-box button {
+        padding: 4px;
+        width: 25px;
+        border: none;
+        background: #eee;
+        font-weight: bold;
+        border-radius: 50px;
+        bottom: 25px;
+        position: absolute;
+    }
+
+    .hover-img-box label {
+        position: relative;
+    }
+
+    @@media only screen and (max-width: 991px) {
+        .hover-img-box button {
+            margin: -5px 10px 0;
+        }
+
+        #box img {
+            max-width: 200px;
+        }
+
+        #box {
+            left: 90%;
+            top: -14px;
+        }
+    }
+
+    .p-b-10 {
+        padding-bottom: 10px;
+    }
+
+    @@media only screen and (max-width: 480px) {
+        #credit-card {
+            width: 100%;
+        }
+
+        .payment-quickstream-accept-logo {
+            max-width: 120px;
+        }
+    }
+</style>
+
+<div class="payment-quickstream-accept-card-container">
+    <div id="credit-card">
+        <table width="100%" cellspacing="2" cellpadding="1" border="0">
+            <tr>
+                <td>
+                    <label asp-for="CardholderName">@T("NopStation.QuickStream.PaymentInfo.Fields.CardholderName"):</label>
+                </td>
+                <td>
+                    <input type="text" asp-for="CardholderName" style="width:165px;" autocomplete="off" />
+                    <span asp-validation-for="CardholderName"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label asp-for="CardNumber">@T("NopStation.QuickStream.PaymentInfo.Fields.CardNumber"):</label>
+                </td>
+                <td>
+                    <input type="text" asp-for="CardNumber" style="width:165px;" autocomplete="off" maxlength="22" />
+                    <p style="color:red;text-align:left" id="Card-Number-Error"></p>
+                    <span asp-validation-for="CardNumber"></span>
+                </td>
+            </tr>
+            <tr style="display:none" id="surcharge">
+                <td>
+                    <label>@T("NopStation.QuickStream.PaymentInfo.Fields.Surcharge"): </label>
+                </td>
+                <td>
+                    <p id="surcharge-value" style="text-align: left">
+
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label asp-for="ExpireMonth">@T("NopStation.QuickStream.PaymentInfo.Fields.ExpirationDate"):</label>
+                </td>
+                <td>
+                    <select asp-for="ExpireMonth" asp-items="Model.ExpireMonths"></select>
+                    /
+                    <select asp-for="ExpireYear" asp-items="Model.ExpireYears"></select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="hover-img-box">
+                        <label asp-for="CardCode">
+                            @T("NopStation.QuickStream.PaymentInfo.Fields.Cvn"):
+                            <button type="button" id="toggle">?</button>
+                        </label>
+                        <div id="box">
+                            <img src="~/Plugins/NopStation.Plugin.Payments.Quickstream/Content/img/hover-img.png">
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <input type="text" asp-for="CardCode" style="width:60px;" autocomplete="off" maxlength="4" />
+                    <span asp-validation-for="CardCode"></span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="payment-quickstream-accept-cards-icon">
+        @if (Model.AcceptCardUrls.Count > 0)
+        {
+            <div class="payment-quickstream-accept-cards">
+                <div class="payment-quickstream-accept-cards-info">
+                    @T("NopStation.QuickStream.AcceptCardInfo")
+                </div>
+
+                <ul class="payment-quickstream-accept-logo">
+                    @foreach (var url in Model.AcceptCardUrls)
+                    {
+                        <li>
+                            <img src="@url" />
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+</div>
+
+<script asp-location="@ResourceLocation.Auto">
+    function delay(fn, ms) {
+    let timer = 0
+    return function (args) {
+        clearTimeout(timer)
+        timer = setTimeout(fn.bind(this, args), ms || 0)
+        }
+    }
+
+    $('#CardNumber').on('input', delay(function (e) {
+        var cardNumber = $(this).val();
+        if (cardNumber.length < 5)
+            return;
+        checkCard(cardNumber);
+    }, 1200));
+
+    function checkCard(cardNumber) {
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: '@Url.Action("ValidateCard", "QuickStreamPayment")',
+            data: { cardNumber: cardNumber },
+            dataType: "json",
+            success: function (response) {
+                if (response.success) {
+                    $('#Card-Number-Error').hide();
+                    $('#surcharge-value').text(response.surcharge+'%');
+                    $('#surcharge').show();
+
+                }
+                else {
+                    $('#Card-Number-Error').text(response.message);
+                    $('#surcharge').hide();
+                    $('#Card-Number-Error').show();
+                }
+            },
+            error: function (error) {
+                console.log(error)
+            },
+            complete: function (jqXHR, textStatus) {
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $("#toggle").click(function () {
+            $("#box").toggle();
+        });
+    });
+
+    $(document).on('click', function (e) {
+        if (e.target.id != 'toggle' && $(e.target).closest("#box").length === 0) {
+            $("#box").hide();
+        }
+    });
+
+</script>

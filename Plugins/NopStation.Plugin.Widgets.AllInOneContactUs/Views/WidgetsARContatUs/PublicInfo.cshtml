@@ -1,0 +1,261 @@
+﻿@using NopStation.Plugin.Widgets.AllInOneContactUs
+@inject ARContactUsSettings arContactUsSettings
+
+@model ARContactUsPublicModel
+@{
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/Plugins/NopStation.Plugin.Widgets.AllInOneContactUs/Content/lib/arcontactus.js");
+    NopHtml.AddCssFileParts("~/Plugins/NopStation.Plugin.Widgets.AllInOneContactUs/Content/lib/arcontactus.css");
+
+    var enableTawk = arContactUsSettings.EnableTawkChat ? "true" : "false";
+    var tawkSrc = arContactUsSettings.EnableTawkChat ? arContactUsSettings.TawkChatSrc : string.Empty;
+    var enableMessenger = arContactUsSettings.EnableMessenger ? "true" : "false";
+    var messengerId = arContactUsSettings.EnableMessenger ? arContactUsSettings.MessengerId : string.Empty;
+    var enableEmail = arContactUsSettings.EnableEmail ? "true" : "false";
+    var emailId = arContactUsSettings.EnableEmail ? arContactUsSettings.EmailId : string.Empty;
+    var enableSkype = arContactUsSettings.EnableSkype ? "true" : "false";
+    var skypeId = arContactUsSettings.EnableSkype ? arContactUsSettings.SkypeId : string.Empty;
+    var enableWhatsapp = arContactUsSettings.EnableWhatsapp ? "true" : "false";
+    var whatsappNumber = arContactUsSettings.EnableWhatsapp ? arContactUsSettings.WhatsappNumber : string.Empty;
+    var enableDirectContactUs = arContactUsSettings.EnableDirectContactUs ? "true" : "false";
+    var contactUsUrl = arContactUsSettings.EnableDirectContactUs ? arContactUsSettings.ContactUsPageUrl : string.Empty;
+    var enableTelegram = arContactUsSettings.EnableTelegram ? "true" : "false";
+    var TelegramName = arContactUsSettings.EnableTelegram ? arContactUsSettings.TelegramName : string.Empty;
+    var enableViber = arContactUsSettings.EnableViber ? "true" : "false";
+    var ViberNumber = arContactUsSettings.EnableViber ? arContactUsSettings.ViberNumber : string.Empty;
+    var enableTeams = arContactUsSettings.EnableTeams ? "true" : "false";
+    var teamsId = arContactUsSettings.EnableTeams ? arContactUsSettings.TeamsId : string.Empty;
+    var enableMeetingLink = arContactUsSettings.EnableMeetingLink ? "true" : "false";
+    var meetingLink = arContactUsSettings.EnableMeetingLink ? arContactUsSettings.MeetingLink : string.Empty;
+}
+
+<div id="arcontactus"></div>
+
+<script asp-location="Footer">
+    var arCuMessages = ['@T("NopStation.Plugin.Widgets.AllInOneContactUs.ButtonText").Text'];
+    var arCuLoop = false;
+    var arCuCloseLastMessage = false;
+    var arCuPromptClosed = false;
+    var _arCuTimeOut = null;
+    var arCuDelayFirst = 2000;
+    var arCuTypingTime = 2000;
+    var arCuMessageTime = 4000;
+    var arCuClosedCookie = 0;
+    var arcItems = [];
+    var enableTawk = @enableTawk;
+    if(enableTawk)
+    {
+        var Tawk_API = Tawk_API || { }, Tawk_LoadStart = new Date();
+    }
+
+    window.addEventListener('load', function () {
+        arCuClosedCookie = arCuGetCookie('arcu-closed');
+        jQuery('#arcontactus').on('arcontactus.init', function () {
+            if (arCuClosedCookie) {
+                return false;
+            }
+            arCuShowMessages();
+        });
+        jQuery('#arcontactus').on('arcontactus.openMenu', function () {
+            clearTimeout(_arCuTimeOut);
+            arCuPromptClosed = true;
+            jQuery('#contact').contactUs('hidePrompt');
+            arCuCreateCookie('arcu-closed', 1, 30);
+        });
+        jQuery('#arcontactus').on('arcontactus.hidePrompt', function () {
+            clearTimeout(_arCuTimeOut);
+            arCuPromptClosed = true;
+            arCuCreateCookie('arcu-closed', 1, 30);
+        });
+
+        if (enableTawk) {
+            var arcItem = {};
+            arcItem.id = 'msg-item-9';
+            arcItem.onClick = function (e) {
+                e.preventDefault();
+                jQuery('#arcontactus').contactUs('closeMenu');
+                if (typeof Tawk_API == 'undefined') {
+                    console.error('Tawk.to integration is disabled in module configuration');
+                    return false;
+                }
+                jQuery('#arcontactus').contactUs('hide');
+                Tawk_API.showWidget();
+                Tawk_API.maximize();
+                tawkToInterval = setInterval(function () {
+                    checkTawkIsOpened();
+                }, 100);
+            }
+            arcItem.class = 'messanger msg-item-comment-smile-light';
+            arcItem.title = 'Live Chat';
+            arcItem.icon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 192c0-88.4-93.1-160-208-160S0 103.6 0 192c0 34.3 14.1 65.9 38 92-13.4 30.2-35.5 54.2-35.8 54.5-2.2 2.3-2.8 5.7-1.5 8.7S4.8 352 8 352c36.6 0 66.9-12.3 88.7-25 32.2 15.7 70.3 25 111.3 25 114.9 0 208-71.6 208-160zm122 220c23.9-26 38-57.7 38-92 0-66.9-53.5-124.2-129.3-148.1.9 6.6 1.3 13.3 1.3 20.1 0 105.9-107.7 192-240 192-10.8 0-21.3-.8-31.7-1.9C207.8 439.6 281.8 480 368 480c41 0 79.1-9.2 111.3-25 21.8 12.7 52.1 25 88.7 25 3.2 0 6.1-1.9 7.3-4.8 1.3-2.9.7-6.3-1.5-8.7-.3-.3-22.4-24.2-35.8-54.5z"></path></svg>';
+            arcItem.color = '#00A0DB';
+            arcItems.push(arcItem);
+        }
+
+        var enableTeams = @enableTeams;
+        if (enableTeams) {
+            var arcItem = {};
+            arcItem.id = 'msg-item-14';
+            arcItem.class = 'msg-item-teams';
+            arcItem.title = 'Chat on Teams';
+            arcItem.icon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M19.19 8.77001C18.8833 8.77001 18.5967 8.71334 18.33 8.60001C18.07 8.48668 17.84 8.33001 17.64 8.13001C17.44 7.93001 17.2833 7.70001 17.17 7.44001C17.0567 7.17334 17 6.88668 17 6.58001C17 6.28001 17.0567 5.99668 17.17 5.73001C17.2833 5.46334 17.44 5.23334 17.64 5.04001C17.84 4.84001 18.07 4.68334 18.33 4.57001C18.5967 4.45001 18.8833 4.39334 19.19 4.40001C19.49 4.39334 19.7733 4.45001 20.04 4.57001C20.3067 4.68334 20.54 4.84001 20.74 5.04001C20.9333 5.23334 21.09 5.46334 21.21 5.73001C21.3233 5.99668 21.38 6.28001 21.38 6.58001C21.38 6.88668 21.3233 7.17334 21.21 7.44001C21.0967 7.70001 20.94 7.93001 20.74 8.13001C20.54 8.33001 20.3067 8.48668 20.04 8.60001C19.7733 8.71334 19.49 8.77001 19.19 8.77001ZM19.19 5.65001C18.93 5.65001 18.7 5.74001 18.5 5.92001C18.3333 6.10001 18.25 6.32001 18.25 6.58001C18.25 6.84001 18.3333 7.06334 18.5 7.25001C18.7 7.41668 18.93 7.50001 19.19 7.50001C19.45 7.50001 19.67 7.41668 19.85 7.25001C20.0367 7.08334 20.13 6.86001 20.13 6.58001C20.13 6.32001 20.0367 6.10001 19.85 5.92001C19.67 5.74001 19.45 5.65001 19.19 5.65001ZM22 10.33V15C22 15.42 21.92 15.82 21.76 16.2C21.5867 16.58 21.3633 16.91 21.09 17.19C20.8033 17.4767 20.47 17.7 20.09 17.86C19.6967 18.0267 19.2933 18.11 18.88 18.11C18.6267 18.11 18.3733 18.0733 18.12 18C17.86 17.9533 17.6233 17.87 17.41 17.75C17.25 18.2767 17.0133 18.7567 16.7 19.19C16.3867 19.6233 16.02 19.9933 15.6 20.3C15.18 20.6067 14.7167 20.84 14.21 21C13.7033 21.18 13.1767 21.27 12.63 21.27C11.99 21.27 11.3867 21.16 10.82 20.94C10.2733 20.72 9.77333 20.4067 9.32 20C8.88 19.62 8.51667 19.1667 8.23 18.64C7.93667 18.1067 7.74667 17.5267 7.66 16.9H2.83C2.61 16.9 2.41333 16.8167 2.24 16.65C2.08 16.49 2 16.2967 2 16.07V7.73001C2 7.50334 2.08 7.30668 2.24 7.14001C2.41333 6.98001 2.61 6.90001 2.83 6.90001H10C9.80667 6.50001 9.71 6.08334 9.71 5.65001C9.71 5.24334 9.78667 4.86001 9.94 4.50001C10.0867 4.16668 10.2933 3.86001 10.56 3.58001C10.8267 3.32001 11.14 3.11334 11.5 2.96001C11.8333 2.80668 12.2067 2.73001 12.62 2.73001C13.0267 2.73001 13.4067 2.80668 13.76 2.96001C14.1133 3.11334 14.4233 3.32001 14.69 3.58001C14.9567 3.86001 15.1633 4.16668 15.31 4.50001C15.4633 4.86001 15.54 5.24334 15.54 5.65001C15.54 6.05001 15.4633 6.43001 15.31 6.79001C15.1633 7.14334 14.9567 7.45001 14.69 7.71001C14.4233 7.97668 14.1133 8.18668 13.76 8.34001C13.4067 8.49334 13.0267 8.57001 12.62 8.57001C12.52 8.57001 12.4167 8.56334 12.31 8.55001C12.21 8.53668 12.1067 8.52001 12 8.50001V9.40001H21.06C21.32 9.40001 21.5433 9.49001 21.73 9.67001C21.91 9.85001 22 10.07 22 10.33ZM12.63 4.00001C12.3967 4.00001 12.1867 4.03668 12 4.11001C11.78 4.19668 11.5933 4.31668 11.44 4.47001C11.2933 4.62334 11.1767 4.80001 11.09 5.00001C11.0033 5.20668 10.96 5.42334 10.96 5.65001C10.96 5.88334 11.0033 6.10001 11.09 6.30001C11.1767 6.50001 11.2933 6.67668 11.44 6.83001C11.5933 6.97668 11.78 7.09668 12 7.19001C12.1867 7.27668 12.3967 7.32001 12.63 7.32001C12.8567 7.32001 13.07 7.27668 13.27 7.19001C13.47 7.09668 13.6467 6.97668 13.8 6.83001C13.9533 6.67668 14.0733 6.50001 14.16 6.30001C14.2533 6.10001 14.3 5.88334 14.3 5.65001C14.3 5.42334 14.2533 5.20668 14.16 5.00001C14.0733 4.80001 13.9533 4.62334 13.8 4.47001C13.6467 4.31668 13.47 4.19668 13.27 4.11001C13.07 4.03668 12.8567 4.00001 12.63 4.00001ZM7.78 10.18H9.66V8.62001H4.34V10.18H6.22V15.18H7.78M16.38 16.27V10.65H12V16.07C12 16.2967 11.92 16.49 11.76 16.65C11.5867 16.8167 11.39 16.9 11.17 16.9H8.92C9.00667 17.3467 9.16333 17.7633 9.39 18.15C9.61667 18.53 9.89 18.86 10.21 19.14C10.53 19.4133 10.8967 19.63 11.31 19.79C11.7167 19.93 12.1567 20 12.63 20C13.1433 20 13.6267 19.91 14.08 19.73C14.5333 19.53 14.9333 19.26 15.28 18.92C15.62 18.58 15.8867 18.1833 16.08 17.73C16.28 17.2767 16.38 16.79 16.38 16.27ZM20.75 15V10.65H17.63V16.36C17.7967 16.5267 17.9867 16.6533 18.2 16.74C18.4 16.82 18.6267 16.86 18.88 16.86C19.14 16.86 19.3833 16.81 19.61 16.71C19.8367 16.61 20.0333 16.4767 20.2 16.31C20.3733 16.1433 20.5067 15.9433 20.6 15.71C20.7 15.4833 20.75 15.2467 20.75 15Z" fill="white"/></svg>';
+            arcItem.href = 'https://teams.microsoft.com/l/chat/0/0?users=@teamsId';
+            arcItem.color = '#434AAF';
+            arcItems.push(arcItem);
+        }
+
+        var enableWhatsapp = @enableWhatsapp;
+        if (enableWhatsapp) {
+            var arcItem = {};
+            arcItem.id = 'msg-item-10';
+            arcItem.class = 'messanger msg-item-whatsapp';
+            arcItem.title = 'Chat on WhatsApp';
+            arcItem.icon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"></path></svg>';
+            arcItem.href = 'https://wa.me/@whatsappNumber';
+            arcItem.color = '#4EB625';
+            arcItems.push(arcItem);
+        }
+
+        var enableMessenger = @enableMessenger;
+        if (enableMessenger) {
+            var arcItem = {};
+            arcItem.id = 'msg-item-1';
+            arcItem.class = 'msg-item-facebook-messenger';
+            arcItem.title = 'Messenger';
+            arcItem.icon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 32C15.9 32-77.5 278 84.6 400.6V480l75.7-42c142.2 39.8 285.4-59.9 285.4-198.7C445.8 124.8 346.5 32 224 32zm23.4 278.1L190 250.5 79.6 311.6l121.1-128.5 57.4 59.6 110.4-61.1-121.1 128.5z"></path></svg>';
+            arcItem.href = 'https://m.me/@messengerId';
+            arcItem.color = '#567AFF';
+            arcItems.push(arcItem);
+        }
+
+        var enableSkype = @enableSkype;
+        if (enableSkype) {
+            var arcItem = {};
+            arcItem.id = 'msg-item-6';
+            arcItem.class = 'msg-item-skype';
+            arcItem.title = 'Chat on Skype';
+            arcItem.icon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M424.7 299.8c2.9-14 4.7-28.9 4.7-43.8 0-113.5-91.9-205.3-205.3-205.3-14.9 0-29.7 1.7-43.8 4.7C161.3 40.7 137.7 32 112 32 50.2 32 0 82.2 0 144c0 25.7 8.7 49.3 23.3 68.2-2.9 14-4.7 28.9-4.7 43.8 0 113.5 91.9 205.3 205.3 205.3 14.9 0 29.7-1.7 43.8-4.7 19 14.6 42.6 23.3 68.2 23.3 61.8 0 112-50.2 112-112 .1-25.6-8.6-49.2-23.2-68.1zm-194.6 91.5c-65.6 0-120.5-29.2-120.5-65 0-16 9-30.6 29.5-30.6 31.2 0 34.1 44.9 88.1 44.9 25.7 0 42.3-11.4 42.3-26.3 0-18.7-16-21.6-42-28-62.5-15.4-117.8-22-117.8-87.2 0-59.2 58.6-81.1 109.1-81.1 55.1 0 110.8 21.9 110.8 55.4 0 16.9-11.4 31.8-30.3 31.8-28.3 0-29.2-33.5-75-33.5-25.7 0-42 7-42 22.5 0 19.8 20.8 21.8 69.1 33 41.4 9.3 90.7 26.8 90.7 77.6 0 59.1-57.1 86.5-112 86.5z"></path></svg>';
+            arcItem.href = 'skype:@skypeId?chat';
+            arcItem.color = '#1C9CC5';
+            arcItems.push(arcItem);
+        }
+
+        var enableDirectContactUs = @enableDirectContactUs;
+        if (enableDirectContactUs) {
+            var arcItem = {};
+            arcItem.id = 'msg-item-11';
+            arcItem.class = 'messanger msg-item-comments';
+            arcItem.title = 'Submit Your Query';
+            arcItem.icon = '<svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M464 64H48C21.5 64 0 85.5 0 112v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zM48 96h416c8.8 0 16 7.2 16 16v41.4c-21.9 18.5-53.2 44-150.6 121.3-16.9 13.4-50.2 45.7-73.4 45.3-23.2.4-56.6-31.9-73.4-45.3C85.2 197.4 53.9 171.9 32 153.4V112c0-8.8 7.2-16 16-16zm416 320H48c-8.8 0-16-7.2-16-16V195c22.8 18.7 58.8 47.6 130.7 104.7 20.5 16.4 56.7 52.5 93.3 52.3 36.4.3 72.3-35.5 93.3-52.3 71.9-57.1 107.9-86 130.7-104.7v205c0 8.8-7.2 16-16 16z"></path></svg>';
+            arcItem.href = '@contactUsUrl';
+            arcItem.color = '#FF643A';
+            arcItems.push(arcItem);
+        }
+
+        var enableEmail = @enableEmail;
+        if (enableEmail) {
+            var arcItem = {};
+            arcItem.id = 'msg-item-7';
+            arcItem.class = 'msg-item-envelope';
+            arcItem.title = 'Email Us';
+            //arcItem.icon = '<svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M464 64H48C21.5 64 0 85.5 0 112v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zM48 96h416c8.8 0 16 7.2 16 16v41.4c-21.9 18.5-53.2 44-150.6 121.3-16.9 13.4-50.2 45.7-73.4 45.3-23.2.4-56.6-31.9-73.4-45.3C85.2 197.4 53.9 171.9 32 153.4V112c0-8.8 7.2-16 16-16zm416 320H48c-8.8 0-16-7.2-16-16V195c22.8 18.7 58.8 47.6 130.7 104.7 20.5 16.4 56.7 52.5 93.3 52.3 36.4.3 72.3-35.5 93.3-52.3 71.9-57.1 107.9-86 130.7-104.7v205c0 8.8-7.2 16-16 16z"></path></svg>';
+            arcItem.icon = '<svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M464 64H48C21.5 64 0 85.5 0 112v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zM48 96h416c8.8 0 16 7.2 16 16v41.4c-21.9 18.5-53.2 44-150.6 121.3-16.9 13.4-50.2 45.7-73.4 45.3-23.2.4-56.6-31.9-73.4-45.3C85.2 197.4 53.9 171.9 32 153.4V112c0-8.8 7.2-16 16-16zm416 320H48c-8.8 0-16-7.2-16-16V195c22.8 18.7 58.8 47.6 130.7 104.7 20.5 16.4 56.7 52.5 93.3 52.3 36.4.3 72.3-35.5 93.3-52.3 71.9-57.1 107.9-86 130.7-104.7v205c0 8.8-7.2 16-16 16z"></path></svg>';
+            arcItem.href = 'mailto:@emailId';
+            arcItem.color = '#FF643A';
+            arcItems.push(arcItem);
+        }
+
+        @{
+            var enableCall = arContactUsSettings.EnableCall ? "true" : "false";
+            var phoneNumber = arContactUsSettings.EnableCall ? arContactUsSettings.PhoneNumber : string.Empty;
+        }
+
+        var enableCall = @enableCall;
+        if (enableCall) {
+            var arcItem = {};
+            arcItem.id = 'msg-item-8';
+            arcItem.class = 'msg-item-phone';
+            arcItem.title = 'Call @phoneNumber';
+            arcItem.icon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"></path></svg>';
+            arcItem.href = 'tel:@phoneNumber';
+            arcItem.color = '#4EB625';
+            arcItems.push(arcItem);
+        }
+
+        var enableTelegram = @enableTelegram;
+        if (enableTelegram) {
+            var arcItem = {};
+            arcItem.id = 'msg-item-12';
+            arcItem.class = 'messanger msg-item-telegram-plane';
+            arcItem.title = 'Telegram';
+            arcItem.icon = '<svg xmlns = "http://www.w3.org/2000/svg" viewBox = "0 0 448 512" > <path fill="currentColor" d = "M446.7 98.6l-67.6 318.8c-5.1 22.5-18.4 28.1-37.3 17.5l-103-75.9-49.7 47.8c-5.5 5.5-10.1 10.1-20.7 10.1l7.4-104.9 190.9-172.5c8.3-7.4-1.8-11.5-12.9-4.1L117.8 284 16.2 252.2c-22.1-6.9-22.5-22.1 4.6-32.7L418.2 66.4c18.4-6.9 34.5 4.1 28.5 32.2z" > </path></svg>';
+            arcItem.href = 'https://t.me/@TelegramName';
+            arcItem.color = '#229ED9';
+            arcItems.push(arcItem);
+        }
+
+        var enableViber = @enableViber;
+        if (enableViber) {
+            var arcItem = {};
+            arcItem.id = 'msg-item-13';
+            arcItem.class = 'messanger msg-item-viber';
+            arcItem.title = 'Viber';
+            arcItem.icon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M444 49.9C431.3 38.2 379.9.9 265.3.4c0 0-135.1-8.1-200.9 52.3C27.8 89.3 14.9 143 13.5 209.5c-1.4 66.5-3.1 191.1 117 224.9h.1l-.1 51.6s-.8 20.9 13 25.1c16.6 5.2 26.4-10.7 42.3-27.8 8.7-9.4 20.7-23.2 29.8-33.7 82.2 6.9 145.3-8.9 152.5-11.2 16.6-5.4 110.5-17.4 125.7-142 15.8-128.6-7.6-209.8-49.8-246.5zM457.9 287c-12.9 104-89 110.6-103 115.1-6 1.9-61.5 15.7-131.2 11.2 0 0-52 62.7-68.2 79-5.3 5.3-11.1 4.8-11-5.7 0-6.9.4-85.7.4-85.7-.1 0-.1 0 0 0-101.8-28.2-95.8-134.3-94.7-189.8 1.1-55.5 11.6-101 42.6-131.6 55.7-50.5 170.4-43 170.4-43 96.9.4 143.3 29.6 154.1 39.4 35.7 30.6 53.9 103.8 40.6 211.1zm-139-80.8c.4 8.6-12.5 9.2-12.9.6-1.1-22-11.4-32.7-32.6-33.9-8.6-.5-7.8-13.4.7-12.9 27.9 1.5 43.4 17.5 44.8 46.2zm20.3 11.3c1-42.4-25.5-75.6-75.8-79.3-8.5-.6-7.6-13.5.9-12.9 58 4.2 88.9 44.1 87.8 92.5-.1 8.6-13.1 8.2-12.9-.3zm47 13.4c.1 8.6-12.9 8.7-12.9.1-.6-81.5-54.9-125.9-120.8-126.4-8.5-.1-8.5-12.9 0-12.9 73.7.5 133 51.4 133.7 139.2zM374.9 329v.2c-10.8 19-31 40-51.8 33.3l-.2-.3c-21.1-5.9-70.8-31.5-102.2-56.5-16.2-12.8-31-27.9-42.4-42.4-10.3-12.9-20.7-28.2-30.8-46.6-21.3-38.5-26-55.7-26-55.7-6.7-20.8 14.2-41 33.3-51.8h.2c9.2-4.8 18-3.2 23.9 3.9 0 0 12.4 14.8 17.7 22.1 5 6.8 11.7 17.7 15.2 23.8 6.1 10.9 2.3 22-3.7 26.6l-12 9.6c-6.1 4.9-5.3 14-5.3 14s17.8 67.3 84.3 84.3c0 0 9.1.8 14-5.3l9.6-12c4.6-6 15.7-9.8 26.6-3.7 14.7 8.3 33.4 21.2 45.8 32.9 7 5.7 8.6 14.4 3.8 23.6z"></path></svg>';
+            arcItem.href = 'viber://chat?number=%@ViberNumber';
+            arcItem.color = '#812379';
+            arcItems.push(arcItem);
+        }
+
+        var enableMeetingLink = @enableMeetingLink;
+        if (enableMeetingLink) {
+            var arcItem = {};
+            arcItem.id = 'msg-item-13';
+            arcItem.class = 'messanger msg-item-meeting';
+            arcItem.title = 'Book a Meeting';
+            arcItem.icon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 276 276"><path fill="currentColor" d="M181.75 231.75H193.625V131.125H184.875C184.25 134.875 183 138 181.125 140.5C179.25 143 177.375 144.875 174.875 146.125C172.375 147.375 169.25 148.625 166.125 149.25C163 149.875 159.875 149.875 156.75 149.875V159.25H181.75V231.75ZM250.5 25.5H225.5V6.75C225.5 3 223 0.5 219.25 0.5C215.5 0.5 213 3 213 6.75V25.5H63V6.75C63 3 60.5 0.5 56.75 0.5C53 0.5 50.5 3 50.5 6.75V25.5H25.5C11.75 25.5 0.5 36.75 0.5 50.5V88V100.5V250.5C0.5 264.25 11.75 275.5 25.5 275.5H250.5C264.25 275.5 275.5 264.25 275.5 250.5V100.5V88V50.5C275.5 36.75 264.25 25.5 250.5 25.5ZM263 250.5C263 257.375 257.375 263 250.5 263H25.5C18.625 263 13 257.375 13 250.5V100.5H263V250.5ZM263 88H13V50.5C13 43.625 18.625 38 25.5 38H50.5V56.75C50.5 60.5 53 63 56.75 63C60.5 63 63 60.5 63 56.75V38H213V56.75C213 60.5 215.5 63 219.25 63C223 63 225.5 60.5 225.5 56.75V38H250.5C257.375 38 263 43.625 263 50.5V88ZM122.375 217.375C120.5 219.25 118 220.5 115.5 221.125C113 221.75 110.5 222.375 107.375 222.375C100.5 222.375 95.5 220.5 92.375 216.125C88.625 211.75 86.75 206.75 86.75 200.5H74.875C74.875 205.5 75.5 210.5 76.75 214.25C78 218 80.5 221.75 83 224.25C86.125 226.75 89.25 229.25 93.625 230.5C97.375 231.75 102.375 232.375 107.375 232.375C111.75 232.375 116.125 231.75 120.5 230.5C124.875 229.25 128 227.375 131.125 224.875C134.25 222.375 136.75 219.25 138.625 215.5C140.5 211.75 141.125 207.375 141.125 202.375C141.125 196.125 139.875 191.125 136.75 186.75C133.625 182.375 129.25 179.25 123.625 178C127.375 176.125 130.5 173.625 133 169.875C135.5 166.125 136.75 162.375 136.75 158C136.75 153.625 136.125 149.25 134.25 146.125C133 143 130.5 139.875 128 138C125.5 136.125 122.375 134.25 118.625 133C114.875 131.75 111.125 131.125 106.75 131.125C101.75 131.125 97.375 131.75 93.625 133.625C89.875 135.5 86.75 137.375 84.25 140.5C81.75 143.625 79.875 146.75 78.625 150.5C77.375 154.25 76.75 158.625 76.125 163.625H88C88 160.5 88.625 158 89.25 155.5C89.875 153 91.125 150.5 92.375 148.625C93.625 146.75 95.5 144.875 98 143.625C100.5 142.375 103 141.75 106.125 141.75C111.125 141.75 115.5 143 118.625 145.5C121.75 148 123.625 152.375 123.625 157.375C123.625 159.875 123 162.375 122.375 164.25C121.125 166.125 119.875 168 118.625 169.25C117.375 170.5 114.875 171.75 113 172.375C110.5 173 108.625 173.625 106.125 173.625H103.625C103 173.625 103 173.625 102.375 173.625C101.75 173.625 101.75 173.625 101.125 173.625V183.625C103.625 183.625 105.5 183 108 183C111.125 183 113.625 183.625 116.125 184.25C118.625 184.875 121.125 186.125 122.375 188C124.25 189.875 125.5 191.75 126.75 194.25C128 196.75 128.625 199.25 128.625 202.375C128.625 205.5 128 208 126.75 210.5C126.125 213.625 124.25 216.125 122.375 217.375Z" fill = "white" /> ';
+            arcItem.href = '@meetingLink';
+            arcItem.color = '#00A0DB';
+            arcItems.push(arcItem);
+        }
+
+        jQuery('#arcontactus').contactUs({
+            items: arcItems
+        });
+
+        if (enableTawk) {
+            Tawk_API.onLoad = function () {
+                if (!Tawk_API.isChatOngoing()) {
+                    Tawk_API.hideWidget();
+                } else {
+                    jQuery('#arcontactus').contactUs('hide');
+                }
+            };
+            Tawk_API.onChatMinimized = function () {
+                Tawk_API.hideWidget();
+                jQuery('#arcontactus').contactUs('show');
+            };
+            Tawk_API.onChatEnded = function () {
+                Tawk_API.hideWidget();
+                jQuery('#arcontactus').contactUs('show');
+            };
+
+            (function () {
+                var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+                s1.async = true;
+                s1.src = '@tawkSrc';
+                s1.charset = 'UTF-8';
+                s1.setAttribute('crossorigin', '*');
+                s0.parentNode.insertBefore(s1, s0);
+            })();
+
+            var tawkToInterval;
+
+            function checkTawkIsOpened() {
+                if (Tawk_API.isChatMinimized()) {
+                    Tawk_API.hideWidget();
+                    jQuery('#arcontactus').contactUs('show');
+                    clearInterval(tawkToInterval);
+                }
+            }
+        }
+    });
+</script>

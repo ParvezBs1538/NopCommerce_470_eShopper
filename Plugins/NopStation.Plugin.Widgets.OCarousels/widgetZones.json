@@ -1,0 +1,50 @@
+[
+  {
+    "Name": "home_page_top",
+    "Value": 1
+  },
+  {
+    "Name": "home_page_before_categories",
+    "Value": 2
+  },
+  {
+    "Name": "home_page_before_products",
+    "Value": 3
+  },
+  {
+    "Name": "home_page_before_best_sellers",
+    "Value": 4
+  },
+  {
+    "Name": "home_page_before_news",
+    "Value": 5
+  },
+  {
+    "Name": "home_page_before_poll",
+    "Value": 6
+  },
+  {
+    "Name": "home_page_bottom",
+    "Value": 7
+  },
+  {
+    "Name": "productdetails_bottom",
+    "Value": 8
+  },
+  {
+    "Name": "blogpost_page_after_comments",
+    "Value": 9
+  },
+  {
+    "Name": "bloglist_page_before_posts",
+    "Value": 10
+  },
+  {
+    "Name": "bloglist_page_after_posts",
+    "Value": 11
+  },
+  {
+    "Name": "berry_before_footer_nav",
+    "Value": 12
+  }
+]

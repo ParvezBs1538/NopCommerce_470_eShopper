@@ -1,0 +1,13 @@
+﻿@model NopStation.Plugin.Payments.EveryPay.Models.PaymentInfoModel
+
+@{
+    if (Model.IsSandbox)
+    {
+        <script asp-location="Footer" src="https://sandbox-js.everypay.gr/v3"></script>
+    }
+    else
+    {
+        <script asp-location="Footer" src="https://js.everypay.gr/v3"></script>
+    }
+}
+

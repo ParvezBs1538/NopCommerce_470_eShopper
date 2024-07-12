@@ -1,0 +1,153 @@
+﻿@model PopupModel
+
+@{
+    var column = Model.ColumnType == ColumnType.DoubleColumn ? "double-column" : "single-column";
+}
+
+<div style="display: none" class="popup-modal-content" id="popup-modal-@Model.Id">
+    <div class="modal-content @column @Model.CssClass">
+        <span class="close-button">&times;</span>
+        <div class="column-1">
+            @if (Model.Column1.ContentType == ContentType.Image)
+            {
+                var picture = Model.Column1.Picture;
+
+                if (!string.IsNullOrWhiteSpace(Model.Column1.PopupUrl))
+                {
+                    <div class="image">
+                        <a href="@Model.Column1.PopupUrl">
+                            <img src="@picture.ImageUrl" alt="@picture.AlternateText" title="@picture.Title">
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div class="image">
+                        <img src="@picture.ImageUrl" alt="@picture.AlternateText" title="@picture.Title">
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="text">
+                    @Html.Raw(Model.Column1.Text)
+                </div>
+            }
+        </div>
+        @if (Model.ColumnType == ColumnType.DoubleColumn)
+        {
+            <div class="column-2">
+                @if (Model.Column2.ContentType == ContentType.Image)
+                {
+                    var picture = Model.Column2.Picture;
+                    if (!string.IsNullOrWhiteSpace(Model.Column2.PopupUrl))
+                    {
+                        <div class="image">
+                            <a href="@Model.Column2.PopupUrl">
+                                <img src="@picture.ImageUrl" alt="@picture.AlternateText" title="@picture.Title">
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="image">
+                            <img src="@picture.ImageUrl" alt="@picture.AlternateText" title="@picture.Title">
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text">
+                        @Html.Raw(Model.Column2.Text)
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    @if (Model.AllowCustomerToSelectDoNotShowThisPopupAgain)
+    {
+        var ticked = Model.PreSelectedDoNotShowThisPopupAgain ? "checked=checked" : "";
+        <div class="do-not-show-popup">
+            <input type="checkbox" id="hide-popup-@Model.Id" @ticked>
+            <label for="hide-popup-@Model.Id">@T("NopStation.Popups.Popups.HideThisPopup")</label>
+        </div>
+    }
+
+    <script asp-location="Footer">
+        function toggleModal_Popup_@(Model.Id)(prop) {
+            if (prop) {
+                $("#popup-modal-@Model.Id").dialog("open");
+            }
+            else {
+                $("#popup-modal-@Model.Id").dialog('close');
+            }
+        }
+
+        $(document).ready(function () {
+
+            $('#popup-modal-@Model.Id .close-button').click(function () {
+                        toggleModal_Popup_@(Model.Id)(false);
+
+                console.log("$('#hide-popup-@Model.Id').is(':checked')")
+                console.log($('#hide-popup-@Model.Id').is(':checked'))
+
+                if ($('#hide-popup-@Model.Id').is(':checked')) {
+                    sessionStorage.setItem("hide-popup-@Model.Id", true);
+                }
+            });
+
+            $("#popup-modal-@Model.Id").dialog({
+                modal: true,
+                autoOpen: false,
+                classes: {
+                    "ui-dialog": "popup-modal",
+                    'ui-dialog-titlebar-close': 'hidden'
+                },
+                width: $("#popup-modal-@Model.Id > .modal-content").hasClass("single-column") ? 450 : 600,
+                draggable: false,
+                position: { my: "center", at: "center", of: window },
+                open: function (event, ui) {
+                    $(".ui-dialog-titlebar", $(this).parent())
+                        .hide();
+                    $("body").addClass("stop-scrolling-@Model.Id");
+                },
+                close: function (event, ui) {
+                    $("body").removeClass("stop-scrolling-@Model.Id");
+                }
+            });
+
+        @if (Model.OpenPopupOnLoadPage)
+        {
+            <text>
+                            if (!sessionStorage.getItem("hide-popup-@Model.Id")) {
+                    setTimeout(function () {
+                                    toggleModal_Popup_@(Model.Id)(true);
+                    }, @Model.DelayTime);
+                }
+            </text>
+        }
+                });
+    </script>
+</div>
+
+@if (!Model.OpenPopupOnLoadPage || Model.EnableStickyButton)
+{
+    var position = Model.StickyButtonPosition == Position.Left ? "sticky-left" : "sticky-right";
+
+    <button type="button" class="@position" id="sticky-button-@Model.Id" style="border-bottom-color: @Model.StickyButtonColor">
+        <span>
+            @(string.IsNullOrWhiteSpace(Model.StickyButtonText) ? Model.Name : Model.StickyButtonText)
+        </span>
+    </button>
+
+    <script asp-location="Footer">
+        $(document).ready(function () {
+            $('#sticky-button-@Model.Id').click(function () {
+                        toggleModal_Popup_@(Model.Id)(true);
+            });
+            $('.sticky-left').appendTo('.sticky-container-left');
+            $('.sticky-right').appendTo('.sticky-container-right');
+        });
+    </script>
+}

@@ -1,0 +1,5 @@
+﻿@model PublicInfoModel
+
+@Html.Raw(Model.Script)
+<div class="page_type_gtm" style="display: none;" data-page-type="@ViewData["pageType"]"></div>
+<script asp-location="Footer" src="~/Plugins/NopStation.Plugin.Widgets.GoogleTagManager/Content/js/ns.gtm.js"></script>

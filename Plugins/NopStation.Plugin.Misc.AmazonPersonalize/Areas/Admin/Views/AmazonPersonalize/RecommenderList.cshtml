@@ -1,0 +1,167 @@
+﻿@model RecommenderSearchModel
+
+@inject AdminAreaSettings adminAreaSettings
+
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.AmazonPersonalize.Recommender.RecommenderList").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("AmazonPersonalize.Recommenders");
+}
+<form asp-controller="AmazonPersonalize" asp-action="RecommenderList" method="post">
+    <div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.AmazonPersonalize.Recommender.RecommenderList")
+    </h1>
+</div>
+</form>
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "recommender-grid",
+                            UrlRead = new DataUrl("RecommenderList", "AmazonPersonalize", null),
+                            SearchButtonId = "search-recommender",
+                            Paging = false,
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(RecommenderModel.Name))
+                                {
+                                    Title = T("Admin.NopStation.AmazonPersonalize.Recommender.Fields.Name").Text,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(RecommenderModel.DatasetGroupArn))
+                                {
+                                    Title = T("Admin.NopStation.AmazonPersonalize.Recommender.Fields.DatasetGroupArn").Text,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(RecommenderModel.RecommenderArn))
+                                {
+                                    Title = T("Admin.NopStation.AmazonPersonalize.Recommender.Fields.RecommenderArn").Text,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(RecommenderModel.Status))
+                                {
+                                    Title = T("Admin.NopStation.AmazonPersonalize.Recommender.Fields.Status").Text,
+                                    Width = "80",
+                                    Render = new RenderCustom("renderColumnRecommenderStatus")
+                                },
+                                new ColumnProperty(nameof(RecommenderModel.RecipeArn))
+                                {
+                                    Title = T("Admin.NopStation.AmazonPersonalize.Recommender.Fields.RecipeArn").Text,
+                                    Width = "80"
+                                },
+                                new ColumnProperty(nameof(RecommenderModel.CreationDateTime))
+                                {
+                                    Title = T("Admin.NopStation.AmazonPersonalize.Recommender.Fields.CreationDateTime").Text,
+                                    Width = "80",
+                                    Render = new RenderDate()
+                                },
+                                new ColumnProperty(nameof(RecommenderModel.Status))
+                                {
+                                    Title = T("Admin.NopStation.AmazonPersonalize.Recommender.Fields.StartOrStop").Text,
+                                    Width = "80",
+                                    Render = new RenderCustom("renderColumnRecommenderStartOrStop")
+                                }
+                            }
+                        })
+                         <script>
+                            function renderColumnRecommenderStatus(data, type, row, meta) {
+                                var color;
+                                switch (row.Status) {
+                                case 'STOP PENDING':
+                                    color = 'yellow';
+                                    break;
+                                case 'STOP IN_PROGRESS':
+                                    color = 'yellow';
+                                    break;
+                                case 'ACTIVE':
+                                    color = 'green';
+                                    break;
+                                case 'INACTIVE':
+                                    color = 'red';
+                                    break;
+                                case 'START PENDING':
+                                    color = 'blue';
+                                    break;
+                                case 'START IN_PROGRESS':
+                                    color = 'blue';
+                                    break;
+                                case 'UPDATE IN_PROGRESS':
+                                    color = 'blue';
+                                    break;
+                                }
+                                return '<span class="grid-report-item ' + color + '">' + data + '</span >';
+                            }
+                           function renderColumnRecommenderStartOrStop(data, type, row, meta) {
+                               if(row.Status === 'ACTIVE') {
+                                   return '<button type="submit" class="btn btn-default" onclick="StopRecommender(\'' + row.RecommenderArn + '\')"><i class="far fa-stop-circle"></i>@T("Admin.NopStation.AmazonPersonalize.Recommender.Stop").Text</button>';
+                               } else if (row.Status === 'INACTIVE')
+                               {
+                                   return '<button type="submit" class="btn btn-default" onclick="StartRecommender(\'' + row.RecommenderArn + '\')"><i class="far fa-play-circle"></i>@T("Admin.NopStation.AmazonPersonalize.Recommender.Start").Text</button>';
+                               } else {
+                                   return '@T("Admin.NopStation.AmazonPersonalize.Recommender.Operation.Message").Text';
+                               }
+                               
+                            }
+                             function StartRecommender(arnName, action) {
+                                var postData = {
+                                        recommenderarn: arnName
+                                    };
+                                addAntiForgeryToken(postData);
+                                $.ajax({
+                                    cache: false,
+                                    type: "POST",
+                                    url: "@(Url.Action("StartRecommender"))",
+                                    data: postData,
+                                    success: function (data, textStatus, jqXHR) {
+                                        if (!data.result) {
+                                            $("#recommenderAlert").click();
+                                            return;
+                                        }
+                                        updateTable('#recommender-grid');
+                                    },
+                                    error: function (jqXHR, textStatus, errorThrown) {
+                                        $("#recommenderAlert").click();
+                                    }
+                                });
+                            };
+                            function StopRecommender(arnName, action) {
+                                var postData = {
+                                    recommenderarn: arnName
+                                };
+                                addAntiForgeryToken(postData);
+                                $.ajax({
+                                    cache: false,
+                                    type: "POST",
+                                    url: "@(Url.Action("StopRecommender"))",
+                                    data: postData,
+                                    success: function (data, textStatus, jqXHR) {
+                                        if (!data.result) {
+                                            $("#recommenderAlert").click();
+                                            return;
+                                        }
+                                        updateTable('#recommender-grid');
+                                    },
+                                    error: function (jqXHR, textStatus, errorThrown) {
+                                        $("#recommenderAlert").click();
+                                    }
+                                });
+                            };
+                            
+                            </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<nop-alert asp-alert-id="recommenderAlert" asp-alert-message="@T("Admin.NopStation.AmazonPersonalize.Recommender.Alert.Error")" />

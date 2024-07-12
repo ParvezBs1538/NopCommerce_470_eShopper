@@ -1,0 +1,87 @@
+﻿@model ConfigurationModel
+
+@{ 
+    ViewBag.PageTitle = T("Admin.NopStation.WebApiNotification.Configuration").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("WebApiNotifications"); 
+}
+
+<form asp-controller="WebApiNotification" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.WebApiNotification.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="GoogleConsoleApiAccessKey_OverrideForStore" asp-input="GoogleConsoleApiAccessKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="GoogleConsoleApiAccessKey" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="GoogleConsoleApiAccessKey" />
+                                    <span asp-validation-for="GoogleConsoleApiAccessKey"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="ApplicationTypeId_OverrideForStore" asp-input="ApplicationTypeId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="ApplicationTypeId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-select asp-for="ApplicationTypeId" asp-items="Model.AvailableApplicationTypes" />
+                                    <span asp-validation-for="ApplicationTypeId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="PushKitClientId_OverrideForStore" asp-input="PushKitClientId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="PushKitClientId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="PushKitClientId" />
+                                    <span asp-validation-for="PushKitClientId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="PushKitClientSecret_OverrideForStore" asp-input="PushKitClientSecret" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="PushKitClientSecret" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="PushKitClientSecret" />
+                                    <span asp-validation-for="PushKitClientSecret"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="PushKitAppId_OverrideForStore" asp-input="PushKitAppId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="PushKitAppId" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor-check asp-for="PushKitAppId" />
+                                    <span asp-validation-for="PushKitAppId"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

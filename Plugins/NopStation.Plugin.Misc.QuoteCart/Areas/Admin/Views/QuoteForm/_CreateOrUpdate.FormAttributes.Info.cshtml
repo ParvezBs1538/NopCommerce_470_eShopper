@@ -1,0 +1,74 @@
+@model QuoteFormModel
+
+<div class="cards-group">
+    <div class="card card-default">
+        <div class="card-body">
+            @await Html.PartialAsync("Table", new DataTablesModel
+            {
+                Name = "formAttributeMappings-grid",
+                UrlRead = new DataUrl("FormAttributeMappingList", "QuoteForm", new RouteValueDictionary { [nameof(Model.FormAttributeMappingSearchModel.FormId)] = Model.FormAttributeMappingSearchModel.FormId }),
+                Length = Model.FormAttributeMappingSearchModel.PageSize,
+                LengthMenu = Model.FormAttributeMappingSearchModel.AvailablePageSizes,
+                ColumnCollection = 
+                [
+                    new ColumnProperty(nameof(FormAttributeMappingModel.FormAttribute))
+                    {
+                        Title = T("Admin.NopStation.Plugin.Misc.QuoteCart.Forms.FormAttributes.Fields.Attribute").Text,
+                        Width = "200"
+                    },
+                    new ColumnProperty(nameof(FormAttributeMappingModel.TextPrompt))
+                    {
+                        Title = T("Admin.NopStation.Plugin.Misc.QuoteCart.Forms.FormAttributes.Fields.TextPrompt").Text,
+                        Width = "150"
+                    },
+                    new ColumnProperty(nameof(FormAttributeMappingModel.IsRequired))
+                    {
+                        Title = T("Admin.NopStation.Plugin.Misc.QuoteCart.Forms.FormAttributes.Fields.IsRequired").Text,
+                        Width = "100",
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        Render = new RenderBoolean()
+                    },
+                    new ColumnProperty(nameof(FormAttributeMappingModel.AttributeControlType))
+                    {
+                        Title = T("Admin.NopStation.Plugin.Misc.QuoteCart.Forms.FormAttributes.Fields.AttributeControlType").Text,
+                        Width = "250"
+                    },
+                    new ColumnProperty(nameof(FormAttributeMappingModel.DisplayOrder))
+                    {
+                        Title = T("Admin.NopStation.Plugin.Misc.QuoteCart.Forms.FormAttributes.Fields.DisplayOrder").Text,
+                        Width = "150",
+                        ClassName =  NopColumnClassDefaults.CenterAll
+                    },
+                    new ColumnProperty(nameof(FormAttributeMappingModel.ValidationRulesString))
+                    {
+                        Title = T("Admin.NopStation.Plugin.Misc.QuoteCart.Forms.FormAttributes.ValidationRules").Text,
+                        Width = "150",
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        Encode = false
+                    },
+                    new ColumnProperty(nameof(FormAttributeMappingModel.ConditionString))
+                    {
+                        Title = T("Admin.NopStation.Plugin.Misc.QuoteCart.Forms.FormAttributes.Condition").Text,
+                        Width = "150",
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        Encode = false
+                    },
+                    new ColumnProperty(nameof(FormAttributeMappingModel.Id))
+                    {
+                        Title = T("Admin.Common.Edit").Text,
+                        Width = "100",
+                        ClassName =  NopColumnClassDefaults.Button,
+                        Render = new RenderButtonEdit(new DataUrl("~/Admin/QuoteForm/FormAttributeMappingEdit/"))
+                    }
+                ]
+            })
+        </div>
+
+        <div class="card-footer">
+            <a asp-action="FormAttributeMappingCreate" asp-route-formId="@Model.Id" class="btn btn-primary">
+                <i class="fas fa-plus-square"></i>
+                @T("Admin.NopStation.Plugin.Misc.QuoteCart.Forms.FormAttributes.AddNew")
+            </a>
+        </div>
+    </div>
+</div>

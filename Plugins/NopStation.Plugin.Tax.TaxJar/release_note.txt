@@ -1,0 +1,2 @@
+﻿4.60.1.0: Initial release for nopCommerce 4.60
+4.60.1.1: Fixed tax calculation based on tax settings

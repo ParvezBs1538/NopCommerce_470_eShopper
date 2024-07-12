@@ -1,0 +1,178 @@
+@model TicketModel
+
+<div class="card-body">
+    @if (Model.Id > 0)
+    {
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="TicketGuid" />
+            </div>
+            <div class="col-md-9">
+                <div class="form-text-row">@Model.TicketGuid</div>
+            </div>
+        </div>
+    }
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Name" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Name" asp-required="true" />
+            <span asp-validation-for="Name"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Email" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Email" asp-required="true" />
+            <span asp-validation-for="Email"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="PhoneNumber" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="PhoneNumber" asp-required="true" />
+            <span asp-validation-for="PhoneNumber"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Subject" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Subject" asp-required="true" />
+            <span asp-validation-for="Subject"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Body" />
+        </div>
+        <div class="col-md-9">
+            <nop-textarea asp-for="Body" asp-required="true"></nop-textarea>
+            <span asp-validation-for="Body"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="CustomerId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="CustomerId" />
+            <span asp-validation-for="CustomerId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DepartmentId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="DepartmentId" asp-items="Model.AvailableDepartments" />
+            <span asp-validation-for="DepartmentId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="StaffId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="StaffId" asp-items="Model.AvailableStaffs" />
+            <span asp-validation-for="StaffId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="CategoryId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="CategoryId" asp-items="Model.AvailableCategories" />
+            <span asp-validation-for="CategoryId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="StoreId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="StoreId" asp-items="Model.AvailableStores" />
+            <span asp-validation-for="StoreId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="StatusId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="StatusId" asp-items="Model.AvailableStatuses" />
+            <span asp-validation-for="StatusId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="PriorityId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="PriorityId" asp-items="Model.AvailablePriorities" />
+            <span asp-validation-for="PriorityId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductId" />
+            <span asp-validation-for="ProductId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="OrderId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="OrderId" />
+            <span asp-validation-for="OrderId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DownloadId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DownloadId" />
+            <span asp-validation-for="DownloadId"></span>
+        </div>
+    </div>
+
+    @if (Model.Id > 0)
+    {
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="CreatedByCustomerId" />
+            </div>
+            <div class="col-md-9">
+                <div class="form-text-row">@Model.CreatedByCustomerEmail</div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="CreatedOn" />
+            </div>
+            <div class="col-md-9">
+                <div class="form-text-row">@Model.CreatedOn</div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="UpdatedOn" />
+            </div>
+            <div class="col-md-9">
+                <div class="form-text-row">@Model.UpdatedOn</div>
+            </div>
+        </div>
+    }
+</div>

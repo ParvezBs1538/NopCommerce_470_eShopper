@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Nop-Station Merge Guest Orders",
+  "SystemName": "NopStation.Plugin.Misc.MergeGuestOrder",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Misc.MergeGuestOrder.dll",
+  "Description": "This plugin allows to merge guest orders into a customer's order list.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

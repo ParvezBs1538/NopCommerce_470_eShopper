@@ -1,0 +1,118 @@
+﻿@model NopStation.Plugin.Misc.AjaxFilter.Models.PublicInfoModel
+
+<form id="ajaxfilter-form" action="">
+    <input type="hidden" name="CategoryId" id="CategoryId" value=@(Model.CategoryId)>
+    <input type="hidden" name="ManufacturerId" id="ManufacturerId" value=@(Model.ManufacturerId)>
+    <input type="hidden" name="EnableManufacturersFilter" value="@(Model.EnableManufacturersFilter.ToString())">
+    <input type="hidden" name="EnableVendorsFilter" value="@(Model.EnableVendorsFilter.ToString())">
+    <input type="hidden" name="EnableProductTagsFilter" value="@(Model.EnableProductTagsFilter.ToString())">
+    <input type="hidden" name="EnablePriceRangeFilter" value="@(Model.EnablePriceRangeFilter.ToString())">
+    <input type="hidden" name="EnableSpecificationsFilter" value="@(Model.EnableSpecificationsFilter.ToString())">
+    <input type="hidden" name="EnableProductAttributeFilter" value="@(Model.EnableProductAttributeFilter.ToString())">
+    <input type="hidden" name="ViewMode" id="ViewMode" value="@(Model.ViewMode)">
+    <input type="hidden" name="PageSize" id="PageSize" value="@(Model.PageSize)">
+    <input type="hidden" name="SortOption" id="SortOption" value="@(Model.SortOption)">
+    <input type="hidden" name="PageNumber" id="PageNumber" value="@(Model.PageNumber)">
+    <input type="hidden" name="RequestPath" id="RequestPath" value="@(Model.RequestPath)">
+    <input type="hidden" name="ManufacturerOptionIds" id="ManufacturerOptionIds" value="@(Model.ManufacturerIds)">
+    <input type="hidden" name="ProductAttributeOptionIds" id="ProductAttributeOptionIds" value="@(Model.ProductAttributeOptionIds)">
+    <input type="hidden" name="SpecificationOptionIds" id="SpecificationOptionIds" value="@(Model.SpecificationOptionIds)">
+    <input type="hidden" name="DiscountedProduct" id="DiscountedProduct" value="@(Model.DiscountedProduct)">
+    <input type="hidden" name="FreeShipping" id="FreeShipping" value="@(Model.FreeShipping)">
+    <input type="hidden" name="TaxExempt" id="TaxExempt" value="@(Model.TaxExempt)">
+    <input type="hidden" name="NewProduct" id="NewProduct" value="@(Model.NewProduct)">
+    <input type="hidden" name="ProductTagIds" id="ProductTagIds" value="@(Model.ProductTagIds)">
+
+
+    <input type="hidden" name="Count" id="Count" value="@(Model.Count)">
+    <div class="filter-title accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+        <h2 data-toggle="collapse" data-parent="#accordionEx" data-target="#collapseOne11" aria-expanded="false" aria-controls="collapseOne11">@T("NopStation.Plugin.Misc.AjaxFilter.Filters.ProductFilter")  <i class="fa fa-angle-down rotate-icon float-right"></i> </h2>
+    </div>
+    <div class="ajax-filter-section collapse show" id="collapseOne11" role="tabpanel" aria-labelledby="headingOne1" data-parent="#accordionEx">
+        <div class="filter-result-count">
+            <div class="count-clear">
+                <p>@Model.Count Results</p>
+                <div onclick="clearAllFilters()" class="clear-filter-all">Clear all filters</div>
+            </div>
+
+            <div class="d-flex">
+                <div class="applied-filters"></div>
+                @if (!string.IsNullOrWhiteSpace(Model.SpecificationOptionIds) || !string.IsNullOrWhiteSpace(Model.ManufacturerIds))
+                {
+                    <a href="#" class="clearAllfilters" onclick="AjaxFilter.clearAll(this)">@*@T("NopStation.Plugin.Misc.AjaxFilter.Filters.ClearAll")*@ <i class="fa fa-undo"></i></a>
+                }
+            </div>
+        </div>
+        @{
+            if (Model.EnablePriceRangeFilter)
+            {
+                if (Model.AjaxFilterParentCategoryModel.EnablePriceRangeFiltering)
+                    @await Html.PartialAsync("FilterPriceRange.cshtml", Model.FilterPriceModel)
+            }
+
+            if (Model.EnableProductAttributeFilter)
+            {
+                @await Html.PartialAsync("FilterAttributes.cshtml", Model.AttributesModel)
+            }
+
+            if (Model.EnableManufacturersFilter)
+            {
+                if (Model.AjaxFilterParentCategoryModel.EnableManufactureFiltering)
+                    @await Html.PartialAsync("FilterManufacturers.cshtml", Model.ManufacturerModel)
+            }
+
+            if (Model.EnableSpecificationsFilter)
+            {
+                if (Model.AjaxFilterParentCategoryModel.EnableSpecificationAttributeFiltering)
+                    @await Html.PartialAsync("FilterSpecifications.cshtml", Model.SpecificationModel)
+            }
+
+            if (Model.EnableVendorsFilter)
+            {
+                @await Html.PartialAsync("FilterVendors.cshtml", Model.VendorsModel)
+            }
+
+            if (Model.EnableProductRating)
+            {
+                @await Html.PartialAsync("FilterProductRating.cshtml", Model.FilterRatingModel)
+            }
+
+            if (Model.EnableMiscFilter)
+            {
+                @await Html.PartialAsync("FilterProducts.cshtml", Model.FilterProductsModel)
+            }
+
+            if (Model.EnableProductTagsFilter)
+            {
+                @await Html.PartialAsync("FilterProductTags.cshtml", Model.ProductTagsModel)
+            }
+        }
+    </div>
+</form>
+
+<script asp-location="Footer">
+    AjaxFilterChildren.init();
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('.filter-section').accordion({
+            collapsible: true,
+            animate: 200,
+            heightStyle: "content"
+        });
+        if ($(window).width() < 1000) {
+            $('.filter-section').accordion({
+                collapsible: true,
+                active: false,
+                animate: 200
+            })
+        }
+        AjaxFilter.addSelectedFilterListOnReload();
+    });
+
+    function clearAllFilters() {
+        window.location.href = window.location.origin + window.location.pathname;
+
+    }
+</script>

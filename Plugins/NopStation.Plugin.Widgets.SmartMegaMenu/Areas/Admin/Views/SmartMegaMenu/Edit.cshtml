@@ -1,0 +1,45 @@
+﻿@model MegaMenuModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.SmartMegaMenu.MegaMenus.EditDetails").Text;
+    NopHtml.SetActiveMenuItemSystemName("SmartMegaMenu.Menus");
+
+    NopHtml.AddCssFileParts("~/Plugins/NopStation.Plugin.Widgets.SmartMegaMenu/Contents/css/jqtree.css");
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, $"~/Plugins/NopStation.Plugin.Widgets.SmartMegaMenu/Contents/scripts/tree.jquery.js");
+}
+
+<link rel="stylesheet" href="~/lib_npm/farbstastic/farbtastic.css" />
+<script src="~/lib_npm/farbstastic/farbtastic.min.js" asp-location="Head"></script>
+
+@* register CSS and JS *@
+<link rel="stylesheet" href="~/lib_npm/fine-uploader/fine-uploader/fine-uploader.min.css" />
+<script asp-exclude-from-bundle="true" src="~/lib_npm/fine-uploader/jquery.fine-uploader/jquery.fine-uploader.min.js" asp-location="Footer"></script>
+
+<form asp-controller="SmartMegaMenu" asp-action="Edit" method="post" id="smart-megamenu-form">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.SmartMegaMenu.MegaMenus.EditDetails")
+            <small>
+                <i class="fas fa-arrow-circle-left"></i>
+                <a asp-action="List">@T("Admin.NopStation.SmartMegaMenu.MegaMenus.BackToList")</a>
+            </small>
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+            <button type="submit" name="save-continue" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.SaveContinue")
+            </button>
+            <button type="button" id="menu-delete" class="btn btn-danger">
+                <i class="far fa-trash-alt"></i>
+                @T("Admin.Common.Delete")
+            </button>
+        </div>
+    </div>
+    @await Html.PartialAsync("_CreateOrUpdate", Model)
+</form>
+
+<nop-delete-confirmation asp-model-id="@Model.Id" asp-button-id="menu-delete" asp-action="Delete" />

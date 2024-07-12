@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "bKash (Manual)",
+  "SystemName": "NopStation.Plugin.Payments.BkashManual",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.BkashManual.dll",
+  "Description": "This plugin enables bKash manual payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

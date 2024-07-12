@@ -1,0 +1,87 @@
+﻿@model MapShipmentFieldsModel
+
+@{
+    //Layout = "_AdminPopupLayout";
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.ZohoCRM.MapShipmentFields").Text;
+    NopHtml.SetActiveMenuItemSystemName("ZohoCRM.Configuration");
+}
+
+@if (Model.CloseWindow)
+{
+    <script>
+        window.close();
+    </script>
+}
+
+<form asp-controller="ZohoCRM" asp-action="MapShipmentFields">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.ZohoCRM.MapShipmentFields")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default card-popup">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <nop-label asp-for="OrderField" />
+                                </div>
+                                <div class="col-sm-8">
+                                    <input asp-for="OrderField" class="form-control text-box single-line" readonly />
+                                    <span asp-validation-for="OrderField"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <nop-label asp-for="TrackingNumberField" />
+                                </div>
+                                <div class="col-sm-8">
+                                    <nop-select asp-for="TrackingNumberField" asp-items="@Model.AvailableFields" />
+                                    <span asp-validation-for="TrackingNumberField"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <nop-label asp-for="WeightField" />
+                                </div>
+                                <div class="col-sm-8">
+                                    <nop-select asp-for="WeightField" asp-items="@Model.AvailableFields" />
+                                    <span asp-validation-for="WeightField"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <nop-label asp-for="ShippedDateUtcField" />
+                                </div>
+                                <div class="col-sm-8">
+                                    <nop-select asp-for="ShippedDateUtcField" asp-items="@Model.AvailableFields" />
+                                    <span asp-validation-for="ShippedDateUtcField"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <nop-label asp-for="DeliveryDateUtcField" />
+                                </div>
+                                <div class="col-sm-8">
+                                    <nop-select asp-for="DeliveryDateUtcField" asp-items="@Model.AvailableFields" />
+                                    <span asp-validation-for="DeliveryDateUtcField"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

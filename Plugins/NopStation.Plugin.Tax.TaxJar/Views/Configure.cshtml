@@ -1,0 +1,195 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.TaxJar.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("TaxJar.Configuration");
+}
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.CountryId)").change(function () {
+            var selectedItem = $(this).val();
+            var ddlStates = $("#@Html.IdFor(model => model.StateId)");
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.Action("GetStatesByCountryId", "Country"))",
+                data: {
+                    "countryId": selectedItem,
+                    "addSelectStateItem": "false"
+                },
+                success: function (data, textStatus, jqXHR) {
+                    ddlStates.html('');
+                    $.each(data,
+                        function (id, option) {
+                            ddlStates.append($('<option></option>').val(option.id).html(option.name));
+                        });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $("#statesAlert").click();
+                }
+            });
+        });
+    });
+</script>
+<form asp-controller="TaxJar" asp-action="Configure" method="post">
+    <div class="content">
+        <div class="form-horizontal">
+            <div class="content-header clearfix">
+                <h1 class="float-left">
+                    @T("Admin.NopStation.TaxJar.Configuration")
+
+                    <small>
+                        <i class="fas fa-arrow-circle-left"></i>
+                        <a href="/Admin/Tax/List">@T("Admin.NopStation.TaxJar.BackToList")</a>
+                    </small>
+                </h1>
+
+                <div class="float-right">
+
+                    <a class="btn btn-primary" href="UpdateCategories" onclick="return confirm('@T("Admin.NopStation.TaxJar.ConfirmationText")');">
+                        @T("Admin.NopStation.TaxJar.Update Categories")
+                    </a>
+
+                    <button type="submit" name="save" class="btn btn-primary">
+                        <i class="far fa-save"></i>
+                        @T("Admin.Common.Save")
+                    </button>
+                </div>
+            </div>
+            @await Component.InvokeAsync("StoreScopeConfiguration")
+            <nop-cards id="avalara-panels">
+                <nop-card asp-name="configuration" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.TaxJar.Configuration")" asp-hide-block-attribute-name="false" asp-hide="false" asp-advanced="false">
+
+                    <div asp-validation-summary="All"></div>
+                    <div class="card-body" style="padding-left:5rem">
+                        <p>
+                            <h3>
+                                @T("Admin.NopStation.TaxJar.Note")
+                            </h3>
+                            @T("Admin.NopStation.TaxJar.ConditionForCountry")<br />
+                            @T("Admin.NopStation.TaxJar.ConditionForZip")<br />
+                            @T("Admin.NopStation.TaxJar.ConditionForState")<br />
+                            @T("Admin.NopStation.TaxJar.ConditionForDefultCategory")<br />
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="Token_OverrideForStore" asp-input="Token" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="Token" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor-check asp-for="Token" />
+                                <span asp-validation-for="Token"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="UseSandBox_OverrideForStore" asp-input="UseSandBox" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="UseSandBox" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="UseSandBox" />
+                                <span asp-validation-for="UseSandBox"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="DisableItemWiseTax_OverrideForStore" asp-input="DisableItemWiseTax" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="DisableItemWiseTax" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="DisableItemWiseTax" />
+                                <span asp-validation-for="DisableItemWiseTax"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="AppliedOnCheckOutOnly_OverrideForStore" asp-input="AppliedOnCheckOutOnly" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="AppliedOnCheckOutOnly" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="AppliedOnCheckOutOnly" />
+                                <span asp-validation-for="AppliedOnCheckOutOnly"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="DisableTaxSubmit_OverrideForStore" asp-input="DisableTaxSubmit" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="DisableTaxSubmit" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="DisableTaxSubmit" />
+                                <span asp-validation-for="DisableTaxSubmit"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="CountryId_OverrideForStore" asp-input="CountryId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="CountryId" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-select asp-for="CountryId" asp-items="Model.AvailableCountries" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="StateId_OverrideForStore" asp-input="StateId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="StateId" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-select asp-for="StateId" asp-items="Model.AvailableStates" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="Zip_OverrideForStore" asp-input="Zip" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="Zip" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="Zip" />
+                                <span asp-validation-for="Zip"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="City_OverrideForStore" asp-input="City" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="City" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="City" />
+                                <span asp-validation-for="City"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="Street_OverrideForStore" asp-input="Street" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="Street" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="Street" />
+                                <span asp-validation-for="Street"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="DefaultTaxCategoryId_OverrideForStore" asp-input="DefaultTaxCategoryId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="DefaultTaxCategoryId" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-select asp-for="DefaultTaxCategoryId" asp-items="Model.AvailableCategories" />
+                            </div>
+                        </div>
+                    </div>
+
+                </nop-card>
+                <nop-card asp-name="log" asp-icon="fas fa-list" asp-title="@T("Admin.NopStation.TaxJar.Log")" asp-hide-block-attribute-name="false" asp-hide="false" asp-advanced="false">
+                    @await Html.PartialAsync("~/Plugins/NopStation.Plugin.Tax.TaxJar/Views/Log/List.cshtml", Model)
+                </nop-card>
+            </nop-cards>
+        </div>
+    </div>
+</form> 

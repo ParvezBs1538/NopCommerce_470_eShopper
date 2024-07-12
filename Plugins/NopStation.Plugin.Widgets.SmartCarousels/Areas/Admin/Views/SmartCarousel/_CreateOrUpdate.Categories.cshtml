@@ -1,0 +1,79 @@
+@model SmartCarouselModel
+
+<div class="card-body">
+    @if (Model.Id > 0)
+    {
+        <div class="sub-panel">
+            @await Html.PartialAsync("Table", new DataTablesModel
+            {
+                Name = "carouselcategories-grid",
+                UrlRead = new DataUrl("CategoryList", "SmartCarousel", new RouteValueDictionary { [nameof(Model.CarouselCategorySearchModel.CarouselId)] = Model.CarouselCategorySearchModel.CarouselId }),
+                UrlUpdate = new DataUrl("CategoryUpdate", "SmartCarousel", new RouteValueDictionary { [nameof(Model.CarouselCategorySearchModel.CarouselId)] = Model.CarouselCategorySearchModel.CarouselId }),
+                UrlDelete = new DataUrl("CategoryDelete", "SmartCarousel", new RouteValueDictionary { [nameof(Model.CarouselCategorySearchModel.CarouselId)] = Model.CarouselCategorySearchModel.CarouselId }),
+                Length = Model.CarouselCategorySearchModel.PageSize,
+                LengthMenu = Model.CarouselCategorySearchModel.AvailablePageSizes,
+                ColumnCollection = new List<ColumnProperty>
+                {
+                    new ColumnProperty(nameof(SmartCarouselCategoryModel.CategoryName))
+                    {
+                        Title = T("Admin.NopStation.SmartCarousels.Carousels.Categories.Fields.Category").Text,
+                        Width = "350",
+                    },
+                    new ColumnProperty(nameof(SmartCarouselCategoryModel.CategoryId))
+                    {
+                        Title = T("Admin.Common.View").Text,
+                        Width = "150",
+                        ClassName =  NopColumnClassDefaults.Button,
+                        Render = new RenderButtonView(new DataUrl("~/Admin/Category/Edit/"))
+                    },
+                    new ColumnProperty(nameof(SmartCarouselCategoryModel.DisplayOrder))
+                    {
+                        Title = T("Admin.NopStation.SmartCarousels.Carousels.Categories.Fields.DisplayOrder").Text,
+                        Width = "150",
+                        Editable = true,
+                        EditType = EditType.Number,
+                        ClassName = NopColumnClassDefaults.CenterAll
+                    },
+                    new ColumnProperty(nameof(SmartCarouselCategoryModel.Id))
+                    {
+                        Title = T("Admin.Common.Edit").Text,
+                        Width = "100",
+                        ClassName =  NopColumnClassDefaults.Button,
+                        Render = new RenderButtonsInlineEdit()
+                    },
+                    new ColumnProperty(nameof(SmartCarouselCategoryModel.Id))
+                    {
+                        Title = T("Admin.Common.Delete").Text,
+                        Width = "100",
+                        Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                        ClassName =  NopColumnClassDefaults.Button
+                    }
+                }
+            })
+        </div>
+        <div class="card-footer">
+            <button type="submit" id="btnAddNewCategory" onclick="javascript:OpenWindow('@(Url.Action("CategoryAddPopup", "SmartCarousel", new { CarouselId = Model.Id, btnId = "btnRefreshCarouselsCategories", formId = "carousel-form" }))', 800, 800, true); return false;" class="btn btn-primary">
+                @T("Admin.NopStation.SmartCarousels.Carousels.Categories.AddNew")
+            </button>
+            <input type="submit" id="btnRefreshCarouselsCategories" style="display: none" />
+            <script>
+                $(document).ready(function () {
+                    $('#btnRefreshCarouselsCategories').click(function () {
+                        //refresh grid
+                        updateTable('#carouselcategories-grid');
+                        //return false to don't reload a page
+                        return false;
+                    });
+                });
+            </script>
+        </div>
+    }
+    else
+    {
+        <div class="card card-default">
+            <div class="card-body">
+                @T("Admin.NopStation.SmartCarousels.Carousels.Categories.SaveBeforeEdit")
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,14 @@
+﻿@{
+    var requestPage = false;
+    if (Url.ActionContext.RouteData.Values["controller"].ToString().Equals("productrequest", StringComparison.InvariantCultureIgnoreCase) &&
+        (Url.ActionContext.RouteData.Values["action"].ToString().Equals("history", StringComparison.InvariantCultureIgnoreCase) ||
+        Url.ActionContext.RouteData.Values["action"].ToString().Equals("addnew", StringComparison.InvariantCultureIgnoreCase) ||
+        Url.ActionContext.RouteData.Values["action"].ToString().Equals("details", StringComparison.InvariantCultureIgnoreCase)))
+    {
+        requestPage = true;
+    }
+
+    <li class="customer-requests @(requestPage ? "active" : "inactive")">
+        <a href="@Url.RouteUrl("ProductRequests")">@T("NopStation.ProductRequests.Navigation.MyProductRequests")</a>
+    </li>
+} 

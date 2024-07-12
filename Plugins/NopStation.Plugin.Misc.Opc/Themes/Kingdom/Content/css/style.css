@@ -1,0 +1,282 @@
+﻿.checkout-page.spc .checkout-data .step-title .title {
+  background: none;
+  padding: 0;
+  margin: 0;
+  min-height: initial;
+}
+.checkout-page.spc .checkout-data .spc-estimate-shipping {
+  padding: 0;
+}
+
+.spc .opc .section .method-list {
+  display: block;
+  padding: 10px 0;
+}
+.spc .opc .section .method-list li {
+  display: block;
+  width: 100%;
+  border: none;
+  max-width: 100%;
+  padding: 0;
+}
+.spc .opc .section.shipping-method li .method-description {
+  color: var(--dark-grey);
+  font-style: italic;
+  font-weight: 300;
+}
+.spc .opc .section.shipping-method li label {
+  background: #FFFFFF;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+  display: block;
+  width: 100%;
+  padding: 15px;
+  padding-left: 30px;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 18px;
+}
+.spc .opc .section.shipping-method li label::before {
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+}
+@media (min-width: 992px) {
+  .spc .opc .section.payment-method .method-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+}
+.spc .opc .section.payment-method .method-list li {
+  background: #FFFFFF;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+  display: block;
+  width: 100%;
+  padding: 15px;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 18px;
+  padding-left: 40px;
+  position: relative;
+}
+.spc .opc .section.payment-method .method-list li label {
+  position: static;
+  padding-left: 0;
+}
+.spc .opc .section.payment-method .method-list li label::before {
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+}
+@media (min-width: 992px) {
+  .spc .opc .section.payment-method .method-list li {
+    width: calc(50% - 10px);
+  }
+}
+.spc .opc .section.payment-method .method-list li .method-name {
+  display: flex;
+  align-items: center;
+}
+.spc .opc .section.payment-method .method-list li .method-name .payment-logo {
+  max-width: 60px;
+  margin-right: 10px;
+}
+
+.estimate-shipping .inputs label {
+  text-align: left;
+  display: block;
+}
+.estimate-shipping .inputs .required {
+  top: 26px;
+}
+.estimate-shipping .estimate-shipping-button {
+  background: var(--black-faded);
+  color: #fff;
+  padding: 10px 25px;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+}
+
+.estimate-shipping-result ul {
+  list-style-type: none;
+  padding: 10px;
+}
+
+.spc .order-summary-content {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+.spc .order-summary-content .cart-options {
+  box-shadow: none;
+}
+.spc .order-summary-content .cart-collaterals .button-2 {
+  width: auto;
+}
+
+@media (max-width: 767px) {
+  .spc {
+    padding: 0 !important;
+  }
+  .spc .page-body {
+    padding: 0 !important;
+  }
+  .spc .page-body .step {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .spc .cart-footer {
+    display: block;
+  }
+}
+.spc .opc {
+  background: #FFFFFF;
+  border: 1px solid var(--grey);
+  box-shadow: 0px 3px 20px rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+  padding: 15px;
+}
+@media (min-width: 992px) {
+  .spc .opc .right {
+    border-left: 1px solid var(--grey);
+  }
+}
+.spc .opc .step {
+  padding: 10px 0;
+}
+.spc .cart tr {
+  box-shadow: none;
+}
+.spc .cart th {
+  color: var(--black);
+  background: var(--grey);
+}
+.spc .cart th.product {
+  text-align: left;
+}
+.spc .cart td {
+  vertical-align: middle;
+  border: 1px solid var(--grey);
+}
+.spc .cart td.product {
+  text-align: left;
+}
+.spc .cart td.remove-from-cart {
+  text-align: center;
+}
+.spc .cart td .cart-quantity input {
+  border: none;
+  height: 38px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1) inset;
+  padding-right: 15px;
+}
+.spc .cart td .cart-quantity .qty-button {
+  font-size: 8px;
+  height: 20px;
+  line-height: 20px;
+  color: #999;
+  border-width: 0 0 0 1px;
+  border-color: #eee;
+  border-radius: 0 4px 0 0;
+  background: rgba(0, 0, 0, 0.02);
+  display: block;
+}
+.spc .cart-options .selected-checkout-attributes {
+  padding: 0 15px;
+}
+
+.spc .cart-footer .cart-options .cart-collaterals {
+  width: 100%;
+}
+.spc .cart-footer .cart-options .cart-collaterals .deals > div {
+  float: none;
+  width: 100%;
+}
+.spc .cart-footer .cart-options .cart-collaterals .deals .hint {
+  text-align: left;
+}
+.spc .cart-footer .cart-options .cart-collaterals .deals .title {
+  background: none;
+  padding: 0;
+}
+.spc .cart-footer .cart-options .cart-collaterals .deals .coupon-code {
+  margin: 0;
+}
+.spc .cart-footer .cart-options .cart-collaterals .deals .coupon-code .button-2 {
+  bottom: initial;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.spc .cross-sells .product-item .product-title a {
+  font-size: 14px;
+}
+
+.spc .checkout-attributes {
+  padding: 15px !important;
+}
+.spc .checkout-attributes dt {
+  text-align: left;
+}
+
+.spc .inputs input[type=text], .spc .inputs input[type=email],
+.spc .inputs input[type=password], .spc .inputs input[type=date],
+.spc .inputs input[type=date], .spc .inputs input[type=tel], .spc .inputs select {
+  color: var(--black);
+  background: #FFFFFF;
+  border: 1px solid #D5D5DA;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+.spc .select-pickup-point ul {
+  list-style-type: none;
+  text-align: left;
+}
+.spc .edit-address {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -5px;
+  margin-right: -5px;
+}
+.spc .edit-address label {
+  display: none;
+}
+.spc .edit-address .inputs {
+  width: 50%;
+  padding: 0 5px;
+}
+.spc .edit-address .inputs.address-input {
+  width: 100%;
+}
+
+.spc .totals td {
+  color: var(--black);
+}
+.spc .totals td.cart-total-left {
+  text-align: left;
+}
+.spc .totals .button-1 {
+  float: none;
+  width: 100%;
+  max-width: 100%;
+  margin-top: 30px;
+}
+
+.spc .payment-method .payment-logo {
+  max-width: 80px;
+}
+.spc .payment-method .checkout-data td select {
+  display: inline-block;
+}
+
+.spc .totals {
+  background: #FFFFFF;
+  border: 1px solid var(--primary-color);
+  box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+/*@import "buy-button";*/

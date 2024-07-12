@@ -1,0 +1,9 @@
+﻿@model PollModel
+<div class="block block-poll collaps-filter">
+   
+        <h2>@T("Polls.Title")</h2>
+    
+    <div class="listbox filter-content">
+        @await Html.PartialAsync("_Poll", Model)
+    </div>
+</div>

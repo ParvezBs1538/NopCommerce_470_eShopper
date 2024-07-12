@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Unzer Payment",
+  "SystemName": "NopStation.Plugin.Payments.Unzer",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.Unzer.dll",
+  "Description": "This is a plugin which will confirm the payment by Unzer.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

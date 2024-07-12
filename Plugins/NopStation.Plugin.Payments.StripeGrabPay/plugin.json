@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Stripe GrabPay",
+  "SystemName": "NopStation.Plugin.Payments.StripeGrabPay",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.StripeGrabPay.dll",
+  "Description": "This plugin enables Stripe GrabPay payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

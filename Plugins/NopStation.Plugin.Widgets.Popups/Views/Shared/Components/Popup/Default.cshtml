@@ -1,0 +1,30 @@
+﻿@using Nop.Core
+@model PopupPublicModel
+@inject IWorkContext workContext
+
+@{
+    var supportRtl = (await workContext.GetWorkingLanguageAsync()).Rtl;
+
+    if (supportRtl)
+    {
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.Popups/Content/css/style.rtl.css", string.Empty);
+    }
+    else
+    {
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.Popups/Content/css/style.css", string.Empty);
+    }
+    <script asp-location="Footer" src="~/Plugins/NopStation.Plugin.Widgets.Popups/Content/js/script.js"></script>
+}
+
+@if (Model.NewsletterPopup.PopupEnabled)
+{
+    @await Html.PartialAsync("_NewsletterPopup", Model.NewsletterPopup)
+}
+
+@foreach (var popup in Model.Popups)
+{
+    @await Html.PartialAsync("_PromotionalPopup", popup)
+}
+
+<div class="sticky-container-left"></div>
+<div class="sticky-container-right"></div>

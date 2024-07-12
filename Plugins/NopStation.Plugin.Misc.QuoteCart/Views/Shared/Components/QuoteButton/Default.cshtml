@@ -1,0 +1,77 @@
+﻿@model QuoteButtonModel
+
+@if (!Model.IsProductDetails)
+{
+    <div class="quote-add">
+        <button type="button" onclick="QuoteCart.addToCart_productbox(@Model.ProductId)" class="add-to-qcart button-2 quote-add-btn product-box-add-to-cart-button">@T("NopStation.Plugin.Misc.QuoteCart.Cart.AddButton")</button>
+    </div>
+}
+else if (Model.AddToCartButtonEnabled)
+{
+    <style>
+        .details-add-to-qcart-button {
+            margin-left: 4px;
+        }
+    </style>
+    <script asp-location="Footer">
+        $(function () {
+            var addToCartButton = $(`[id^='add-to-cart-button-']`);
+            var addToQuoteCartButton = addToCartButton.clone();
+            addToQuoteCartButton.attr('id', 'add-to-quote-cart-button-' + @Model.ProductId);
+            addToQuoteCartButton.addClass('details-add-to-qcart-button');
+            addToQuoteCartButton.attr('onclick', `QuoteCart.addToCart_details('@Url.RouteUrl("QuoteCart.AddQuote-Details", new { productId = Model.ProductId })', '#product-details-form');return false;`);
+            addToQuoteCartButton.text('@T("NopStation.Plugin.Misc.QuoteCart.Cart.AddButton")');
+            addToCartButton.after(addToQuoteCartButton);
+        });
+    </script>
+}
+else {
+    ViewData.TemplateInfo.HtmlFieldPrefix = $"addtocart_{Model.ProductId}";
+    <div class="add-to-cart-panel" id="add-to-quote-cart-panel">
+        <label asp-for="EnteredQuantity" asp-postfix=":" class="qty-label"></label>
+        @if (Model.AllowedQuantities.Count > 0)
+        {
+            <select asp-for="EnteredQuantity" asp-items="Model.AllowedQuantities" id="product_enteredQuantity_@Model.ProductId" class="qty-dropdown" aria-label=@T("Products.Qty.AriaLabel")></select>
+            <script asp-location="Footer">
+                $(function () {
+                    $("#product_enteredQuantity_@Model.ProductId").on("change", function () {
+                        var data = {
+                            productId: @Model.ProductId,
+                            quantity: $('#product_enteredQuantity_@Model.ProductId').find(":selected").text()
+                        };
+                        $(document).trigger({ type: "product_quantity_changed", changedData: data });
+                    });
+                });
+            </script>
+        }
+        else
+        {
+            <input asp-for="EnteredQuantity" id="product_enteredQuantity_@Model.ProductId" class="qty-input" type="text" aria-label=@T("Products.Qty.AriaLabel") />
+            <script asp-location="Footer">
+                //when a customer clicks 'Enter' button we submit the "add to cart" button (if visible)
+                $(function () {
+                    $("#@Html.IdFor(model => model.EnteredQuantity)").on("keydown", function (event) {
+                        if (event.keyCode == 13) {
+                            $("#add-to-cart-button-@Model.ProductId").trigger("click");
+                            return false;
+                        }
+                    });
+
+                    $("#product_enteredQuantity_@Model.ProductId").on("input propertychange paste", function () {
+                        var data = {
+                            productId: @Model.ProductId,
+                            quantity: $('#product_enteredQuantity_@Model.ProductId').val()
+                        };
+                        $(document).trigger({ type: "product_quantity_changed", changedData: data });
+                    });
+                });
+            </script>
+        }
+        <button type="button" id="add-to-quote-cart-button-@Model.ProductId" class="button-1 add-to-cart-button details-add-to-qcart-button" data-productid="@Model.ProductId" onclick="QuoteCart.addToCart_details('@Url.RouteUrl("QuoteCart.AddQuote-Details", new { productId = Model.ProductId })', '#product-details-form');return false;">@T("NopStation.Plugin.Misc.QuoteCart.Cart.AddButton")</button>
+    </div>
+    <script asp-location="Footer">
+        $(function() {
+            $('.overview-buttons').before($('#add-to-quote-cart-panel'));
+        });
+    </script>
+}

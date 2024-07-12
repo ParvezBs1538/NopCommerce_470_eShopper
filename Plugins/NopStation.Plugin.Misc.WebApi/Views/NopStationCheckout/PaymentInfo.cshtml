@@ -1,0 +1,29 @@
+﻿@model CheckoutPaymentInfoModel
+@using Microsoft.AspNetCore.Http
+@using Nop.Core.Http.Extensions
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    Layout = "_Root.Head";
+    httpContextAccessor.HttpContext.Session.Set("NSCheckout", BitConverter.GetBytes(true));
+}
+
+<div class="page checkout-page payment-info-page">
+    <div class="page-title">
+        <h1>@T("Checkout.PaymentInfo")</h1>
+    </div>
+    <div class="page-body checkout-data">
+        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutPaymentInfoTop })
+        <div class="section payment-info">
+            <form asp-route="NopStationCheckoutPaymentInfo" method="post">
+                <div asp-validation-summary="ModelOnly" class="message-error"></div>
+                <div class="info">
+                    @await Component.InvokeAsync(Model.PaymentViewComponent)
+                </div>
+                <div class="buttons">
+                    <button type="submit" name="nextstep" class="button-1 payment-info-next-step-button">@T("Checkout.NextButton")</button>
+                </div>
+            </form>
+        </div>
+        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutPaymentInfoBottom })
+    </div>
+</div>

@@ -1,0 +1,144 @@
+﻿@model ManufacturerSEOTemplateSearchModel
+@{
+    NopHtml.SetActiveMenuItemSystemName("NopStation.AdvancedSEO.ManufacturerSEOTemplate");
+    ViewBag.PageTitle = T("Admin.NopStation.Plugin.Misc.AdvancedSEO.ManufacturerSEOTemplate.List").Text;
+
+    const string hideSearchBlockAttributeName = "ManufacturerSEOTemplatePage.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Admin.NopStation.Plugin.Misc.AdvancedSEO.ManufacturerSEOTemplate")
+    </h1>
+    <div class="float-right">
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus-square"></i>
+            @T("Admin.Common.AddNew")
+        </a>
+    </div>
+</div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default card-search">
+                    <div class="card-body">
+                        <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                            <div class="search-text">@T("Admin.Common.Search")</div>
+                            <div class="icon-search"><i class="fas fa-search" aria-hidden="true"></i></div>
+                            <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                        </div>
+                        <div class="search-body @(hideSearchBlock ? "closed" : "")">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <nop-label asp-for="SearchTemplateName" />
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <nop-editor asp-for="SearchTemplateName" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <nop-label asp-for="SearchStatus" />
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <nop-select asp-for="SearchStatus" asp-items="Model.AvailableStatus" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <nop-label asp-for="SearchTemplateType" />
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <nop-select asp-for="SearchTemplateType" asp-items="Model.AvailableTemplateType" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row" @(Model.HideStoresList ? Html.Raw("style=\"display:none\"") : null)>
+                                                <div class="col-md-4">
+                                                    <nop-label asp-for="SearchStoreId" />
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <nop-select asp-for="SearchStoreId" asp-items="Model.AvailableStores" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="text-center col-12">
+                                    <button type="button" id="search-manufacturer-seo-template" class="btn btn-primary btn-search">
+                                        <i class="fas fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-default">
+                    <div class="card-body">
+                        @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                            Name = "nopstation-manufacturer-seo-template-grid",
+                            UrlRead = new DataUrl("List", "ManufacturerSEOTemplate", null),
+                            Length = Model.PageSize,
+                            LengthMenu = Model.AvailablePageSizes,
+                            SearchButtonId = "search-manufacturer-seo-template",
+                            Filters = new List<FilterParameter>
+                            {
+                                new FilterParameter(nameof(Model.SearchTemplateName)),
+                                new FilterParameter(nameof(Model.SearchStatus)),
+                                new FilterParameter(nameof(Model.SearchTemplateType)),
+                                new FilterParameter(nameof(Model.SearchStoreId))
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                            {
+                                new ColumnProperty(nameof(ManufacturerSEOTemplateModel.TemplateName))
+                                {
+                                    Title = T("Admin.NopStation.Plugin.Misc.AdvancedSEO.ManufacturerSEOTemplate.Fields.TemplateName").Text,
+                                    Width = "200",
+                                    ClassName = NopColumnClassDefaults.CenterAll,
+                                },
+                                new ColumnProperty(nameof(ManufacturerSEOTemplateModel.Priority))
+                                {
+                                    Title = T("Admin.NopStation.Plugin.Misc.AdvancedSEO.ManufacturerSEOTemplate.Fields.Priority").Text,
+                                    Width = "80",
+                                    ClassName = NopColumnClassDefaults.CenterAll,
+                                },
+                                new ColumnProperty(nameof(ManufacturerSEOTemplateModel.IsGlobalTemplate))
+                                {
+                                    Title = T("Admin.NopStation.Plugin.Misc.AdvancedSEO.ManufacturerSEOTemplate.Fields.ApplyToAllManufacturer").Text,
+                                    Width = "50",
+                                    ClassName = NopColumnClassDefaults.CenterAll,
+                                    Render = new RenderBoolean()
+                                },
+                                new ColumnProperty(nameof(ManufacturerSEOTemplateModel.IsActive))
+                                {
+                                    Title = T("Admin.NopStation.Plugin.Misc.AdvancedSEO.ManufacturerSEOTemplate.Fields.IsActive").Text,
+                                    Width = "80",
+                                    ClassName = NopColumnClassDefaults.CenterAll,
+                                    Render = new RenderBoolean()
+                                },
+                                new ColumnProperty(nameof(ManufacturerSEOTemplateModel.Id))
+                                {
+                                    Title = T("Admin.Common.Edit").Text,
+                                    Width = "50",
+                                    ClassName =  NopColumnClassDefaults.Button,
+                                    Render = new RenderButtonEdit(new DataUrl("Edit"))
+                                }
+                            }
+                        })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

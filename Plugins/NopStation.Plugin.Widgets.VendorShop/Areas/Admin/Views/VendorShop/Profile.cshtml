@@ -1,0 +1,107 @@
+﻿@model VendorProfileModel
+@inject VendorShopSettings vendorShopSettings
+@{
+    Layout = "_AdminLayout";
+    NopHtml.SetActiveMenuItemSystemName("VendorShop.VendorProfile");
+    ViewBag.PageTitle = T("Admin.NopStation.VendorShop.VendorProfile.Edit").Text;
+}
+
+<form asp-controller="VendorShop" asp-action="Profile" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.VendorShop.VendorProfile.Edit")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+
+                            @(await Html.LocalizedEditorAsync<VendorProfileModel, VendorProfileLocalizedModel>("vendorprofile-localized",
+
+                                @<div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="Description" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="@Model.Locales[item].Description" asp-template="RichEditor" />
+                                        </div>
+                                    </div>
+                                    <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+
+                                </div>
+                                ,
+
+                                @<div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <nop-label asp-for="Description" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="@Model.Description" asp-template="RichEditor" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            
+                                            <nop-label asp-for="ProfilePictureId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="ProfilePictureId" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            
+                                            <nop-label asp-for="BannerPictureId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="BannerPictureId" />
+                                        </div>
+                                    </div>
+                            
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            
+                                            <nop-label asp-for="MobileBannerPictureId" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="MobileBannerPictureId" />
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" asp-for="VendorId" />
+                                    <input type="hidden" asp-for="Id" />
+                                </div>
+                            
+                            ))
+                            @if(vendorShopSettings.EnableVendorCustomCss)
+                            {
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <nop-label asp-for="CustomCss" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <nop-textarea asp-for="CustomCss" />
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

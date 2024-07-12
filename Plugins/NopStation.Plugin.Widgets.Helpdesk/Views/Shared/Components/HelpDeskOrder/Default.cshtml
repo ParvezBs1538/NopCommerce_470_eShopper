@@ -1,0 +1,11 @@
+﻿@using Nop.Web.Framework.UI
+@model NopStation.Plugin.Widgets.Helpdesk.Models.OrderModel
+@{
+    NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.Helpdesk/Content/styles.css", string.Empty);
+}
+
+@if (Model.AllowCustomerToCreateTicketFromOrderPage)
+{
+    <a href="@Url.RouteUrl("HelpdeskAddNewTicket")" target="_blank" class="createTicket">@T("NopStation.Helpdesk.Tickets.CreateTicket")</a>
+}
+<br />

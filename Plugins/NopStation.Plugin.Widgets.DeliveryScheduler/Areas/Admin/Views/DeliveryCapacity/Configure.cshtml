@@ -1,0 +1,151 @@
+@model DeliveryCapacityConfigurationModel
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.NopStation.DeliveryScheduler.DeliveryCapacities").Text;
+    //active menu item (system name)
+    NopHtml.SetActiveMenuItemSystemName("DeliveryScheduler.DeliveryCapacities");
+}
+
+<style>
+    #capacity-table input[type=number] {
+        width: 100%;
+        max-width: 200px;
+    }
+</style>
+
+<form asp-controller="DeliveryCapacity" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.DeliveryScheduler.DeliveryCapacities")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @if (Model.ShippingMethods.Any())
+                {
+                    @await Component.InvokeAsync("StoreScopeConfiguration")
+                    <div class="cards-group">
+                        <div class="card card-default">
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <nop-label asp-for="ShippingMethodId" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="hidden" name="ShippingMethodId" value="@Model.ShippingMethodId" />
+                                        <select class="form-control valid" onchange="setLocation(this.value)">
+                                            @foreach (var item in Model.ShippingMethods)
+                                            {
+                                                if (item.Selected)
+                                                {
+                                                    <option selected value="@item.Value">@item.Text</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.Value">@item.Text</option>
+                                                }
+                                            }
+                                        </select>
+                                        <span asp-validation-for="ShippingMethodId"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cards-group">
+                        <div class="card card-default">
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <table class="table table-bordered table-striped time-table" id="capacity-table">
+                                        <thead>
+                                            <tr>
+                                                <th>@T("Admin.NopStation.DeliveryScheduler.DeliveryCapacities.DaysOfWeek")</th>
+                                                @foreach (var delivery in Model.DeliveryCapacities)
+                                                {
+                                                    <th>@delivery.Value.DeliverySlot</th>
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>@T("Admin.NopStation.DeliveryScheduler.DeliveryCapacities.Fields.Day1Capacity")</td>
+                                                @foreach (var delivery in Model.DeliveryCapacities)
+                                                {
+                                                    <td>
+                                                        <input type="number" name="Capacity_@(delivery.Key)_1" value="@delivery.Value.Day1Capacity" />
+                                                    </td>
+                                                }
+                                            </tr>
+                                            <tr>
+                                                <td>@T("Admin.NopStation.DeliveryScheduler.DeliveryCapacities.Fields.Day2Capacity")</td>
+                                                @foreach (var delivery in Model.DeliveryCapacities)
+                                                {
+                                                    <td>
+                                                        <input type="number" name="Capacity_@(delivery.Key)_2" value="@delivery.Value.Day2Capacity" />
+                                                    </td>
+                                                }
+                                            </tr>
+                                            <tr>
+                                                <td>@T("Admin.NopStation.DeliveryScheduler.DeliveryCapacities.Fields.Day3Capacity")</td>
+                                                @foreach (var delivery in Model.DeliveryCapacities)
+                                                {
+                                                    <td>
+                                                        <input type="number" name="Capacity_@(delivery.Key)_3" value="@delivery.Value.Day3Capacity" />
+                                                    </td>
+                                                }
+                                            </tr>
+                                            <tr>
+                                                <td>@T("Admin.NopStation.DeliveryScheduler.DeliveryCapacities.Fields.Day4Capacity")</td>
+                                                @foreach (var delivery in Model.DeliveryCapacities)
+                                                {
+                                                    <td>
+                                                        <input type="number" name="Capacity_@(delivery.Key)_4" value="@delivery.Value.Day4Capacity" />
+                                                    </td>
+                                                }
+                                            </tr>
+                                            <tr>
+                                                <td>@T("Admin.NopStation.DeliveryScheduler.DeliveryCapacities.Fields.Day5Capacity")</td>
+                                                @foreach (var delivery in Model.DeliveryCapacities)
+                                                {
+                                                    <td>
+                                                        <input type="number" name="Capacity_@(delivery.Key)_5" value="@delivery.Value.Day5Capacity" />
+                                                    </td>
+                                                }
+                                            </tr>
+                                            <tr>
+                                                <td>@T("Admin.NopStation.DeliveryScheduler.DeliveryCapacities.Fields.Day6Capacity")</td>
+                                                @foreach (var delivery in Model.DeliveryCapacities)
+                                                {
+                                                    <td>
+                                                        <input type="number" name="Capacity_@(delivery.Key)_6" value="@delivery.Value.Day6Capacity" />
+                                                    </td>
+                                                }
+                                            </tr>
+                                            <tr>
+                                                <td>@T("Admin.NopStation.DeliveryScheduler.DeliveryCapacities.Fields.Day7Capacity")</td>
+                                                @foreach (var delivery in Model.DeliveryCapacities)
+                                                {
+                                                    <td>
+                                                        <input type="number" name="Capacity_@(delivery.Key)_7" value="@delivery.Value.Day7Capacity" />
+                                                    </td>
+                                                }
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</form>

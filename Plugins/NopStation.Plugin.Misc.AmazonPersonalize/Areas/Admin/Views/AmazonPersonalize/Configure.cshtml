@@ -1,0 +1,58 @@
+﻿@model ConfigurationModel
+
+@{
+    
+    NopHtml.SetActiveMenuItemSystemName("AmazonPersonalize.Configuration");
+    ViewBag.PageTitle = @T("Admin.NopStation.AmazonPersonalize.Configuration").Text;
+}
+@{
+    const string hideCommonBlockAttributeName = "AmazonPersonalizeSettingsPage.HideCommonBlock";
+    var hideCommonBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideCommonBlockAttributeName);
+
+    const string hideRecommendedForYouBlockAttributeName = "AmazonPersonalizeSettingsPage.HideRecommendedForYouBlock";
+    var hideRecommendedForYouBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideRecommendedForYouBlockAttributeName);
+
+    const string hideMostViewedBlockAttributeName = "AmazonPersonalizeSettingsPage.HideMostViewedBlock";
+    var hideMostViewedBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideMostViewedBlockAttributeName);
+
+    const string hideCustomersWhoViewedXAlsoViewedBlockAttributeName = "AmazonPersonalizeSettingsPage.HideCustomersWhoViewedXAlsoViewed";
+    var hideCustomersWhoViewedXAlsoViewed = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideCustomersWhoViewedXAlsoViewedBlockAttributeName);
+
+    const string hideBestSellersBlockAttributeName = "AmazonPersonalizeSettingsPage.HideBestSellersBlock";
+    var hideBestSellersBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideBestSellersBlockAttributeName);
+
+    const string hideFrequentlyBoughtTogetherBlockAttributeName = "AmazonPersonalizeSettingsPage.HideFrequentlyBoughtTogetherBlock";
+    var hideFrequentlyBoughtTogetherBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideFrequentlyBoughtTogetherBlockAttributeName);
+}
+
+<form asp-controller="AmazonPersonalize" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.AmazonPersonalize.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync("StoreScopeConfiguration")
+                <div asp-validation-summary="All"></div>
+
+                <nop-cards id="amazonpersonalizesettings-panels">
+                    <nop-card asp-name="amazonpersonalizesettings-common" asp-icon="fas fa-info" asp-title="@T("Admin.NopStation.AmazonPersonalize.Configuration.BlockTitle.Common")" asp-hide-block-attribute-name="@hideCommonBlockAttributeName" asp-hide="@hideCommonBlock" asp-advanced="false">@await Html.PartialAsync("_Configure.Common", Model)</nop-card>
+                    <nop-card asp-name="amazonpersonalizesettings-recommendedforyou" asp-icon="fas fa-stream" asp-title="@T("Admin.NopStation.AmazonPersonalize.Configuration.BlockTitle.RecommendedForYou")" asp-hide-block-attribute-name="@hideRecommendedForYouBlockAttributeName" asp-hide="@hideRecommendedForYouBlock" asp-advanced="false">@await Html.PartialAsync("_Configure.RecommendedForYou", Model)</nop-card>
+                    <nop-card asp-name="amazonpersonalizesettings-mostviewed" asp-icon="fas fa-stream" asp-title="@T("Admin.NopStation.AmazonPersonalize.Configuration.BlockTitle.MostViewed")" asp-hide-block-attribute-name="@hideMostViewedBlockAttributeName" asp-hide="@hideMostViewedBlock" asp-advanced="false">@await Html.PartialAsync("_Configure.MostViewed", Model)</nop-card>
+                    <nop-card asp-name="amazonpersonalizesettings-customerwhoviewedxalsoviewed" asp-icon="fas fa-stream" asp-title="@T("Admin.NopStation.AmazonPersonalize.Configuration.BlockTitle.CustomersWhoViewedXAlsoViewed")" asp-hide-block-attribute-name="@hideCustomersWhoViewedXAlsoViewedBlockAttributeName" asp-hide="@hideCustomersWhoViewedXAlsoViewed" asp-advanced="false">@await Html.PartialAsync("_Configure.CustomersWhoViewedXAlsoViewed", Model)</nop-card>
+                    <nop-card asp-name="amazonpersonalizesettings-bestsellers" asp-icon="fas fa-stream" asp-title="@T("Admin.NopStation.AmazonPersonalize.Configuration.BlockTitle.BestSellers")" asp-hide-block-attribute-name="@hideBestSellersBlockAttributeName" asp-hide="@hideBestSellersBlock" asp-advanced="false">@await Html.PartialAsync("_Configure.BestSellers", Model)</nop-card>
+                    <nop-card asp-name="amazonpersonalizesettings-frequentlyboughttogether" asp-icon="fas fa-stream" asp-title="@T("Admin.NopStation.AmazonPersonalize.Configuration.BlockTitle.FrequentlyBoughtTogether")" asp-hide-block-attribute-name="@hideFrequentlyBoughtTogetherBlockAttributeName" asp-hide="@hideFrequentlyBoughtTogetherBlock" asp-advanced="false">@await Html.PartialAsync("_Configure.FrequentlyBoughtTogether", Model)</nop-card>
+                </nop-cards>
+            </div>
+        </div>
+    </div>
+</form>

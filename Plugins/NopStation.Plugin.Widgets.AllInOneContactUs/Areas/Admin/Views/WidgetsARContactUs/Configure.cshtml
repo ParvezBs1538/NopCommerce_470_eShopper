@@ -1,0 +1,434 @@
+﻿@model WidgetsARContactUsConfigurationModel
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.Plugin.Widgets.AllInOneContactUs.Menu.Configuration").Text;
+
+    NopHtml.SetActiveMenuItemSystemName("AllInOneContactUs.Configuration");
+}
+
+<form asp-controller="WidgetsARContactUs" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.Plugin.Widgets.AllInOneContactUs.Menu.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableMeetingLink_OverrideForStore" asp-input="EnableMeetingLink" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableMeetingLink" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableMeetingLink" />
+                                    <span asp-validation-for="EnableMeetingLink"></span>
+                                </div>
+                            </div>
+
+                            <nop-nested-setting asp-for="EnableMeetingLink" disable-auto-generation="true">
+                                <div class="form-group row" id="ARContactUs_MeetingLink">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="MeetingLink_OverrideForStore" asp-input="MeetingLink" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="MeetingLink" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="MeetingLink" />
+                                        <span asp-validation-for="MeetingLink"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableMessenger_OverrideForStore" asp-input="EnableMessenger" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableMessenger" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableMessenger" />
+                                    <span asp-validation-for="EnableMessenger"></span>
+                                </div>
+                            </div>
+
+                            <nop-nested-setting asp-for="EnableMessenger" disable-auto-generation="true">
+                                <div class="form-group row" id="ARContactUs_MessengerId">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="MessengerId_OverrideForStore" asp-input="MessengerId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="MessengerId" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="MessengerId" />
+                                        <span asp-validation-for="MessengerId"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableTeams_OverrideForStore" asp-input="EnableTeams" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableTeams" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableTeams" />
+                                    <span asp-validation-for="EnableTeams"></span>
+                                </div>
+                            </div>
+
+                            <nop-nested-setting asp-for="EnableTeams" disable-auto-generation="true">
+                                <div class="form-group row" id="ARContactUs_TeamsId">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="TeamsId_OverrideForStore" asp-input="TeamsId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="TeamsId" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="TeamsId" />
+                                        <span asp-validation-for="TeamsId"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableSkype_OverrideForStore" asp-input="EnableSkype" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableSkype" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableSkype" />
+                                    <span asp-validation-for="EnableSkype"></span>
+                                </div>
+                            </div>
+
+                            <nop-nested-setting asp-for="EnableSkype" disable-auto-generation="true">
+                                <div class="form-group row" id="ARContactUs_SkypeId">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="SkypeId_OverrideForStore" asp-input="SkypeId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="SkypeId" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <nop-editor asp-for="SkypeId" />
+                                                <span asp-validation-for="SkypeId"></span>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="callout bg-gray-light no-margin">
+                                                    @T("Admin.NopStation.Plugin.Widgets.AllInOneContactUs.ConfigurationModel.SkypeId.Hint")
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableEmail_OverrideForStore" asp-input="EnableEmail" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableEmail" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableEmail" />
+                                    <span asp-validation-for="EnableEmail"></span>
+                                </div>
+                            </div>
+
+                            <nop-nested-setting asp-for="EnableEmail" disable-auto-generation="true">
+                                <div class="form-group row" id="ARContactUs_EmailId">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="EmailId_OverrideForStore" asp-input="EmailId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="EmailId" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="EmailId" />
+                                        <span asp-validation-for="EmailId"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableCall_OverrideForStore" asp-input="EnableCall" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableCall" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableCall" />
+                                    <span asp-validation-for="EnableCall"></span>
+                                </div>
+                            </div>
+
+                            <nop-nested-setting asp-for="EnableCall" disable-auto-generation="true">
+                                <div class="form-group row" id="ARContactUs_PhoneNumber">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="PhoneNumber_OverrideForStore" asp-input="PhoneNumber" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="PhoneNumber" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="PhoneNumber" />
+                                        <span asp-validation-for="PhoneNumber"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableTawkChat_OverrideForStore" asp-input="EnableTawkChat" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableTawkChat" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableTawkChat" />
+                                    <span asp-validation-for="EnableTawkChat"></span>
+                                </div>
+                            </div>
+
+                            <nop-nested-setting asp-for="EnableTawkChat" disable-auto-generation="true">
+                                <div class="form-group row" id="ARContactUs_TawkChatSrc">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="TawkChatSrc_OverrideForStore" asp-input="TawkChatSrc" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="TawkChatSrc" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="TawkChatSrc" />
+                                        <span asp-validation-for="TawkChatSrc"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableWhatsapp_OverrideForStore" asp-input="EnableWhatsapp" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableWhatsapp" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableWhatsapp" />
+                                    <span asp-validation-for="EnableWhatsapp"></span>
+                                </div>
+                            </div>
+
+                            <nop-nested-setting asp-for="EnableWhatsapp" disable-auto-generation="true">
+                                <div class="form-group row" id="ARContactUs_WhatsappNumber">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="WhatsappNumber_OverrideForStore" asp-input="WhatsappNumber" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="WhatsappNumber" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="WhatsappNumber" />
+                                        <span asp-validation-for="WhatsappNumber"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableDirectContactUs_OverrideForStore" asp-input="EnableDirectContactUs" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableDirectContactUs" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableDirectContactUs" />
+                                    <span asp-validation-for="EnableDirectContactUs"></span>
+                                </div>
+                            </div>
+
+                            <nop-nested-setting asp-for="EnableDirectContactUs" disable-auto-generation="true">
+                                <div class="form-group row" id="ARContactUs_ContactUsPageUrl">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="ContactUsPageUrl_OverrideForStore" asp-input="ContactUsPageUrl" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="ContactUsPageUrl" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="ContactUsPageUrl" />
+                                        <span asp-validation-for="ContactUsPageUrl"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableTelegram_OverrideForStore" asp-input="EnableTelegram" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableTelegram" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableTelegram" />
+                                    <span asp-validation-for="EnableTelegram"></span>
+                                </div>
+                            </div>
+
+                            <nop-nested-setting asp-for="EnableTelegram" disable-auto-generation="true">
+                                <div class="form-group row" id="ARContactUs_TelegramName">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="TelegramName_OverrideForStore" asp-input="TelegramName" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="TelegramName" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="TelegramName" />
+                                        <span asp-validation-for="TelegramName"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableViber_OverrideForStore" asp-input="EnableViber" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableViber" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableViber" />
+                                    <span asp-validation-for="EnableViber"></span>
+                                </div>
+                            </div>
+
+                            <nop-nested-setting asp-for="EnableViber" disable-auto-generation="true">
+                                <div class="form-group row" id="ARContactUs_ViberNumber">
+                                    <div class="col-md-3">
+                                        <nop-override-store-checkbox asp-for="ViberNumber_OverrideForStore" asp-input="ViberNumber" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                        <nop-label asp-for="ViberNumber" />
+                                    </div>
+                                    <div class="col-md-9">
+                                        <nop-editor asp-for="ViberNumber" />
+                                        <span asp-validation-for="ViberNumber"></span>
+                                    </div>
+                                </div>
+                            </nop-nested-setting>
+
+                            <script>
+                                $(document).ready(function () {
+                                    toggleMessengerOption();
+                                    toggleSkypeOption();
+                                    toggleEmailOption();
+                                    toggleCallOption();
+                                    toggleTawkOption();
+                                    toggleWhatsappOption();
+                                    toggleDirectContactUsOption();
+                                    toggleTelegramOption();
+                                    toggleViberOption();
+                                    toggleTeamsOption();
+                                    toggleMeetingOption();
+
+                                    $("#@Html.IdFor(model => model.EnableMessenger)").click(toggleMessengerOption);
+                                    $("#@Html.IdFor(model => model.EnableSkype)").click(toggleSkypeOption);
+                                    $("#@Html.IdFor(model => model.EnableEmail)").click(toggleEmailOption);
+                                    $("#@Html.IdFor(model => model.EnableCall)").click(toggleCallOption);
+                                    $("#@Html.IdFor(model => model.EnableTawkChat)").click(toggleTawkOption);
+                                    $("#@Html.IdFor(model => model.EnableWhatsapp)").click(toggleWhatsappOption);
+                                    $("#@Html.IdFor(model => model.EnableDirectContactUs)").click(toggleDirectContactUsOption);
+                                    $("#@Html.IdFor(model => model.EnableTelegram)").click(toggleTelegramOption);
+                                    $("#@Html.IdFor(model => model.EnableViber)").click(toggleViberOption);
+                                    $("#@Html.IdFor(model => model.EnableTeams)").click(toggleTeamsOption);
+                                    $("#@Html.IdFor(model => model.EnableMeetingLink)").click(toggleMeetingOption);
+                                });
+
+                                function toggleMessengerOption() {
+                                    if ($("#@Html.IdFor(model => model.EnableMessenger)").is(':checked')) {
+                                        $("#ARContactUs_MessengerId").showElement();
+                                    }
+                                    else {
+                                        $("#ARContactUs_MessengerId").hideElement();
+                                    }
+                                }
+
+                                function toggleSkypeOption() {
+                                    if ($("#@Html.IdFor(model => model.EnableSkype)").is(':checked')) {
+                                        $("#ARContactUs_SkypeId").showElement();
+                                    }
+                                    else {
+                                        $("#ARContactUs_SkypeId").hideElement();
+                                    }
+                                }
+
+                                function toggleEmailOption() {
+                                    if ($("#@Html.IdFor(model => model.EnableEmail)").is(':checked')) {
+                                        $("#ARContactUs_EmailId").showElement();
+                                    }
+                                    else {
+                                        $("#ARContactUs_EmailId").hideElement();
+                                    }
+                                }
+
+                                function toggleCallOption() {
+                                    if ($("#@Html.IdFor(model => model.EnableCall)").is(':checked')) {
+                                        $("#ARContactUs_PhoneNumber").showElement();
+                                    }
+                                    else {
+                                        $("#ARContactUs_PhoneNumber").hideElement();
+                                    }
+                                }
+
+                                function toggleTawkOption() {
+                                    if ($("#@Html.IdFor(model => model.EnableTawkChat)").is(':checked')) {
+                                        $("#ARContactUs_TawkChatSrc").showElement();
+                                    }
+                                    else {
+                                        $("#ARContactUs_TawkChatSrc").hideElement();
+                                    }
+                                }
+
+                                function toggleWhatsappOption() {
+                                    if ($("#@Html.IdFor(model => model.EnableWhatsapp)").is(':checked')) {
+                                        $("#ARContactUs_WhatsappNumber").showElement();
+                                    }
+                                    else {
+                                        $("#ARContactUs_WhatsappNumber").hideElement();
+                                    }
+                                }
+
+                                function toggleDirectContactUsOption() {
+                                    if ($("#@Html.IdFor(model => model.EnableDirectContactUs)").is(':checked')) {
+                                        $("#ARContactUs_ContactUsPageUrl").showElement();
+                                    }
+                                    else {
+                                        $("#ARContactUs_ContactUsPageUrl").hideElement();
+                                    }
+                                }
+
+                                function toggleTelegramOption() {
+                                    if ($("#@Html.IdFor(model => model.EnableTelegram)").is(':checked')) {
+                                        $("#ARContactUs_TelegramName").showElement();
+                                    }
+                                    else {
+                                        $("#ARContactUs_TelegramName").hideElement();
+                                    }
+                                }
+
+                                function toggleViberOption() {
+                                    if ($("#@Html.IdFor(model => model.EnableViber)").is(':checked')) {
+                                        $("#ARContactUs_ViberNumber").showElement();
+                                    }
+                                    else {
+                                        $("#ARContactUs_ViberNumber").hideElement();
+                                    }
+                                }
+
+                                function toggleMeetingOption() {
+                                    if ($("#@Html.IdFor(model => model.EnableMeetingLink)").is(':checked')) {
+                                        $("#ARContactUs_MeetingLink").showElement();
+                                    }
+                                    else {
+                                        $("#ARContactUs_MeetingLink").hideElement();
+                                    }
+                                }
+
+                                function toggleTeamsOption() {
+                                    if ($("#@Html.IdFor(model => model.EnableTeams)").is(':checked')) {
+                                        $("#ARContactUs_TeamsId").showElement();
+                                    }
+                                    else {
+                                        $("#ARContactUs_TeamsId").hideElement();
+                                    }
+                                }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

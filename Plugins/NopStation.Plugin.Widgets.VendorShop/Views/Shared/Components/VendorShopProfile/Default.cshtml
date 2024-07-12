@@ -1,0 +1,36 @@
+﻿@using Nop.Core.Domain.Catalog
+@using Nop.Web.Extensions;
+@using Nop.Web.Framework.Mvc.Routing;
+@using NopStation.Plugin.Widgets.VendorShop.Models.ProfileTabs;
+@model VendorProfileModel
+@inject Nop.Services.Html.IHtmlFormatter htmlFormatter
+
+@{
+    NopHtml.AppendPageCssClassParts("html-account-page");
+    NopHtml.AppendPageCssClassParts("html-my-product-reviews-list-page");
+}
+<script asp-exclude-from-bundle="true" asp-location="Footer" src="~/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/Profile/js/public.catalogreviews.js"></script>
+
+
+<div class="vendor-page">
+    @if(Model.HasReview)
+    {
+        <div class="vendor-page-reviews">
+            <div class="title">
+                <h5>@T("Admin.NopStation.VendorShop.ProfileTabs.OverallRetings")</h5>
+            </div>
+            @await Html.PartialAsync("_VendorReviewsOverview", Model.ReviewOverview)
+        </div>
+    }
+    <div class="vendor-page-profile">
+        <div class="title">
+            <h5>@T("Admin.NopStation.VendorShop.ProfileTabs.Title")</h5>
+        </div>
+        @await Html.PartialAsync("_CatalogReviewSelectors", Model)
+        @{
+            var catalogProductsViewData = new ViewDataDictionary(ViewData);
+            catalogProductsViewData["FetchUrl"] = Html.Raw(Url.Action("ProductReviews", "VendorProductReviews", new { vendorId = Model.VendorId }));
+        }
+        @await Html.PartialAsync("_CatalogReviews", Model, catalogProductsViewData)
+    </div>
+</div>

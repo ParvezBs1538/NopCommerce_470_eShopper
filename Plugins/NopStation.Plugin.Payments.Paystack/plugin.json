@@ -1,0 +1,12 @@
+﻿{
+  "Group": "Nop-Station",
+  "FriendlyName": "Paystack",
+  "SystemName": "NopStation.Plugin.Payments.Paystack",
+  "Version": "4.70.1.0",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Payments.Paystack.dll",
+  "Description": "This plugin enables Paystack gateway payments.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

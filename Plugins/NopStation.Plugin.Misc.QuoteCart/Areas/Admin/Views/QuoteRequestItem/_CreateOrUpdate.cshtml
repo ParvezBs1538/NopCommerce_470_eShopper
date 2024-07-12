@@ -1,0 +1,87 @@
+﻿@model QuoteRequestItemModel
+
+@{
+    NopHtml.SetActiveMenuItemSystemName("QuoteCart.Requests");
+}
+<input asp-for="Id" type="hidden" />
+<input asp-for="QuoteRequestId" type="hidden" />
+<div class="card">
+    <div class="card-body">
+        @if (Model.ProductId > 0)
+        {
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="ProductId" />
+                </div>
+                <div class="col-md-9">
+                    <input asp-for="ProductId" type="hidden" />
+                    @Html.ActionLink(Model.ProductName, "Edit", "Product", new { id = Model.ProductId })
+                    @if (Model.Id <= 0)
+                    {
+                        <button class="quote-add-btn btn btn-sm ml-2 btn-danger" type="button" onclick="removeProduct()"><i class="fa fa-times"></i> @T("Common.Remove")</button>
+                        <script>
+                            function removeProduct() {
+                                const newUrl = new URL(window.location.href);
+                                newUrl.searchParams.delete('productId');
+                                if (!newUrl.searchParams.has('requestId'))
+                                    newUrl.searchParams.set('requestId', $('#@Html.IdFor(model => model.QuoteRequestId)').val());
+                                window.location = newUrl;
+                            }
+                        </script>
+                    }
+                    else
+                    {
+                        <br />
+                        @Html.Raw(Model.FormattedAttributes)
+                    }
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="ProductPrice" />
+                </div>
+                <div class="col-md-9">
+                    @Html.DisplayFor(x => x.ProductPriceStr)
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="Quantity" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="Quantity" asp-required="true" />
+                    <span asp-validation-for="Quantity"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="DiscountedPrice" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="DiscountedPrice" />
+                    <span asp-validation-for="DiscountedPrice"></span>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="ProductId" />
+                </div>
+                <div class="col-md-9 sku-field">
+                    <input asp-for="ProductId" type="hidden" />
+                    <button class="quote-add-btn btn btn-sm btn-primary" onclick="javascript:OpenWindow('@(Url.Action("ProductSelectPopup", "QuoteRequestItem", new { fieldId = Html.IdFor(x => x.ProductId), skuFieldId = Html.IdFor(x => x.ProductSku) }))', 800, 800, true); return false;">@T("Admin.NopStation.Plugin.Misc.QuoteCart.QuoteRequests.GoToProductList")</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@if (Model.ProductAttributes.Count != 0) {
+    <div class="card">
+        <div class="card-body">
+            @await Html.PartialAsync("_ProductAddAttributes", Model.ProductAttributes)
+        </div>
+    </div>
+}

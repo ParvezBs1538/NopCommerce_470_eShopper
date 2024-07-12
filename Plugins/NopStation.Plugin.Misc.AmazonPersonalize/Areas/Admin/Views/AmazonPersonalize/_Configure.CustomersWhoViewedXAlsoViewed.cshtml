@@ -1,0 +1,63 @@
+﻿@model ConfigurationModel
+
+ <div class="card-body">
+                            
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="EnableCustomersWhoViewedXAlsoViewed_OverrideForStore" asp-input="EnableCustomersWhoViewedXAlsoViewed" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="EnableCustomersWhoViewedXAlsoViewed" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableCustomersWhoViewedXAlsoViewed" />
+            <span asp-validation-for="EnableCustomersWhoViewedXAlsoViewed"></span>
+        </div>
+    </div>
+
+    <nop-nested-setting asp-for="EnableCustomersWhoViewedXAlsoViewed">
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="CustomersWhoViewedXAlsoViewedARN_OverrideForStore" asp-input="CustomersWhoViewedXAlsoViewedARN" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="CustomersWhoViewedXAlsoViewedARN" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="CustomersWhoViewedXAlsoViewedARN" />
+                <span asp-validation-for="CustomersWhoViewedXAlsoViewedARN"></span>
+            </div>
+        </div>
+
+        @*<div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="CustomersWhoViewedXAlsoViewedWidgetZoneId_OverrideForStore" asp-input="CustomersWhoViewedXAlsoViewedWidgetZoneId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="CustomersWhoViewedXAlsoViewedWidgetZoneId" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="CustomersWhoViewedXAlsoViewedWidgetZoneId" />
+                <span asp-validation-for="CustomersWhoViewedXAlsoViewedWidgetZoneId"></span>
+            </div>
+        </div> *@
+
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="CustomersWhoViewedXAlsoViewedNumberOfItems_OverrideForStore" asp-input="CustomersWhoViewedXAlsoViewedNumberOfItems" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="CustomersWhoViewedXAlsoViewedNumberOfItems" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="CustomersWhoViewedXAlsoViewedNumberOfItems" />
+                <span asp-validation-for="CustomersWhoViewedXAlsoViewedNumberOfItems"></span>
+            </div>
+        </div> 
+        
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-override-store-checkbox asp-for="CustomersWhoViewedXAlsoViewedAllowForGuestCustomer_OverrideForStore" asp-input="CustomersWhoViewedXAlsoViewedAllowForGuestCustomer" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                <nop-label asp-for="CustomersWhoViewedXAlsoViewedAllowForGuestCustomer" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="CustomersWhoViewedXAlsoViewedAllowForGuestCustomer" />
+                <span asp-validation-for="CustomersWhoViewedXAlsoViewedAllowForGuestCustomer"></span>
+            </div>
+        </div> 
+
+    </nop-nested-setting>
+</div> 

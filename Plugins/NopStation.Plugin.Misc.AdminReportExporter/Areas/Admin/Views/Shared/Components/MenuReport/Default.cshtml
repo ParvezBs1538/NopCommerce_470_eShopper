@@ -1,0 +1,14 @@
+﻿<script>
+$(document).ready(function() {
+    const element = $(`<form method="post" action="@Url.Action(Context.Request.RouteValues["action"] as string, "AdminExport")"></form>`);
+    element.insertBefore($('.content-wrapper'));
+    element.append($('.content-wrapper'));
+    $(".content-header").append(`
+                <div class="float-right">
+                    <button type="submit" class="btn btn-success" formaction="@Url.Action(Context.Request.RouteValues["action"] as string, "AdminExport")">
+                        <i class="fas fa-download"></i>
+                        @T("Admin.Common.Export")
+                    </button>
+                </div>`);
+});
+</script>

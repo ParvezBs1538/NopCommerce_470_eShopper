@@ -1,0 +1,75 @@
+﻿@model VendorShopFooterModel
+@inject Nop.Core.IWorkContext workContext
+@{
+    var supportRtl = (await workContext.GetWorkingLanguageAsync()).Rtl;
+    if(Model.EnableSlider)
+    {
+        <script  asp-exclude-from-bundle="true" asp-location="Footer" src= "~/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/Slider/js/owl.carousel.min.js" ></script>
+        <script  asp-exclude-from-bundle="true" asp-location="Footer" src= "~/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/Slider/js/nopstation.anywhereslider.js" ></script>
+
+        if (supportRtl)
+        {
+            NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/Slider/css/rtl/owl.theme.green.min.css", string.Empty);
+            NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/Slider/css/rtl/owl.carousel.css", string.Empty);
+        }
+        else
+        {
+            NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/Slider/css/owl.theme.green.min.css", string.Empty);
+            NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/Slider/css/owl.carousel.css", string.Empty);
+        }
+
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/Slider/css/styles.css", string.Empty);
+    }
+    if(Model.EnableCarousel)
+    {
+        <script asp-exclude-from-bundle="true" asp-location="Footer" src="~/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/OCarousels/script/owl.carousel.min.js"></script>
+        <script asp-exclude-from-bundle="true" asp-location="Footer" src="~/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/OCarousels/script/nopstation.carousel.js"></script>
+        NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/OCarousels/css/styles.css", string.Empty);
+
+        if (supportRtl)
+        {
+            NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/OCarousels/css/rtl/owl.theme.green.min.css", string.Empty);
+            NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/OCarousels/css/rtl/owl.carousel.css", string.Empty);
+        }
+        else
+        {
+            NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/OCarousels/css/owl.theme.green.min.css", string.Empty);
+            NopHtml.AppendCssFileParts("/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/OCarousels/css/owl.carousel.css", string.Empty);
+        }
+    }
+}
+ @if(Model.EnableSlider)
+ {
+     <script asp-location="Footer" asp-exclude-from-bundle="true">
+        var sliderdata = {};
+        sliderdata.AnywereSliderFailure = '@T("NopStation.VendorShop.AnywhereSlider.LoadingFailed")';
+
+        $(document).ready(function () {
+            AnywereSlider.init('@Url.RouteUrl("AnywhereSliderVendorShop")', '.slider-container', '.v .loader', sliderdata);
+        });
+    </script>
+ }
+ @if(Model.EnableCarousel)
+ {
+     <script asp-exclude-from-bundle="true" asp-location="Footer">
+        var carouseldata = {};
+        carouseldata.CarouselFailure = '@T("NopStation.VendorShop.OCarousels.LoadingFailed")';
+
+        $(document).ready(function () {
+            Carousel.init('@Url.RouteUrl("OCarouselVendorShop")', '.carousel-container', '.carousel-container .loader', carouseldata);
+        });
+    </script>
+ }
+
+ @if(Model.EnableProductTabs)
+{
+    NopHtml.AppendCssFileParts($"/Plugins/NopStation.Plugin.Widgets.VendorShop/Contents/ProductTabs/css/styles.css", string.Empty);
+    <script asp-location="Footer">
+        $(function () {
+            $(".ns-product-tab").tabs();
+        });
+    </script>
+}
+
+
+

@@ -1,0 +1,15 @@
+﻿@{
+    Layout = "_ColumnsTwo";
+
+    //title
+    NopHtml.AddTitleParts(T("PageTitle.PageNotFound").Text);
+}
+
+<div class="features_items"><!--features_items-->
+    <h2 class="title text-center">@T("PageTitle.PageNotFound")</h2>
+    @await Component.InvokeAsync("TopicBlock", new { systemName = "PageNotFound" })
+    <div class="custom-page-box-div">
+        <img src="~/Themes/eshopper4.20/Content/css/images/404/404.png" class="img-responsive" alt="" />
+    </div>
+</div>
+

@@ -1,0 +1,23 @@
+﻿@model ConfigurationModel
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="UpdatePaymentMethodsOnChangeBillingAddressFields_OverrideForStore" asp-input="UpdatePaymentMethodsOnChangeBillingAddressFields" asp-store-scope="Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="UpdatePaymentMethodsOnChangeBillingAddressFields" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="UpdatePaymentMethodsOnChangeBillingAddressFields" asp-items="Model.AvailableAddressFields" asp-multiple="true" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-override-store-checkbox asp-for="UpdatePaymentMethodsOnChangeShippingAddressFields_OverrideForStore" asp-input="UpdatePaymentMethodsOnChangeShippingAddressFields" asp-store-scope="Model.ActiveStoreScopeConfiguration" />
+            <nop-label asp-for="UpdatePaymentMethodsOnChangeShippingAddressFields" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="UpdatePaymentMethodsOnChangeShippingAddressFields" asp-items="Model.AvailableAddressFields" asp-multiple="true" />
+        </div>
+    </div>
+</div>
+

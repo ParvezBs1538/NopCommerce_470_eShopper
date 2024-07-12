@@ -1,0 +1,98 @@
+@model SpecialDeliveryCapacityModel
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div asp-validation-summary="All"></div>
+            <input asp-for="Id" type="hidden" />
+
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="SpecialDate" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="SpecialDate" />
+                                <span asp-validation-for="SpecialDate"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="DeliverySlotId" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-select asp-for="DeliverySlotId" asp-items="@Model.AvailableDeliverySlots" />
+                                <span asp-validation-for="DeliverySlotId"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="ShippingMethodId" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-select asp-for="ShippingMethodId" asp-items="@Model.AvailableShippingMethods" />
+                                <span asp-validation-for="ShippingMethodId"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="SelectedStoreIds" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <nop-select asp-for="SelectedStoreIds" asp-items="Model.AvailableStores" asp-multiple="true" />
+                                        <script>
+                                            $(document).ready(function() {
+                                                var storesIdsInput = $('#@Html.IdFor(model => model.SelectedStoreIds)').data("kendoMultiSelect");
+                                                storesIdsInput.setOptions({
+                                                    autoClose: false,
+                                                    filter: "contains"
+                                                });
+
+                                                @if (Model.AvailableStores.Count == 0)
+                                                {
+                                                    <text>
+                                                        storesIdsInput.setOptions({
+                                                            enable: false,
+                                                            placeholder: 'No stores available'
+                                                        });
+                                                        storesIdsInput._placeholder();
+                                                        storesIdsInput._enable();
+                                                    </text>
+                                                }
+                                            });
+                                        </script>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @await Component.InvokeAsync("MultistoreDisabledWarning")
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="Capacity" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="Capacity" />
+                                <span asp-validation-for="Capacity"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="Note" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-textarea asp-for="Note" />
+                                <span asp-validation-for="Note"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,82 @@
+﻿@model NopStation.Plugin.DiscountRules.ShippingCountry.Models.RequirementModel
+@{
+    Layout = "";
+}
+
+<script>
+    $(document).ready(function () {
+        $('#saveshippingcountryrequirement@(Model.RequirementId)').click(function () {
+            var shippingCountry = $("#@Html.IdFor(model => model.ShippingCountry)").val();
+            var discountTypeId = $("#@Html.IdFor(model => model.DiscountTypeId)").val();
+            var discountId = @Model.DiscountId;
+            var requirementId = @Model.RequirementId;
+            var postData = {
+                DiscountId: discountId,
+                RequirementId: requirementId,
+                ShippingCountry: shippingCountry
+            };
+            addAntiForgeryToken(postData);
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@(Url.Action("Configure", "DiscountRulesShippingCountry"))",
+                data: postData,
+                success: function (data, textStatus, jqXHR) {
+
+                    var $alertInfoEl = $("#saveshippingcountryrequirementAlert-info");
+                    let response = jqXHR.responseJSON;
+                    if (response instanceof Object && response.hasOwnProperty('Errors')) {
+                        var errorMessages = '';
+                        $.each(response.Errors, function (i, error) {
+                            errorMessages += error;
+                            if (response.Errors.length - 1 != i)
+                                errorMessages += '</br>';
+                        });
+                        $alertInfoEl.html(errorMessages);
+                        $("#saveshippingcountryrequirementAlert").click();
+
+                        return;
+                    }
+
+                    $('#pnl-save-requirement-result@(Model.RequirementId)').fadeIn("slow").delay(1000).fadeOut("slow");
+    @if (Model.RequirementId == 0)
+    {
+        <text>$("#discountRequirementContainer").trigger('nopnewdiscountruleadded', [data.NewRequirementId]); </text>
+    }
+                    },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    var $alertInfoEl = $("#saveshippingcountryrequirementAlert-info");
+
+                    // display default error
+                    $alertInfoEl.html('@T("Admin.Promotions.Discounts.Requirements.FailedToSave")');
+
+                    $("#saveshippingcountryrequirementAlert").click();
+                }
+            });
+        });
+    });
+</script>
+
+<div class="form-group row">
+    <div class="col-md-3 requirement-label-col">
+        <nop-label asp-for="ShippingCountry" />
+    </div>
+    <div class="col-md-9 requirement-data-col">
+        <div class="requirement-data-input">
+            <nop-select asp-for="ShippingCountry" asp-items="Model.AvailableShippingCountry" />
+            <span asp-validation-for="ShippingCountry"></span>
+        </div>
+        <div class="requirement-data-buttons">
+            <button type="button" id="saveshippingcountryrequirement@(Model.RequirementId)" class="btn btn-primary">@T("Admin.Common.Save")</button>
+        </div>
+    </div>
+</div>
+<div class="form-group row">
+    <div class="offset-md-3 col-md-9 requirement-messages-col">
+        <div id="pnl-save-requirement-result@(Model.RequirementId)" style="display: none;" class="text-green margin-t-5">
+            @T("Admin.Promotions.Discounts.Requirements.Saved")
+        </div>
+    </div>
+</div>
+<nop-alert asp-alert-id="saveshippingcountryrequirementAlert" />

@@ -1,0 +1,7 @@
+﻿@model CustomCssModel
+@if(!string.IsNullOrEmpty(Model.Css))
+{
+    <style>
+        @Html.Raw(Model.Css)
+    </style>
+}

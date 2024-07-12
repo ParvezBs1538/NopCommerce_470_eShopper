@@ -1,0 +1,45 @@
+﻿@model ActivityHistorySearchModel
+
+<div class="card-body">
+    @await Html.PartialAsync("Table", new DataTablesModel
+    {
+        Name = "activities-grid",
+        UrlRead = new DataUrl("List", "WalletActivityHistory", new RouteValueDictionary { [nameof(Model.SearchWalletCustomerId)] = Model.SearchWalletCustomerId }),
+        SearchButtonId = "search-activities",
+        Length = Model.PageSize,
+        LengthMenu = Model.AvailablePageSizes,
+        Filters = new List<FilterParameter>
+        {
+            new FilterParameter(nameof(Model.SearchEmail)),
+            new FilterParameter(nameof(Model.SelectedActivityTypeIds))
+        },
+        ColumnCollection = new List<ColumnProperty>
+        {
+            new ColumnProperty(nameof(ActivityHistoryModel.ActivityTypeStr))
+            {
+                Title = T("Admin.NopStation.CreditWallet.ActivityHistory.Fields.ActivityType").Text,
+                Width = "80"
+            },
+            new ColumnProperty(nameof(ActivityHistoryModel.PreviousTotalCreditUsed))
+            {
+                Title = T("Admin.NopStation.CreditWallet.ActivityHistory.Fields.PreviousTotalCreditUsed").Text,
+                Width = "80"
+            },
+            new ColumnProperty(nameof(ActivityHistoryModel.CurrentTotalCreditUsed))
+            {
+                Title = T("Admin.NopStation.CreditWallet.ActivityHistory.Fields.CurrentTotalCreditUsed").Text,
+                Width = "80"
+            },
+            new ColumnProperty(nameof(ActivityHistoryModel.CreditUsed))
+            {
+                Title = T("Admin.NopStation.CreditWallet.ActivityHistory.Fields.CreditUsed").Text,
+                Width = "50"
+            },
+            new ColumnProperty(nameof(ActivityHistoryModel.Note))
+            {
+                Title = T("Admin.NopStation.CreditWallet.ActivityHistory.Fields.Note").Text,
+                Width = "150"
+            }
+        }
+    })
+</div>

@@ -1,0 +1,13 @@
+﻿@model CartModel
+@{
+    NopHtml.AppendPageCssClassParts("html-registration-page");
+}
+
+<div id="quote-submitted-dialogue" title="@T("NopStation.Plugin.Misc.QuoteCart.QuoteRequest.Added")"></div>
+
+@foreach (var item in Model.Forms)
+{
+    <div class="fieldsets">
+            @await Html.PartialAsync("_FormFields", item)
+    </div>
+}
