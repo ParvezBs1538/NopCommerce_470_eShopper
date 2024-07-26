@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Payment methods",
+  "FriendlyName": "Gem Visa Payment",
+  "SystemName": "Payments.GemVisaPayment",
+  "Version": "2.00",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "NopStation",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Payments.GemVisaPayment.dll",
+  "Description": "This plugin allows paying with Gem Visa"
+}

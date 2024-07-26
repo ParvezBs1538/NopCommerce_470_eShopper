@@ -1,0 +1,118 @@
+﻿@model ConfigurationModel
+    @{
+        Layout = "_ConfigurePlugin";
+    }
+
+    @await Component.InvokeAsync("StoreScopeConfiguration")
+
+    <form asp-controller="PaymentGemVisa" asp-action="Configure" method="post">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @T("Plugins.NopStation.GemVisaPayment.Instructions")
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-override-store-checkbox asp-for="UseSandbox_OverrideForStore" asp-input="UseSandbox" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                            <nop-label asp-for="UseSandbox" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="UseSandbox" />
+                            <span asp-validation-for="UseSandbox"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-override-store-checkbox asp-for="DebugMode_OverrideForStore" asp-input="DebugMode" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                            <nop-label asp-for="DebugMode" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="DebugMode" />
+                            <span asp-validation-for="DebugMode"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-override-store-checkbox asp-for="MerchantId_OverrideForStore" asp-input="MerchantId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                            <nop-label asp-for="MerchantId" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="MerchantId" />
+                            <span asp-validation-for="MerchantId"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-override-store-checkbox asp-for="SecretKey_OverrideForStore" asp-input="SecretKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                            <nop-label asp-for="SecretKey" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="SecretKey" />
+                            <span asp-validation-for="SecretKey"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-override-store-checkbox asp-for="MinimumAmount_OverrideForStore" asp-input="MinimumAmount" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                            <nop-label asp-for="MinimumAmount" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="MinimumAmount" />
+                            <span asp-validation-for="MinimumAmount"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-override-store-checkbox asp-for="MaximumAmount_OverrideForStore" asp-input="MaximumAmount" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                            <nop-label asp-for="MaximumAmount" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="MaximumAmount" />
+                            <span asp-validation-for="MaximumAmount"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-override-store-checkbox asp-for="ShowInfoInProductDetailsPage_OverrideForStore" asp-input="ShowInfoInProductDetailsPage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                            <nop-label asp-for="ShowInfoInProductDetailsPage" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="ShowInfoInProductDetailsPage" />
+                            <span asp-validation-for="ShowInfoInProductDetailsPage"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-override-store-checkbox asp-for="InstallmentMonth_OverrideForStore" asp-input="InstallmentMonth" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                            <nop-label asp-for="InstallmentMonth" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="InstallmentMonth" />
+                            <span asp-validation-for="InstallmentMonth"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-9">
+                            <input type="submit" name="save" class="btn bg-blue" value="@T("Admin.Common.Save")" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>

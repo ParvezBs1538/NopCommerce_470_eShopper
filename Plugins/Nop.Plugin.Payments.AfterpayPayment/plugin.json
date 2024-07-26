@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Payment methods",
+  "FriendlyName": "Afterpay Payment",
+  "SystemName": "Payments.AfterpayPayment",
+  "Version": "2.00",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "NopStation",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Payments.AfterpayPayment.dll",
+  "Description": "This plugin allows paying with Afterpay"
+}

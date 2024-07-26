@@ -1,0 +1,37 @@
+﻿    @model GemPayInstallmentMessageModel
+    <div id="latitude-banner-container"></div>
+    <script asp-location="Head">
+        window.LatitudeCheckout = {
+            "merchantId": "@Model.MarchantId",
+            "page": "product",
+            "container": "latitude-banner-container",
+            "containerClass": "",
+            "currency": "@Model.Currency",
+            "layout": "standard",
+            "promotionMonths": "@Model.PromotionMonths",
+            "product": {
+                "id": "",
+                "name": "",
+                "category": "",
+                "price": "",
+                "sku": ""
+            }
+        };
+
+        (function () {
+            function asyncLoad() {
+                var curr = document.createElement("script");
+                curr.type = "text/javascript";
+                curr.async = true;
+                curr.src = "@Model.Url";
+                var scr = document.getElementsByTagName("script")[0];
+                scr.parentNode.insertBefore(curr, scr);
+            }
+
+            if (window.attachEvent) {
+                window.attachEvent("onload", asyncLoad);
+            } else {
+                window.addEventListener("load", asyncLoad, false);
+            }
+        })();
+    </script>

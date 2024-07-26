@@ -1,0 +1,35 @@
+﻿@model decimal
+
+@inject IWorkContext workContext
+@inject IWorkContext workContext
+@inject ISettingService settingService
+@using Nop.Plugin.Payments.AfterpayPayment;
+@using System;
+@{
+    var locale = workContext.WorkingLanguage.LanguageCulture.Replace('-', '_');
+    var price = Model;
+    var currency = workContext.WorkingCurrency.CurrencyCode;
+    var key = "afterpaypaymentsettings.minimumamount";
+    var minimum = settingService.GetSettingByKey<int>(key, 0);
+    key = "afterpaypaymentsettings.maximumamount";
+    var maximum = settingService.GetSettingByKey<int>
+        (key, 0);
+    var isEligible = "true";
+    if (price < minimum || price > maximum)
+    {
+        isEligible = "false";
+    }
+}
+
+<div id="afterpayInstallment">
+    <script asp-location="Head" src="https://js.afterpay.com/afterpay-1.x.js" data-min="@minimum"
+            data-max="@maximum" async>
+    </script>
+    <afterpay-placement data-locale="@locale"
+                        data-is-eligible=@isEligible
+                        data-currency="@currency"
+                        data-modal-link-style="more-info-text"
+                        data-amount="@price">
+    </afterpay-placement>
+</div>
+

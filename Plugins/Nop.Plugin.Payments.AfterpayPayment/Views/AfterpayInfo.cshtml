@@ -1,0 +1,7 @@
+﻿@model string
+<script asp-location="Footer">
+    if (!localStorage.getItem(location.pathname)) {
+        displayBarNotification("@Model", 'error', 5000);
+        localStorage.setItem(location.pathname,true);
+    }
+</script>
